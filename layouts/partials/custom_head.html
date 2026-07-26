@@ -1,0 +1,3 @@
+{{ if hugo.IsDevelopment }}
+ Kind: {{ .Kind }} | Type: {{ .Type }} | Layout: {{ .Layout }}{{ with .File }} | Fichier: {{ .Filename }}{{ end }}
+{{ end }}
