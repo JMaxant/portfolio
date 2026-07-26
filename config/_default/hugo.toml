@@ -1,11 +1,13 @@
-baseURL = 'https://example.org/'
-locale = 'en-us'
-title = 'My New Hugo Project'
-
-[module]
-  [[module.imports]]
-    path = "github.com/clente/hugo-bearcub"
+baseURL = 'https://www.julien-maxant.com/'
+locale = 'fr-fr'
+title = 'Julien Maxant'
+copyright = '2026 - Julien Maxant'
 
 [params]
+  madeWith = 'Made with Hugo & based on bear-cub theme'
   [params.author]
     name = "Julien Maxant"
+
+[module]
+[[module.imports]]
+path = "github.com/clente/hugo-bearcub"

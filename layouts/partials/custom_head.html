@@ -1,3 +1,18 @@
+{{ $files := resources.Match "styles/*.css" }}
+{{ $custom := $files | resources.Concat "style/bundled.css" }}
+
 {{ if hugo.IsDevelopment }}
- Kind: {{ .Kind }} | Type: {{ .Type }} | Layout: {{ .Layout }}{{ with .File }} | Fichier: {{ .Filename }}{{ end }}
+  {{ range $files }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{ end }}
+  <pre>
+    #### Debug ####
+    Kind: {{ .Kind }} | Type: {{ .Type }} | Layout: {{ .Layout }}{{ with .File }} | Fichier: {{ .Filename }}{{ end }}
+    #### Debug ####
+   </pre>
+{{ end }}
+
+{{ if hugo.IsProduction }}
+  {{ $custom = $custom | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $custom.RelPermalink }}">
 {{ end }}

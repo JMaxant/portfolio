@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+vars:
+  HUGO: hugo
+
+tasks:
+  default:
+    desc: List all available tasks.
+    cmds:
+      - task --list
+
+  hugo:serve:
+    aliases: [serve, dev, run]
+    cmd: "{{.HUGO}} serve -D"
+
