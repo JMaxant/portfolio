@@ -11,7 +11,7 @@ defaultContentLanguageInSubdir = false
     name = "Julien Maxant"
 
 [taxonomies]
-  tags = "tags"
+  tag = "tags"
 
 [module]
 [[module.imports]]
