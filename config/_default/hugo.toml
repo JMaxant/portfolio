@@ -10,6 +10,9 @@ defaultContentLanguageInSubdir = false
   [params.author]
     name = "Julien Maxant"
 
+[taxonomies]
+  tag = "tags"
+
 [module]
 [[module.imports]]
 path = "github.com/clente/hugo-bearcub"
