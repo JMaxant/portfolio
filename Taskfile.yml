@@ -11,7 +11,11 @@ tasks:
     cmds:
       - task --list
 
+  setup:
+    desc: Set up the local dev environment (installs the pre-commit git hook).
+    cmds:
+      - pre-commit install
+
   hugo:serve:
     aliases: [serve, dev, run]
     cmd: "{{.HUGO}} serve -D"
-
