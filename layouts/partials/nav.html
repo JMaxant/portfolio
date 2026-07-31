@@ -1,0 +1,25 @@
+{{ range .Site.Menus.main.ByWeight }}
+  <a href="{{ .URL }}">{{ .Name }}</a>
+{{ end }}
+<a href='{{ absURL "index.xml" }}'>RSS</a>
+
+<!-- Convert this page's translations into a dict -->
+{{ $translations := dict }}
+{{ range .Translations }}
+  {{ $translations = merge $translations (dict .Language.Lang .) }}
+{{ end }}
+
+<!-- Create a link to every translation -->
+{{ range hugo.Sites }}
+  {{ $lang := .Language }}
+  {{ if and $lang.IsDefault .Version.IsDefault .Role.IsDefault (ne $lang.Lang $.Page.Lang) }}
+    {{ with (index $translations $lang.Lang) }}
+      <a href="{{ .RelPermalink }}">{{ .Language.LanguageName }}</a>
+    {{ else }}
+      <!-- The complicated setup was necessary to make a grayed out link -->
+      {{ if not $lang.Params.hideUntranslated }}
+        <a class="disabled" role="link" aria-disabled="true">{{ $lang.LanguageName }}</a>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}

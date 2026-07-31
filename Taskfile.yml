@@ -12,9 +12,9 @@ tasks:
       - task --list
 
   setup:
-    desc: Set up the local dev environment (installs the pre-commit git hook).
+    desc: Set up the local dev environment (installs the lefthook git hook).
     cmds:
-      - pre-commit install
+      - lefthook install
 
   hugo:serve:
     aliases: [serve, dev, run]
