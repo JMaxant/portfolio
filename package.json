@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "lefthook": "2.1.10",
     "stylelint": "17.14.1",
     "stylelint-config-standard": "40.0.0"
   }

@@ -1,15 +1,18 @@
 # Portfolio
 
+[![CI](https://github.com/JMaxant/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/JMaxant/portfolio/actions/workflows/ci.yml)
+
 Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](https://github.com/clente/hugo-bearcub) theme.
 
 ## Requirements
 
-- **Hugo extended** v0.123.7+
+- **Hugo extended** v0.164.0+ (custom `layouts/` overrides use `.Site.Language.Locale` and `hugo.Sites`, unavailable before Hugo v0.158.0 — see `layouts/_default/baseof.html`, `layouts/_default/rss.xml`, `layouts/partials/nav.html`)
 - **Go** 1.26.5+ (Hugo Modules resolution — see `go.mod`)
+- **Node/npm** (for `stylelint` and `lefthook` — see Setup below)
 
 ## CSS stack
 
-Plain CSS, no preprocessor, no framework. Numbered files in `assets/styles/` (e.g. `01-base.css`), concatenated/minified/fingerprinted by Hugo's asset pipeline (`layouts/partials/custom_head.html`) in production only; served separately and unminified in development for debugging.
+Plain CSS, no preprocessor, no framework. Numbered files in `assets/styles/` (e.g. `01-base.css`), concatenated/minified/fingerprinted by Hugo's asset pipeline (`layouts/partials/custom_head.html`) in production only; served separately and unminified in development for debugging. Linted with [Stylelint](https://stylelint.io) + `stylelint-config-standard`.
 
 ## Setup
 
@@ -17,17 +20,21 @@ Plain CSS, no preprocessor, no framework. Numbered files in `assets/styles/` (e.
 task setup
 ```
 
-Installs the [lefthook](https://github.com/evilmartians/lefthook) git hook (TOML/Markdown linting, strict Hugo build). Requires `lefthook` on `PATH`, plus Node/npm (linters run via `npx`, no global install needed).
+Runs `npm install` (Stylelint and [lefthook](https://github.com/evilmartians/lefthook), both pinned in `package.json`) and installs the lefthook pre-commit git hook (whitespace/conflict check, TOML/Markdown/CSS linting, strict Hugo build). TOML/Markdown linters run via ad-hoc `npx`, no install needed for those.
 
-### Installing lefthook (Debian/Ubuntu)
+To run every check on all files (not just staged ones):
 
 ```sh
-# Option 1 — official apt repo
-curl -1sLf 'https://dl.cloudsmith.io/public/evilmartians/lefthook/setup.deb.sh' | sudo -E bash
-sudo apt install lefthook
-
-# Option 2 — via Go (already required for this project)
-go install github.com/evilmartians/lefthook/v2@latest
+task qa
 ```
 
-Then check the binary is on `PATH` (`lefthook version`) before running `task setup`.
+## CI
+
+Two GitHub Actions workflows, independent of deployment:
+
+- **`ci.yml`** (every PR + push to `main`):
+  - `quality` — runs `lefthook run pre-commit --all-files`, so `lefthook.yml` stays the single source of truth and CI can never drift from the local hook.
+  - `links-internal` — builds the site and checks internal links and anchors with [lychee](https://github.com/lycheeverse/lychee) (offline, no network flakiness).
+- **`links-external.yml`** (weekly + manual trigger) — checks external links online; on dead links it opens or updates an issue labeled `link-rot`.
+
+Shared lychee settings live in `lychee.toml`; the Hugo version used by CI is pinned in `.github/actions/setup-hugo/action.yml`.

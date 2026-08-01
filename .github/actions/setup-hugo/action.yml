@@ -1,0 +1,19 @@
+name: Setup Hugo toolchain
+description: Go (for Hugo Modules resolution) + pinned Hugo extended.
+
+inputs:
+  hugo-version:
+    description: Hugo extended version — the single place to bump it.
+    default: "0.164.0"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+
+    - uses: peaceiris/actions-hugo@v3
+      with:
+        hugo-version: ${{ inputs.hugo-version }}
+        extended: true

@@ -3,7 +3,9 @@ pre-commit:
   commands:
     whitespace-and-conflicts:
       glob: "*"
-      run: git diff --check --cached
+      # Empty tree vs index: checks every tracked file as it will be committed,
+      # both in pre-commit and in CI's --all-files run (where index == HEAD).
+      run: git diff --check --cached "$(git hash-object -t tree /dev/null)"
 
     taplo-fmt:
       glob: "*.toml"
@@ -15,8 +17,13 @@ pre-commit:
 
     markdownlint:
       glob: "*.md"
-      exclude: "docs/.*"
+      exclude:
+        - "docs/**"
       run: npx --yes markdownlint-cli2@0.23.2 {staged_files}
+
+    stylelint:
+      glob: "*.css"
+      run: npx stylelint {staged_files}
 
     hugo-build:
       run: scripts/quality/check-hugo-build.sh

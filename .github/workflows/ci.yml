@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  # Mirrors the local pre-commit hook exactly — lefthook.yml is the single
+  # source of truth for which checks run.
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-hugo
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run all pre-commit checks
+        run: npx lefthook run pre-commit --all-files
+
+  # Internal links and anchors only (offline, deterministic). External links
+  # are covered by the weekly links-external workflow.
+  links-internal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-hugo
+
+      - run: hugo --gc --minify
+
+      - name: Check internal links and anchors
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --root-dir "${{ github.workspace }}/public"
+            --remap 'https://www.julien-maxant.com(.*) file://${{ github.workspace }}/public$1'
+            "public/**/*.html"
+          fail: true
