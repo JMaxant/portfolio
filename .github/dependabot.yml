@@ -1,0 +1,15 @@
+# Weekly bump PRs for the two ecosystems that move under our feet:
+# action versions (runtime deprecations, schema changes) and npm dev tooling.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directories:
+      - /
+      - /.github/actions/setup-hugo
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
