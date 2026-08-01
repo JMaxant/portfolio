@@ -206,8 +206,8 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 
 ### Phase 1 — Squelette de contenu (arborescence, sans rédaction ni design)
 
-- [ ] Créer `/parcours/`, `/blog/`, `/projets/` (pages/listes, contenu encore vide ou stub).
-- [ ] Vérifier que les layouts bear-cub (`single.html`/`list.html`) couvrent le type "projet" ; sinon prévoir un layout minimal dédié.
+- [X] Créer `/parcours/`, `/blog/`, `/projets/` (pages/listes, contenu encore vide ou stub).
+- [X] Vérifier que les layouts bear-cub (`single.html`/`list.html`) couvrent le type "projet" ; sinon prévoir un layout minimal dédié. => Layouts dédiés ajoutés.
 - [ ] Navigation : centraliser les menus dans `config/_default/menus.toml`, trancher le cas `/parcours/` (front matter vs config), déplacer le lien RSS de la nav vers le footer via surcharge des partials bear-cub (issue #36).
 
 ### Phase 2 — Identité visuelle
