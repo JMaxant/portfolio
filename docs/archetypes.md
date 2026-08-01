@@ -49,7 +49,7 @@ Pièges :
 
 Deux langages imbriqués, deux règles :
 
-```toml/run
+```toml
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 ```
 
