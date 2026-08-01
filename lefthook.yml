@@ -26,5 +26,9 @@ pre-commit:
       glob: "*.css"
       run: npx stylelint {staged_files}
 
+    actionlint:
+      glob: ".github/workflows/*.yml"
+      run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 {staged_files}
+
     hugo-build:
       run: scripts/quality/check-hugo-build.sh

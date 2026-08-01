@@ -1,6 +1,6 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.1.0
+version: 1.2.0
 date_publication: 2026-08-01
 date_modification: 2026-08-01
 ---
@@ -27,6 +27,7 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 | `taplo-fmt` / `taplo-lint` | `@taplo/cli` (npx, épinglé)            | Format + lint TOML                                                                  |
 | `markdownlint`             | `markdownlint-cli2` (npx, épinglé)     | Markdown, hors `docs/**`                                                            |
 | `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard`)                                                   |
+| `actionlint`               | `actionlint` (via `go run`, épinglé)   | Workflows GitHub Actions (`.github/workflows/*.yml`)                                |
 | `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
 
 ## Workflows GitHub Actions
@@ -62,7 +63,7 @@ task qa      # tous les checks sur tous les fichiers = job CI `quality`
 
 ## Maintenance
 
+- **Automatique (Dependabot, PR hebdo — `.github/dependabot.yml`)** : versions des actions GitHub (workflows + composite `setup-hugo`) et devDependencies npm.
 - **Bump Hugo CI** : `.github/actions/setup-hugo/action.yml` (garder ≥ l'exigence du README).
-- **Bump lefthook / stylelint / editorconfig-checker** : `package.json` (versions exactes).
-- **Bump taplo / markdownlint** : versions inline dans `lefthook.yml`.
+- **Bump taplo / markdownlint / actionlint** : versions inline dans `lefthook.yml`.
 - **Ajouter un check** : une entrée dans `lefthook.yml` suffit — le pre-commit et la CI le récupèrent tous les deux.
