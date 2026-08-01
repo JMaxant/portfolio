@@ -79,20 +79,22 @@ Deux idées évoquées : "Récemment publiés" (nouveau contenu) et "Dernières 
 
 Utile uniquement pour les types de contenu créés de façon répétée — pas pour les pages singulières.
 
-- **`blog`** — archetype dédié : `title`, `date`, `draft`, `tags`, `summary`/`description`, éventuellement `cover`.
-- **`projets`** — archetype dédié : `title`, `date`, `stack` (liste), `role`, `repo`/`demo` (liens), `status` (en cours / terminé), `summary`.
+- **`blog`** — archetype dédié : `title`, `date`, `draft`, `tags`, `description`, éventuellement `cover`.
+- **`projets`** — archetype dédié : `title`, `date`, `tags` (liste), `role`, `repo`/`demo` (liens), `status` (en cours / terminé), `description`.
 - **Accueil, Parcours, À propos** — pas d'archetype nécessaire : pages uniques, créées une fois, éditées directement.
 
-Actuellement seul `archetypes/default.md` existe (générique). À enrichir quand les dossiers `content/blog/` et `content/projets/` seront créés.
+Les archétypes `archetypes/default.md` (générique), `archetypes/blog.md` et `archetypes/projets.md` existent.
 
 ## 5quinquies. Taxonomies & filtrage des listes
 
-**Décidé** : prévoir une taxonomie par **stack technique** (ex. `php`, `symfony`, `vue`, `go`, `python`, `k8s`), appliquée aux articles de blog et aux fiches projets. Sert à la fois de mécanisme de découverte pour le visiteur et de fil conducteur pour la trajectoire "avant/maintenant/direction" décrite en 5bis.
+~~**Décidé** : prévoir une taxonomie par **stack technique** (ex. `php`, `symfony`, `vue`, `go`, `python`, `k8s`), appliquée aux articles de blog et aux fiches projets. Sert à la fois de mécanisme de découverte pour le visiteur et de fil conducteur pour la trajectoire "avant/maintenant/direction" décrite en 5bis.~~
 
-Point à trancher : nommer une taxonomie dédiée (ex. `stack`) plutôt que de tout entasser dans `tags` — plus propre pour distinguer "techno utilisée" d'autres classifications futures (ex. type de contenu, thématique).
+~~Point à trancher : nommer une taxonomie dédiée (ex. `stack`) plutôt que de tout entasser dans `tags` — plus propre pour distinguer "techno utilisée" d'autres classifications futures (ex. type de contenu, thématique).~~
+
+Ne sera utilisée qu'une seule taxonomie (tags), une deuxième taxonomie sera ajoutée si besoin mais excessive à date.
 
 **Recherche/filtrage sur les pages de liste** (blog et projets) : évoqué comme un "peut-être", pas encore un engagement ferme. Deux niveaux possibles :
-1. **Pages de taxonomie natives Hugo** (`/stack/go/`, etc.) — générées automatiquement à la compilation, zéro JS, zéro coût de maintenance. Bonne base minimale, quasiment gratuite avec une taxonomie déjà en place.
+1. **Pages de taxonomie natives Hugo** (`/tags/go/`, etc.) — générées automatiquement à la compilation, zéro JS, zéro coût de maintenance. Bonne base minimale, quasiment gratuite avec une taxonomie déjà en place.
 2. **Filtre interactif côté client** sur une page de liste (cocher une techno, la liste se met à jour sans rechargement) — nécessite du JS (site 100% statique, pas de traitement serveur), faisable en vanilla JS à cette échelle mais c'est un vrai morceau de dev, pas juste de la config.
 
 Le niveau 1 est à considérer comme acquis dès qu'une taxonomie existe. Le niveau 2 reste un point ouvert (voir section 14).
@@ -177,7 +179,7 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 - [ ] Build Hugo sans warning, déployé en HTTPS sur `julien-maxant.com`.
 - [ ] Aucun contenu Lorem Ipsum ou placeholder restant.
 - [ ] Switch light/dark mode fonctionnel (préférence système détectée + bascule manuelle mémorisée).
-- [ ] Taxonomie stack technique en place sur au moins les articles/projets publiés au lancement.
+- [ ] Taxonomie tag en place sur au moins les articles/projets publiés au lancement.
 - [ ] `llms.txt` présent à la racine.
 - [ ] CV machine-readable (`/cv.json` ou équivalent JSON Resume) présent et à jour avec la page Parcours.
 
@@ -185,7 +187,7 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 
 1. Cadence de publication du blog (pour rester réaliste sur l'engagement).
 2. Choix définitif de l'hébergeur (GitHub Pages / Cloudflare / Netlify).
-3. Nom exact de la taxonomie stack technique (`stack` dédiée vs réutilisation de `tags`).
+3. ~~Nom exact de la taxonomie stack technique (`stack` dédiée vs réutilisation de `tags`).~~ => Choix final: une seule taxonomie (tags).
 4. Filtrage interactif (JS) sur les pages de liste blog/projets : en V1 ou repoussé en V1.1 — seules les pages de taxonomie natives Hugo sont acquises pour la V1 (section 5quinquies).
 
 ## 15. Découpage en tâches (ordre logique)
@@ -196,11 +198,11 @@ Séquencé par dépendances réelles, pas par numéro de section. Deux points ou
 
 Tout changer ici après coup implique de retoucher du contenu déjà écrit — à faire en premier.
 
-- [ ] Trancher le nom de la taxonomie stack technique (point ouvert 3), la déclarer dans `hugo.toml`.
-- [ ] Config i18n-ready : `defaultContentLanguage = "fr"`, `defaultContentLanguageInSubdir = false` (section 7).
-- [ ] `i18n/fr.toml` pour surcharger les libellés du thème (section 7, note technique).
-- [ ] Archetypes `blog.md` et `projets.md` (section 5quater).
-- [ ] Quality checks + GitHub Actions dédiées (lint, build Hugo sans warning, vérification de liens) — automatise dès maintenant ce que la Phase 6 vérifiera manuellement une dernière fois avant mise en prod ; le pre-commit hook existant (si activé) doit rester cohérent avec ce que la CI vérifie.
+- [X] Trancher le nom de la taxonomie stack technique (point ouvert 3), la déclarer dans `hugo.toml`.
+- [X] Config i18n-ready : `defaultContentLanguage = "fr"`, `defaultContentLanguageInSubdir = false` (section 7).
+- [X] `i18n/fr.toml` pour surcharger les libellés du thème (section 7, note technique).
+- [X] Archetypes `blog.md` et `projets.md` (section 5quater).
+- [X] Quality checks + GitHub Actions dédiées (lint, build Hugo sans warning, vérification de liens) — automatise dès maintenant ce que la Phase 6 vérifiera manuellement une dernière fois avant mise en prod ; le pre-commit hook existant (si activé) doit rester cohérent avec ce que la CI vérifie.
 
 ### Phase 1 — Squelette de contenu (arborescence, sans rédaction ni design)
 
