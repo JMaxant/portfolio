@@ -15,11 +15,11 @@ Un archetype est un template de front matter appliqué par `hugo new <chemin>`. 
 
 ## Archetypes du site
 
-| Archetype | Usage | Champs spécifiques |
-|---|---|---|
-| `default.md` | Pages génériques | — |
-| `blog.md` | Articles de blog | `tags`, `description`, `cover` |
-| `projets.md` | Fiches projets | `tags`, `description`, `status`, `repo`, `demo`, `role` |
+| Archetype    | Usage            | Champs spécifiques                                      |
+|--------------|------------------|---------------------------------------------------------|
+| `default.md` | Pages génériques | —                                                       |
+| `blog.md`    | Articles de blog | `tags`, `description`, `cover`                          |
+| `projets.md` | Fiches projets   | `tags`, `description`, `status`, `repo`, `demo`, `role` |
 
 Champs communs : `title` (dérivé du nom de fichier), `date`, `draft = true`, `translationKey`.
 
@@ -49,7 +49,7 @@ Pièges :
 
 Deux langages imbriqués, deux règles :
 
-```toml
+```toml/run
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 ```
 
