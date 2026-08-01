@@ -1,0 +1,9 @@
+[[main]]
+name = 'Projets'
+url = '/projets/'
+weight = 10
+
+[[main]]
+name = 'Blog'
+url = '/blog/'
+weight = 20
