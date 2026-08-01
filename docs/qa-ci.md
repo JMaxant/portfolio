@@ -1,6 +1,6 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.0.0
+version: 1.1.0
 date_publication: 2026-08-01
 date_modification: 2026-08-01
 ---
@@ -20,13 +20,14 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 
 ## Les checks (`lefthook.yml`)
 
-| Check                      | Outil                                   | Portée                                                                                                       |
-|----------------------------|-----------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| `whitespace-and-conflicts` | `git diff --check` (arbre vide → index) | Whitespace en fin de ligne + marqueurs de conflit résiduels, sur tous les fichiers trackés tels que commités |
-| `taplo-fmt` / `taplo-lint` | `@taplo/cli` (npx, épinglé)             | Format + lint TOML                                                                                           |
-| `markdownlint`             | `markdownlint-cli2` (npx, épinglé)      | Markdown, hors `docs/**`                                                                                     |
-| `stylelint`                | `stylelint` (devDependency)             | CSS (`stylelint-config-standard`)                                                                            |
-| `hugo-build`               | `scripts/quality/check-hugo-build.sh`   | `hugo --gc --minify`, tout `WARN` = échec                                                                    |
+| Check                      | Outil                                  | Portée                                                                              |
+|----------------------------|----------------------------------------|-------------------------------------------------------------------------------------|
+| `editorconfig`             | `editorconfig-checker` (devDependency) | Règles `.editorconfig` : trailing whitespace, newline finale, encodage UTF-8, LF    |
+| `conflict-markers`         | `git grep`                             | Marqueurs de conflit résiduels (`<<<<<<<`, `=======`, `>>>>>>>`) — fichiers trackés |
+| `taplo-fmt` / `taplo-lint` | `@taplo/cli` (npx, épinglé)            | Format + lint TOML                                                                  |
+| `markdownlint`             | `markdownlint-cli2` (npx, épinglé)     | Markdown, hors `docs/**`                                                            |
+| `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard`)                                                   |
+| `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
 
 ## Workflows GitHub Actions
 
@@ -49,7 +50,8 @@ Build Hugo → lychee **en ligne** (liens externes inclus). En cas de liens mort
 | `lychee.toml` | Config lychee partagée interne/externe (ancres, retries, timeouts) |
 | `.github/actions/setup-hugo/action.yml` | Composite action Go + Hugo extended — **la version de Hugo CI s'épingle ici** (input `hugo-version`) |
 | `.markdownlint.yaml`, `.stylelintrc.json` | Configs linters |
-| `package.json` | Versions épinglées de `lefthook` et `stylelint` (installées via `npm ci` en CI) |
+| `.editorconfig` | Règles whitespace/newline/encodage — aussi appliquées à l'édition par les IDE qui le lisent nativement (PhpStorm, VS Code…) |
+| `package.json` | Versions épinglées de `lefthook`, `stylelint` et `editorconfig-checker` (installées via `npm ci` en CI) |
 
 ## Usage local
 
@@ -61,6 +63,6 @@ task qa      # tous les checks sur tous les fichiers = job CI `quality`
 ## Maintenance
 
 - **Bump Hugo CI** : `.github/actions/setup-hugo/action.yml` (garder ≥ l'exigence du README).
-- **Bump lefthook / stylelint** : `package.json` (versions exactes).
+- **Bump lefthook / stylelint / editorconfig-checker** : `package.json` (versions exactes).
 - **Bump taplo / markdownlint** : versions inline dans `lefthook.yml`.
 - **Ajouter un check** : une entrée dans `lefthook.yml` suffit — le pre-commit et la CI le récupèrent tous les deux.

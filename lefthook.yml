@@ -1,11 +1,12 @@
 pre-commit:
   parallel: true
   commands:
-    whitespace-and-conflicts:
+    editorconfig:
       glob: "*"
-      # Empty tree vs index: checks every tracked file as it will be committed,
-      # both in pre-commit and in CI's --all-files run (where index == HEAD).
-      run: git diff --check --cached "$(git hash-object -t tree /dev/null)"
+      run: npx editorconfig-checker {staged_files}
+
+    conflict-markers:
+      run: "! git grep -nE '^(<{7}|={7}|>{7})( |$)'"
 
     taplo-fmt:
       glob: "*.toml"
