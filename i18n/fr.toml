@@ -1,14 +1,14 @@
 [filtering-for]
-  other = "Filtré par"
+other = "Filtré par"
 
 [no-posts]
-  other = "Aucun article pour l'instant"
+other = "Aucun article pour l'instant"
 
 [email-subject]
-  other = "Répondre à "
+other = "Répondre à "
 
 [email-reply]
-  other = "Répondre à cet article par email"
+other = "Répondre à cet article par email"
 
 [skip-link]
-  other = "Aller au contenu principal"
+other = "Aller au contenu principal"

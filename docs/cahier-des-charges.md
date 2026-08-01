@@ -27,7 +27,7 @@ Le site sert aussi de terrain d'entraînement technique, mais ce n'est pas un ob
 Conséquences sur le ton et le contenu :
 - Ton clair, professionnel, orienté preuve (résultats, stack, contexte) plutôt qu'informel.
 - Les articles de blog technique doivent rester accessibles à un lecteur qui évalue un profil (pas seulement à des pairs devs) — éviter le jargon non expliqué en première lecture.
-- Le CV/parcours doit être facile à scanner en quelques secondes (recruteur pressé). 
+- Le CV/parcours doit être facile à scanner en quelques secondes (recruteur pressé).
 
 ## 4. Contenu prioritaire
 

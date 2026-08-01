@@ -11,7 +11,16 @@ tasks:
     cmds:
       - task --list
 
+  setup:
+    desc: Set up the local dev environment (installs npm deps and the lefthook git hook).
+    cmds:
+      - npm install
+      - npx lefthook install
+
+  qa:
+    desc: Run every quality check on all files (exactly what CI's quality job runs).
+    cmd: npx lefthook run pre-commit --all-files
+
   hugo:serve:
     aliases: [serve, dev, run]
     cmd: "{{.HUGO}} serve -D"
-

@@ -6,12 +6,12 @@ defaultContentLanguage = 'fr'
 defaultContentLanguageInSubdir = false
 
 [params]
-  madeWith = 'Made with Hugo & based on bear-cub theme'
-  [params.author]
-    name = "Julien Maxant"
+madeWith = 'Made with Hugo & based on bear-cub theme'
+[params.author]
+name = "Julien Maxant"
 
 [taxonomies]
-  tag = "tags"
+tag = "tags"
 
 [module]
 [[module.imports]]

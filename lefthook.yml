@@ -1,0 +1,30 @@
+pre-commit:
+  parallel: true
+  commands:
+    editorconfig:
+      glob: "*"
+      run: npx editorconfig-checker {staged_files}
+
+    conflict-markers:
+      run: "! git grep -nE '^(<{7}|={7}|>{7})( |$)'"
+
+    taplo-fmt:
+      glob: "*.toml"
+      run: npx --yes @taplo/cli@0.7.0 fmt --check {staged_files}
+
+    taplo-lint:
+      glob: "*.toml"
+      run: npx --yes @taplo/cli@0.7.0 lint {staged_files}
+
+    markdownlint:
+      glob: "*.md"
+      exclude:
+        - "docs/**"
+      run: npx --yes markdownlint-cli2@0.23.2 {staged_files}
+
+    stylelint:
+      glob: "*.css"
+      run: npx stylelint {staged_files}
+
+    hugo-build:
+      run: scripts/quality/check-hugo-build.sh
