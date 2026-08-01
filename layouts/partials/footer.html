@@ -1,0 +1,11 @@
+<nav>
+    <ul>
+        <li>
+            <a href='{{ absURL "index.xml" }}'>RSS</a>
+        </li>
+    </ul>
+</nav>
+
+<small>
+  {{ .Site.Copyright }} | {{ markdownify .Site.Params.madeWith }}
+</small>
