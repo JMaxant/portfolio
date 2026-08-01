@@ -32,7 +32,7 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 
 ### `ci.yml` — chaque PR + push sur `main`
 
-- **`quality`** : Node 22 (cache npm) + toolchain Hugo → `npm ci` → `npx lefthook run pre-commit --all-files`.
+- **`quality`** : Node 24 (cache npm) + toolchain Hugo → `npm ci` → `npx lefthook run pre-commit --all-files`.
 - **`links-internal`** : build Hugo → [lychee](https://github.com/lycheeverse/lychee) en `--offline` sur `public/` — liens et ancres internes uniquement, déterministe (le `baseURL` absolu est remappé vers `public/`).
 
 Concurrence : les runs de PR obsolètes sont annulés ; pas ceux de `main`.
