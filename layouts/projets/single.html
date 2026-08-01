@@ -8,10 +8,8 @@
     {{ with .Params.author }}· {{.}}{{ end }}
 </p>
 {{ end }}
-{{ with .Params.status }}<p>Status: {{ . }}</p>{{ end }}
-{{ with .Params.role }}<p>Role: {{ . }}</p>{{ end }}
-{{ with .Params.repo }}<p>Repo: <a href="{{ . }}">Code source</a></p>{{ end }}
-{{ with .Params.demo }}<p><a href="{{ . }}">Demo</a></p>{{ end }}
+{{ partial "projets-meta.html" . }}
+
 <content>
     {{ .Content }}
 </content>

@@ -12,3 +12,15 @@ other = "Répondre à cet article par email"
 
 [skip-link]
 other = "Aller au contenu principal"
+
+[project-status]
+other = "Statut"
+
+[project-role]
+other = "Rôle"
+
+[project-repo]
+other = "Dépôt"
+
+[project-demo]
+other = "Démo"

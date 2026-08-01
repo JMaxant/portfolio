@@ -1,0 +1,4 @@
+{{ with .Params.status }}<p>{{ i18n "project-status" }}: {{ . }}</p>{{ end }}
+{{ with .Params.role }}<p>{{ i18n "project-role" }}: {{ . }}</p>{{ end }}
+{{ with .Params.repo }}<p><a href="{{ . }}">{{ i18n "project-repo" }}</a></p>{{ end }}
+{{ with .Params.demo }}<p><a href="{{ . }}">{{ i18n "project-demo" }}</a></p>{{ end }}
