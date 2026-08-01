@@ -1,7 +1,7 @@
 # Shared lychee config. The internal (per-PR) check adds --offline on the CLI;
 # the weekly external check runs online with these settings as-is.
 no_progress = true
-include_fragments = true
+include_fragments = "full"
 max_retries = 2
 timeout = 20
 cache = false
