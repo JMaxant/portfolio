@@ -1,8 +1,8 @@
 ---
 title: Quality gates — pre-commit & CI
 version: 1.2.0
-date_publication: 2026-08-01
-date_modification: 2026-08-01
+date_published: 2026-08-01
+date_modified: 2026-08-01
 ---
 
 # Quality gates — pre-commit & CI

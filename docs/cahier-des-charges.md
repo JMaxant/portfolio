@@ -208,6 +208,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 
 - [ ] Créer `/parcours/`, `/blog/`, `/projets/` (pages/listes, contenu encore vide ou stub).
 - [ ] Vérifier que les layouts bear-cub (`single.html`/`list.html`) couvrent le type "projet" ; sinon prévoir un layout minimal dédié.
+- [ ] Navigation : centraliser les menus dans `config/_default/menus.toml`, trancher le cas `/parcours/` (front matter vs config), déplacer le lien RSS de la nav vers le footer via surcharge des partials bear-cub (issue #36).
 
 ### Phase 2 — Identité visuelle
 
