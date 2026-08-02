@@ -218,7 +218,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 
 ### Phase 2 — Identité visuelle
 
-- [ ] Palette d'accent + typo minimale, appliquées via `assets/styles/01-base.css`.
+- [X] Palette d'accent + typo minimale, appliquées via `assets/styles/01-base.css`.
 - [ ] Switch light/dark : détection `prefers-color-scheme` + bascule manuelle mémorisée (`localStorage`) — développement complet, rien à récupérer du thème (section 6).
 - [ ] Mise en forme des listes et articles de blog, blocs de code inclus (issue #44).
 - [ ] Mise en forme des fiches et de la liste projets (issue #45).
