@@ -1,0 +1,22 @@
+:root {
+  --color-bg: #f9f9f9;
+  --color-text: #2a2d34;
+  --color-link: #14684e;
+  --color-link-hover: #0c4a37;
+  --color-link-visited: #4f5f50;
+  --font-weight-bold: 700;
+  --font-sans: system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', monospace;
+
+  font-size: 62.5%; /* 1rem = 10px */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #16181d;
+    --color-text: #d6d8dd;
+    --color-link: #5fc2a0;
+    --color-link-hover: #85d6bb;
+    --color-link-visited: #9ab5a4;
+  }
+}
