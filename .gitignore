@@ -2,5 +2,5 @@ public/
 .hugo_build.lock
 _vendor/
 .idea/
-.claude/settings.local.json
+.claude
 node_modules/
