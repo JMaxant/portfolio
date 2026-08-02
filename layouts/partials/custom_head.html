@@ -5,11 +5,6 @@
   {{ range $files }}
     <link rel="stylesheet" href="{{ .RelPermalink }}">
   {{ end }}
-  <pre>
-    #### Debug ####
-    Kind: {{ .Kind }} | Type: {{ .Type }} | Layout: {{ .Layout }}{{ with .File }} | Fichier: {{ .Filename }}{{ end }}
-    #### Debug ####
-   </pre>
 {{ end }}
 
 {{ if hugo.IsProduction }}
