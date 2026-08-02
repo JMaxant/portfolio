@@ -21,6 +21,13 @@ tasks:
     desc: Run every quality check on all files (exactly what CI's quality job runs).
     cmd: npx lefthook run pre-commit --all-files
 
+  qa:fix:
+    desc: Auto-fix what the quality checks can fix (stylelint, taplo, markdownlint); the rest stays manual.
+    cmds:
+      - npx stylelint --fix $(git ls-files '*.css')
+      - npx --yes @taplo/cli@0.7.0 fmt $(git ls-files '*.toml')
+      - npx --yes markdownlint-cli2@0.23.2 --fix $(git ls-files '*.md' ':!docs/**')
+
   hugo:serve:
     aliases: [serve, dev, run]
     cmd: "{{.HUGO}} serve -D"

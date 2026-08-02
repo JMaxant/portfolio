@@ -1,0 +1,12 @@
+{{ if hugo.IsDevelopment }}
+<pre>
+    #### Debug ####
+    Kind: {{ .Kind }}
+    Type: {{ .Type }}
+    Layout: {{ .Layout }}{{ with .File }}
+    Fichier: {{ .Filename }}{{ end }}
+    Template: {{ templates.Current.Name }}
+    Parent: {{ templates.Current.Parent.Name }}
+    #### Debug ####
+</pre>
+{{ end }}

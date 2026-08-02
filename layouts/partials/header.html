@@ -1,0 +1,10 @@
+<a class="skip-link" href="#main-content">{{ i18n "skip-link" }}</a>
+
+{{ if .IsHome }}
+<h1>{{ .Site.Title }}</h1>
+{{ else }}
+<a href="{{ relURL .Site.Home.RelPermalink }}" class="title"><h1>{{ .Site.Title }}</h1></a>
+
+{{ end }}
+
+<nav>{{- partial "nav.html" . -}}</nav>

@@ -1,14 +1,24 @@
 [[main]]
+name = 'Accueil'
+url = '/'
+weight = 10
+
+[[main]]
 name = 'Projets'
 url = '/projets/'
-weight = 10
+weight = 20
 
 [[main]]
 name = 'Blog'
 url = '/blog/'
-weight = 20
+weight = 30
 
 [[main]]
 name = 'Veille'
 url = '/veille/'
-weight = 30
+weight = 40
+
+[[main]]
+name = 'Parcours'
+url = '/parcours/'
+weight = 50
