@@ -213,7 +213,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 
 - [X] Créer `/parcours/`, `/blog/`, `/projets/` (pages/listes, contenu encore vide ou stub).
 - [X] Vérifier que les layouts bear-cub (`single.html`/`list.html`) couvrent le type "projet" ; sinon prévoir un layout minimal dédié. => Layouts dédiés ajoutés.
-- [ ] Navigation : centraliser les menus dans `config/_default/menus.toml`, trancher le cas `/parcours/` (front matter vs config), déplacer le lien RSS de la nav vers le footer via surcharge des partials bear-cub (issue #36).
+- [X] Navigation : centraliser les menus dans `config/_default/menus.toml`, trancher le cas `/parcours/` (front matter vs config), déplacer le lien RSS de la nav vers le footer via surcharge des partials bear-cub (issue #36).
 - [X] Section `/veille/` teaser-only : cascade build options, archetype `veille.md`, layout `layouts/veille/list.html`, entrée de menu (issue #40).
 
 ### Phase 2 — Identité visuelle
@@ -226,6 +226,10 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [ ] Mise en forme de la page Parcours / CV (issue #47).
 - [ ] Mise en forme de la page d'accueil (issue #48).
 - [ ] Mise en forme navigation/header et footer (issue #49).
+- [ ] Page 404 personnalisée (issue #50).
+- [ ] Mise en forme des pages de taxonomie `/tags/` (issue #51).
+- [ ] Favicon et icônes meta (issue #52).
+- [ ] Pagination des listes : vérifier et trancher (issue #53).
 
 ### Phase 3 — Contenu réel (remplace le Lorem Ipsum)
 

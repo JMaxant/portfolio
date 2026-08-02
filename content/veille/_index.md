@@ -7,6 +7,6 @@ translationKey = 'veille'
 list = 'local'
 render = 'never'
 [cascade.target]
-path = "/veille/*"
+path = '/veille/*'
 +++
 
