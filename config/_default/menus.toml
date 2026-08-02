@@ -7,3 +7,8 @@ weight = 10
 name = 'Blog'
 url = '/blog/'
 weight = 20
+
+[[main]]
+name = 'Veille'
+url = '/veille/'
+weight = 30
