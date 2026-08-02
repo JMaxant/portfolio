@@ -49,6 +49,8 @@ Trois piliers de contenu à couvrir, par ordre de priorité :
 /parcours/            → CV / timeline d'expérience + formations + compétences
 /blog/                → liste des articles
 /blog/<slug>/         → article
+/veille/              → liste de liens externes commentés (teaser-only : aucune
+                        page détail par entrée, cf. 5quinquies)
 /contact/ (ou ancre)  → coordonnées / liens
 ```
 
@@ -81,9 +83,10 @@ Utile uniquement pour les types de contenu créés de façon répétée — pas 
 
 - **`blog`** — archetype dédié : `title`, `date`, `draft`, `tags`, `description`, éventuellement `cover`.
 - **`projets`** — archetype dédié : `title`, `date`, `tags` (liste), `role`, `repo`/`demo` (liens), `status` (en cours / terminé), `description`.
+- **`veille`** — archetype dédié : `title`, `date`, `link` (URL de l'article partagé), `description` (commentaire), `tags`, `source_lang` (langue de la source, pour l'attribut `lang` et un futur filtrage).
 - **Accueil, Parcours, À propos** — pas d'archetype nécessaire : pages uniques, créées une fois, éditées directement.
 
-Les archétypes `archetypes/default.md` (générique), `archetypes/blog.md` et `archetypes/projets.md` existent.
+Les archétypes `archetypes/default.md` (générique), `archetypes/blog.md`, `archetypes/projets.md` et `archetypes/veille.md` existent (voir [archetypes.md](archetypes.md)).
 
 ## 5quinquies. Taxonomies & filtrage des listes
 
@@ -98,6 +101,8 @@ Ne sera utilisée qu'une seule taxonomie (tags), une deuxième taxonomie sera aj
 2. **Filtre interactif côté client** sur une page de liste (cocher une techno, la liste se met à jour sans rechargement) — nécessite du JS (site 100% statique, pas de traitement serveur), faisable en vanilla JS à cette échelle mais c'est un vrai morceau de dev, pas juste de la config.
 
 Le niveau 1 est à considérer comme acquis dès qu'une taxonomie existe. Le niveau 2 reste un point ouvert (voir section 14).
+
+**Cas particulier — section `/veille/` (issue #40)** : entrées *teaser-only* via build options en cascade dans `content/veille/_index.md` (`build.render = 'never'`, `build.list = 'local'`, ciblées sur `/veille/*` pour épargner la page de section). Vérifié empiriquement : une page `render = 'never'` **n'engendre jamais de page de taxonomie**, même avec `list = 'always'` — les tags des entrées veille n'alimentent donc pas les pages `/tags/*`. Le champ `tags` est conservé dans l'archetype pour un futur filtrage côté client (niveau 2 ci-dessus, hors V1). Avec `list = 'always'` les entrées apparaîtraient dans le RSS global ; choix V1 : `local`, visibilité limitée à la liste de section.
 
 ## 6. Identité visuelle
 
@@ -151,11 +156,11 @@ Pas de lien de prise de RDV (Cal.com/Calendly) à ce stade.
 
 **Non tranché.** Options à évaluer avant de coder la CI/CD :
 
-| Option | Avantage principal | Point d'attention |
-|---|---|---|
-| GitHub Pages | Gratuit, Actions CI/CD simples, le repo est déjà sur GitHub | Pas de traitement serveur (formulaires, redirections avancées) |
-| Cloudflare Pages | Bonne perf/CDN, extensible (edge functions) si besoin plus tard | Légèrement plus de configuration initiale |
-| Netlify | Formulaires natifs sans backend | Moins pertinent ici puisqu'aucun formulaire n'est prévu |
+| Option           | Avantage principal                                              | Point d'attention                                              |
+|------------------|-----------------------------------------------------------------|----------------------------------------------------------------|
+| GitHub Pages     | Gratuit, Actions CI/CD simples, le repo est déjà sur GitHub     | Pas de traitement serveur (formulaires, redirections avancées) |
+| Cloudflare Pages | Bonne perf/CDN, extensible (edge functions) si besoin plus tard | Légèrement plus de configuration initiale                      |
+| Netlify          | Formulaires natifs sans backend                                 | Moins pertinent ici puisqu'aucun formulaire n'est prévu        |
 
 Le nom de domaine (`julien-maxant.com`) est déjà défini dans `hugo.toml` — la décision d'hébergement doit rester compatible avec un domaine custom en HTTPS.
 
@@ -209,11 +214,18 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [X] Créer `/parcours/`, `/blog/`, `/projets/` (pages/listes, contenu encore vide ou stub).
 - [X] Vérifier que les layouts bear-cub (`single.html`/`list.html`) couvrent le type "projet" ; sinon prévoir un layout minimal dédié. => Layouts dédiés ajoutés.
 - [ ] Navigation : centraliser les menus dans `config/_default/menus.toml`, trancher le cas `/parcours/` (front matter vs config), déplacer le lien RSS de la nav vers le footer via surcharge des partials bear-cub (issue #36).
+- [X] Section `/veille/` teaser-only : cascade build options, archetype `veille.md`, layout `layouts/veille/list.html`, entrée de menu (issue #40).
 
 ### Phase 2 — Identité visuelle
 
 - [ ] Palette d'accent + typo minimale, appliquées via `assets/styles/01-base.css`.
 - [ ] Switch light/dark : détection `prefers-color-scheme` + bascule manuelle mémorisée (`localStorage`) — développement complet, rien à récupérer du thème (section 6).
+- [ ] Mise en forme des listes et articles de blog, blocs de code inclus (issue #44).
+- [ ] Mise en forme des fiches et de la liste projets (issue #45).
+- [ ] Mise en forme de la liste de veille (issue #46).
+- [ ] Mise en forme de la page Parcours / CV (issue #47).
+- [ ] Mise en forme de la page d'accueil (issue #48).
+- [ ] Mise en forme navigation/header et footer (issue #49).
 
 ### Phase 3 — Contenu réel (remplace le Lorem Ipsum)
 

@@ -1,0 +1,42 @@
+{{ define "main" }}
+<content>
+    <ul class="blog-posts">
+        {{ range .Pages }}
+        <li>
+      <span>
+        <i>
+          <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
+            {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+          </time>
+        </i>
+      </span>
+            {{ if .Params.link }}
+                <a
+                    {{ with .Params.source_lang }} lang="{{ . }}"{{ end }}
+                    href="{{ .Params.link }}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                        {{ .Title }} ↪
+                </a>
+            {{ end }}
+
+            {{ if .Params.description }}
+                <p>{{ .Params.description }}</p>
+            {{ end }}
+            {{ if .Params.tags }}
+                <ul>
+                    {{ range .Params.tags }}
+                    <li>{{ . }}</li>
+                    {{ end }}
+                </ul>
+            {{ end }}
+        </li>
+        {{ else }}
+        <li>
+            {{ i18n "no-posts" }}
+        </li>
+        {{ end }}
+    </ul>
+</content>
+{{ end }}
