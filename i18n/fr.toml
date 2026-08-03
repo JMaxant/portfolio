@@ -24,3 +24,15 @@ other = "Dépôt"
 
 [project-demo]
 other = "Démo"
+
+[theme]
+other = "Thème"
+
+[dark]
+other = "Sombre"
+
+[light]
+other = "Clair"
+
+[system]
+other = "Système"

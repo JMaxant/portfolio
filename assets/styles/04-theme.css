@@ -1,0 +1,25 @@
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--dark-bg);
+    --color-text: var(--dark-text);
+    --color-link: var(--dark-link);
+    --color-link-hover: var(--dark-link-hover);
+    --color-link-visited: var(--dark-link-visited);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: var(--dark-bg);
+  --color-text: var(--dark-text);
+  --color-link: var(--dark-link);
+  --color-link-hover: var(--dark-link-hover);
+  --color-link-visited: var(--dark-link-visited);
+}
+
+:root[data-theme="light"] {
+  --color-bg: var(--light-bg);
+  --color-text: var(--light-text);
+  --color-link: var(--light-link);
+  --color-link-hover: var(--light-link-hover);
+  --color-link-visited: var(--light-link-visited);
+}
