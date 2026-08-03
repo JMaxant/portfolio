@@ -4,7 +4,8 @@
 <h1>{{ .Site.Title }}</h1>
 {{ else }}
 <a href="{{ relURL .Site.Home.RelPermalink }}" class="title"><h1>{{ .Site.Title }}</h1></a>
-
 {{ end }}
 
 <nav>{{- partial "nav.html" . -}}</nav>
+
+<div class="theme-switcher">{{- partial "theme-switcher.html" . -}}</div>
