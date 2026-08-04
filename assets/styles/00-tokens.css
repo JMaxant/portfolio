@@ -13,6 +13,21 @@
   --dark-link-hover: #85d6bb;
   --dark-link-visited: #9ab5a4;
 
+  /* Breakpoints */
+  --bp-mobile: 480px;
+  --bp-mobile-lg: 640px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-desktop-lg: 1280px;
+
+  /* Paddings/margins */
+  --padding-default: 1rem;
+
+  /* Base container width */
+  --container-wide: var(--bp-desktop-lg);
+  --container-reading: 70ch;
+  --container-default: 1024px;
+
   /* Base color. */
   --color-bg: var(--light-bg);
   --color-text: var(--light-text);
