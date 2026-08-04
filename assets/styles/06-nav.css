@@ -1,0 +1,5 @@
+.menu {
+  display: flex;
+  gap: var(--spacing-lg);
+  font-size: var(--text-base);
+}

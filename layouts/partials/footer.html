@@ -1,11 +1,14 @@
-<nav>
-    <ul class="menu menu--footer">
-        <li>
-            <a href='{{ absURL "index.xml" }}'>RSS</a>
-        </li>
+<div class="container--wide">
+  <nav>
+    <ul class="menu menu--footer" role="list">
+      <li>
+        <a href='{{ absURL "index.xml" }}'>RSS</a>
+      </li>
     </ul>
-</nav>
+  </nav>
 
-<small>
-  {{ .Site.Copyright }} | {{ markdownify .Site.Params.madeWith }}
-</small>
+  <p>
+    {{ .Site.Copyright }} | {{ markdownify .Site.Params.madeWith }}
+  </p>
+
+</div>
