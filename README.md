@@ -12,7 +12,26 @@ Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](htt
 
 ## CSS stack
 
-Plain CSS, no preprocessor, no framework. Numbered files in `assets/styles/` (e.g. `01-base.css`), concatenated/minified/fingerprinted by Hugo's asset pipeline (`layouts/partials/custom_head.html`) in production only; served separately and unminified in development for debugging. Linted with [Stylelint](https://stylelint.io) + `stylelint-config-standard`.
+- Plain CSS
+- Numbered files in `assets/styles/` (e.g. `01-base.css`) are imported by `assets/styles/main.css`
+- Built with Hugo's native `css.Build`
+- Minified and fingerprinted in production only
+- served with a linked sourcemap in development for debugging.
+
+Target browser baseline:
+
+- Chrome 100+
+- Firefox 100+
+- Safari 15+,
+- Edge 100+
+
+Used by `css.Build` to down-level unsupported syntax (e.g. native CSS nesting) and by [Stylelint](https://stylelint.io) (`stylelint-config-standard` + `stylelint-no-unsupported-browser-features`
+
+See:
+
+- the `browserslist` in `package.json`
+- `layouts/partials/css.html`
+- [Pre-commit/CI docs](docs/qa-ci.md)
 
 ## Setup
 

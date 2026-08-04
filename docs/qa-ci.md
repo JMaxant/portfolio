@@ -1,8 +1,8 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.2.0
+version: 1.3.0
 date_published: 2026-08-01
-date_modified: 2026-08-01
+date_modified: 2026-08-04
 ---
 
 # Quality gates — pre-commit & CI
@@ -26,9 +26,18 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 | `conflict-markers`         | `git grep`                             | Marqueurs de conflit résiduels (`<<<<<<<`, `=======`, `>>>>>>>`) — fichiers trackés |
 | `taplo-fmt` / `taplo-lint` | `@taplo/cli` (npx, épinglé)            | Format + lint TOML                                                                  |
 | `markdownlint`             | `markdownlint-cli2` (npx, épinglé)     | Markdown, hors `docs/**`                                                            |
-| `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard`)                                                   |
+| `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard` + `stylelint-no-unsupported-browser-features`)     |
 | `actionlint`               | `actionlint` (via `go run`, épinglé)   | Workflows GitHub Actions (`.github/workflows/*.yml`)                                |
 | `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
+
+## Baseline navigateurs
+
+Réf : issue #63. Cible : **Chrome 100+, Firefox 100+, Safari 15+, Edge 100+**.
+
+- `stylelint-no-unsupported-browser-features` lit le champ `browserslist` de `package.json` pour flaguer, en amont, toute feature CSS hors baseline.
+- `css.Build` (`layouts/partials/css.html`) reçoit la même baseline en dur (option `target`) et down-level la syntaxe non supportée (ex. nesting natif) au build.
+
+Les deux listes sont dupliquées manuellement — pas d'outil de synchronisation (`browserslist-to-esbuild` ou équivalent) pour éviter une dépendance supplémentaire. En cas de changement de baseline, mettre à jour les deux (`package.json` et `layouts/partials/css.html`) ainsi que le README.
 
 ## Workflows GitHub Actions
 
