@@ -11,10 +11,14 @@
           "css-nesting",
           "css-scroll-behavior",
           "css-media-range-syntax",
-          "text-size-adjust"
+          "text-size-adjust",
+          "css-appearance"
         ]
       }
     ],
+    "property-no-vendor-prefix": [true, {
+      "ignoreProperties": ["-webkit-appearance"]
+    }],
     "selector-class-pattern": "^[a-z]([a-z0-9]*(-[a-z0-9]+)*)?(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$"
   }
 }
