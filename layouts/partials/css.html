@@ -1,0 +1,24 @@
+{{ if (.Page.Store.Get "hasCodeBlock") }}
+  {{ $syntax := resources.Get "syntax.css" | minify }}
+  <link href="{{ $syntax.RelPermalink }}" rel="stylesheet">
+{{ end }}
+
+{{ with .Params.style }}
+  {{ $extra := resources.Get . | minify }}
+  <link href="{{ $extra.RelPermalink }}" rel="stylesheet">
+{{ end }}
+
+{{ $opts := dict
+  "target" (slice "chrome100" "edge100" "firefox100" "safari15")
+  "minify" (not hugo.IsDevelopment)
+  "sourceMap" (cond hugo.IsDevelopment "linked" "none")
+}}
+{{ with resources.Get "styles/main.css" | css.Build $opts }}
+  {{ if hugo.IsDevelopment }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{ else }}
+    {{ with . | fingerprint }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+    {{ end }}
+  {{ end }}
+{{ end }}
