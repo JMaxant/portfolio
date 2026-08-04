@@ -13,10 +13,7 @@
   --dark-link-hover: #b4c3fa;
   --dark-link-visited: #b39fd6;
 
-  /* Breakpoint unique (tablet et -, tablet et +) — documentation seulement :
-     les custom properties ne sont pas résolues dans les @media. Chaque @media
-     utilisant 768px doit porter un commentaire `--bp-tablet` pour garder la
-     synchro manuelle. */
+  /* Breakpoint */
   --bp-tablet: 768px;
 
   /* Spacing scale (1rem = 10px, cf. font-size: 62.5% ci-dessous) */
