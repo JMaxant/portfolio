@@ -3,6 +3,11 @@ header {
   margin: auto;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 4rem;
+}
+
+.site-title {
+  display: flex;
+  flex-direction: column;
 }
