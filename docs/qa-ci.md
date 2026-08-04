@@ -1,6 +1,6 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.3.0
+version: 1.4.0
 date_published: 2026-08-01
 date_modified: 2026-08-04
 ---
@@ -38,6 +38,8 @@ Réf : issue #63. Cible : **Chrome 100+, Firefox 100+, Safari 15+, Edge 100+**.
 - `css.Build` (`layouts/partials/css.html`) reçoit la même baseline en dur (option `target`) et down-level la syntaxe non supportée (ex. nesting natif) au build.
 
 Les deux listes sont dupliquées manuellement — pas d'outil de synchronisation (`browserslist-to-esbuild` ou équivalent) pour éviter une dépendance supplémentaire. En cas de changement de baseline, mettre à jour les deux (`package.json` et `layouts/partials/css.html`) ainsi que le README.
+
+Répartition des rôles transpileur/linter et justification des features ignorées : voir [css-compat.md](css-compat.md).
 
 ## Workflows GitHub Actions
 
