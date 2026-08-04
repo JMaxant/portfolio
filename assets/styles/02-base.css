@@ -65,5 +65,5 @@ pre {
 .container--reading,
 .container--wide {
   margin-inline: auto;
-  padding-inline: var(--padding-default);
+  padding-inline: var(--spacing-md);
 }

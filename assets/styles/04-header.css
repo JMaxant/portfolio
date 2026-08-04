@@ -1,0 +1,28 @@
+header .container--wide {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--spacing-lg);
+
+  .site-title {
+    display: flex;
+    flex-direction: column;
+    font-weight: 300;
+    font-size: var(--text-xl);
+    color: inherit;
+    text-decoration: none;
+
+    span {
+      font-weight: 200;
+      font-size: var(--text-lg);
+    }
+  }
+}
+
+@media screen and (width <= 768px) {
+  header .container--wide {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}

@@ -1,10 +1,23 @@
-<a class="skip-link" href="#main-content">{{ i18n "skip-link" }}</a>
+<div class="container--wide">
+  <a class="skip-link" href="#main-content">{{ i18n "skip-link" }}</a>
 
-<h1 class="site-title">
-  {{ .Site.Title }}
-  <span>{{ .Site.Params.baseline }}</span>
-</h1>
+  {{ if .IsHome }}
+  <h1 class="site-title">
+    {{ .Site.Title }}
+    <span>{{ .Site.Params.baseline }}</span>
+  </h1>
+  {{ else }}
+  <h1>
+    <a href="{{ relURL .Site.Home.RelPermalink }}" class="site-title">
+      {{ .Site.Title }}
+      <span>{{ .Site.Params.baseline }}</span>
+    </a>
+  </h1>
 
-<nav>{{- partial "nav.html" . -}}</nav>
+  {{ end }}
 
-<div class="theme-switcher">{{- partial "theme-switcher.html" . -}}</div>
+  <nav>{{- partial "nav.html" . -}}</nav>
+
+  <div class="theme-switcher">{{- partial "theme-switcher.html" . -}}</div>
+
+</div>

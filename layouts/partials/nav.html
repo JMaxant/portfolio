@@ -1,5 +1,5 @@
 <nav>
-  <ul class="menu menu--main">
+  <ul class="menu menu--main" role="list">
     {{ range .Site.Menus.main.ByWeight }}
     <li>
       <a href="{{ .URL }}">{{ .Name }}</a>
