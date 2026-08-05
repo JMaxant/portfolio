@@ -1,8 +1,8 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.4.0
+version: 1.5.0
 date_published: 2026-08-01
-date_modified: 2026-08-04
+date_modified: 2026-08-05
 ---
 
 # Quality gates — pre-commit & CI
@@ -26,13 +26,13 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 | `conflict-markers`         | `git grep`                             | Marqueurs de conflit résiduels (`<<<<<<<`, `=======`, `>>>>>>>`) — fichiers trackés |
 | `taplo-fmt` / `taplo-lint` | `@taplo/cli` (npx, épinglé)            | Format + lint TOML                                                                  |
 | `markdownlint`             | `markdownlint-cli2` (npx, épinglé)     | Markdown, hors `docs/**`                                                            |
-| `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard` + `stylelint-no-unsupported-browser-features`)     |
+| `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard` + `stylelint-config-recess-order` pour l'ordre des propriétés + `stylelint-no-unsupported-browser-features`) |
 | `actionlint`               | `actionlint` (via `go run`, épinglé)   | Workflows GitHub Actions (`.github/workflows/*.yml`)                                |
 | `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
 
 ## Baseline navigateurs
 
-Réf : issue #63. Cible : **Chrome 100+, Firefox 100+, Safari 15+, Edge 100+**.
+Réf : issue #63 (relevée lors de l'issue #61). Cible : **Chrome 105+, Firefox 121+, Safari 16+, Edge 105+**.
 
 - `stylelint-no-unsupported-browser-features` lit le champ `browserslist` de `package.json` pour flaguer, en amont, toute feature CSS hors baseline.
 - `css.Build` (`layouts/partials/css.html`) reçoit la même baseline en dur (option `target`) et down-level la syntaxe non supportée (ex. nesting natif) au build.
@@ -45,7 +45,7 @@ Répartition des rôles transpileur/linter et justification des features ignoré
 
 ### `ci.yml` — chaque PR + push sur `main`
 
-- **`quality`** : Node 24 (cache npm) + toolchain Hugo → `npm ci` → `npx lefthook run pre-commit --all-files`.
+- **`quality`** : Node (version lue dans `.nvmrc`, cache npm) + toolchain Hugo → `npm ci` → `npx lefthook run pre-commit --all-files`.
 - **`links-internal`** : build Hugo → [lychee](https://github.com/lycheeverse/lychee) en `--offline` sur `public/` — liens et ancres internes uniquement, déterministe (le `baseURL` absolu est remappé vers `public/`).
 
 Concurrence : les runs de PR obsolètes sont annulés ; pas ceux de `main`.
@@ -63,12 +63,13 @@ Build Hugo → lychee **en ligne** (liens externes inclus). En cas de liens mort
 | `.github/actions/setup-hugo/action.yml` | Composite action Go + Hugo extended — **la version de Hugo CI s'épingle ici** (input `hugo-version`) |
 | `.markdownlint.yaml`, `.stylelintrc.json` | Configs linters |
 | `.editorconfig` | Règles whitespace/newline/encodage — aussi appliquées à l'édition par les IDE qui le lisent nativement (PhpStorm, VS Code…) |
-| `package.json` | Versions épinglées de `lefthook`, `stylelint` et `editorconfig-checker` (installées via `npm ci` en CI) |
+| `package.json` | devDependencies (ranges `^`, versions exactes figées par `package-lock.json`, installées via `npm ci` en CI) ; champ `engines` (Node minimal) ; `allowScripts` autorise le `postinstall` de lefthook, qui installe le hook git |
+| `.nvmrc` | Version Node du projet — lue par nvm/fnm/mise en local et par `actions/setup-node` en CI (`node-version-file`) ; cohérente avec `engines` |
 
 ## Usage local
 
 ```sh
-task setup   # npm install + installation du hook git lefthook
+task setup   # npm ci — le hook git lefthook est installé par son postinstall (autorisé via allowScripts)
 task qa      # tous les checks sur tous les fichiers = job CI `quality`
 ```
 
