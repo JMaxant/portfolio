@@ -1,10 +1,10 @@
 {
   "private": true,
   "browserslist": [
-    "Chrome >= 100",
-    "Firefox >= 100",
-    "Safari >= 15",
-    "Edge >= 100"
+    "Chrome >= 105",
+    "Firefox >= 121",
+    "Safari >= 16",
+    "Edge >= 105"
   ],
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -9,7 +9,7 @@
 {{ end }}
 
 {{ $opts := dict
-  "target" (slice "chrome100" "edge100" "firefox100" "safari15")
+  "target" (slice "chrome105" "edge105" "firefox121" "safari16")
   "minify" (not hugo.IsDevelopment)
   "sourceMap" (cond hugo.IsDevelopment "linked" "none")
 }}

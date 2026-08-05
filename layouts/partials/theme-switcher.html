@@ -1,16 +1,18 @@
 <fieldset>
   <legend>{{ i18n "theme" }}</legend>
 
-  <label for="theme-light" >
-    <input type="radio" name="theme" value="light" id="theme-light">
-    {{ i18n "light" }}
-  </label>
-  <label for="theme-dark">
-    <input type="radio" name="theme" value="dark" id="theme-dark" >
-    {{ i18n "dark" }}
-  </label>
-  <label for="theme-system">
-    <input type="radio" name="theme" value="system" id="theme-system" checked>
-    {{ i18n "system" }}
-  </label>
+  <div class="theme-switcher--wrapper">
+    <label for="theme-light">
+      <input type="radio" name="theme" value="light" id="theme-light">
+      {{ i18n "light" }}
+    </label>
+    <label for="theme-dark">
+      <input type="radio" name="theme" value="dark" id="theme-dark">
+      {{ i18n "dark" }}
+    </label>
+    <label for="theme-system">
+      <input type="radio" name="theme" value="system" id="theme-system" checked>
+      {{ i18n "system" }}
+    </label>
+  </div>
 </fieldset>

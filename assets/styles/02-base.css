@@ -4,6 +4,7 @@ body {
   font-size: 1.8rem;
   background-color: var(--color-bg);
   color: var(--color-text);
+  transition: all 0.2s ease-in-out;
 }
 
 a {
@@ -66,4 +67,9 @@ pre {
 .container--wide {
   margin-inline: auto;
   padding-inline: var(--spacing-md);
+}
+
+:focus-visible {
+  outline: 2px dashed var(--color-text);
+  outline-offset: 2px;
 }
