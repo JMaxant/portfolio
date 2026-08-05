@@ -20,10 +20,10 @@ Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](htt
 
 Target browser baseline:
 
-- Chrome 100+
-- Firefox 100+
-- Safari 15+,
-- Edge 100+
+- Chrome 105+
+- Firefox 121+
+- Safari 16+,
+- Edge 105+
 
 Used by `css.Build` to down-level unsupported syntax (e.g. native CSS nesting) and by [Stylelint](https://stylelint.io) (`stylelint-config-standard` + `stylelint-no-unsupported-browser-features`
 

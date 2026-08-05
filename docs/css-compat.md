@@ -7,7 +7,7 @@ date_modified: 2026-08-04
 
 # CSS browser compatibility
 
-Ref: issue #63. Browser baseline: **Chrome 100+, Firefox 100+, Safari 15+, Edge 100+** (see [qa-ci.md](qa-ci.md), "Baseline navigateurs").
+Ref: issue #63. Browser baseline: **Chrome 105+, Firefox 121+, Safari 16+, Edge 105+** (see [qa-ci.md](qa-ci.md), "Baseline navigateurs").
 
 ## Division of work
 
