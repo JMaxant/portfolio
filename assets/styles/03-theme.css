@@ -5,6 +5,10 @@
     --color-link: var(--dark-link);
     --color-link-hover: var(--dark-link-hover);
     --color-link-visited: var(--dark-link-visited);
+    --color-surface: var(--dark-surface);
+    --color-surface-alt: var(--dark-surface-alt);
+    --color-border: var(--dark-border);
+    --color-border-strong: var(--dark-border-strong);
   }
 }
 
@@ -14,6 +18,10 @@
   --color-link: var(--dark-link);
   --color-link-hover: var(--dark-link-hover);
   --color-link-visited: var(--dark-link-visited);
+  --color-surface: var(--dark-surface);
+  --color-surface-alt: var(--dark-surface-alt);
+  --color-border: var(--dark-border);
+  --color-border-strong: var(--dark-border-strong);
 }
 
 :root[data-theme="light"] {
@@ -22,4 +30,50 @@
   --color-link: var(--light-link);
   --color-link-hover: var(--light-link-hover);
   --color-link-visited: var(--light-link-visited);
+  --color-surface: var(--light-surface);
+  --color-surface-alt: var(--light-surface-alt);
+  --color-border: var(--light-border);
+  --color-border-strong: var(--light-border-strong);
+}
+
+.theme-switcher {
+  fieldset {
+    display: flex;
+    padding: 0;
+    border: none;
+
+    legend {
+      font-size: var(--text-sm);
+    }
+
+    .theme-switcher--wrapper {
+      display: flex;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+    }
+
+    label {
+      padding: var(--spacing-2xs) var(--spacing-xs);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:has(input:checked) {
+        font-weight: var(--font-weight-bold);
+        color: var(--color-bg);
+        background-color: var(--color-link);
+      }
+
+      &:has(input:focus-visible) {
+        outline: 2px dashed var(--color-bg);
+        outline-offset: -3px;
+      }
+    }
+
+    input {
+      appearance: none;
+      outline: none;
+    }
+  }
 }

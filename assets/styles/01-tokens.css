@@ -5,6 +5,10 @@
   --light-link: #2145c9;
   --light-link-hover: #162f92;
   --light-link-visited: #6b4fa0;
+  --light-surface: #fff;
+  --light-surface-alt: #eef0f5;
+  --light-border: #d8dce4;
+  --light-border-strong: #b6bdcb;
 
   /* Dark theme. */
   --dark-bg: #16181d;
@@ -12,11 +16,12 @@
   --dark-link: #93a8f5;
   --dark-link-hover: #b4c3fa;
   --dark-link-visited: #b39fd6;
+  --dark-surface: #1c1f27;
+  --dark-surface-alt: #21252e;
+  --dark-border: #2b3040;
+  --dark-border-strong: #414b60;
 
-  /* Breakpoint unique (tablet et -, tablet et +) — documentation seulement :
-     les custom properties ne sont pas résolues dans les @media. Chaque @media
-     utilisant 768px doit porter un commentaire `--bp-tablet` pour garder la
-     synchro manuelle. */
+  /* Breakpoint */
   --bp-tablet: 768px;
 
   /* Spacing scale (1rem = 10px, cf. font-size: 62.5% ci-dessous) */
@@ -51,9 +56,17 @@
   --color-link: var(--light-link);
   --color-link-hover: var(--light-link-hover);
   --color-link-visited: var(--light-link-visited);
+  --color-surface: var(--light-surface);
+  --color-surface-alt: var(--light-surface-alt);
+  --color-border: var(--light-border);
+  --color-border-strong: var(--light-border-strong);
   --font-weight-bold: 700;
   --font-sans: system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', monospace;
+
+  /* Misc. */
+  --transition: all 0.2s ease-in-out;
+  --border-radius: 0.4rem;
 
   font-size: 62.5%; /* 1rem = 10px */
 }

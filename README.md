@@ -8,7 +8,7 @@ Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](htt
 
 - **Hugo extended** v0.164.0+ (custom `layouts/` overrides use `.Site.Language.Locale` and `hugo.Sites`, unavailable before Hugo v0.158.0 — see `layouts/_default/baseof.html`, `layouts/_default/rss.xml`, `layouts/partials/nav.html`)
 - **Go** 1.26.5+ (Hugo Modules resolution — see `go.mod`)
-- **Node/npm** (for `stylelint` and `lefthook` — see Setup below)
+- **Node** 24+ (for `stylelint` and `lefthook` — see Setup below; version declared in `.nvmrc` and enforced by the `engines` field of `package.json`)
 
 ## CSS stack
 
@@ -20,12 +20,12 @@ Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](htt
 
 Target browser baseline:
 
-- Chrome 100+
-- Firefox 100+
-- Safari 15+,
-- Edge 100+
+- Chrome 105+
+- Firefox 121+
+- Safari 16+
+- Edge 105+
 
-Used by `css.Build` to down-level unsupported syntax (e.g. native CSS nesting) and by [Stylelint](https://stylelint.io) (`stylelint-config-standard` + `stylelint-no-unsupported-browser-features`
+Used by `css.Build` to down-level unsupported syntax (e.g. native CSS nesting) and by [Stylelint](https://stylelint.io) (`stylelint-config-standard` + `stylelint-config-recess-order` for property order + `stylelint-no-unsupported-browser-features`).
 
 See:
 
@@ -39,7 +39,7 @@ See:
 task setup
 ```
 
-Runs `npm install` (Stylelint and [lefthook](https://github.com/evilmartians/lefthook), both pinned in `package.json`) and installs the lefthook pre-commit git hook (whitespace/conflict check, TOML/Markdown/CSS linting, strict Hugo build). TOML/Markdown linters run via ad-hoc `npx`, no install needed for those.
+Runs `npm ci` (Stylelint and [lefthook](https://github.com/evilmartians/lefthook), versions locked by `package-lock.json`). Lefthook's `postinstall` script — allowed through the `allowScripts` field of `package.json` — installs the pre-commit git hook (whitespace/conflict check, TOML/Markdown/CSS linting, strict Hugo build). TOML/Markdown linters run via ad-hoc `npx`, no install needed for those.
 
 To run every check on all files (not just staged ones):
 

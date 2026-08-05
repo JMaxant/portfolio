@@ -1,19 +1,27 @@
 {
   "private": true,
   "browserslist": [
-    "Chrome >= 100",
-    "Firefox >= 100",
-    "Safari >= 15",
-    "Edge >= 100"
+    "Chrome >= 105",
+    "Firefox >= 121",
+    "Safari >= 16",
+    "Edge >= 105"
   ],
+  "engines": {
+    "node": ">=24"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "editorconfig-checker": "6.1.1",
+    "editorconfig-checker": "^6.1.1",
     "eslint": "^10.8.0",
     "globals": "^17.9.0",
-    "lefthook": "2.1.10",
-    "stylelint": "17.14.1",
-    "stylelint-config-standard": "40.0.0",
-    "stylelint-no-unsupported-browser-features": "^8.1.1"
+    "lefthook": "^2.1.10",
+    "stylelint": "^17.14.1",
+    "stylelint-config-recess-order": "^7.7.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-no-unsupported-browser-features": "^8.1.1",
+    "stylelint-order": "^8.1.1"
+  },
+  "allowScripts": {
+    "lefthook@2.1.10": true
   }
 }
