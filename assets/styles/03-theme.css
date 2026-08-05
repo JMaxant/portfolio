@@ -38,31 +38,31 @@
 
 .theme-switcher {
   fieldset {
+    display: flex;
     padding: 0;
     border: none;
-    display: flex;
 
     legend {
       font-size: var(--text-sm);
     }
 
     .theme-switcher--wrapper {
-      border: 1px solid var(--color-border);
-      border-radius: var(--border-radius);
       display: flex;
       overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
     }
 
     label {
-      cursor: pointer;
       padding: var(--spacing-2xs) var(--spacing-xs);
       font-size: var(--text-sm);
+      cursor: pointer;
       transition: all 0.2s ease-in-out;
 
       &:has(input:checked) {
-        background-color: var(--color-link);
-        color: var(--color-bg);
         font-weight: var(--font-weight-bold);
+        color: var(--color-bg);
+        background-color: var(--color-link);
       }
 
       &:has(input:focus-visible) {

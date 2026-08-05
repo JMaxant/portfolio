@@ -1,5 +1,5 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
   "plugins": [
     "stylelint-no-unsupported-browser-features"
   ],
