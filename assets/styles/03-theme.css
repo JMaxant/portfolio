@@ -49,7 +49,7 @@
     .theme-switcher--wrapper {
       display: flex;
       overflow: hidden;
-      border: 1px solid var(--color-border);
+      border: var(--border-thin);
       border-radius: var(--border-radius);
     }
 

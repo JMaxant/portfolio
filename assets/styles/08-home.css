@@ -1,5 +1,12 @@
 .home {
   &.home__projets {
+    padding-block: var(--spacing-lg);
     background: var(--color-surface-alt);
+
+    h2 {
+      margin-block: 0 var(--spacing-md);
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-normal);
+    }
   }
 }

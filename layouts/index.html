@@ -6,16 +6,16 @@
 {{ end }}
 
 {{ with $featured }}
-<section class="home home__projets">
-  <div class="container--wide">
-    <h2>Projets phares</h2>
-    <div class="cards cards--grid">
-      {{ range . }}
-      {{ partial "card.html" . }}
-      {{ end }}
+  <section class="home home__projets">
+    <div class="container--wide">
+      <h2>Projets phares</h2>
+      <div class="cards cards--grid">
+        {{ range . }}
+        {{ partial "card.html" . }}
+        {{ end }}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 {{ end }}
 
 {{ .Content }}

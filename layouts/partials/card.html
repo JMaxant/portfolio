@@ -3,7 +3,7 @@
     <a href="{{ .RelPermalink }}">{{ .Title }}</a>
   </h3>
   {{ with .Description }}
-    <p>{{ . }}</p>
+    <p class="card__body">{{ . }}</p>
   {{ end }}
   <div class="card__footer">
     {{ with .Params.status }}

@@ -34,6 +34,7 @@
   --spacing-2xl: 6.4rem;
 
   /* Type scale */
+  --text-xs: 1.2rem;
   --text-sm: 1.4rem;
   --text-base: 1.6rem;
   --text-lg: 2.2rem;
@@ -60,7 +61,7 @@
   --color-surface-alt: var(--light-surface-alt);
   --color-border: var(--light-border);
   --color-border-strong: var(--light-border-strong);
-  --font-weight-bold: 700;
+  --font-weight-bold: 600;
   --font-weight-normal: 400;
   --font-sans: system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', monospace;
@@ -68,6 +69,7 @@
   /* Misc. */
   --transition: all 0.2s ease-in-out;
   --border-radius: 0.4rem;
+  --border-thin: 1px solid var(--color-border);
 
   font-size: 62.5%; /* 1rem = 10px */
 }
