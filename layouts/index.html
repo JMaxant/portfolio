@@ -1,0 +1,23 @@
+{{ define "main" }}
+{{ $projets := where site.RegularPages "Section" "projets" }}
+{{ $featured := where $projets "Params.featured" true }}
+{{ if not $featured }}
+{{ $featured = first 3 $projets }}   {{/* fallback : 3 plus récents */}}
+{{ end }}
+
+{{ with $featured }}
+<section class="home home__projets">
+  <div class="container--wide">
+    <h2>Projets phares</h2>
+    <div class="cards cards--grid">
+      {{ range . }}
+      {{ partial "card.html" . }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ .Content }}
+
+{{ end }}

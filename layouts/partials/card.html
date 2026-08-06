@@ -1,0 +1,21 @@
+<article class="card card--projet">
+  <h3 class="card__title">
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+  </h3>
+  {{ with .Description }}
+    <p>{{ . }}</p>
+  {{ end }}
+  <div class="card__footer">
+    {{ with .Params.status }}
+      {{ $key := urlize . }}
+      <p class="badge status-{{ $key }}">{{ . }}</p>
+    {{ end }}
+    {{ with .GetTerms "tags" }}
+      <ul role="list" class="tags">
+        {{ range . }}
+        <li class="tag"><a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a></li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  </div>
+</article>

@@ -35,15 +35,15 @@
 
   /* Type scale */
   --text-sm: 1.4rem;
-  --text-base: 1.8rem;
+  --text-base: 1.6rem;
   --text-lg: 2.2rem;
   --text-xl: 2.8rem;
   --text-2xl: 3.6rem;
   --text-hero: 4.4rem;
 
   /* Line heights */
-  --leading-tight: 1.2;
-  --leading-base: 1.6;
+  --line-height-heading: 1.2;
+  --line-height-base: 1.6;
 
   /* Base container width */
   --container-wide: 1280px;
@@ -61,6 +61,7 @@
   --color-border: var(--light-border);
   --color-border-strong: var(--light-border-strong);
   --font-weight-bold: 700;
+  --font-weight-normal: 400;
   --font-sans: system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', monospace;
 

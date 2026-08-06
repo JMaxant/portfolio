@@ -1,0 +1,5 @@
+.home {
+  &.home__projets {
+    background: var(--color-surface-alt);
+  }
+}

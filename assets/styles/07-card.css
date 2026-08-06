@@ -1,0 +1,19 @@
+/* Cards container. */
+.cards {
+  &.cards--grid {
+    display: flex;
+    gap: var(--spacing-xl);
+  }
+}
+
+.card {
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+
+  .card__title {
+    padding-block: var(--spacing-2xs);
+    font-size: 1.6rem;
+  }
+
+}
