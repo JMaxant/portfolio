@@ -1,4 +1,31 @@
 .home {
+  &.home__hero {
+    padding-block: var(--spacing-xl) var(--spacing-lg);
+
+    h1 {
+      margin-block-end: var(--spacing-xs);
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-light);
+      line-height: var(--line-height-base);
+    }
+
+    p {
+      max-width: 60ch;
+      margin-block-end: var(--spacing-lg);
+      font-size: 1.8rem;
+      color: var(--color-text-soft);
+    }
+
+    .cta {
+      display: inline-block;
+      padding: var(--spacing-xs) var(--spacing-md);
+      color: var(--color-bg);
+      text-decoration: none;
+      background: var(--color-link);
+      border-radius: var(--border-radius);
+    }
+  }
+
   &.home__projets {
     padding-block: var(--spacing-lg);
     background: var(--color-surface-alt);

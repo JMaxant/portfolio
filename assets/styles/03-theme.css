@@ -15,6 +15,7 @@
 :root[data-theme="dark"] {
   --color-bg: var(--dark-bg);
   --color-text: var(--dark-text);
+  --color-text-soft: var(--dark-text-alt);
   --color-link: var(--dark-link);
   --color-link-hover: var(--dark-link-hover);
   --color-link-visited: var(--dark-link-visited);
@@ -27,6 +28,7 @@
 :root[data-theme="light"] {
   --color-bg: var(--light-bg);
   --color-text: var(--light-text);
+  --color-text-soft: var(--light-text-alt);
   --color-link: var(--light-link);
   --color-link-hover: var(--light-link-hover);
   --color-link-visited: var(--light-link-visited);

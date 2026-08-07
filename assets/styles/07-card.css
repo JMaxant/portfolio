@@ -22,6 +22,7 @@
 
   .card__body {
     font-size: var(--text-sm);
+    color: var(--color-text-soft);
   }
 
   .card__footer {
