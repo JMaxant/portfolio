@@ -36,3 +36,15 @@ other = "Clair"
 
 [system]
 other = "Système"
+
+[home-featured]
+other = "Quelques projets"
+
+[home-latest]
+other = "Dernière activité"
+
+[type-blog]
+other = "Article"
+
+[type-projets]
+other = "Projet"
