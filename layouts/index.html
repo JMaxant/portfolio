@@ -2,7 +2,7 @@
 
 <!-- Hero -->
 <section class="home home__hero">
-  {{ partial "hero.html" . }}
+  {{ partial "hero.html" (dict "content" .Content "baseline" .Params.baseline) }}
 </section>
 
 
