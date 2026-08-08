@@ -1,6 +1,6 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.0.0
+version: 1.1.0
 date_published: 2026-08-08
 date_modified: 2026-08-08
 ---
@@ -39,6 +39,44 @@ anything about the palettes. A component consuming `--light-surface` would break
 mode: that is the mistake to avoid.
 
 See [theme-switcher.md](theme-switcher.md) for the switching mechanism.
+
+## Contrast target: WCAG AAA (7:1)
+
+Every text colour in the palette clears **7:1** against every background it can land on, in
+both themes. That is the AAA threshold for normal-size text — deliberately stricter than AA
+(4.5:1), because the smallest text on the site (`--text-xs`, 12px, used by `.tag`) is well
+under the size that would let a lower ratio qualify.
+
+The constraint that matters is the **worst background of each theme**, which is
+`--*-surface-alt` in both: it is the darkest of the light backgrounds and the lightest of
+the dark ones. A colour that clears 7:1 there clears it on `bg` and `surface` too, so that
+is the only pair worth solving.
+
+Tightest pairs, all measured against `surface-alt`:
+
+| Theme | Token | Ratio |
+|-------|-------|-------|
+| light | `--light-link` | 7.03 |
+| light | `--light-text-alt` | 7.04 |
+| light | `--light-link-visited` | 7.06 |
+| dark | `--dark-link` | 7.00 |
+| dark | `--dark-link-visited` | 7.01 |
+| dark | `--dark-text-alt` | 7.02 |
+
+**The margin is thin by construction**: these six values were derived by moving lightness
+only — hue and saturation untouched — until they just cleared the threshold, so the visual
+change stayed minimal. The flip side is that *any* change to a `surface-alt` token drops
+them below AAA. Re-measure before touching a background.
+
+Two pairs are easy to forget because the roles are inverted: `.cta` and the checked state of
+the theme switcher paint `--color-bg` **on** `--color-link`. Both clear 7:1 (7.61 light,
+8.11 dark), and they follow `--color-link`, so they move whenever it does.
+
+Borders are out of scope for this target. `--*-border` and `--*-border-strong` sit between
+1.2:1 and 2.0:1 against their backgrounds, below the 3:1 of WCAG 1.4.11 — which applies to
+visual information *required* to identify a component or its state. The borders here are
+decorative: a tag, a card and a switcher are all identifiable without them. If a border ever
+becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being true.
 
 ## Scales
 
@@ -94,3 +132,5 @@ To be settled alongside the CSS tree reorganisation (#69).
 - Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`.
 - Add tokens to `01-tokens.css` only, never to a component file.
 - Adding a breakpoint means updating the table above.
+- Changing any colour token means re-measuring against AAA, including the backgrounds:
+  the text colours were solved against `surface-alt` and have no headroom.

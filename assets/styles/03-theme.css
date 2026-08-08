@@ -2,6 +2,7 @@
   :root {
     --color-bg: var(--dark-bg);
     --color-text: var(--dark-text);
+    --color-text-soft: var(--dark-text-alt);
     --color-link: var(--dark-link);
     --color-link-hover: var(--dark-link-hover);
     --color-link-visited: var(--dark-link-visited);
