@@ -1,16 +1,14 @@
 .site-footer {
-  padding-block: var(--spacing-lg);
-
   .container--wide {
     display: flex;
     justify-content: space-between;
+    padding-block: var(--spacing-lg);
     font-size: var(--text-sm);
     border-block-start: var(--border-thin);
-
   }
 }
 
-@media (width <= 576px) {
+@media screen and (width <= 576px) {
   .site-footer {
     .container--wide {
       flex-direction: column;

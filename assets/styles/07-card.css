@@ -30,34 +30,5 @@
     gap: var(--spacing-sm);
     align-items: center;
     font-size: var(--text-sm);
-
-    .tags {
-      display: flex;
-      gap: var(--spacing-sm);
-
-      .tag {
-        padding: var(--spacing-2xs);
-        font-size: var(--text-xs);
-        background-color: var(--color-surface-alt);
-        border: var(--border-thin);
-        border-radius: var(--border-radius);
-
-      }
-    }
-  }
-}
-
-.badge {
-  margin-block: 0;
-
-  &.badge__type {
-    padding-inline: var(--spacing-2xs);
-    font-size: var(--text-xs);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: var(--border-thin);
-    border-radius: var(--border-radius);
   }
 }

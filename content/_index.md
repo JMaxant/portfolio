@@ -5,8 +5,6 @@ title = 'Julien Maxant'
 
 [params]
 baseline = 'Développeur web depuis 2017, après une première vie ailleurs.'
-cta_label = 'Me contacter'
-cta_url = 'mailto:julien.maxant@gmail.com'
 +++
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Je construis des

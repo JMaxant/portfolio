@@ -45,7 +45,7 @@
         }
       }
 
-      @media (width <= 576px) {
+      @media screen and (width <= 576px) {
         a {
           grid-column: 1 / -1;
         }

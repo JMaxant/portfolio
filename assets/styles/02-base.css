@@ -113,3 +113,29 @@ pre {
   background: var(--color-link);
   border-radius: var(--border-radius);
 }
+
+.tags {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tag {
+  padding: var(--spacing-2xs);
+  padding-inline: var(--spacing-2xs);
+  margin-block: 0;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: var(--border-thin);
+  border-radius: var(--border-radius);
+
+  &.tag__accented {
+    background-color: var(--color-surface-alt);
+  }
+
+  &.tag__light {
+    color: var(--color-text)
+  }
+}
