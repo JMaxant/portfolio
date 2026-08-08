@@ -7,5 +7,5 @@
     variant (optional)
 */ -}}
 {{- with .url -}}
-<a class="cta" href="{{ . }}">{{ $.label }}</a>
+<a class="cta{{ with $.variant }} cta--{{ . }}{{ end }}" href="{{ . }}">{{ $.label }}</a>
 {{- end -}}

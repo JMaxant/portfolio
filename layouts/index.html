@@ -1,6 +1,6 @@
 {{ define "main" }}
 
-  <!-- Hero -->
+  {{/* Hero */}}
   <section class="home home__hero">
     {{ partial "hero.html" (dict "content" .Content "baseline" .Params.baseline) }}
   </section>
@@ -12,11 +12,11 @@
     {{ $featured = first 3 $projets }}
   {{ end }}
 
-  <!-- Featured projects -->
+  {{/* Featured projects */}}
   {{ with $featured }}
     <section class="home home__projets">
       <div class="container--wide">
-        <h2>{{ i18n "home-featured"}}</h2>
+        <h2>{{ i18n "home-featured" }}</h2>
         <div class="cards cards--grid">
           {{ range . }}
            {{ partial "card.html" (dict "page" . "variant" "projet" "title_level" "h3") }}
@@ -26,7 +26,7 @@
     </section>
   {{ end }}
 
-  <!-- Latest. -->
+  {{/* Latest activity */}}
   {{ $activites := where site.RegularPages "Section" "in" (slice "blog" "projets") }}
 
   {{ with first 3 $activites.ByLastmod.Reverse }}
