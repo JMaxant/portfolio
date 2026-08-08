@@ -1,11 +1,12 @@
 .site-footer {
   padding-block: var(--spacing-lg);
-  border-block-start: var(--border-thin);
 
   .container--wide {
     display: flex;
     justify-content: space-between;
     font-size: var(--text-sm);
+    border-block-start: var(--border-thin);
+
   }
 }
 
