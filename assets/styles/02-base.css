@@ -146,8 +146,6 @@ pre {
   font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   border: var(--border-thin);
   border-radius: var(--border-radius);
 

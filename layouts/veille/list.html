@@ -26,11 +26,12 @@
               {{ with .Params.description }}
                 <p>{{ . }}</p>
               {{ end }}
-
-              {{ with .Params.tags }}
+              {{ with .GetTerms "tags" }}
                 <ul role="list" class="tags">
                   {{ range . }}
-                    <li class="tag tag--accented">{{ lower . }}</li>
+                    <li class="tag tag--accented">
+                      <a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+                    </li>
                   {{ end }}
                 </ul>
               {{ end }}

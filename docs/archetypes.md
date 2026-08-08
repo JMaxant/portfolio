@@ -1,8 +1,8 @@
 ---
 title: Archetypes Hugo
-version: 1.1.0
+version: 1.2.0
 date_published: 2026-08-01
-date_modified: 2026-08-02
+date_modified: 2026-08-08
 ---
 
 # Archetypes Hugo
@@ -43,10 +43,10 @@ Pièges :
 
 - **`description`** plutôt que `summary` : le thème bear-cub lit `.Params.description` pour le SEO et les cartes sociales ; `summary` est déjà un champ calculé par Hugo depuis le contenu.
 - **`translationKey`** : apparie les futures traductions (Phase 2, section 7 du cahier des charges) indépendamment des slugs. Dérivé du nom du contenu, ignoré tant que le site est monolingue.
-- **`tags`** : taxonomie unique du site — inclut la stack technique (décision section 5quinquies, pas de taxonomie `stack` séparée). Nuance veille : une page `render = 'never'` n'alimente jamais les pages de taxonomie (vérifié empiriquement, quel que soit `list`) ; le champ est conservé pour un futur filtrage côté client.
+- **`tags`** : taxonomie unique du site — inclut la stack technique (décision section 5quinquies, pas de taxonomie `stack` séparée). Nuance veille : le champ alimente bien les pages `/tags/*` depuis le passage à `build.render = 'link'` (vérifié empiriquement ; `render = 'never'` les en excluait, quel que soit `list`).
 - **`status`** (projets) : `en cours` ou `terminé`.
 - **`cover`** (blog) : réservé pour un futur layout ; non exploité par bear-cub à ce jour.
-- **`link`** (veille) : URL de l'article partagé. Les entrées de veille sont *teaser-only* (issue #40) : un cascade dans `content/veille/_index.md` leur applique `build.render = 'never'` et `build.list = 'local'` — aucune page individuelle n'est générée, le layout de liste doit lier `link`, jamais `.RelPermalink` (vide).
+- **`link`** (veille) : URL de l'article partagé. Les entrées de veille sont *teaser-only* (issue #40) : un cascade dans `content/veille/_index.md` leur applique `build.render = 'link'` et `build.list = 'local'` — aucune page individuelle n'est générée. Un layout de liste doit donc lier `link`, jamais `.RelPermalink` : `render = 'link'` l'assigne bel et bien, mais l'URL correspondante n'a pas de rendu et renvoie un 404. Le piège s'applique aussi aux flux, cf. issue #74.
 - **`source_lang`** (veille) : langue de la source, code BCP 47 (`fr`, `en`…). Prévu pour l'attribut `lang` (a11y) et un futur filtrage.
 
 ## Quotes TOML vs template Go

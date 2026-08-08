@@ -5,8 +5,7 @@ translationKey = 'veille'
 [[cascade]]
 [cascade.build]
 list = 'local'
-render = 'never'
+render = 'link'
 [cascade.target]
 path = '/veille/*'
 +++
-
