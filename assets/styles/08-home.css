@@ -1,4 +1,12 @@
 .home {
+  padding-block: var(--spacing-lg);
+
+  h2 {
+    margin-block: 0 var(--spacing-md);
+    font-size: var(--text-md);
+    font-weight: var(--font-weight-bold);
+  }
+
   &.home__hero {
     padding-block: var(--spacing-xl) var(--spacing-lg);
 
@@ -27,13 +35,25 @@
   }
 
   &.home__projets {
-    padding-block: var(--spacing-lg);
     background: var(--color-surface-alt);
+  }
 
-    h2 {
-      margin-block: 0 var(--spacing-md);
-      font-size: var(--text-lg);
-      font-weight: var(--font-weight-normal);
+  &.home__latest {
+    ul {
+      li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+        align-items: baseline;
+        padding-block: var(--spacing-xs);
+        border-block-start: var(--border-thin);
+
+        time {
+          min-width: 10rem;
+          font-size: var(--text-sm);
+          color: var(--color-text-soft);
+        }
+      }
     }
   }
 }
