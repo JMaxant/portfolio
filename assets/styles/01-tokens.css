@@ -2,10 +2,10 @@
   /* Light theme. */
   --light-bg: #f9f9f9;
   --light-text: #2a2d34;
-  --light-text-alt: #515F68;
-  --light-link: #2145c9;
+  --light-text-alt: #46525a;
+  --light-link: #2042c2;
   --light-link-hover: #162f92;
-  --light-link-visited: #6b4fa0;
+  --light-link-visited: #5b4389;
   --light-surface: #fff;
   --light-surface-alt: #eef0f5;
   --light-border: #d8dce4;
@@ -14,10 +14,10 @@
   /* Dark theme. */
   --dark-bg: #16181d;
   --dark-text: #d6d8dd;
-  --dark-text-alt: #9aa0a9;
-  --dark-link: #93a8f5;
+  --dark-text-alt: #aab0b7;
+  --dark-link: #99acf6;
   --dark-link-hover: #b4c3fa;
-  --dark-link-visited: #b39fd6;
+  --dark-link-visited: #b9a7d9;
   --dark-surface: #1c1f27;
   --dark-surface-alt: #21252e;
   --dark-border: #2b3040;

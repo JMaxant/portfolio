@@ -104,6 +104,26 @@ pre {
   outline-offset: 2px;
 }
 
+/* Page wrapper for list and single templates. */
+.page {
+  padding-block: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Readable by assistive technology only. The 1px box with overflow: hidden does
+   the hiding on its own; clip-path only removes rendering artefacts, so browsers
+   without it still behave correctly. See docs/css-compat.md. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
 /* todo: move to utils or dedicated file. */
 .cta {
   display: inline-block;
@@ -119,15 +139,18 @@ pre {
   gap: var(--spacing-sm);
 }
 
+:where(.tag) {
+  color: var(--color-text-soft);
+}
+
 .tag {
+  display: inline-block;
   padding: var(--spacing-2xs);
   padding-inline: var(--spacing-2xs);
   margin-block: 0;
   font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-align: center;
   border: var(--border-thin);
   border-radius: var(--border-radius);
 

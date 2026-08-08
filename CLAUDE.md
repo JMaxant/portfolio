@@ -19,6 +19,12 @@ task serve   # hugo serve -D
 of truth: `ci.yml` calls the same command, so CI cannot drift from the local hook. Run it
 before claiming work is done.
 
+**Lefthook lints the index, not the working tree.** After `task qa:fix` — or any edit to an
+already-staged file — re-run `git add` on it, otherwise the hook keeps reporting errors at
+line numbers that no longer match what you see on disk. A failure you cannot reproduce by
+running the linter directly on the file is this, every time: compare with
+`git show :<path>`.
+
 ## Build
 
 - **Hugo extended**, version pinned in `.github/actions/setup-hugo/action.yml`. Match that

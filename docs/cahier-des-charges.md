@@ -102,7 +102,24 @@ Ne sera utilisée qu'une seule taxonomie (tags), une deuxième taxonomie sera aj
 
 Le niveau 1 est à considérer comme acquis dès qu'une taxonomie existe. Le niveau 2 reste un point ouvert (voir section 14).
 
-**Cas particulier — section `/veille/` (issue #40)** : entrées *teaser-only* via build options en cascade dans `content/veille/_index.md` (`build.render = 'never'`, `build.list = 'local'`, ciblées sur `/veille/*` pour épargner la page de section). Vérifié empiriquement : une page `render = 'never'` **n'engendre jamais de page de taxonomie**, même avec `list = 'always'` — les tags des entrées veille n'alimentent donc pas les pages `/tags/*`. Le champ `tags` est conservé dans l'archetype pour un futur filtrage côté client (niveau 2 ci-dessus, hors V1). Avec `list = 'always'` les entrées apparaîtraient dans le RSS global ; choix V1 : `local`, visibilité limitée à la liste de section.
+**Cas particulier — section `/veille/` (issue #40)** : entrées *teaser-only* via build options en cascade dans `content/veille/_index.md` (`build.render = 'link'`, `build.list = 'local'`, ciblées sur `/veille/*` pour épargner la page de section).
+
+Les trois valeurs de `render` ne se valent pas, et la nuance décide de tout ici :
+
+- `never` exclut la page de **toutes** les collections. Vérifié empiriquement : elle n'engendre alors jamais de page de taxonomie, même avec `list = 'always'`.
+- `link` supprime la sortie HTML mais **conserve l'entrée dans les collections** et lui assigne un `Permalink`.
+
+**Décidé** : `render = 'link'`, et donc oui, les entrées veille alimentent les pages `/tags/*`. Le `list.html` de bear-cub gère déjà le pattern lien externe (`.Params.link` + `↪`) : une page de terme lie l'entrée vers sa source, pas vers une URL du site. On obtient le niveau 1 ci-dessus sur la veille aussi — zéro JS, vraies URLs partageables, indexables, cohérent avec les objectifs SEO/GEO de la section 8bis.
+
+Garanties vérifiées après `hugo --gc --minify --cleanDestinationDir` :
+
+- aucune page `public/veille/<entrée>/` n'est générée — l'exigence de #40 tient ;
+- `sitemap.xml` ne référence que `/veille/`, pas les entrées ;
+- le RSS global reste exempt de veille, `list = 'local'` limitant la visibilité à la section (avec `list = 'always'` les entrées y apparaîtraient).
+
+**Réserve connue** : le `Permalink` assigné par `link` pointe vers une URL sans rendu, et `layouts/_default/rss.xml` l'émet tel quel dans `/veille/index.xml` et `/tags/<terme>/index.xml` — liens morts dans les flux (mais pas dans le HTML ni le sitemap). Traité par l'issue #74.
+
+Le champ `tags` de l'archetype veille est donc désormais exploité nativement. Reste non couvert : affiner la liste **dans** `/veille/`, une page de terme mélangeant blog, projets et veille (issue #42, V1).
 
 ## 6. Identité visuelle
 
@@ -193,7 +210,7 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 1. Cadence de publication du blog (pour rester réaliste sur l'engagement).
 2. Choix définitif de l'hébergeur (GitHub Pages / Cloudflare / Netlify).
 3. ~~Nom exact de la taxonomie stack technique (`stack` dédiée vs réutilisation de `tags`).~~ => Choix final: une seule taxonomie (tags).
-4. Filtrage interactif (JS) sur les pages de liste blog/projets : en V1 ou repoussé en V1.1 — seules les pages de taxonomie natives Hugo sont acquises pour la V1 (section 5quinquies).
+4. Filtrage interactif (JS) sur les pages de liste blog/projets : en V1 ou repoussé en V1.1 — seules les pages de taxonomie natives Hugo sont acquises pour la V1 (section 5quinquies). Cas distinct, déjà tranché : l'affinage de la liste `/veille/` elle-même est **en V1** (issue #42), la découverte par tag y étant désormais couverte nativement.
 
 ## 15. Découpage en tâches (ordre logique)
 

@@ -29,6 +29,7 @@ The linter checks source files and does not know a transpiler runs afterwards. F
 | `css-nesting` | Transpiled by `css.Build` (verified: selectors are flattened in `public/`) |
 | `css-media-range-syntax` | Transpiled by `css.Build` (verified: rewritten to `min-width`/`max-width` in `public/`) |
 | `text-size-adjust` | Only meaningful on iOS Safari (via the `-webkit-` prefix); browsers that lack it do not need it, no degradation |
+| `css-clip-path`, `css-masks` | Progressive enhancement: only used by `.visually-hidden`, where the 1px box with `overflow: hidden` already hides the content. `clip-path` merely removes rendering artefacts. The "partial support" flagged across the whole baseline concerns `path()` and SVG elements, not `inset()` on an HTML element. `clip` is not an option — deprecated, and rejected by `property-no-deprecated` |
 
 ### Entries removed on 2026-08-08
 

@@ -17,7 +17,7 @@
     {{ with .page.GetTerms "tags" }}
       <ul role="list" class="tags">
         {{ range . }}
-        <li class="tag tag--accented"><a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a></li>
+        <li><a class="tag tag--accented" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a></li>
         {{ end }}
       </ul>
     {{ end }}
