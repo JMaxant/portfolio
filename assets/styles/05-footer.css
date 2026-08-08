@@ -1,9 +1,20 @@
-footer {
+.site-footer {
   padding-block: var(--spacing-lg);
+  border-block-start: var(--border-thin);
 
   .container--wide {
     display: flex;
     justify-content: space-between;
     font-size: var(--text-sm);
+  }
+}
+
+@media (width <= 576px) {
+  .site-footer {
+    .container--wide {
+      flex-direction: column;
+      gap: var(--spacing-lg);
+      align-items: center;
+    }
   }
 }
