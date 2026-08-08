@@ -48,3 +48,9 @@ other = "Article"
 
 [type-projets]
 other = "Projet"
+
+[external-link]
+other = "lien externe"
+
+[no-links]
+other = "Aucun lien pour l'instant"

@@ -12,7 +12,9 @@
           "css-scroll-behavior",
           "css-media-range-syntax",
           "text-size-adjust",
-          "css-appearance"
+          "css-appearance",
+          "css-clip-path",
+          "css-masks"
         ]
       }
     ],

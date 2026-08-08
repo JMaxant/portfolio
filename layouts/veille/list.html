@@ -1,42 +1,45 @@
 {{ define "main" }}
-<content>
-  <ul class="blog-posts">
-    {{ range .Pages }}
-    <li>
-      <span>
-        <i>
-          <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
-            {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
-          </time>
-        </i>
-      </span>
-      {{ if .Params.link }}
-      <a
-        {{ with .Params.source_lang }} lang="{{ . }}" {{ end }}
-        href="{{ .Params.link }}"
-        target="_blank"
-        rel="noopener"
-      >
-        {{ .Title }} ↪
-      </a>
-      {{ end }}
+  <div class="page">
+    <div class="container">
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}{{ . }}{{ end }}
 
-      {{ if .Params.description }}
-      <p>{{ .Params.description }}</p>
-      {{ end }}
-      {{ if .Params.tags }}
-      <ul>
-        {{ range .Params.tags }}
-        <li>{{ . }}</li>
+      <ul class="entry-list" role="list">
+        {{ range .Pages }}
+          {{- $entry := . -}}
+          {{- $lang := .Params.source_lang -}}
+          <li class="entry-list__item">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">
+              {{ time.Format "2 Jan 2006" .Date }}
+            </time>
+
+            <div class="entry-list__body">
+              {{ with .Params.link }}
+                <a class="entry-list__title" href="{{ . }}" target="_blank" rel="noopener"
+                  {{ with $lang }}hreflang="{{ . }}"{{ end }}>
+                  <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ $entry.Title }}</span>
+                  <span aria-hidden="true">&#8618;</span>
+                  <span class="visually-hidden">{{ i18n "external-link" }}</span>
+                </a>
+              {{ end }}
+
+              {{ with .Params.description }}
+                <p>{{ . }}</p>
+              {{ end }}
+
+              {{ with .Params.tags }}
+                <ul role="list" class="tags">
+                  {{ range . }}
+                    <li class="tag tag--accented">{{ lower . }}</li>
+                  {{ end }}
+                </ul>
+              {{ end }}
+            </div>
+          </li>
+        {{ else }}
+          <li>{{ i18n "no-links" }}</li>
         {{ end }}
       </ul>
-      {{ end }}
-    </li>
-    {{ else }}
-    <li>
-      {{ i18n "no-posts" }}
-    </li>
-    {{ end }}
-  </ul>
-</content>
+    </div>
+  </div>
 {{ end }}
