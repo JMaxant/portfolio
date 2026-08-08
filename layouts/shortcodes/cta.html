@@ -1,0 +1,19 @@
+{{- /*
+  Renders partial/cta.html from markdown.
+
+{{< cta url="/contact/" label="Me contacter" >}}
+{{< cta url="mailto:julien.maxant@gmail.com" label="Email me" >}}
+{{< cta url="/parcours/" label="Mon parcours" variant="ghost" >}}
+*/ -}}
+{{- $url := .Get "url" -}}
+{{- $label := .Get "label" -}}
+{{- $variant := .Get "variant" -}}
+{{- if not $url -}}
+  {{- errorf "shortcode cta: 'url' parameter is required - %s" .Position -}}
+{{- end -}}
+
+{{- if not $label -}}
+  {{- errorf "shortcode cta: 'label' parameter is required - %s" .Position -}}
+{{- end -}}
+
+{{- partial "cta.html" (dict "url" $url "label" $label "variant" $variant) -}}

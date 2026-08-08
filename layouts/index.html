@@ -1,0 +1,52 @@
+{{ define "main" }}
+
+  {{/* Hero */}}
+  <section class="home home--hero">
+    {{ partial "hero.html" (dict "content" .Content "baseline" .Params.baseline) }}
+  </section>
+
+
+  {{ $projets := where site.RegularPages "Section" "projets" }}
+  {{ $featured := where $projets "Params.featured" true }}
+  {{ if not $featured }}
+    {{ $featured = first 3 $projets }}
+  {{ end }}
+
+  {{/* Featured projects */}}
+  {{ with $featured }}
+    <section class="home home--projets">
+      <div class="container--wide">
+        <h2>{{ i18n "home-featured" }}</h2>
+        <div class="cards cards--grid">
+          {{ range . }}
+           {{ partial "card.html" (dict "page" . "variant" "projet" "title_level" "h3") }}
+          {{ end }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+  {{/* Latest activity */}}
+  {{ $activites := where site.RegularPages "Section" "in" (slice "blog" "projets") }}
+
+  {{ with first 3 $activites.ByLastmod.Reverse }}
+    <section class="home home--latest">
+      <div class="container--wide">
+        <h2>{{ i18n "home-latest" }}</h2>
+        <ul class="activites" role="list">
+          {{ range . }}
+          <li>
+            <time datetime="{{ .Lastmod.Format "2006-01-02" }}">
+            {{ time.Format "2 Jan 2006" .Lastmod }}
+            </time>
+            <span class="tag">{{ i18n (printf "type-%s" .Section) }}</span>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+    </section>
+  {{ end }}
+
+{{ end }}
+

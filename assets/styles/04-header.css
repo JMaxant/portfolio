@@ -4,6 +4,7 @@ header .container--wide {
   justify-content: space-between;
   padding-block: var(--spacing-lg);
   margin: auto;
+  border-block-end: var(--border-thin);
 
   .site-title {
     display: flex;

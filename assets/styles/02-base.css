@@ -1,10 +1,40 @@
 body {
   max-width: unset;
   font-family: var(--font-sans);
-  font-size: 1.8rem;
+  font-size: var(--text-base);
   color: var(--color-text);
   background-color: var(--color-bg);
   transition: all 0.2s ease-in-out;
+}
+
+h1, h2, h3, h4 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  text-wrap: balance;
+}
+
+h1 {
+  margin-block: 0 var(--spacing-lg);
+  font-size: var(--text-hero);
+}
+
+h2 {
+  margin-block: var(--spacing-2xl) var(--spacing-md);
+  font-size: var(--text-2xl);
+}
+
+h3 {
+  margin-block: var(--spacing-xl) var(--spacing-sm);
+  font-size: var(--text-lg);
+}
+
+h4 {
+  margin-block: var(--spacing-lg) var(--spacing-xs);
+  font-size: var(--text-base);
+}
+
+p {
+  margin-block: 0 var(--spacing-md);
 }
 
 a {
@@ -34,7 +64,7 @@ a:active {
   left: -999rem;
   z-index: 100000;
   padding: 0.75rem 1.25rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: #fff;
   text-decoration: none;
   background: #000;
@@ -72,4 +102,40 @@ pre {
 :focus-visible {
   outline: 2px dashed var(--color-text);
   outline-offset: 2px;
+}
+
+/* todo: move to utils or dedicated file. */
+.cta {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  color: var(--color-bg);
+  text-decoration: none;
+  background: var(--color-link);
+  border-radius: var(--border-radius);
+}
+
+.tags {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tag {
+  padding: var(--spacing-2xs);
+  padding-inline: var(--spacing-2xs);
+  margin-block: 0;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: var(--border-thin);
+  border-radius: var(--border-radius);
+
+  &.tag--accented {
+    background-color: var(--color-surface-alt);
+  }
+
+  &.tag--light {
+    color: var(--color-text)
+  }
 }

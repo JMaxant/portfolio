@@ -4,6 +4,7 @@ title = 'Julien Maxant'
 copyright = '2026 - Julien Maxant'
 defaultContentLanguage = 'fr'
 defaultContentLanguageInSubdir = false
+removePathAccents = true
 
 [params]
 madeWith = 'Made with Hugo & based on bear-cub theme'

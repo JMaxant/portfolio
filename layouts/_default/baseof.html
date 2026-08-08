@@ -22,13 +22,13 @@
 </head>
 
 <body>
-  <header>
+  <header class="site-header">
     {{- partial "header.html" . -}}
   </header>
-  <main id="main-content">
+  <main id="main-content" class="layout-content">
     {{- block "main" . }}{{- end }}
   </main>
-  <footer>
+  <footer class="site-footer">
     {{- partial "footer.html" . -}}
   </footer>
 

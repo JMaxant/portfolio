@@ -31,7 +31,15 @@ See:
 
 - the `browserslist` in `package.json`
 - `layouts/partials/css.html`
+- [Browser compatibility](docs/css-compat.md) — how `css.Build` and Stylelint divide the work
+- [CSS tokens and breakpoints](docs/css-tokens.md) — design tokens, colour indirection, breakpoint values
 - [Pre-commit/CI docs](docs/qa-ci.md)
+
+## Components
+
+Reusable partials take an explicit dict rather than the current context. Their template
+contracts, the CSS classes they expose, and the Go templating pitfalls specific to this
+project are documented in [Components](docs/components.md).
 
 ## Setup
 

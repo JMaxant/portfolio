@@ -1,0 +1,25 @@
+{{- $level := .title_level | default "h3" -}}
+{{- if not (in (slice "h2" "h3" "h4" "h5") $level) -}}
+  {{- errorf "partial card.html: invalid title_level provided (%q), expected h2, h3, h4 or h5" $level -}}
+{{- end -}}
+
+<article class="card{{ with .variant }} card--{{ . }}{{ end }}">
+  {{ printf `<%s class="card__title">` $level | safeHTML }}
+    <a href="{{ .page.RelPermalink }}">{{ .page.Title }}</a>
+  {{ printf "</%s>" $level | safeHTML }}
+  {{ with .page.Description }}
+    <p class="card__body">{{ . }}</p>
+  {{ end }}
+  <div class="card__footer">
+    {{ with .page.Params.status }}
+      <span class="tag tag--light">{{ . }}</span>
+    {{ end }}
+    {{ with .page.GetTerms "tags" }}
+      <ul role="list" class="tags">
+        {{ range . }}
+        <li class="tag tag--accented"><a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a></li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  </div>
+</article>

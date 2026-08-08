@@ -1,0 +1,11 @@
+{{-
+/*
+  CTA.
+    Expected context (dict) :
+    url (required)
+    label (required)
+    variant (optional)
+*/ -}}
+{{- with .url -}}
+  <a class="cta{{ with $.variant }} cta--{{ . }}{{ end }}" href="{{ . }}">{{ $.label }}</a>
+{{- end -}}
