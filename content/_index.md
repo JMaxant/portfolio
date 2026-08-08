@@ -2,16 +2,15 @@
 date = '2026-07-26'
 draft = false
 title = 'Julien Maxant'
+
+[params]
+baseline = 'Développeur web depuis 2017, après une première vie ailleurs.'
+cta_label = 'Me contacter'
+cta_url = 'mailto:julien.maxant@gmail.com'
 +++
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Je construis des
+sites et applications en PHP, Symfony, Drupal et Vue. Ut enim ad minim
+veniam : Go, Python et Kubernetes — documentés ici, preuve à l'appui.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+{{< cta url="mailto:<julien.maxant@gmail.com>" label="Email me">}}

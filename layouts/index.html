@@ -19,7 +19,7 @@
         <h2>{{ i18n "home-featured"}}</h2>
         <div class="cards cards--grid">
           {{ range . }}
-           {{ partial "card.html" . }}
+           {{ partial "card.html" (dict "page" . "variant" "projet" "title_level" "h3") }}
           {{ end }}
         </div>
       </div>

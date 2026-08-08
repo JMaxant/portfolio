@@ -23,15 +23,6 @@
       font-size: 1.8rem;
       color: var(--color-text-soft);
     }
-
-    .cta {
-      display: inline-block;
-      padding: var(--spacing-xs) var(--spacing-md);
-      color: var(--color-bg);
-      text-decoration: none;
-      background: var(--color-link);
-      border-radius: var(--border-radius);
-    }
   }
 
   &.home__projets {
@@ -41,17 +32,22 @@
   &.home__latest {
     ul {
       li {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 8rem 6rem 1fr;
         gap: var(--spacing-md);
         align-items: baseline;
         padding-block: var(--spacing-xs);
         border-block-start: var(--border-thin);
 
         time {
-          min-width: 10rem;
           font-size: var(--text-sm);
           color: var(--color-text-soft);
+        }
+      }
+
+      @media (width <= 576px) {
+        a {
+          grid-column: 1 / -1;
         }
       }
     }

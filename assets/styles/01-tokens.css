@@ -25,6 +25,7 @@
 
   /* Breakpoint */
   --bp-tablet: 768px;
+  --bp-mobile: 576px;
 
   /* Spacing scale (1rem = 10px, cf. font-size: 62.5% ci-dessous) */
   --spacing-2xs: 0.4rem;

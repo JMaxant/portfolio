@@ -103,3 +103,13 @@ pre {
   outline: 2px dashed var(--color-text);
   outline-offset: 2px;
 }
+
+/* todo: move to utils or dedicated file. */
+.cta {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  color: var(--color-bg);
+  text-decoration: none;
+  background: var(--color-link);
+  border-radius: var(--border-radius);
+}
