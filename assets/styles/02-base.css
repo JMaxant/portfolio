@@ -131,11 +131,11 @@ pre {
   border: var(--border-thin);
   border-radius: var(--border-radius);
 
-  &.tag__accented {
+  &.tag--accented {
     background-color: var(--color-surface-alt);
   }
 
-  &.tag__light {
+  &.tag--light {
     color: var(--color-text)
   }
 }

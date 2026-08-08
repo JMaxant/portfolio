@@ -7,7 +7,7 @@
     font-weight: var(--font-weight-bold);
   }
 
-  &.home__hero {
+  &.home--hero {
     padding-block: var(--spacing-xl) var(--spacing-lg);
 
     h1 {
@@ -25,11 +25,11 @@
     }
   }
 
-  &.home__projets {
+  &.home--projets {
     background: var(--color-surface-alt);
   }
 
-  &.home__latest {
+  &.home--latest {
     ul {
       li {
         display: grid;

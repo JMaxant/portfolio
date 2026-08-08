@@ -1,8 +1,8 @@
 ---
 title: CSS browser compatibility
-version: 1.1.0
+version: 1.2.0
 date_published: 2026-08-04
-date_modified: 2026-08-04
+date_modified: 2026-08-08
 ---
 
 # CSS browser compatibility
@@ -28,9 +28,19 @@ The linter checks source files and does not know a transpiler runs afterwards. F
 |---------|--------|
 | `css-nesting` | Transpiled by `css.Build` (verified: selectors are flattened in `public/`) |
 | `css-media-range-syntax` | Transpiled by `css.Build` (verified: rewritten to `min-width`/`max-width` in `public/`) |
-| `css-scroll-behavior` | Progressive enhancement: unsupported browsers (Safari < 15.4) fall back to instant scroll, nothing breaks |
 | `text-size-adjust` | Only meaningful on iOS Safari (via the `-webkit-` prefix); browsers that lack it do not need it, no degradation |
-| `css-appearance` | Transpiled by `css.Build` (verified: `-webkit-appearance` is emitted for the `safari15` target, which covers the "partial support" flagged for Safari 15.0-15.3) |
+
+### Entries removed on 2026-08-08
+
+`css-scroll-behavior` and `css-appearance` were justified against an earlier Safari 15
+baseline. Both features are natively supported from Safari 15.4, so raising the baseline
+to Safari 16 (issue #63) made the plugin stop flagging them. Verified by removing each
+entry and re-running Stylelint: no error is reported. `scroll-behavior` and `appearance`
+are still used in `00-reset.css` and `03-theme.css` — only the exemptions became useless.
+
+Note that `-webkit-appearance` is **no longer emitted** in the built CSS with the current
+`safari16` target, contrary to what the removed entry claimed. No prefix is needed across
+the whole baseline.
 
 ## Adding to the ignore list
 
@@ -38,5 +48,9 @@ Before ignoring a flagged feature, prove one of the two cases:
 
 1. **Transpiled**: build the site (`hugo`) and confirm in `public/` that the feature no longer appears in the output CSS.
 2. **Progressive enhancement**: the feature degrades gracefully — unsupported browsers render acceptable, unbroken output.
+
+An exemption justified against an older baseline does not stay valid when the baseline is
+raised. Re-test the list whenever the target browsers change: remove an entry, run
+Stylelint, and drop it for good if nothing is reported.
 
 If neither holds, the linter is right: rewrite the CSS or raise the baseline (in both `package.json` and `layouts/partials/css.html`).
