@@ -55,6 +55,9 @@ other = "lien externe"
 [no-links]
 other = "Aucun lien pour l'instant"
 
+[no-projects]
+other = "Aucun projet pour l'instant"
+
 [reading-time]
 other = "{{ .Count }} min de lecture"
 

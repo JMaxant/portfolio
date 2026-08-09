@@ -9,6 +9,8 @@
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
   padding: var(--spacing-md);
   background: var(--color-surface);
   border: var(--border-thin);
@@ -20,8 +22,14 @@
     font-size: var(--text-base);
   }
 
+  .card__body {
+    flex-grow: 1;
+    margin-block-end: var(--spacing-md);
+  }
+
   .card__footer {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-sm);
     align-items: center;
     font-size: var(--text-sm);
