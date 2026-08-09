@@ -1,7 +1,4 @@
 .entry-list {
-  padding: 0;
-  list-style: none;
-
   .entry-list__item {
     display: grid;
     grid-template-columns: 12rem 1fr;
@@ -12,9 +9,7 @@
 
   time {
     padding-block-start: 0.2rem;
-    font-size: var(--text-sm);
     font-variant-numeric: tabular-nums;
-    color: var(--color-text-soft);
   }
 
   .entry-list__body {
@@ -28,8 +23,6 @@
   p {
     max-width: 62ch;
     margin-block: var(--spacing-2xs) var(--spacing-xs);
-    font-size: var(--text-sm);
-    color: var(--color-text-soft);
   }
 
   .tags {

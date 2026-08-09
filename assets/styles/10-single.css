@@ -1,0 +1,19 @@
+.single {
+  padding-block: var(--spacing-xl);
+}
+
+.single__intro {
+  font-size: var(--text-base);
+  font-style: italic;
+}
+
+.single__heading {
+  padding-block-end: var(--spacing-md);
+  margin-block-end: var(--spacing-lg);
+  border-bottom: var(--border-thin);
+}
+
+.byline {
+  display: flex;
+  gap: var(--spacing-xs);
+}

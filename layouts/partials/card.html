@@ -8,7 +8,7 @@
     <a href="{{ .page.RelPermalink }}">{{ .page.Title }}</a>
   {{ printf "</%s>" $level | safeHTML }}
   {{ with .page.Description }}
-    <p class="card__body">{{ . }}</p>
+    <p class="card__body meta">{{ . }}</p>
   {{ end }}
   <div class="card__footer">
     {{ with .page.Params.status }}

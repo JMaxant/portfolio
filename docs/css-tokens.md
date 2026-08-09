@@ -1,8 +1,8 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.1.0
+version: 1.2.0
 date_published: 2026-08-08
-date_modified: 2026-08-08
+date_modified: 2026-08-09
 ---
 
 # CSS tokens and breakpoints
@@ -89,6 +89,36 @@ becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being
 | Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px |
 | Misc | `--border-radius`, `--border-thin`, `--transition` | `--border-thin` composes `--color-border`, so it follows the theme |
 
+## Utilities
+
+Utilities live in `11-utils.css`, and `main.css` imports it **last**. That position is
+load-bearing, not tidiness: a utility and a component class often have the same specificity
+— `.meta` and `.card__body` are both (0,1,0) — and only source order separates them. Move
+the import up and utilities silently stop applying wherever a component declares the same
+property.
+
+| Utility | Role |
+|---------|------|
+| `.container`, `.container--reading`, `.container--wide` | Page width and inline padding |
+| `.visually-hidden` | Readable by assistive technology only |
+| `.cta` | Call-to-action button |
+| `.meta` | Secondary text: metadata, bylines, summaries |
+
+`.meta` is the single source of truth for the "small and soft" pairing
+(`--text-sm` + `--color-text-soft`). It was extracted from five components that each
+declared it identically. A component must not re-declare that pair — apply the class in the
+template instead.
+
+Two consequences worth knowing before using it:
+
+- **Applying the class is not enough where the component selector is more specific.** A
+  nested `.entry-list p` is (0,1,1) and beats `.meta`. Adopting the utility means deleting
+  the component declarations, not layering a class on top of them — a half-migration leaves
+  the utility inert and looks correct until the token changes.
+- **A different size is not a `.meta` case.** `.tag` (`--text-xs` + soft) and
+  `.home--hero p` (`--text-md` + soft) are soft-coloured but sized differently. Forcing them
+  into `.meta` would mean overriding `font-size` right after, which defeats the point.
+
 ## Breakpoints
 
 Two thresholds are used across the project:
@@ -129,6 +159,7 @@ To be settled alongside the CSS tree reorganisation (#69).
 ## Rules
 
 - Never write a colour, spacing or size literal inside a component.
+- Never re-declare `--text-sm` + `--color-text-soft` in a component: apply `.meta`.
 - Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`.
 - Add tokens to `01-tokens.css` only, never to a component file.
 - Adding a breakpoint means updating the table above.

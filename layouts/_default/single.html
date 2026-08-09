@@ -1,0 +1,25 @@
+{{ define "main" }}
+  <article class="container--reading single">
+    <header class="single__heading">
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}
+       <p class="single__intro">{{ . }}</p>
+      {{ end }}
+      <ul class="byline meta" role="list">
+        <li>
+          <time pubdate="pubdate" datetime='{{ .Date.Format "2006-01-02" }}'>
+            {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+          </time>
+        </li>
+        {{ range (.GetTerms "tags") }}
+        <li>
+          <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+        </li>
+        {{ end }}
+      </ul>
+    </header>
+
+    {{ .Content }}
+  </article>
+
+{{ end }}
