@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{- /* Same reading template as a blog article, with the project meta line in
          place of the byline. See docs/components.md. */ -}}
-  <article class="container--reading single">
+  <article class="single">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
       {{ with .Params.description }}

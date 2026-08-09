@@ -1,12 +1,5 @@
-/* Utilities. Imported last so that, at equal specificity, they win over component
-   rules. See docs/css-tokens.md. */
-
 .container--wide {
   max-width: var(--container-wide);
-}
-
-.container--reading {
-  max-width: var(--container-reading);
 }
 
 .container {
@@ -14,15 +7,11 @@
 }
 
 .container,
-.container--reading,
 .container--wide {
   padding-inline: var(--spacing-md);
   margin-inline: auto;
 }
 
-/* Readable by assistive technology only. The 1px box with overflow: hidden does
-   the hiding on its own; clip-path only removes rendering artefacts, so browsers
-   without it still behave correctly. See docs/css-compat.md. */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -44,8 +33,21 @@
   border-radius: var(--border-radius);
 }
 
-/* Secondary text: metadata, bylines, summaries. Single source of truth for the
-   "small and soft" pairing — components must not re-declare it. */
+/* The states of `a` in 02-base.css are (0,1,1) and beat .cta (0,1,0), so the label
+   would take a link colour on a link-coloured background: measured 1.41:1 hovered,
+   1.00:1 visited. The label stays put and the feedback moves to the background. */
+.cta:visited {
+  color: var(--color-bg);
+}
+
+.cta:hover,
+.cta:focus,
+.cta:active {
+  color: var(--color-bg);
+  background: var(--color-link-hover);
+}
+
+/* Secondary text: metadata, bylines, summaries, etc. */
 .meta {
   font-size: var(--text-sm);
   color: var(--color-text-soft);

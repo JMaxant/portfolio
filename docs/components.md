@@ -1,13 +1,13 @@
 ---
 title: Components — partials and integration
-version: 1.1.0
+version: 1.2.0
 date_published: 2026-08-08
 date_modified: 2026-08-09
 ---
 
 # Components — partials and integration
 
-Ref: issues #45, #48, #66. Describes the reusable components from both sides: the **template
+Ref: issues #45, #48, #66, #77. Describes the reusable components from both sides: the **template
 contract** (how you call them) and the **CSS contract** (what they expose to integration).
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
@@ -151,8 +151,14 @@ Call-to-action link.
 | `label` | yes | — | Visible label |
 | `variant` | no | none | Class suffix: `cta--<variant>` |
 
-**Integration** — `.cta` is defined in `02-base.css`, so it is available everywhere,
+**Integration** — `.cta` is defined in `12-utils.css`, so it is available everywhere,
 including inside an article. `cta--<variant>` is an unstyled extension point so far.
+
+Inside an article the shortcode's output is **not** wrapped in a `<p>` by Hugo, so the `<a>`
+becomes a direct child of `.single` and therefore a grid item: blockified, and stretched over
+the whole measure by default. `10-single.css` carries `.single > .cta { justify-self: start }`
+to restore its intrinsic width. Any other inline element that can end up as a direct child of
+`.Content` needs the same guard.
 
 #### `cta` shortcode
 
@@ -170,6 +176,32 @@ the source file.
 Careful with URLs: do not wrap an address in angle brackets (`<…>`). Markdown treats them
 as an autolink and they end up percent-encoded as `%3c`/`%3e` in the `href`, breaking the
 link.
+
+## Article layout (`.single`)
+
+Ref: issue #77. `.single` is not a partial but it exposes a CSS contract, because what a
+template puts inside an `<article>` lands directly in a grid.
+
+`<article class="single">` is a grid with three named columns — `content` (the reading
+measure), `wide` (the measure plus a breakout each side, used by code blocks) and `full`
+(edge to edge, unused so far). The full definition, its four invariants and the vertical
+rhythm model are in [css-tokens.md](css-tokens.md#article-layout-grid). What a template
+author needs to know:
+
+- **Every direct child is a grid item**, placed in `content` by default. `{{ .Content }}`
+  emits its top-level blocks flat, so each `p`, `h2`, `ul`, `blockquote` and `div.highlight`
+  is an item.
+- **Widening a block is one declaration**: `grid-column: wide` or `grid-column: full`, added
+  in `10-single.css`. Do not reach for a negative margin.
+- **Only direct children can be placed.** A block nested in a `blockquote` or an `li` cannot
+  leave the `content` column.
+- **Never declare a bottom margin on a direct child.** Grid does not collapse margins, so it
+  would add to the next element's top margin. The rhythm is top-side only.
+- **An inline element that can be a direct child needs `justify-self`**, otherwise it is
+  stretched over the whole column — see `.cta` above.
+
+`.post-nav` is a sibling of the article, outside the grid, and resolves the same width
+expression on its own so its rule aligns with the header's.
 
 ## Templating pitfalls
 
