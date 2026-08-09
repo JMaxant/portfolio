@@ -11,6 +11,15 @@
   --light-border: #d8dce4;
   --light-border-strong: #b6bdcb;
 
+  /* Syntax highlighting. Every value clears AAA (7:1) against --light-surface-alt;
+     the measured ratio is in the comment. Re-measure before changing one. */
+  --light-code-comment: #47505a; /* 7.18:1 */
+  --light-code-keyword: #99105f; /* 7.13:1 */
+  --light-code-type: #0b5560; /* 7.42:1 */
+  --light-code-function: #1a3c9c; /* 8.49:1 */
+  --light-code-string: #155c34; /* 7.06:1 */
+  --light-code-number: #8a3200; /* 7.26:1 */
+
   /* Dark theme. */
   --dark-bg: #16181d;
   --dark-text: #d6d8dd;
@@ -22,6 +31,14 @@
   --dark-surface-alt: #21252e;
   --dark-border: #2b3040;
   --dark-border-strong: #414b60;
+
+  /* Syntax highlighting, measured against --dark-surface-alt. */
+  --dark-code-comment: #a9b1ba; /* 7.09:1 */
+  --dark-code-keyword: #f7a8cd; /* 8.36:1 */
+  --dark-code-type: #86d9e6; /* 9.56:1 */
+  --dark-code-function: #adc4ff; /* 8.85:1 */
+  --dark-code-string: #9edcae; /* 9.72:1 */
+  --dark-code-number: #f2bd92; /* 9.11:1 */
 
   /* Breakpoint */
   --bp-tablet: 768px;
@@ -66,6 +83,12 @@
   --color-surface-alt: var(--light-surface-alt);
   --color-border: var(--light-border);
   --color-border-strong: var(--light-border-strong);
+  --color-code-comment: var(--light-code-comment);
+  --color-code-keyword: var(--light-code-keyword);
+  --color-code-type: var(--light-code-type);
+  --color-code-function: var(--light-code-function);
+  --color-code-string: var(--light-code-string);
+  --color-code-number: var(--light-code-number);
   --font-weight-bold: 600;
   --font-weight-normal: 400;
   --font-weight-light: 300;
@@ -76,6 +99,7 @@
   --transition: all 0.2s ease-in-out;
   --border-radius: 0.4rem;
   --border-thin: 1px solid var(--color-border);
+  --border-thick: 5px solid var(--color-border);
 
   font-size: 62.5%; /* 1rem = 10px */
 }

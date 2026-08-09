@@ -36,7 +36,7 @@
         <ul class="activites" role="list">
           {{ range . }}
           <li>
-            <time datetime="{{ .Lastmod.Format "2006-01-02" }}">
+            <time class="meta" datetime="{{ .Lastmod.Format "2006-01-02" }}">
             {{ time.Format "2 Jan 2006" .Lastmod }}
             </time>
             <span class="tag">{{ i18n (printf "type-%s" .Section) }}</span>

@@ -20,7 +20,7 @@
     p {
       max-width: 60ch;
       margin-block-end: var(--spacing-lg);
-      font-size: 1.8rem;
+      font-size: var(--text-md);
       color: var(--color-text-soft);
     }
   }
@@ -38,11 +38,6 @@
         align-items: baseline;
         padding-block: var(--spacing-xs);
         border-block-start: var(--border-thin);
-
-        time {
-          font-size: var(--text-sm);
-          color: var(--color-text-soft);
-        }
       }
 
       @media screen and (width <= 576px) {

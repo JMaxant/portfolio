@@ -30,4 +30,4 @@ tasks:
 
   hugo:serve:
     aliases: [serve, dev, run]
-    cmd: "{{.HUGO}} serve -D"
+    cmd: "{{.HUGO}} serve -D --cleanDestinationDir --cleanDestinationDir"

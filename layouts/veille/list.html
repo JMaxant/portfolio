@@ -9,7 +9,7 @@
           {{- $entry := . -}}
           {{- $lang := .Params.source_lang -}}
           <li class="entry-list__item">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">
+            <time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">
               {{ time.Format "2 Jan 2006" .Date }}
             </time>
 
@@ -24,7 +24,7 @@
               {{ end }}
 
               {{ with .Params.description }}
-                <p>{{ . }}</p>
+                <p class="meta">{{ . }}</p>
               {{ end }}
               {{ with .GetTerms "tags" }}
                 <ul role="list" class="tags">

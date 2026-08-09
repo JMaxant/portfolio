@@ -1,8 +1,8 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.1.0
+version: 1.4.0
 date_published: 2026-08-08
-date_modified: 2026-08-08
+date_modified: 2026-08-09
 ---
 
 # CSS tokens and breakpoints
@@ -89,14 +89,83 @@ becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being
 | Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px |
 | Misc | `--border-radius`, `--border-thin`, `--transition` | `--border-thin` composes `--color-border`, so it follows the theme |
 
+## Syntax highlighting
+
+Chroma is configured with `noClasses = false` (`config/_default/hugo.toml`), so it emits
+class names instead of inline styles. That single setting is what makes code blocks
+themeable at all: inline styles cannot be overridden from a stylesheet, and the default
+`monokai` background is hardcoded dark regardless of the active theme.
+
+The palette follows the same two-stage indirection as every other colour — raw values in
+`01-tokens.css`, semantic assignment in `03-theme.css`:
+
+| Semantic token | Role |
+|----------------|------|
+| `--color-code-comment` | Comments, preprocessor directives |
+| `--color-code-keyword` | Keywords, word operators, deleted diff lines |
+| `--color-code-type` | Types, builtins, classes, namespaces |
+| `--color-code-function` | Function names, attributes, tags, constants |
+| `--color-code-string` | String literals, inserted diff lines |
+| `--color-code-number` | Numeric literals |
+
+`11-code.css` maps Chroma's class names onto these six, and nothing else in the project may
+reference them. Token groups that are not mapped — punctuation, operators, whitespace —
+fall back to `--color-text`: an uncoloured token is a degradation, not a defect.
+
+**The generated stylesheet is deliberately not used.** `hugo gen chromastyles` emits about
+75 rules and sixty-odd hex literals per theme, none of them measured for contrast, and it
+would have to be hand-wrapped for the three theme states. Six hand-picked tokens cover the
+languages this site actually publishes.
+
+### Contrast
+
+Every syntax colour clears **AAA (7:1) against `--color-surface-alt`**, which is the code
+block background, in both themes. The measured ratio sits in a comment next to each value
+in `01-tokens.css` — the tightest is 7.06:1, so there is no headroom. Re-measure before
+changing any of them.
+
+The AAA target is what shapes the palette: on a light background it forces dark, saturated
+hues, and on a dark one it forces pastels. Anything more vivid fails.
+
+## Utilities
+
+Utilities live in `12-utils.css`, and `main.css` imports it **last**. That position is
+load-bearing, not tidiness: a utility and a component class often have the same specificity
+— `.meta` and `.card__body` are both (0,1,0) — and only source order separates them. Move
+the import up and utilities silently stop applying wherever a component declares the same
+property.
+
+| Utility | Role |
+|---------|------|
+| `.container`, `.container--reading`, `.container--wide` | Page width and inline padding |
+| `.visually-hidden` | Readable by assistive technology only |
+| `.cta` | Call-to-action button |
+| `.meta` | Secondary text: metadata, bylines, summaries |
+
+`.meta` is the single source of truth for the "small and soft" pairing
+(`--text-sm` + `--color-text-soft`). It was extracted from five components that each
+declared it identically. A component must not re-declare that pair — apply the class in the
+template instead.
+
+Two consequences worth knowing before using it:
+
+- **Applying the class is not enough where the component selector is more specific.** A
+  nested `.entry-list p` is (0,1,1) and beats `.meta`. Adopting the utility means deleting
+  the component declarations, not layering a class on top of them — a half-migration leaves
+  the utility inert and looks correct until the token changes.
+- **A different size is not a `.meta` case.** `.tag` (`--text-xs` + soft) and
+  `.home--hero p` (`--text-md` + soft) are soft-coloured but sized differently. Forcing them
+  into `.meta` would mean overriding `font-size` right after, which defeats the point.
+
 ## Breakpoints
 
-Two thresholds are used across the project:
+Three thresholds are used across the project:
 
 | Value | Locations | Purpose |
 |-------|-----------|---------|
 | `768px` | `04-header.css` | Header stacks vertically (title, navigation, theme switcher) |
-| `576px` | `05-footer.css`, `08-home.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line |
+| `576px` | `05-footer.css`, `08-home.css`, `10-single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
+| `560px` | `09-entry-list.css` | Entry date moves above the title instead of sitting in its own column |
 
 Agreed syntax, used consistently: `@media screen and (width <= Npx)`. The range syntax is
 transpiled by `css.Build` down to `max-width` (see [css-compat.md](css-compat.md)).
@@ -129,8 +198,10 @@ To be settled alongside the CSS tree reorganisation (#69).
 ## Rules
 
 - Never write a colour, spacing or size literal inside a component.
+- Never re-declare `--text-sm` + `--color-text-soft` in a component: apply `.meta`.
 - Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`.
 - Add tokens to `01-tokens.css` only, never to a component file.
 - Adding a breakpoint means updating the table above.
 - Changing any colour token means re-measuring against AAA, including the backgrounds:
   the text colours were solved against `surface-alt` and have no headroom.
+- Never reference a `--color-code-*` token outside `11-code.css`.

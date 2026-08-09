@@ -20,11 +20,6 @@
     font-size: var(--text-base);
   }
 
-  .card__body {
-    font-size: var(--text-sm);
-    color: var(--color-text-soft);
-  }
-
   .card__footer {
     display: flex;
     gap: var(--spacing-sm);

@@ -16,6 +16,12 @@ name = 'Julien Maxant'
 [taxonomies]
 tag = 'tags'
 
+[markup]
+[markup.highlight]
+# Emit class names instead of inline styles, so the palette lives in
+# 11-code.css and follows the theme. See docs/css-tokens.md.
+noClasses = false
+
 [module]
 [[module.imports]]
 path = 'github.com/clente/hugo-bearcub'
