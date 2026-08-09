@@ -54,3 +54,15 @@ other = "lien externe"
 
 [no-links]
 other = "Aucun lien pour l'instant"
+
+[reading-time]
+other = "{{ .Count }} min de lecture"
+
+[post-nav]
+other = "Articles"
+
+[post-newer]
+other = "Article plus récent"
+
+[post-older]
+other = "Article plus ancien"

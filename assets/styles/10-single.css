@@ -17,3 +17,34 @@
   display: flex;
   gap: var(--spacing-xs);
 }
+
+.post-nav {
+  padding-block-start: var(--spacing-lg);
+  margin-block: var(--spacing-md);
+  border-block-start: var(--border-thin);
+}
+
+.post-nav__list {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.post-nav__label {
+  display: block;
+}
+
+.post-nav__item--older {
+  margin-inline-start: auto;
+  text-align: end;
+}
+
+@media screen and (width <= 576px) {
+  .post-nav__list {
+    flex-direction: column;
+  }
+
+  .post-nav__item--older {
+    margin-inline-start: 0;
+    text-align: start;
+  }
+}

@@ -1,4 +1,7 @@
 {{ define "main" }}
+  {{- /* Reading time and post navigation are for blog articles only. This template
+         also serves /parcours/, which carries no date and is left untouched. */ -}}
+  {{- $isPost := eq .Section "blog" }}
   <article class="container--reading single">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
@@ -11,6 +14,9 @@
             {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
           </time>
         </li>
+        {{ if $isPost }}
+          <li>{{ i18n "reading-time" .ReadingTime }}</li>
+        {{ end }}
         {{ range (.GetTerms "tags") }}
         <li>
           <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
@@ -22,4 +28,22 @@
     {{ .Content }}
   </article>
 
+  {{ if and $isPost (or .PrevInSection .NextInSection) }}
+  <nav class="post-nav container--reading" aria-label="{{ i18n "post-nav" }}">
+    <ul class="post-nav__list" role="list">
+      {{ with .NextInSection }}
+      <li class="post-nav__item post-nav__item--newer">
+        <span class="post-nav__label meta">{{ i18n "post-newer" }}</span>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </li>
+      {{ end }}
+      {{ with .PrevInSection }}
+      <li class="post-nav__item post-nav__item--older">
+        <span class="post-nav__label meta">{{ i18n "post-older" }}</span>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </li>
+      {{ end }}
+    </ul>
+  </nav>
+  {{ end }}
 {{ end }}
