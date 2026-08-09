@@ -15,7 +15,9 @@
 
 .byline {
   display: flex;
-  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-sm);
+  align-items: baseline;
 }
 
 .post-nav {

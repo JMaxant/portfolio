@@ -238,15 +238,15 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [X] Palette d'accent + typo minimale, appliquées via `assets/styles/01-base.css`.
 - [X] Switch light/dark : détection `prefers-color-scheme` + bascule manuelle mémorisée (`localStorage`) — développement complet, rien à récupérer du thème (section 6).
 - [X] Pipeline CSS avec baseline de compatibilité navigateurs (Chrome 105+, Firefox 121+, Safari 16+, Edge 105+) : `css.Build` natif Hugo (down-level, ex. nesting) + `stylelint-no-unsupported-browser-features` en amont — sujet identifié pendant #49, traité séparément car structurant pour tout le front (issue #63, voir `docs/css-compat.md`).
-- [ ] Mise en forme des listes et articles de blog, blocs de code inclus (issue #44).
-- [ ] Mise en forme des fiches et de la liste projets (issue #45).
-- [ ] Mise en forme de la liste de veille (issue #46).
+- [X] Mise en forme des listes et articles de blog, blocs de code inclus (issue #44).
+- [X] Mise en forme des fiches et de la liste projets (issue #45) : liste en cards via `card.html`, fiche au gabarit lecture de l'article, ligne de méta enrichie (`projets-meta.html`).
+- [X] Mise en forme de la liste de veille (issue #46).
 - [ ] Mise en forme de la page Parcours / CV (issue #47).
-- [ ] Mise en forme de la page d'accueil (issue #48).
-- [ ] Mise en forme navigation/header et footer (issue #49).
+- [X] Mise en forme de la page d'accueil (issue #48).
+- [X] Mise en forme navigation/header et footer (issue #49).
 - [ ] Page 404 personnalisée (issue #50).
 - [ ] Mise en forme des pages de taxonomie `/tags/` (issue #51).
-- [ ] Favicon et icônes meta (issue #52).
+- [ ] Favicon et icônes meta — traités avec l'iconographie d'interface (issue #80, qui absorbe #52).
 - [ ] Pagination des listes : vérifier et trancher (issue #53).
 
 ### Phase 3 — Contenu réel (remplace le Lorem Ipsum)

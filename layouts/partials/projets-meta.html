@@ -1,4 +1,53 @@
-{{ with .Params.status }}<p>{{ i18n "project-status" }}: {{ . }}</p>{{ end }}
-{{ with .Params.role }}<p>{{ i18n "project-role" }}: {{ . }}</p>{{ end }}
-{{ with .Params.repo }}<p><a href="{{ . }}">{{ i18n "project-repo" }}</a></p>{{ end }}
-{{ with .Params.demo }}<p><a href="{{ . }}">{{ i18n "project-demo" }}</a></p>{{ end }}
+{{- /*
+  projets-meta.html — meta line of a project page: date, role, status, links to the
+  repository and to the demo, then taxonomy terms.
+
+  Contract:
+    page (required) — the project page to describe.
+
+  Every field but the date is optional: an entry is emitted only for what the front
+  matter actually carries. Repository and demo point outside the site, so they get
+  the external-link treatment (visible marker plus a text equivalent), which is what
+  tells them apart from the internal links of the page.
+*/ -}}
+{{- $page := .page -}}
+{{- if not $page -}}
+  {{- errorf "partial projets-meta.html: missing required key %q" "page" -}}
+{{- end -}}
+
+<ul class="byline meta" role="list">
+  <li>
+    <time pubdate="pubdate" datetime='{{ $page.Date.Format "2006-01-02" }}'>
+      {{ $page.Date.Format (default "2006-01-02" $page.Site.Params.dateFormat) }}
+    </time>
+  </li>
+  {{- with $page.Params.role }}
+    <li>{{ i18n "project-role" }}&#160;: {{ . }}</li>
+  {{- end }}
+  {{- with $page.Params.status }}
+    <li>{{ i18n "project-status" }}&#160;: {{ . }}</li>
+  {{- end }}
+  {{- with $page.Params.repo }}
+    <li>
+      <a href="{{ . }}" target="_blank" rel="noopener">
+        {{ i18n "project-repo" }}
+        <span aria-hidden="true">&#8618;</span>
+        <span class="visually-hidden">{{ i18n "external-link" }}</span>
+      </a>
+    </li>
+  {{- end }}
+  {{- with $page.Params.demo }}
+    <li>
+      <a href="{{ . }}" target="_blank" rel="noopener">
+        {{ i18n "project-demo" }}
+        <span aria-hidden="true">&#8618;</span>
+        <span class="visually-hidden">{{ i18n "external-link" }}</span>
+      </a>
+    </li>
+  {{- end }}
+  {{- range $page.GetTerms "tags" }}
+    <li>
+      <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+    </li>
+  {{- end }}
+</ul>
