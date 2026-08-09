@@ -1,7 +1,8 @@
-{{ if (.Page.Store.Get "hasCodeBlock") }}
-  {{ $syntax := resources.Get "syntax.css" | minify }}
-  <link href="{{ $syntax.RelPermalink }}" rel="stylesheet">
-{{ end }}
+{{/* bear-cub's own syntax.css is deliberately not loaded here. It hardcodes a
+     Dracula palette — background AND foreground — that ignores the theme, and its
+     .chroma selectors outrank ours on specificity whatever the link order. Syntax
+     colours live in assets/styles/11-code.css, mapped onto semantic tokens.
+     See docs/css-tokens.md. */}}
 
 {{ with .Params.style }}
   {{ $extra := resources.Get . | minify }}

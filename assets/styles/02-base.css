@@ -118,3 +118,14 @@ pre {
     color: var(--color-text)
   }
 }
+
+blockquote {
+  padding-block: var(--spacing-sm);
+  padding-inline-start: var(--spacing-sm);
+  background-color: var(--color-surface-alt);
+  border-left: var(--border-thick);
+
+  p {
+    margin-block-end: var(--spacing-md);
+  }
+}

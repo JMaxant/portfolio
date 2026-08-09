@@ -1,0 +1,145 @@
+/* Code blocks and syntax highlighting.
+
+   Chroma emits class names rather than inline styles (markup.highlight.noClasses
+   = false, config/_default/hugo.toml). This file is the only place those classes
+   are mapped onto semantic tokens, so the theme switcher reaches them like any
+   other component.
+
+   Only the token groups that occur in practice are mapped. Anything else falls
+   back to --color-text, which stays readable — an uncoloured token is a
+   degradation, not a bug.
+
+   Every colour clears WCAG AAA (7:1) against --color-surface-alt in both themes.
+   Re-measure before changing one; see docs/css-tokens.md. */
+
+/* Wrapper emitted by Hugo around every highlighted block.
+
+   PROVISIONAL: the breakout below lets code exceed the reading measure by up to
+   --spacing-2xl a side, collapsing to zero when the viewport runs out of room.
+   It is a stopgap — it reads 100vw, which includes the scrollbar width, so the
+   reserved gutter is what absorbs the error. To be replaced by named grid
+   columns on .single, which size against the container instead. */
+.highlight {
+  --code-breakout: clamp(0px, (100vw - 2 * var(--spacing-md) - 100%) / 2, var(--spacing-2xl));
+
+  margin-block-end: var(--spacing-lg);
+  margin-inline: calc(-1 * var(--code-breakout));
+}
+
+/* The <pre> carries tabindex="0" from Hugo, so it must be the scrollable
+   element: a keyboard user has to be able to focus what scrolls. Selecting on
+   pre rather than .chroma also covers fences that carry no language. */
+pre {
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  tab-size: 2;
+  background: var(--color-surface-alt);
+  border: var(--border-thin);
+  border-radius: var(--border-radius);
+}
+
+/* Comment */
+.chroma .c,
+.chroma .ch,
+.chroma .cm,
+.chroma .c1,
+.chroma .cs,
+.chroma .cp,
+.chroma .cpf {
+  font-style: italic;
+  color: var(--color-code-comment);
+}
+
+/* Keyword */
+.chroma .k,
+.chroma .kc,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr,
+.chroma .ow {
+  color: var(--color-code-keyword);
+}
+
+/* Type and builtin */
+.chroma .kt,
+.chroma .nb,
+.chroma .bp,
+.chroma .nc,
+.chroma .nn {
+  color: var(--color-code-type);
+}
+
+/* Function and other names */
+.chroma .nf,
+.chroma .nx,
+.chroma .na,
+.chroma .nt,
+.chroma .nd,
+.chroma .no {
+  color: var(--color-code-function);
+}
+
+/* String */
+.chroma .s,
+.chroma .sa,
+.chroma .sb,
+.chroma .sc,
+.chroma .dl,
+.chroma .sd,
+.chroma .s2,
+.chroma .se,
+.chroma .sh,
+.chroma .si,
+.chroma .sx,
+.chroma .sr,
+.chroma .s1,
+.chroma .ss {
+  color: var(--color-code-string);
+}
+
+/* Number */
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .mo,
+.chroma .il {
+  color: var(--color-code-number);
+}
+
+/* Diff blocks. Colour alone must not carry the meaning, so the leading
+   -/+ character Chroma keeps in the output does the work for everyone else. */
+.chroma .gd {
+  color: var(--color-code-keyword);
+}
+
+.chroma .gi {
+  color: var(--color-code-string);
+}
+
+.chroma .ge {
+  font-style: italic;
+}
+
+.chroma .gs {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Error: underlined rather than given a background, which would need its own
+   contrast measurement against the token colour sitting on top of it. Plain
+   underline — the `underline wavy <color>` shorthand is only partially
+   supported across the browserslist targets. */
+.chroma .err {
+  color: var(--color-code-keyword);
+  text-decoration: underline;
+}
+
+/* Inline code, outside any highlighted block. */
+:not(.chroma) > code {
+  padding-inline: var(--spacing-2xs);
+  font-family: var(--font-mono);
+  background: var(--color-surface-alt);
+  border-radius: var(--border-radius);
+}
