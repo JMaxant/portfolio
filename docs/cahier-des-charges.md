@@ -246,7 +246,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [X] Mise en forme navigation/header et footer (issue #49).
 - [ ] Page 404 personnalisée (issue #50).
 - [ ] Mise en forme des pages de taxonomie `/tags/` (issue #51).
-- [ ] Favicon et icônes meta (issue #52).
+- [ ] Favicon et icônes meta — traités avec l'iconographie d'interface (issue #80, qui absorbe #52).
 - [ ] Pagination des listes : vérifier et trancher (issue #53).
 
 ### Phase 3 — Contenu réel (remplace le Lorem Ipsum)
