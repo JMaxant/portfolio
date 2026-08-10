@@ -37,10 +37,6 @@
 .single__intro {
   font-size: var(--text-base);
   font-style: italic;
-
-  ul, li {
-    margin-block-end: 0;
-  }
 }
 
 .single__heading {

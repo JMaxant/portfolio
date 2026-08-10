@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.2.0
+version: 1.3.0
 date_published: 2026-08-08
 date_modified: 2026-08-09
 ---
@@ -48,12 +48,19 @@ BEM, with one distinction to observe strictly:
 The test: if both classes sit on the same HTML element, the second is a modifier and takes
 `--`. A light tag *is* a tag; a hero section *is* a home section. Neither is a sub-part.
 
+One exception, and only one: **a block may be composed with a layout class**, which is a block
+in its own right and takes no `--`. `<article class="single container-content-grid">` is an
+article block placed in the content grid; the article *is not* a kind of grid, so the modifier
+test does not apply. Read the second class as "put in", not as "variant of". A layout class
+owns width, placement and rhythm and nothing else, which is what keeps it composable — the
+same pairing existed before with `container--reading single`.
+
 ### Where styles live
 
 A component reused beyond a single page gets its own file in `assets/styles/`
 (`07-card.css`), imported by `main.css`. Styles specific to one template stay in that
-template's file (`08-home.css`). Generic elements reused everywhere — `.tag`, `.tags`,
-`.cta` — live in `02-base.css`.
+template's file (`08-home.css`). Generic elements reused everywhere live in `02-base.css`
+(`.tag`, `.tags`) or in `12-utils.css` (`.cta`, `.meta`, `.visually-hidden`).
 
 ## Inventory
 
@@ -155,10 +162,10 @@ Call-to-action link.
 including inside an article. `cta--<variant>` is an unstyled extension point so far.
 
 Inside an article the shortcode's output is **not** wrapped in a `<p>` by Hugo, so the `<a>`
-becomes a direct child of `.single` and therefore a grid item: blockified, and stretched over
-the whole measure by default. `10-single.css` carries `.single > .cta { justify-self: start }`
-to restore its intrinsic width. Any other inline element that can end up as a direct child of
-`.Content` needs the same guard.
+becomes a direct child of the article grid and therefore a grid item: blockified, and
+stretched over the whole measure by default. `10-single.css` carries
+`.container-content-grid > .cta { justify-self: start }` to restore its intrinsic width. Any
+other inline element that can end up as a direct child of `.Content` needs the same guard.
 
 #### `cta` shortcode
 
@@ -177,16 +184,32 @@ Careful with URLs: do not wrap an address in angle brackets (`<…>`). Markdown 
 as an autolink and they end up percent-encoded as `%3c`/`%3e` in the `href`, breaking the
 link.
 
-## Article layout (`.single`)
+## Article layout (`.container-content-grid`)
 
-Ref: issue #77. `.single` is not a partial but it exposes a CSS contract, because what a
-template puts inside an `<article>` lands directly in a grid.
+Ref: issue #77. Neither class below is a partial, but together they expose a CSS contract,
+because what a template puts inside an `<article>` lands directly in a grid.
 
-`<article class="single">` is a grid with three named columns — `content` (the reading
-measure), `wide` (the measure plus a breakout each side, used by code blocks) and `full`
-(edge to edge, unused so far). The full definition, its four invariants and the vertical
-rhythm model are in [css-tokens.md](css-tokens.md#article-layout-grid). What a template
-author needs to know:
+### Two classes, two jobs
+
+```gotemplate
+<article class="single container-content-grid">
+```
+
+- **`single`** is the BEM block. It owns the sub-parts — `single__heading`, `single__intro` —
+  and carries no layout of its own.
+- **`container-content-grid`** is the layout. It is what makes the element a grid with three
+  named columns: `content` (the reading measure), `wide` (the measure plus a breakout each
+  side, used by code blocks) and `full` (edge to edge, unused so far).
+
+They are two blocks on one element, not a block and a modifier — see
+[Class naming](#class-naming). **A template that wants the reading layout has to carry both**:
+`single` alone styles the header and the intro but leaves the article full-bleed, with no
+measure and no vertical padding.
+
+The full definition, its four invariants and the vertical rhythm model are in
+[css-tokens.md](css-tokens.md#article-layout-grid).
+
+### What a template author needs to know
 
 - **Every direct child is a grid item**, placed in `content` by default. `{{ .Content }}`
   emits its top-level blocks flat, so each `p`, `h2`, `ul`, `blockquote` and `div.highlight`
@@ -195,13 +218,20 @@ author needs to know:
   in `10-single.css`. Do not reach for a negative margin.
 - **Only direct children can be placed.** A block nested in a `blockquote` or an `li` cannot
   leave the `content` column.
-- **Never declare a bottom margin on a direct child.** Grid does not collapse margins, so it
-  would add to the next element's top margin. The rhythm is top-side only.
+- **Never declare a top margin on a direct child.** Grid does not collapse margins, so it
+  would add to the bottom margin of the element before it. The rhythm is bottom-side only.
 - **An inline element that can be a direct child needs `justify-self`**, otherwise it is
   stretched over the whole column — see `.cta` above.
 
 `.post-nav` is a sibling of the article, outside the grid, and resolves the same width
 expression on its own so its rule aligns with the header's.
+
+### Where the grid lives
+
+`container-content-grid` is a reusable layout primitive, not a style of the `single` template,
+so by [Where styles live](#where-styles-live) it should have its own file. It currently sits
+in `10-single.css`, which no longer describes it. Moving it belongs to the CSS tree
+reorganisation (#69); until then, expect to find it there.
 
 ## Templating pitfalls
 
