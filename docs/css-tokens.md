@@ -1,13 +1,13 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.4.0
+version: 1.6.0
 date_published: 2026-08-08
 date_modified: 2026-08-09
 ---
 
 # CSS tokens and breakpoints
 
-Ref: issues #49, #63, #69. Describes the contents of `assets/styles/01-tokens.css` and the
+Ref: issues #49, #63, #69, #77. Describes the contents of `assets/styles/01-tokens.css` and the
 breakpoint convention. For browser compatibility and the respective roles of `css.Build`
 and Stylelint, see [css-compat.md](css-compat.md).
 
@@ -86,7 +86,7 @@ becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being
 | Text sizes | `--text-xs` … `--text-hero` | `--text-base` is the body text size |
 | Font weights | `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold` | |
 | Line heights | `--line-height-heading`, `--line-height-base` | |
-| Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px |
+| Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px, and is consumed by the article grid rather than by a utility — see [Article layout grid](#article-layout-grid) |
 | Misc | `--border-radius`, `--border-thin`, `--transition` | `--border-thin` composes `--color-border`, so it follows the theme |
 
 ## Syntax highlighting
@@ -137,7 +137,7 @@ property.
 
 | Utility | Role |
 |---------|------|
-| `.container`, `.container--reading`, `.container--wide` | Page width and inline padding |
+| `.container`, `.container--wide` | Page width and inline padding |
 | `.visually-hidden` | Readable by assistive technology only |
 | `.cta` | Call-to-action button |
 | `.meta` | Secondary text: metadata, bylines, summaries |
@@ -156,6 +156,94 @@ Two consequences worth knowing before using it:
 - **A different size is not a `.meta` case.** `.tag` (`--text-xs` + soft) and
   `.home--hero p` (`--text-md` + soft) are soft-coloured but sized differently. Forcing them
   into `.meta` would mean overriding `font-size` right after, which defeats the point.
+
+## Article layout grid
+
+Ref: issue #77. `.container-content-grid` (`10-single.css`) is a grid with named columns, and
+**it is the source of the reading measure** — there is no `.container--reading` utility any
+more. The
+reason is the unit: `--container-reading` is `70ch`, measured in the font of the element that
+declares it. In `--font-sans` a `ch` is about 8.8px, in `--font-mono` about 9.6px, so the
+measure is worth roughly 64 characters of code, not 70. A code block of 64 signs overflowed
+before its `padding` was even counted.
+
+A negative margin was the previous answer, and it had to read `100vw` — which includes the
+scrollbar width. Grid columns size against the *container* instead, so nothing has to guess
+the viewport.
+
+### The three widths
+
+| Column | Width | Used by |
+|--------|-------|---------|
+| `content` | `min(var(--container-reading), 100% - 2 * var(--gutter))` | Every direct child by default |
+| `wide` | `content` plus up to `--breakout` (`--spacing-2xl`) a side | `.highlight`, the code block wrapper |
+| `full` | Edge to edge, gutters included | Nothing yet — reserved for a full-bleed medium |
+
+The two breakout tracks are `minmax(0, var(--breakout))`: they collapse to zero when the
+room runs out, which reproduces the floor of the old `clamp` without a media query. Placing a
+child is one declaration, `grid-column: wide` or `grid-column: full`.
+
+Only **direct** children are grid items. A block nested inside a `blockquote` or an `li`
+cannot be placed in another column.
+
+### Invariants
+
+Four rules hold the width math together. **This document is the only place they are
+written** — breaking one brings back horizontal overflow on the whole page.
+
+- **Never declare `gap` or `column-gap` on the grid.** The five tracks are calculated to
+  total `100%`; a column gap adds four times its value. At 320px: 16 + 0 + 288 + 0 + 16 + 96
+  = 416px.
+- **Never set a track minimum to `auto`.** Every minimum is a fixed length, which resolves
+  `min-width: auto` to `0` on every item: an unbreakable word overflows its own box without
+  widening the page. One `auto` minimum and the page scrolls sideways.
+- **Never add `padding-inline` to the grid.** The `100%` in `grid-template-columns` resolves
+  against the content box, so an inline padding would count the gutter twice. `padding-block`
+  is safe and is what the grid uses.
+- **Keep the `100% - 2 * var(--gutter)` ceiling in step with the outer tracks' minimum.** It
+  is what keeps the content column inside the page below 70ch.
+
+`--gutter` and `--breakout` are declared on `.container-content-grid, .post-nav`, not on
+`:root`. A custom property is substituted at the point of use, so a `ch` length resolves in
+the consuming element's font — a token holding the measure would be wrong inside a `pre`.
+
+`.post-nav` sits outside the article, so it resolves the same `min()` expression on its own
+`width` to stay aligned with the content column.
+
+### Vertical rhythm: bottom margins only
+
+`display: grid` removes margin collapsing between children. A bottom margin no longer merges
+into the next element's top margin — the two add up. The rhythm is therefore declared **on
+the bottom side only**, so that no two siblings can ever contribute to the same gap:
+
+| Rule | Declaration | Effect |
+|------|-------------|--------|
+| `.container-content-grid > *` | `margin-block-end: var(--spacing-md)` | The step below every direct child |
+| `.container-content-grid h2, h3, h4, h5` | `margin-block: 0 var(--spacing-md)` | Headings drop the top margin they carry in `02-base.css` |
+
+The result is a flat **`--spacing-md` (16px) between every pair of blocks**, headings
+included — measured end to end on a page exercising headings, lists, a blockquote, a table,
+an `hr` and code.
+
+`row-gap` is deliberately not used: it would be a second source of vertical space, added to
+the margins rather than replacing them, and the invariant above forbids `gap` on this grid
+anyway.
+
+Three consequences worth knowing:
+
+- **The grid overrides the element rhythm of `02-base.css` by specificity.**
+  `.container-content-grid > *` is (0,1,0) and beats `p` (0,0,1), so the 24px of
+  `--spacing-lg` becomes 16px inside an article. `.container-content-grid h3` is (0,1,1) and
+  beats `h3` (0,0,1), so `margin-block: 40px 12px` becomes `0 16px`. Reading `02-base.css`
+  alone gives the wrong numbers for anything inside the grid.
+- **Only the bottom side may carry the rhythm.** A top margin on a direct child adds to the
+  bottom margin of the one before it instead of collapsing into it.
+- **The heading rule is a descendant selector, the step rule is a child selector.** Headings
+  nested in a `blockquote` or an `li` are reset too; other nested blocks keep the margins of
+  `02-base.css`, which is what makes a paragraph inside a blockquote behave normally.
+
+A new element type needs no rule unless it wants something other than the step. A new heading
+level does — add it to the heading list. That is what #78 has to do for `h6`.
 
 ## Breakpoints
 
@@ -205,3 +293,5 @@ To be settled alongside the CSS tree reorganisation (#69).
 - Changing any colour token means re-measuring against AAA, including the backgrounds:
   the text colours were solved against `surface-alt` and have no headroom.
 - Never reference a `--color-code-*` token outside `11-code.css`.
+- Never break one of the four [article grid invariants](#invariants); never declare a top
+  margin on a direct child of `.container-content-grid` — the rhythm is the bottom side.

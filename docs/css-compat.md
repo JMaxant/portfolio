@@ -1,13 +1,13 @@
 ---
 title: CSS browser compatibility
-version: 1.2.0
+version: 1.2.1
 date_published: 2026-08-04
-date_modified: 2026-08-08
+date_modified: 2026-08-09
 ---
 
 # CSS browser compatibility
 
-Ref: issue #63. Browser baseline: **Chrome 105+, Firefox 121+, Safari 16+, Edge 105+** (see [qa-ci.md](qa-ci.md), "Baseline navigateurs").
+Ref: issues #63, #77. Browser baseline: **Chrome 105+, Firefox 121+, Safari 16+, Edge 105+** (see [qa-ci.md](qa-ci.md), "Baseline navigateurs").
 
 ## Division of work
 
@@ -16,7 +16,7 @@ Two tools enforce the baseline, each with a distinct role:
 | Tool | Stage | Role |
 |------|-------|------|
 | `css.Build` (esbuild, `layouts/partials/css.html`) | Hugo build | Transpiles modern *syntax* down to the target browsers (native nesting, media query range syntax, vendor prefixes) |
-| `stylelint-no-unsupported-browser-features` (`.stylelintrc.json`) | Lint (pre-commit + CI) | Blocks *runtime* features the browser must support natively — nothing can transpile them (e.g. `:has()`, container queries, `subgrid`) |
+| `stylelint-no-unsupported-browser-features` (`.stylelintrc.json`) | Lint (pre-commit + CI) | Blocks *runtime* features the browser must support natively — nothing can transpile them (e.g. container queries, `subgrid`) |
 
 Vendor prefixes are part of the transpiler's job: write unprefixed properties only, `css.Build` inserts the prefixes required by the targets. No autoprefixer, no manual `-webkit-` prefixes.
 
@@ -42,6 +42,15 @@ are still used in `00-reset.css` and `03-theme.css` — only the exemptions beca
 Note that `-webkit-appearance` is **no longer emitted** in the built CSS with the current
 `safari16` target, contrary to what the removed entry claimed. No prefix is needed across
 the whole baseline.
+
+### Example corrected on 2026-08-09
+
+The table above used to cite `:has()` as a blocked feature. That went stale the same way, and
+for the same reason: `:has()` ships in Chrome 105 and Safari 15.4, so the plugin stopped
+flagging it when the baseline rose to Safari 16 (#63). Verified by linting `.a:has(+ .b)`
+against the current config — no error, and no entry in the `ignore` list either. Container
+queries (*only partially supported by Edge 105, Chrome 105*) and `subgrid` (*not supported by
+Edge 105-116*) do still fail, and are the accurate examples.
 
 ## Adding to the ignore list
 
