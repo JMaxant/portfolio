@@ -28,4 +28,11 @@ export default defineConfig([
       curly: ["error", "all"],
     },
   },
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      sourceType: "module",
+      globals: globals.node,
+    },
+  },
 ]);

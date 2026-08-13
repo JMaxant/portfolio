@@ -1,5 +1,6 @@
 header .container--wide {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   padding-block: var(--spacing-lg);

@@ -28,6 +28,17 @@ tasks:
       - npx --yes @taplo/cli@0.7.0 fmt $(git ls-files '*.toml')
       - npx --yes markdownlint-cli2@0.23.2 --fix $(git ls-files '*.md' ':!docs/**')
 
+  test:layout:browser:
+    desc: Download the Chromium build Playwright drives.
+    cmd: npx playwright install chromium
+
+  test:layout:
+    desc: Run the Playwright layout suite (horizontal overflow) — not part of `task qa`, see docs/tests-layout.md.
+    # Chromium only: firefox/webkit run in CI (.github/workflows/playwright.yml).
+    cmds:
+      - task: test:layout:browser
+      - npx playwright test --project=chromium
+
   hugo:serve:
     aliases: [serve, dev, run]
     cmd: "{{.HUGO}} serve -D --cleanDestinationDir --disableFastRender"
