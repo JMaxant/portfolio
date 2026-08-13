@@ -10,10 +10,14 @@
     "node": ">=24"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0",
     "editorconfig-checker": "^6.1.1",
     "eslint": "^10.8.0",
     "globals": "^17.9.0",
+    "http-server": "^14.1.1",
     "lefthook": "^2.1.10",
     "stylelint": "^17.14.1",
     "stylelint-config-recess-order": "^7.7.0",
@@ -23,5 +27,6 @@
   },
   "allowScripts": {
     "lefthook@2.1.10": true
-  }
+  },
+  "scripts": {}
 }
