@@ -215,9 +215,9 @@ never builds, and the link checker would report it.
 |-------|------|
 | `timeline` | Block: the `ol`, unbulleted |
 | `timeline__item` | Entry, marked by `--border-thick` on the inline start edge |
-| `timeline__periode` | Date range, `--color-text-soft`, tabular figures |
-| `timeline__titre` | Title, `--text-md` |
-| `timeline__corps` | Description, capped at 62ch |
+| `timeline__period` | Date range, `--color-text-soft`, tabular figures |
+| `timeline__title` | Title, `--text-md` |
+| `timeline__body` | Description, capped at 62ch |
 
 The inline-start rule reuses the `blockquote` border of `02-base.css` rather than
 introducing a second vertical accent.
@@ -324,4 +324,5 @@ been opened, so that no fragment is emitted ahead of the failure.
 - `assets/cv.json` is the single source of the Parcours page: it is both read by
   `layouts/parcours/single.html` and republished untouched at `/cv.json`, so the page and
   the machine-readable CV cannot drift. Adding a section to the page means adding it to the
-  JSON, not to the template.
+  JSON, not to the template. See [parcours-cv.md](parcours-cv.md) for the content-editing
+  guide.
