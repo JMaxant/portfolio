@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://www.julien-maxant.com/schemas/cv.schema.json",
+  "title": "Portfolio CV",
+  "description": "Contract for assets/cv.json. A JSON Resume subset, tightened to what layouts/parcours/single.html actually reads. Upstream requires nothing and allows any extra key, so a misspelled field would render an empty section instead of failing the build; every field this site consumes is therefore required here, and unknown keys are rejected.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["basics", "skills"],
+  "anyOf": [{ "required": ["work"] }, { "required": ["education"] }],
+  "properties": {
+    "$schema": { "type": "string" },
+    "basics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "label", "summary"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Rendered as the page lead, so it is required even though upstream makes it optional."
+        },
+        "email": { "type": "string", "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" },
+        "phone": { "type": "string" },
+        "url": { "type": "string" },
+        "image": { "type": "string" },
+        "location": { "type": "object" },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["network", "url"],
+            "properties": {
+              "network": { "type": "string" },
+              "username": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "work": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "position", "startDate"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "position": { "type": "string", "minLength": 1 },
+          "startDate": { "$ref": "#/definitions/iso8601" },
+          "endDate": { "$ref": "#/definitions/iso8601" },
+          "summary": { "type": "string" },
+          "url": { "type": "string" },
+          "location": { "type": "string" },
+          "description": { "type": "string" },
+          "highlights": { "type": "array", "items": { "type": "string" } },
+          "x_tags": { "$ref": "#/definitions/tags" }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["institution", "studyType", "startDate"],
+        "properties": {
+          "institution": { "type": "string", "minLength": 1 },
+          "studyType": { "type": "string", "minLength": 1 },
+          "startDate": { "$ref": "#/definitions/iso8601" },
+          "endDate": { "$ref": "#/definitions/iso8601" },
+          "area": { "type": "string" },
+          "score": { "type": "string" },
+          "url": { "type": "string" },
+          "courses": { "type": "array", "items": { "type": "string" } },
+          "summary": {
+            "type": "string",
+            "description": "Not in the upstream schema, but rendered exactly like work[].summary."
+          },
+          "x_tags": { "$ref": "#/definitions/tags" }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "level"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "level": {
+            "enum": ["Pratiqué au quotidien", "En cours d'acquisition"],
+            "description": "Drives which of the two blocks the skill lands in. The template rejects any other value at build time; the enum is repeated here to fail at commit time instead, with the offending path named."
+          },
+          "keywords": { "type": "array", "items": { "type": "string" } },
+          "x_preuve": {
+            "$ref": "#/definitions/internalPath",
+            "description": "Root-relative permalink of the page that evidences the skill. Section 5bis of the specification: a direction is only credible if something published here backs it."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "iso8601": {
+      "type": "string",
+      "pattern": "^[1-2][0-9]{3}(-[0-1][0-9](-[0-3][0-9])?)?$",
+      "description": "YYYY, YYYY-MM or YYYY-MM-DD, as upstream defines it."
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "description": "Lowercase slug, so it can be matched against a taxonomy term."
+      }
+    },
+    "internalPath": {
+      "type": "string",
+      "pattern": "^/([a-z0-9]+(-[a-z0-9]+)*/)+$",
+      "description": "Leading and trailing slash, matching what RelPermalink emits."
+    }
+  }
+}

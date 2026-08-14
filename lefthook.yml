@@ -27,8 +27,12 @@ pre-commit:
       run: npx stylelint {staged_files}
 
     eslint:
-      glob: "*.js"
+      glob: "*.{js,mjs}"
       run: npx eslint {staged_files}
+
+    cv-schema:
+      glob: "assets/cv.json"
+      run: node scripts/quality/check-cv-schema.mjs {staged_files}
 
     actionlint:
       glob: ".github/workflows/*.yml"

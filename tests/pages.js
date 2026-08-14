@@ -3,5 +3,5 @@
 export const PAGES = [
   ['blog list', '/blog/'],
   ['cas max', '/cas-max/'],
-  // … complète avec les pages du probe
+  ['parcours', '/parcours/'],
 ];

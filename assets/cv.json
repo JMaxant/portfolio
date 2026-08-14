@@ -1,0 +1,81 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Julien Maxant",
+    "label": "Développeur web",
+    "email": "julien.maxant@protonmail.com",
+    "url": "https://www.julien-maxant.com/",
+    "summary": "Développeur web depuis 2017, venu d'une première vie professionnelle ailleurs. Aujourd'hui PHP, Symfony, Drupal et Vue au quotidien ; Go, Python et Kubernetes en trajectoire.",
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "JMaxant",
+        "url": "https://github.com/JMaxant"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Entreprise actuelle",
+      "position": "Développeur web",
+      "startDate": "2023-01",
+      "summary": "Développement et maintenance d'applications Symfony et Drupal ; montée en autonomie sur la partie front Vue.",
+      "x_tags": ["php", "symfony", "vue"]
+    },
+    {
+      "name": "Précédent poste",
+      "position": "Développeur web",
+      "startDate": "2020-01",
+      "endDate": "2023-01",
+      "summary": "Refonte d'un site Drupal 7 vers Drupal 9, mise en place d'une CI, premiers modules custom.",
+      "x_tags": ["drupal", "php"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Organisme de formation",
+      "area": "Développement web",
+      "studyType": "Reconversion professionnelle",
+      "startDate": "2017-01",
+      "endDate": "2020-01",
+      "summary": "Reconversion : bases PHP/JS, premiers projets professionnels.",
+      "x_tags": ["php", "js"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "PHP",
+      "level": "Pratiqué au quotidien"
+    },
+    {
+      "name": "Symfony",
+      "level": "Pratiqué au quotidien"
+    },
+    {
+      "name": "Drupal",
+      "level": "Pratiqué au quotidien"
+    },
+    {
+      "name": "JavaScript",
+      "level": "Pratiqué au quotidien"
+    },
+    {
+      "name": "Vue",
+      "level": "Pratiqué au quotidien"
+    },
+    {
+      "name": "Go",
+      "level": "En cours d'acquisition",
+      "x_preuve": "/blog/apprendre-go-venant-de-php/"
+    },
+    {
+      "name": "Kubernetes",
+      "level": "En cours d'acquisition",
+      "x_preuve": "/projets/api-suivi-go/"
+    },
+    {
+      "name": "Python",
+      "level": "En cours d'acquisition"
+    }
+  ]
+}

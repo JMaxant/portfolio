@@ -1,0 +1,139 @@
+{{ define "main" }}
+  {{- /* Parcours / CV page.
+
+         The structured CV lives in assets/cv.json, in JSON Resume format. This template both
+         renders it and republishes the very same file at /cv.json — a copy, never a
+         re-serialisation — so the human page and the machine-readable CV cannot drift.
+
+         What belongs in cv.json is what a CV holds: positions, education, skills. What belongs
+         to this page only — the "Avant" paragraph — stays in the Markdown body, and the
+         front matter description keeps its own job, the meta description.
+
+         Unlike _default/single.html this template emits no byline: /parcours/ carries no date.
+
+         Everything read from cv.json is resolved and validated in this preamble, before any
+         output, so a broken CV fails the build instead of rendering a page with silent holes. */ -}}
+
+  {{- $source := resources.Get "cv.json" -}}
+  {{- if not $source -}}
+    {{- errorf "parcours: assets/cv.json is missing" -}}
+  {{- end -}}
+  {{- $cvCopy := resources.Copy "/cv.json" $source -}}
+  {{- $cv := $source | transform.Unmarshal -}}
+  {{- $cvCopy.Publish -}}
+
+  {{- /* Positions and diplomas share one antichronological timeline, so normalise both shapes
+         into the timeline-item contract. */ -}}
+  {{- $entries := slice -}}
+  {{- range $cv.work -}}
+    {{- $entries = $entries | append (dict
+          "debut" .startDate "fin" .endDate
+          "titre" .position "organisation" .name
+          "resume" .summary "tags" .x_tags) -}}
+  {{- end -}}
+  {{- range $cv.education -}}
+    {{- $entries = $entries | append (dict
+          "debut" .startDate "fin" .endDate
+          "titre" .studyType "organisation" .institution
+          "resume" .summary "tags" .x_tags) -}}
+  {{- end -}}
+  {{- if not $entries -}}
+    {{- errorf "parcours: cv.json declares neither work nor education" -}}
+  {{- end -}}
+  {{- $entries = sort $entries "debut" "desc" -}}
+
+  {{- /* The year the two sections hinge on is the oldest entry, not a constant to keep in sync. */ -}}
+  {{- $pivot := substr (index (last 1 $entries) 0).debut 0 4 -}}
+
+  {{- /* Skill levels drive the two blocks, so they are a closed whitelist. */ -}}
+  {{- $daily := "Pratiqué au quotidien" -}}
+  {{- $direction := "En cours d'acquisition" -}}
+  {{- range $cv.skills -}}
+    {{- if not (in (slice $daily $direction) .level) -}}
+      {{- errorf "parcours: cv.json skill %q has level %q, expected %q or %q" .name .level $daily $direction -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* Section 5bis: a direction is only worth showing when something published here backs
+         it, so a skill with no proof is left out of the page — it stays in cv.json, which is
+         the CV itself, but the page shows the curated subset. A proof that is declared and
+         does not resolve is a different matter: that one fails the build rather than dropping
+         a skill silently. */ -}}
+  {{- $preuves := slice -}}
+  {{- range where $cv.skills "level" $direction -}}
+    {{- $skill := . -}}
+    {{- with .x_preuve -}}
+      {{- $page := site.GetPage . -}}
+      {{- if not $page -}}
+        {{- errorf "parcours: cv.json proof %q resolves to no page" . -}}
+      {{- end -}}
+      {{- $preuves = $preuves | append (dict "nom" $skill.name "page" $page) -}}
+    {{- end -}}
+  {{- end -}}
+
+  <article class="single container-content-grid resume">
+    <header class="single__heading">
+      <h1>{{ .Title }}</h1>
+      {{ with $cv.basics.summary }}
+        <p class="single__intro">{{ . | markdownify }}</p>
+      {{ end }}
+    </header>
+
+    <section class="resume__section resume__section--now">
+      <h2>
+        {{ i18n "parcours-now" }}
+        <span class="resume__period">{{ i18n "parcours-since" (dict "Year" $pivot) }}</span>
+      </h2>
+      <ol class="timeline" role="list">
+        {{ range $entries }}
+          {{ partial "timeline-item.html" . }}
+        {{ end }}
+      </ol>
+    </section>
+
+    <section class="resume__section resume__section--before">
+      <h2>
+        {{ i18n "parcours-before" }}
+        <span class="resume__period">{{ i18n "parcours-until" (dict "Year" $pivot) }}</span>
+      </h2>
+      {{ .Content }}
+    </section>
+
+    <section class="resume__section resume__section--skills">
+      <h2>{{ i18n "parcours-skills" }}</h2>
+      <div class="skills">
+        {{ with where $cv.skills "level" $daily }}
+          <div class="skills__level">
+            <h3>{{ i18n "skills-daily" }}</h3>
+            <ul class="tags" role="list">
+              {{ range . }}
+                <li class="tag tag--accented">{{ .name }}</li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
+
+        {{ with $preuves }}
+          <div class="skills__level skills__level--direction">
+            <h3>
+              {{ i18n "skills-direction" }}
+              <span class="skills__label">{{ lower $direction }}</span>
+            </h3>
+            <ul class="proofs cards cards--grid" role="list">
+              {{ range . }}
+                <li class="proofs__item">
+                  <h4 class="proofs__skill">{{ .nom }}</h4>
+                  {{ partial "card.html" (dict "page" .page "title_level" "h5") }}
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
+      </div>
+    </section>
+
+    <p class="resume__cv-json meta">
+      <a href="{{ $cvCopy.RelPermalink }}">{{ i18n "cv-json" }}</a>
+    </p>
+  </article>
+{{ end }}
