@@ -69,3 +69,30 @@ other = "Article plus récent"
 
 [post-older]
 other = "Article plus ancien"
+
+[parcours-now]
+other = "Maintenant"
+
+[parcours-since]
+other = "{{ .Year }} → aujourd'hui"
+
+[parcours-before]
+other = "Avant"
+
+[parcours-until]
+other = "jusqu'à {{ .Year }}"
+
+[parcours-ongoing]
+other = "aujourd'hui"
+
+[parcours-skills]
+other = "Compétences"
+
+[skills-daily]
+other = "Stack quotidienne"
+
+[skills-direction]
+other = "Direction"
+
+[cv-json]
+other = "Ce parcours au format JSON Resume"

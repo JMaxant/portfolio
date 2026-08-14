@@ -1,0 +1,46 @@
+{{-
+/*
+  One entry of the Parcours timeline — a job or a diploma, already normalised by the
+  caller so that both shapes render through a single contract.
+    Expected context (dict) :
+    debut (required)        ISO 8601 start date: "YYYY", "YYYY-MM" or "YYYY-MM-DD"
+    titre (required)        job title or study type
+    organisation (required) employer or school
+    fin (optional)          ISO 8601 end date; the entry is open-ended when absent
+    resume (optional)       one sentence, inline Markdown allowed
+    tags (optional)         technology slugs; linked only when the taxonomy term exists
+*/ -}}
+{{- range slice "debut" "titre" "organisation" -}}
+  {{- if not (index $ .) -}}
+    {{- errorf "partial timeline-item: %q is required, got %#v" . $ -}}
+  {{- end -}}
+{{- end -}}
+
+<li class="timeline__item">
+  <p class="timeline__periode">
+    <time datetime="{{ .debut }}">{{ substr .debut 0 4 }}</time>
+    &rarr;
+    {{ with .fin }}
+      <time datetime="{{ . }}">{{ substr . 0 4 }}</time>
+    {{ else }}
+      {{ i18n "parcours-ongoing" }}
+    {{ end }}
+  </p>
+  <h3 class="timeline__titre">{{ .titre }} &mdash; {{ .organisation }}</h3>
+  {{ with .resume }}
+    <p class="timeline__corps">{{ . | markdownify }}</p>
+  {{ end }}
+  {{ with .tags }}
+    <ul class="tags" role="list">
+      {{ range . }}
+        {{- $tag := . -}}
+        {{- /* A tag that no content carries has no term page: render it inert rather than
+               emit a link to a URL Hugo never builds. */ -}}
+        {{- $term := site.GetPage (printf "/tags/%s" (urlize $tag)) -}}
+        <li class="tag">
+          {{ with $term }}<a href="{{ .RelPermalink }}">{{ $tag }}</a>{{ else }}{{ $tag }}{{ end }}
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
+</li>
