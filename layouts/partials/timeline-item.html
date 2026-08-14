@@ -17,7 +17,7 @@
 {{- end -}}
 
 <li class="timeline__item">
-  <p class="timeline__periode">
+  <p class="timeline__period">
     <time datetime="{{ .debut }}">{{ substr .debut 0 4 }}</time>
     &rarr;
     {{ with .fin }}
@@ -26,9 +26,9 @@
       {{ i18n "parcours-ongoing" }}
     {{ end }}
   </p>
-  <h3 class="timeline__titre">{{ .titre }} &mdash; {{ .organisation }}</h3>
+  <h3 class="timeline__title">{{ .titre }} &mdash; {{ .organisation }}</h3>
   {{ with .resume }}
-    <p class="timeline__corps">{{ . | markdownify }}</p>
+    <p class="timeline__body">{{ . | markdownify }}</p>
   {{ end }}
   {{ with .tags }}
     <ul class="tags" role="list">

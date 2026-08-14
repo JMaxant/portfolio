@@ -71,7 +71,7 @@
     {{- end -}}
   {{- end -}}
 
-  <article class="single container-content-grid parcours">
+  <article class="single container-content-grid resume">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
       {{ with $cv.basics.summary }}
@@ -79,10 +79,10 @@
       {{ end }}
     </header>
 
-    <section class="parcours__section parcours__section--maintenant">
+    <section class="resume__section resume__section--now">
       <h2>
         {{ i18n "parcours-now" }}
-        <span class="parcours__periode">{{ i18n "parcours-since" (dict "Year" $pivot) }}</span>
+        <span class="resume__period">{{ i18n "parcours-since" (dict "Year" $pivot) }}</span>
       </h2>
       <ol class="timeline" role="list">
         {{ range $entries }}
@@ -91,19 +91,19 @@
       </ol>
     </section>
 
-    <section class="parcours__section parcours__section--avant">
+    <section class="resume__section resume__section--before">
       <h2>
         {{ i18n "parcours-before" }}
-        <span class="parcours__periode">{{ i18n "parcours-until" (dict "Year" $pivot) }}</span>
+        <span class="resume__period">{{ i18n "parcours-until" (dict "Year" $pivot) }}</span>
       </h2>
       {{ .Content }}
     </section>
 
-    <section class="parcours__section parcours__section--competences">
+    <section class="resume__section resume__section--skills">
       <h2>{{ i18n "parcours-skills" }}</h2>
-      <div class="competences">
+      <div class="skills">
         {{ with where $cv.skills "level" $daily }}
-          <div class="competences__niveau">
+          <div class="skills__level">
             <h3>{{ i18n "skills-daily" }}</h3>
             <ul class="tags" role="list">
               {{ range . }}
@@ -114,15 +114,15 @@
         {{ end }}
 
         {{ with $preuves }}
-          <div class="competences__niveau competences__niveau--direction">
+          <div class="skills__level skills__level--direction">
             <h3>
               {{ i18n "skills-direction" }}
-              <span class="competences__label">{{ lower $direction }}</span>
+              <span class="skills__label">{{ lower $direction }}</span>
             </h3>
-            <ul class="preuves cards cards--grid" role="list">
+            <ul class="proofs cards cards--grid" role="list">
               {{ range . }}
-                <li class="preuves__item">
-                  <h4 class="preuves__competence">{{ .nom }}</h4>
+                <li class="proofs__item">
+                  <h4 class="proofs__skill">{{ .nom }}</h4>
                   {{ partial "card.html" (dict "page" .page "title_level" "h5") }}
                 </li>
               {{ end }}
@@ -132,7 +132,7 @@
       </div>
     </section>
 
-    <p class="parcours__cv-json meta">
+    <p class="resume__cv-json meta">
       <a href="{{ $cvCopy.RelPermalink }}">{{ i18n "cv-json" }}</a>
     </p>
   </article>

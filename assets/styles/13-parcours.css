@@ -1,4 +1,4 @@
-.parcours__section {
+.resume__section {
   margin-block-start: var(--spacing-2xl);
 
   > h2 {
@@ -8,14 +8,13 @@
     align-items: baseline;
   }
 
-  /* "Avant" stays a single soft paragraph: it must never compete with "Maintenant". */
-  &.parcours__section--avant p {
+  &.resume__section--before p {
     max-width: 62ch;
     color: var(--color-text-soft);
   }
 }
 
-.parcours__periode {
+.resume__period {
   font-size: var(--text-sm);
   font-weight: var(--font-weight-normal);
   color: var(--color-text-soft);
@@ -27,8 +26,6 @@
   list-style: none;
 }
 
-/* The blockquote rule of 02-base.css, reused as a timeline marker rather than
-   introducing a second vertical accent. */
 .timeline__item {
   padding-inline-start: var(--spacing-md);
   border-inline-start: var(--border-thick);
@@ -38,29 +35,26 @@
   }
 }
 
-.timeline__periode {
+.timeline__period {
   margin-block-end: var(--spacing-2xs);
   font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
   color: var(--color-text-soft);
 }
 
-.timeline__titre {
+.timeline__title {
   margin-block-end: var(--spacing-2xs);
   font-size: var(--text-md);
 }
 
-.timeline__corps {
+.timeline__body {
   max-width: 62ch;
   margin-block-end: var(--spacing-sm);
   font-size: var(--text-sm);
   color: var(--color-text-soft);
 }
 
-/* The two levels are stacked, not side by side: a one-line row of tags and a grid of
-   proof cards have nothing comparable to say, and two columns would starve the cards
-   below the 280px the card grid needs to hold two per row. */
-.competences {
+.skills {
   display: grid;
   gap: var(--spacing-xl);
   margin-block-start: var(--spacing-lg);
@@ -71,15 +65,12 @@
   }
 }
 
-/* A dashed rule rather than a dashed frame: the cards already carry borders, and a box
-   around boxes reads as noise. "In progress" is said by the rule and, in words, by the
-   label next to the heading. */
-.competences__niveau--direction {
+.skills__level--direction {
   padding-block-start: var(--spacing-md);
   border-block-start: 1px dashed var(--color-border-strong);
 }
 
-.competences__label {
+.skills__label {
   font-size: var(--text-xs);
   font-weight: var(--font-weight-normal);
   color: var(--color-text-soft);
@@ -87,14 +78,13 @@
   letter-spacing: 0.05em;
 }
 
-.preuves {
+.proofs {
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-/* The skill labels the card; the card must fill the row it shares with its neighbours. */
-.preuves__item {
+.proofs__item {
   display: flex;
   flex-direction: column;
 
@@ -103,13 +93,13 @@
   }
 }
 
-.preuves__competence {
+.proofs__skill {
   margin-block-end: var(--spacing-2xs);
   font-size: var(--text-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.parcours__cv-json {
+.resume__cv-json {
   margin-block-start: var(--spacing-2xl);
 }
