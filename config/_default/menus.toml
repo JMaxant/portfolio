@@ -22,3 +22,23 @@ weight = 40
 name = 'Parcours'
 url = '/parcours/'
 weight = 50
+
+[[error]]
+name = 'Projets'
+url = '/projets/'
+weight = 20
+
+[[error]]
+name = 'Blog'
+url = '/blog/'
+weight = 30
+
+[[error]]
+name = 'Veille'
+url = '/veille/'
+weight = 40
+
+[[error]]
+name = 'Parcours'
+url = '/parcours/'
+weight = 50

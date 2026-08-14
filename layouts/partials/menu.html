@@ -1,0 +1,18 @@
+{{- /* Expected context (dict): menuName (required) */ -}}
+{{- $allowed := slice "main" "error" -}}
+{{- if not (in $allowed .menuName) -}}
+  {{- errorf "partial menu.html: invalid menuName %q, expected one of %v" .menuName $allowed -}}
+{{- end -}}
+
+{{ with .menuName }}
+<nav>
+  <ul class="menu menu--{{ . }}" role="list">
+    {{ range (index site.Menus .).ByWeight }}
+    <li>
+      <a href="{{ .URL }}">{{ .Name }}</a>
+    </li>
+    {{ end }}
+  </ul>
+</nav>
+
+{{ end }}

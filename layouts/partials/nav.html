@@ -1,12 +1,4 @@
-<nav>
-  <ul class="menu menu--main" role="list">
-    {{ range .Site.Menus.main.ByWeight }}
-    <li>
-      <a href="{{ .URL }}">{{ .Name }}</a>
-    </li>
-    {{ end }}
-  </ul>
-</nav>
+{{ partial "menu.html" (dict "menuName" "main") }}
 
 <!-- Convert this page's translations into a dict -->
 {{ $translations := dict }}

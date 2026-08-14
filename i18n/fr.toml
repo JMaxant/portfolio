@@ -96,3 +96,12 @@ other = "Direction"
 
 [cv-json]
 other = "Ce parcours au format JSON Resume"
+
+[404-title]
+other = "Cette page n'existe pas (ou plus)"
+
+[404-body]
+other = "Entre vous et moi, quelque chose a échoué. J'aimerais crois que ce n'est pas moi, mais l'expérience tends à me dire le contraire."
+
+[cta-back-home]
+other = "Retour à l'accueil"

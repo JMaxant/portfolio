@@ -1,0 +1,16 @@
+{{ define "title" }}404{{ end }}
+
+{{ define "main" }}
+<div class="container-content-grid page-404">
+  <span aria-hidden="true" class="error-code">404</span>
+  <h1>{{ i18n "404-title" }}</h1>
+  <span aria-hidden="true" class="table-flip">ʕノ•ᴥ•ʔノ ︵ ┻━┻</span>
+  <p>{{ i18n "404-body" }}</p>
+
+  {{ $label := i18n "cta-back-home" }}
+  {{ partial "cta.html" (dict "url" "/" "label" $label) }}
+
+
+  {{ partial "menu.html" (dict "menuName" "error") }}
+</div>
+{{ end }}
