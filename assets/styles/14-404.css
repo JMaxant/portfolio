@@ -1,0 +1,29 @@
+.error-code {
+  margin-block-end: var(--spacing-lg);
+  font-size: var(--text-hero);
+  font-weight: var(--font-weight-light);
+  color: var(--color-text-soft);
+}
+
+.table-flip {
+  display: block;
+  margin-block-end: var(--spacing-lg);
+  font-size: var(--text-lg);
+  color: var(--color-text-soft);
+}
+
+.page-404 {
+  h1 {
+    margin-block-end: var(--spacing-lg);
+    font-size: var(--text-xl);
+  }
+
+  p {
+    margin-block-end: var(--spacing-xl);
+    font-size: var(--text-md);
+  }
+
+  .cta {
+    margin-block-end: var(--spacing-xl);
+  }
+}

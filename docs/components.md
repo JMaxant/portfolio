@@ -185,6 +185,20 @@ Careful with URLs: do not wrap an address in angle brackets (`<…>`). Markdown 
 as an autolink and they end up percent-encoded as `%3c`/`%3e` in the `href`, breaking the
 link.
 
+### `menu.html`
+
+Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name.
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `menuName` | yes | — | Menu identifier: `main` or `error` |
+
+`menuName` is checked against a whitelist with `errorf` before any output, since Go
+templates cannot do dynamic field access (`.Site.Menus.$menuName`) — the menu is fetched
+with `index site.Menus .menuName` instead. The resulting class is `menu--<menuName>`.
+
+**Callers** — `nav.html` (`menuName: main`), `layouts/404.html` (`menuName: error`).
+
 ### `timeline-item.html`
 
 One entry of the Parcours timeline. The caller normalises the two shapes the entry can take
