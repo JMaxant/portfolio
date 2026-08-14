@@ -18,8 +18,9 @@
   {{- if not $source -}}
     {{- errorf "parcours: assets/cv.json is missing" -}}
   {{- end -}}
+  {{- $cvCopy := resources.Copy "/cv.json" $source -}}
   {{- $cv := $source | transform.Unmarshal -}}
-  {{- ($source | resources.Copy "/cv.json").Publish -}}
+  {{- $cvCopy.Publish -}}
 
   {{- /* Positions and diplomas share one antichronological timeline, so normalise both shapes
          into the timeline-item contract. */ -}}
@@ -42,7 +43,7 @@
   {{- $entries = sort $entries "debut" "desc" -}}
 
   {{- /* The year the two sections hinge on is the oldest entry, not a constant to keep in sync. */ -}}
-  {{- $pivot := substr (index (sort $entries "debut" "asc") 0).debut 0 4 -}}
+  {{- $pivot := substr (index (last 1 $entries) 0).debut 0 4 -}}
 
   {{- /* Skill levels drive the two blocks, so they are a closed whitelist. */ -}}
   {{- $daily := "Pratiqué au quotidien" -}}
@@ -132,7 +133,7 @@
     </section>
 
     <p class="parcours__cv-json meta">
-      <a href="{{ (resources.Copy "/cv.json" $source).RelPermalink }}">{{ i18n "cv-json" }}</a>
+      <a href="{{ $cvCopy.RelPermalink }}">{{ i18n "cv-json" }}</a>
     </p>
   </article>
 {{ end }}
