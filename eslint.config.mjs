@@ -35,4 +35,11 @@ export default defineConfig([
       globals: globals.node,
     },
   },
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      sourceType: "module",
+      globals: globals.node,
+    },
+  },
 ]);

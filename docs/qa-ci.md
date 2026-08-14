@@ -1,6 +1,6 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.6.0
+version: 1.6.1
 date_published: 2026-08-01
 date_modified: 2026-08-14
 ---
@@ -27,7 +27,7 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 | `taplo-fmt` / `taplo-lint` | `@taplo/cli` (npx, épinglé)            | Format + lint TOML                                                                  |
 | `markdownlint`             | `markdownlint-cli2` (npx, épinglé)     | Markdown, hors `docs/**`                                                            |
 | `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard` + `stylelint-config-recess-order` pour l'ordre des propriétés + `stylelint-no-unsupported-browser-features`) |
-| `cv-schema`                | `ajv-cli` (npx, épinglé)               | `assets/cv.json` against `scripts/quality/schemas/cv.schema.json`                    |
+| `cv-schema`                | `ajv` (devDependency)                  | `scripts/quality/check-cv-schema.mjs`: `assets/cv.json` against `schemas/cv.schema.json` |
 | `actionlint`               | `actionlint` (via `go run`, épinglé)   | Workflows GitHub Actions (`.github/workflows/*.yml`)                                |
 | `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
 
