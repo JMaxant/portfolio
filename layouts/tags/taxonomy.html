@@ -1,0 +1,15 @@
+{{ define "main" }}
+
+<div class="container--wide taxonomy">
+  <h1>{{ .Title }}</h1>
+
+  {{ with .Content }}{{ . }}{{ end }}
+  <section class="cards cards--grid">
+    {{ range .Site.Taxonomies.tags.Alphabetical }}
+      {{ partial "card-taxonomy.html" (dict "term" .Page "title_level" "h2" "variant" "taxonomy") }}
+    {{ else }}
+    <p>{{ i18n "no-posts" }}</p>
+    {{ end }}
+  </section>
+</div>
+{{ end }}
