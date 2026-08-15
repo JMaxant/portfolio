@@ -1,4 +1,6 @@
 .site-footer {
+  border-block-end: var(--border-thin);
+
   .container--wide {
     display: flex;
     justify-content: space-between;
