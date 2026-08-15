@@ -40,7 +40,7 @@
       padding-inline-start: var(--spacing-md);
 
       .entry-list__item {
-        grid-template-columns: max-content 1fr max-content
+        grid-template-columns: max-content 1fr max-content;
 
       }
     }

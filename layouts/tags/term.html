@@ -8,25 +8,31 @@
           <time class="meta" datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
             {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
           </time>
-          {{ if .Params.link }}
-          {{- $lang := .Params.source_lang -}}
-          <a href="{{ .Params.link }}"target="_blank" rel="noopener"{{with $lang }} hrefland="{{ . }}"{{ end }}>
-            <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ .Title }}</span>
-          </a>
-          {{ else }}
-            <a class="entry-list__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-          {{ end }}
           <div class="entry-list__body">
-            <p class="entry-list__body meta">{{ .Params.description }}</p>
+            {{ if .Params.link }}
+              {{- $lang := .Params.source_lang -}}
+              <a href="{{ .Params.link }}" target="_blank" rel="noopener"{{with $lang }} hreflang="{{ . }}"{{ end }}>
+                <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ .Title }}</span>
+                <span aria-hidden="true">&#8618;</span>
+                <span class="visually-hidden">{{ i18n "external-link" }}</span>
+              </a>
+            {{ else }}
+              <a class="entry-list__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{ end }}
+            {{ with .Params.description }}
+              <p class="meta">{{ . }}</p>
+            {{ end }}
             {{ with .GetTerms "tags" }}
             <ul role="list" class="tags">
               {{ range . }}
-              <li class="tag tag--accented"><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+              <li class="tag tag--accented"><a href="{{ .Permalink }}">{{ lower .LinkTitle }}</a></li>
               {{ end }}
             </ul>
             {{ end }}
           </div>
         </li>
+      {{ else }}
+        <li>{{ i18n "no-posts" }}</li>
       {{ end }}
     </ul>
   </div>

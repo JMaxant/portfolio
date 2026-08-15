@@ -22,8 +22,10 @@
         </p>
         {{ if .Params.link }}
           {{- $lang := .Params.source_lang -}}
-          <a href="{{ .Params.link }}"target="_blank" rel="noopener"{{with $lang }} hrefland="{{ . }}"{{ end }}>
+          <a href="{{ .Params.link }}" target="_blank" rel="noopener"{{with $lang }} hreflang="{{ . }}"{{ end }}>
             <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ .Title }}</span>
+            <span aria-hidden="true">&#8618;</span>
+            <span class="visually-hidden">{{ i18n "external-link" }}</span>
           </a>
         {{ else }}
           <a href="{{ .RelPermalink }}">
