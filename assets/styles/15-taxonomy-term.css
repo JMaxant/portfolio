@@ -1,3 +1,3 @@
-.taxonomy {
+.taxonomy, .term {
   margin-block: var(--spacing-xl);
 }

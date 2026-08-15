@@ -1,0 +1,33 @@
+{{ define "main" }}
+  <div class="container--wide term">
+    <h1>{{ .Title }}</h1>
+
+    <ul class="entry-list" role="list">
+      {{ range .Pages }}
+        <li class="entry-list__item">
+          <time class="meta" datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
+            {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+          </time>
+          {{ if .Params.link }}
+          {{- $lang := .Params.source_lang -}}
+          <a href="{{ .Params.link }}"target="_blank" rel="noopener"{{with $lang }} hrefland="{{ . }}"{{ end }}>
+            <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ .Title }}</span>
+          </a>
+          {{ else }}
+            <a class="entry-list__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          {{ end }}
+          <div class="entry-list__body">
+            <p class="entry-list__body meta">{{ .Params.description }}</p>
+            {{ with .GetTerms "tags" }}
+            <ul role="list" class="tags">
+              {{ range . }}
+              <li class="tag tag--accented"><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+              {{ end }}
+            </ul>
+            {{ end }}
+          </div>
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+{{ end }}
