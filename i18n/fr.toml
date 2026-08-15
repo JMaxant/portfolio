@@ -49,6 +49,9 @@ other = "Article"
 [type-projets]
 other = "Projet"
 
+[type-veille]
+other = "Veille"
+
 [external-link]
 other = "lien externe"
 
@@ -105,3 +108,9 @@ other = "Entre vous et moi, quelque chose a échoué. J'aimerais crois que ce n'
 
 [cta-back-home]
 other = "Retour à l'accueil"
+
+[date-format]
+other = "02/01/2006"
+
+[latest-content]
+other = "Derniers contenus"

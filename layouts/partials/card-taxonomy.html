@@ -1,0 +1,40 @@
+{{- $level := .title_level | default "h3" -}}
+{{- if not (in (slice "h2" "h3" "h4" "h5") $level) -}}
+  {{- errorf "partial card-taxonomy.html: invalid title_level provided (%q), expected h2, h3, h4 or h5" $level -}}
+{{- end -}}
+{{- if not .term -}}
+  {{- errorf "partial card-taxonomy.html: missing required \"term\" parameter" -}}
+{{- end -}}
+
+<article class="card{{ with .variant }} card--{{ . }}{{ end }}">
+  {{ printf `<%s class="card__title">` $level | safeHTML }}
+  <a href="{{ .term.RelPermalink }}">{{ .term.Title }}</a>
+  {{ printf "</%s>" $level | safeHTML }}
+  <div class="card__body">
+    <p class="card__description">{{ i18n "latest-content" }}</p>
+    <ul class="entry-list" role="list">
+      {{ range first 3 .term.Pages.ByDate.Reverse }}
+      <li class="entry-list__item">
+        <p>
+          <a class="tag tag--accented" href="{{ .CurrentSection.RelPermalink }}">
+            {{ i18n (printf "type-%s" .Section) }}
+          </a>
+        </p>
+        {{ if .Params.link }}
+          {{- $lang := .Params.source_lang -}}
+          <a href="{{ .Params.link }}"target="_blank" rel="noopener"{{with $lang }} hrefland="{{ . }}"{{ end }}>
+            <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ .Title }}</span>
+          </a>
+        {{ else }}
+          <a href="{{ .RelPermalink }}">
+            {{ .Title }}
+          </a>
+        {{ end }}
+        <time class="meta" datetime='{{ .Date.Format (i18n "date-format") }}' pubdate>
+          {{ .Date.Format (default  (i18n "date-format")  .Site.Params.dateFormat) }}
+        </time>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+</article>

@@ -34,4 +34,22 @@
     align-items: center;
     font-size: var(--text-sm);
   }
+
+  &.card--taxonomy {
+    .entry-list {
+      padding-inline-start: var(--spacing-md);
+
+      .entry-list__item {
+        grid-template-columns: max-content 1fr max-content
+
+      }
+    }
+  }
+}
+
+@media screen and (width >= 768px) {
+  .cards.cards--grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+  }
 }
