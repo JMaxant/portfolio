@@ -213,6 +213,53 @@ Careful with URLs: do not wrap an address in angle brackets (`<…>`). Markdown 
 as an autolink and they end up percent-encoded as `%3c`/`%3e` in the `href`, breaking the
 link.
 
+### `nav.html`
+
+Renders the primary navigation: `menu.html`, the language-switcher links, and
+`theme-switcher.html`, wrapped in `<div class="site-nav" id="primary-nav">`. Takes the
+current page context, not a dict — called once from `header.html` right after
+`.site-header__bar`. `theme-switcher.html` lives here (not in `header.html`) so it ends up
+inside the mobile full-screen panel below 768px, rather than needing a second toggle of its
+own.
+
+**Integration** (`06-nav.css`, refs #72) — `#primary-nav` is the disclosure panel
+controlled by the `.menu-toggle` button rendered in `header.html`. The two are not
+adjacent siblings (the button sits inside `.site-header__bar`), so a CSS combinator can't
+link them: `nav-toggle.js` toggles both `aria-expanded` on the button and an `.is-open`
+class on `.site-nav` from the same call, keeping them in sync from one source of truth in
+JS.
+
+| Class | Role |
+|-------|------|
+| `menu-toggle` | Block: the disclosure button. Hidden above 768px, a fixed square below it |
+| `menu-toggle__icon` | Element: the three-bar icon, morphs into a cross via CSS when `aria-expanded="true"` |
+| `site-nav` | Block: above 768px, an inline row (menu, language links, theme switcher). Below it, hidden until `.is-open`, then a `position: fixed` panel covering the full viewport |
+
+Below 768px the open panel is `position: fixed; inset: 0`, not a panel confined to the
+header's own box — a `max-height` accordion here reads as broken, not subtle, on a phone
+screen. `.site-header` carries `background: var(--color-bg)` so it stays opaque against the
+panel, but `z-index` alone on `.site-header` is not enough: `.site-nav` is a sibling of
+`.site-header__bar` (both children of `.container--wide`), so their stacking order is
+decided against each other, not against the ancestor. `.site-header__bar` therefore needs
+its own `position: relative; z-index: 2` — one above the panel's `z-index: 1` — so the
+title and the toggle button (with its now-a-cross icon) stay visibly on top of, and clip,
+the part of the fixed panel that would otherwise paint over them.
+
+Clipping the overlap visually is not enough on its own: the panel's own content still needs
+to start below the header, or the first link renders underneath it. `nav-toggle.js` measures
+`.site-header`'s real height (title wraps to two lines, so this isn't a constant) and writes
+it to `--header-height` on `:root`; `.site-nav.is-open`'s `padding-block-start` reads that
+custom property (`calc(var(--header-height, 8rem) + var(--spacing-lg))`) instead of a fixed
+token. Re-measured on `resize`.
+
+`body:has(.site-nav.is-open) { overflow: hidden }` stops the page scrolling behind the
+panel.
+
+`assets/scripts/nav-toggle.js` (loaded automatically, see `layouts/_default/baseof.html`)
+toggles `aria-expanded`, closes on `Escape` (returning focus to the button), and closes
+when a nav link is activated. It is a disclosure widget, not a dialog: no focus trap — the
+panel stays in the document flow and is reachable by keyboard without special handling.
+
 ### `menu.html`
 
 Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name.

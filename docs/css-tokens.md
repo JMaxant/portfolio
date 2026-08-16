@@ -251,7 +251,7 @@ Three thresholds are used across the project:
 
 | Value | Locations | Purpose |
 |-------|-----------|---------|
-| `768px` | `04-header.css` | Header stacks vertically (title, navigation, theme switcher) |
+| `768px` | `04-header.css`, `06-nav.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
 | `576px` | `05-footer.css`, `08-home.css`, `10-single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
 | `560px` | `09-entry-list.css`, `02-base.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers |
 

@@ -28,7 +28,7 @@ l'utilisateur suit le système.
 
 | Fichier                                         | Rôle                                                                        |
 |--------------------------------------------------|------------------------------------------------------------------------------|
-| `layouts/partials/theme-switcher.html`            | Groupe de 3 radios (clair/sombre/système), inclus depuis `header.html`      |
+| `layouts/partials/theme-switcher.html`            | Groupe de 3 radios (clair/sombre/système), inclus depuis `nav.html`         |
 | `assets/scripts/inline/theme-init.js`             | Anti-flash : pose `data-theme` avant le premier rendu                       |
 | `assets/scripts/theme.js`                         | Synchronise le radio coché au chargement, écoute les changements            |
 | `assets/styles/00-tokens.css`                     | Primitives (`--light-*`, `--dark-*`) et tokens sémantiques (`--color-*`)    |

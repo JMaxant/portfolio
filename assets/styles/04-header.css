@@ -1,4 +1,7 @@
 .site-header {
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg);
   border-block-end: var(--border-thin);
 
   .container--wide {
@@ -8,6 +11,14 @@
     justify-content: space-between;
     padding-block: var(--spacing-lg);
     margin: auto;
+
+    .site-header__bar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: var(--spacing-sm);
+      align-items: center;
+    }
 
     .site-title {
       display: flex;
@@ -22,12 +33,15 @@
         font-weight: var(--font-weight-thin);
       }
     }
-  }
 
-  @media screen and (width <= 768px) {
-    header .container--wide {
+    @media screen and (width <= 768px) {
       flex-direction: column;
       gap: var(--spacing-md);
+      align-items: stretch;
+
+      .site-header__bar {
+        justify-content: space-between;
+      }
     }
   }
 }
