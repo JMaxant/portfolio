@@ -1,5 +1,5 @@
 {{ define "main" }}
-  <div class="container--wide term">
+  <div class="container term">
     <h1>{{ .Title }}</h1>
 
     <ul class="entry-list" role="list">
@@ -9,16 +9,7 @@
             {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
           </time>
           <div class="entry-list__body">
-            {{ if .Params.link }}
-              {{- $lang := .Params.source_lang -}}
-              <a href="{{ .Params.link }}" target="_blank" rel="noopener"{{with $lang }} hreflang="{{ . }}"{{ end }}>
-                <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ .Title }}</span>
-                <span aria-hidden="true">&#8618;</span>
-                <span class="visually-hidden">{{ i18n "external-link" }}</span>
-              </a>
-            {{ else }}
-              <a class="entry-list__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-            {{ end }}
+            {{ partial "entry-link.html" (dict "page" . "title_class" "entry-list__title") }}
             {{ with .Params.description }}
               <p class="meta">{{ . }}</p>
             {{ end }}

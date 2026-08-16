@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.4.0
+version: 1.5.0
 date_published: 2026-08-08
-date_modified: 2026-08-14
+date_modified: 2026-08-16
 ---
 
 # Components — partials and integration
@@ -139,15 +139,43 @@ Only the date is unconditional; every other entry appears only if the front matt
 the field (`role`, `status`, `repo`, `demo`, `tags`). A missing `page` fails the build
 through `errorf`.
 
-**External links** — `repo` and `demo` leave the site, so they get the marker used in
-`layouts/veille/list.html`: `target="_blank" rel="noopener"`, a `↪` glyph hidden from
-assistive technology (`aria-hidden`), and a `visually-hidden` text equivalent. Colour is
-not the only carrier of the distinction, which is what RGAA 3.3 asks for. Internal links —
-the title, the tags — carry none of that.
+**External links** — `repo` and `demo` leave the site, so they get the same marker as
+[`entry-link.html`](#entry-linkhtml) below: `target="_blank" rel="noopener"`, a `↪` glyph
+hidden from assistive technology (`aria-hidden`), and a `visually-hidden` text equivalent.
+Colour is not the only carrier of the distinction, which is what RGAA 3.3 asks for.
+Internal links — the title, the tags — carry none of that. The two partials render the
+same marker independently: `entry-link.html` owns the internal/external title link of an
+`.entry-list__item`, `projets-meta.html` owns a project's byline, and the two contracts
+don't overlap enough to share one partial.
 
 **Integration** — the partial emits `ul.byline.meta`, the same block as the byline of a
 blog article (`10-single.css`). It holds more entries there, hence the `flex-wrap` on
 `.byline`. No class of its own: a project meta line *is* a byline, only richer.
+
+### `entry-link.html`
+
+Title link of an `.entry-list__item` entry: an external link built from `.Params.link`, or
+a fallback to the page's own permalink when that field is absent.
+
+| Key | Required | Default | Description |
+|-----|----------|---------|--------------|
+| `page` | yes | — | The entry page to link to |
+| `title_class` | no | none | Class added to the `<a>`, e.g. `entry-list__title` |
+
+A missing `page` fails the build through `errorf`. `title_class` is applied to whichever
+branch renders — external or internal — so a caller cannot style one branch and not the
+other; that split existed by accident in `layouts/tags/term.html` before this partial was
+extracted (issue #94) and was not preserved.
+
+**External branch** — when `.Params.link` is set, the `<a>` targets it with
+`target="_blank" rel="noopener"`, an optional `hreflang` from `.Params.source_lang`, a `↪`
+glyph hidden from assistive technology (`aria-hidden`), and a `visually-hidden` text
+equivalent (`i18n "external-link"`). See the note on `projets-meta.html` above for why
+that partial repeats the marker instead of calling this one.
+
+**Callers** — `layouts/veille/list.html` and `layouts/tags/term.html` (both pass
+`title_class: entry-list__title`), and `layouts/partials/card-taxonomy.html` (no
+`title_class`: the compact card layout does not need the larger title size).
 
 ### `cta.html`
 
