@@ -92,7 +92,8 @@
   --font-weight-bold: 600;
   --font-weight-normal: 400;
   --font-weight-light: 300;
-  --font-sans: system-ui, sans-serif;
+  --font-weight-thin: 200;
+  --font-sans: 'Alexandria', system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', monospace;
 
   /* Misc. */

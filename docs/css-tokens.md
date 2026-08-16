@@ -84,7 +84,7 @@ becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being
 |--------|--------|-------|
 | Spacing | `--spacing-2xs` … `--spacing-2xl` | 0.4rem to 6.4rem |
 | Text sizes | `--text-xs` … `--text-hero` | `--text-base` is the body text size |
-| Font weights | `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold` | |
+| Font weights | `--font-weight-thin`, `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold` | 200, 300, 400, 600 — matches the Alexandria variants imported in `main.css` |
 | Line heights | `--line-height-heading`, `--line-height-base` | |
 | Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px, and is consumed by the article grid rather than by a utility — see [Article layout grid](#article-layout-grid) |
 | Misc | `--border-radius`, `--border-thin`, `--transition` | `--border-thin` composes `--color-border`, so it follows the theme |
