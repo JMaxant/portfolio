@@ -7,21 +7,13 @@
       <ul class="entry-list" role="list">
         {{ range .Pages }}
           {{- $entry := . -}}
-          {{- $lang := .Params.source_lang -}}
           <li class="entry-list__item">
             <time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">
               {{ time.Format "2 Jan 2006" .Date }}
             </time>
 
             <div class="entry-list__body">
-              {{ with .Params.link }}
-                <a class="entry-list__title" href="{{ . }}" target="_blank" rel="noopener"
-                  {{ with $lang }}hreflang="{{ . }}"{{ end }}>
-                  <span {{ with $lang }}lang="{{ . }}"{{ end }}>{{ $entry.Title }}</span>
-                  <span aria-hidden="true">&#8618;</span>
-                  <span class="visually-hidden">{{ i18n "external-link" }}</span>
-                </a>
-              {{ end }}
+              {{ partial "entry-link.html" (dict "page" $entry "title_class" "entry-list__title") }}
 
               {{ with .Params.description }}
                 <p class="meta">{{ . }}</p>

@@ -1,0 +1,28 @@
+{{/*
+  entry-link.html — title link of an `.entry-list__item` entry: an external link built
+  from `.Params.link` (with `hreflang`, the "↪" icon and a visually-hidden label), or a
+  fallback to the page's own permalink when `.Params.link` is absent.
+
+  Dict:
+    page        (required) the entry page
+    title_class (optional) CSS class added to the <a>, e.g. "entry-list__title"
+
+  Usage:
+    {{ partial "entry-link.html" (dict "page" . "title_class" "entry-list__title") }}
+*/}}
+{{- if not .page -}}
+  {{- errorf "partial entry-link.html: missing required \"page\" parameter" -}}
+{{- end -}}
+{{- $page := .page -}}
+{{- $titleClass := .title_class -}}
+{{- $lang := $page.Params.source_lang -}}
+
+{{- if $page.Params.link -}}
+  <a{{ with $titleClass }} class="{{ . }}"{{ end }} href="{{ $page.Params.link }}" target="_blank" rel="noopener"{{ with $lang }} hreflang="{{ . }}"{{ end }}>
+    <span{{ with $lang }} lang="{{ . }}"{{ end }}>{{ $page.Title }}</span>
+    <span aria-hidden="true">&#8618;</span>
+    <span class="visually-hidden">{{ i18n "external-link" }}</span>
+  </a>
+{{- else -}}
+  <a{{ with $titleClass }} class="{{ . }}"{{ end }} href="{{ $page.RelPermalink }}">{{ $page.Title }}</a>
+{{- end -}}
