@@ -29,6 +29,15 @@ Paragraphe sous un titre de niveau 3, couplage plus serré encore.
 
 Paragraphe sous un titre de niveau 4, le couplage le plus serré de l'échelle.
 
+##### Titre de niveau 5
+
+Paragraphe sous un titre de niveau 5 : seul `overflow-wrap` du reset le touche
+actuellement, ni taille ni marge propres.
+
+###### Titre de niveau 6
+
+Paragraphe sous un titre de niveau 6, même défaut que le niveau 5.
+
 ## Titres consécutifs
 
 ### Titre de niveau 3 collé à son titre de niveau 2
@@ -59,6 +68,46 @@ Une liste numérotée :
 2. Deuxième étape.
 3. Troisième étape.
 
+Une liste de tâches, extension `tasklist` : la puce et la case à cocher cohabitent sur
+le même `li`.
+
+- [x] Tâche terminée.
+- [ ] Tâche restante, sur une ligne assez longue pour vérifier que le texte s'aligne
+      bien sous lui-même et non sous la case.
+- [ ] Autre tâche restante.
+
+Une liste de définitions, extension `definitionlist` :
+
+Terme simple
+: Une seule définition pour ce terme.
+
+Terme à plusieurs définitions
+: Première définition.
+: Seconde définition, pour vérifier l'empilement de plusieurs `dd` sous un même `dt`.
+
+## Emphases imbriquées
+
+Un paragraphe qui imbrique les emphases : **gras contenant de l'*italique imbriqué***,
+*italique contenant du **gras imbriqué***, et ~~texte barré contenant du **gras**~~,
+pour vérifier que chaque niveau reste visuellement distinct de son parent.
+
+## Image en prose
+
+L'image suivante n'a pas de légende ni de `figure` — Goldmark ne fournit pas ce
+render hook par défaut. Seul le reset s'applique (`display: block; max-width: 100%`) :
+
+![Rectangle de test, sans légende](/cas-max/placeholder.svg)
+
+## Notes de bas de page
+
+Un paragraphe avec un appel de note[^premiere] et un second appel plus loin dans la
+même phrase, pour vérifier l'espacement entre deux `sup` consécutifs[^seconde].
+
+[^premiere]: Première note, courte.
+[^seconde]: Seconde note, plus longue, pour vérifier que le retour à la ligne dans la
+    liste des notes de bas de page reste lisible et que le lien de retour (`↩`) ne se
+    retrouve pas isolé sur sa propre ligne.
+
 ## Citation
 
 Le bloc qui suit n'avait aucune marge avant le passage en grille : il était collé au
@@ -73,21 +122,21 @@ Paragraphe qui suit la citation : c'est ici que le trou se voyait.
 
 ## Tableau
 
-Le tableau n'est pas encore mis en forme — c'est l'objet de #78, qui disposera des
-colonnes `wide` et `full` pour traiter son débordement.
+Le tableau a ses bordures et son en-tête, mais pas encore de colonne `wide`/`full` —
+cette part de #78 reste liée au ticket grid et à son débordement sur mobile.
 
-| Token | Valeur | Rôle |
-| ----- | ------ | ---- |
-| `--spacing-xs` | 0.8rem | Couplage titre de niveau 4 vers son texte |
-| `--spacing-sm` | 1.2rem | Couplage titre de niveau 3 vers son texte |
-| `--spacing-md` | 1.6rem | Couplage titre de niveau 2 vers son texte, et gouttière |
-| `--spacing-lg` | 2.4rem | Pas de base du rythme vertical |
-| `--spacing-xl` | 4rem | Air au-dessus d'un titre de niveau 3 |
-| `--spacing-2xl` | 6.4rem | Débordement maximal d'une piste `wide` |
+| Token             | Valeur   | Rôle                                                      |
+|-------------------|----------|-----------------------------------------------------------|
+| `--spacing-xs`    | 0.8rem   | Couplage titre de niveau 4 vers son texte                 |
+| `--spacing-sm`    | 1.2rem   | Couplage titre de niveau 3 vers son texte                 |
+| `--spacing-md`    | 1.6rem   | Couplage titre de niveau 2 vers son texte, et gouttière   |
+| `--spacing-lg`    | 2.4rem   | Pas de base du rythme vertical                            |
+| `--spacing-xl`    | 4rem     | Air au-dessus d'un titre de niveau 3                      |
+| `--spacing-2xl`   | 6.4rem   | Débordement maximal d'une piste `wide`                    |
 
 ## Séparateur
 
-Le `hr` qui suit n'a pas de style propre non plus, seul le rythme le positionne.
+Le `hr` qui suit se resserre et se centre sous 560px.
 
 ---
 

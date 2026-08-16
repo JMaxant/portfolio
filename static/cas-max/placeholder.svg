@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-labelledby="cas-max-placeholder-title">
+  <title id="cas-max-placeholder-title">Rectangle de test, 320 sur 180</title>
+  <rect width="320" height="180" fill="#8a8a8a" />
+  <rect x="1" y="1" width="318" height="178" fill="none" stroke="#4a4a4a" stroke-width="2" />
+  <line x1="0" y1="0" x2="320" y2="180" stroke="#4a4a4a" stroke-width="2" />
+  <line x1="320" y1="0" x2="0" y2="180" stroke="#4a4a4a" stroke-width="2" />
+</svg>
