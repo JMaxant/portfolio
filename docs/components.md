@@ -220,7 +220,8 @@ Renders the primary navigation: `menu.html`, the language-switcher links, and
 current page context, not a dict — called once from `header.html` right after
 `.site-header__bar`. `theme-switcher.html` lives here (not in `header.html`) so it ends up
 inside the mobile full-screen panel below 768px, rather than needing a second toggle of its
-own.
+own — see [theme-switcher.md](theme-switcher.md#affichage-du-panneau-refs-72) for how the
+same markup becomes a desktop popover vs. an always-open panel on mobile.
 
 **Integration** (`06-nav.css`, refs #72) — `#primary-nav` is the disclosure panel
 controlled by the `.menu-toggle` button rendered in `header.html`. The two are not

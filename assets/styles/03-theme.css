@@ -58,23 +58,94 @@
 }
 
 .theme-switcher {
-  fieldset {
+  position: relative;
+
+  .theme-switcher__icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .theme-switcher__toggle {
     display: flex;
-    padding: 0;
-    border: none;
+    align-items: center;
+    justify-content: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    padding: 0.6rem;
+    color: var(--color-text);
+    cursor: pointer;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+
+    &:hover {
+      background: var(--color-surface-alt);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-link);
+      outline-offset: 2px;
+    }
+  }
+
+  &:has(fieldset.is-open) .theme-switcher__toggle {
+    background-color: var(--color-surface-alt);
+
+    svg {
+      stroke: var(--color-text-soft);
+    }
+  }
+
+  .theme-switcher__panel {
+    display: none;
+    padding: var(--spacing-sm);
+    background: var(--color-surface);
+    border: var(--border-thin);
+    border-radius: var(--border-radius);
+
+    &.is-open {
+      position: absolute;
+      inset-block-start: calc(100% + var(--spacing-xs));
+      inset-inline-end: 0;
+      z-index: 10;
+      display: block;
+    }
 
     legend {
+      float: left;
+      display: flex;
+      gap: var(--spacing-2xs);
+      align-items: center;
+      margin-block-end: var(--spacing-sm);
       font-size: var(--text-sm);
+
+      .theme-switcher__icon {
+        display: none;
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+    }
+
+    .theme-switcher__body {
+      clear: both;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      margin-block-start: var(--spacing-sm);
     }
 
     .theme-switcher--wrapper {
       display: flex;
+      align-self: flex-start;
       overflow: hidden;
       border: var(--border-thin);
       border-radius: var(--border-radius);
     }
 
     label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: var(--spacing-2xs) var(--spacing-xs);
       font-size: var(--text-sm);
       cursor: pointer;
@@ -95,6 +166,32 @@
     input {
       appearance: none;
       outline: none;
+    }
+  }
+
+  @media screen and (width <= 768px) {
+    .theme-switcher__toggle {
+      display: none;
+    }
+
+    .theme-switcher__panel {
+      position: static;
+      display: block;
+      padding: 0;
+      background: none;
+      border: none;
+
+      legend .theme-switcher__icon {
+        display: block;
+      }
+
+      .theme-switcher__body {
+        margin-block-start: var(--spacing-sm);
+      }
+
+      label {
+        min-height: 4.4rem;
+      }
     }
   }
 }
