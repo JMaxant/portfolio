@@ -129,3 +129,47 @@ blockquote {
     margin-block-end: var(--spacing-md);
   }
 }
+
+table {
+  border-collapse: collapse;
+  border: var(--border-thin);
+
+  th, td {
+    padding: var(--spacing-2xs);
+    border: var(--border-thin);
+  }
+
+  thead {
+    background-color: var(--color-surface-alt);
+  }
+}
+
+hr {
+  width: 75%;
+  margin-block-end: var(--spacing-md);
+  margin-inline: auto;
+  color: var(--color-border);
+}
+
+@media screen and (width <= 768px) {
+  hr {
+    width: 100%;
+  }
+}
+
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-2xs) var(--spacing-md);
+}
+
+dt {
+  grid-column: 1;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+dd {
+  grid-column: 2;
+}
+
