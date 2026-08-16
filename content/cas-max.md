@@ -68,14 +68,6 @@ Une liste numérotée :
 2. Deuxième étape.
 3. Troisième étape.
 
-Une liste de tâches, extension `tasklist` : la puce et la case à cocher cohabitent sur
-le même `li`.
-
-- [x] Tâche terminée.
-- [ ] Tâche restante, sur une ligne assez longue pour vérifier que le texte s'aligne
-      bien sous lui-même et non sous la case.
-- [ ] Autre tâche restante.
-
 Une liste de définitions, extension `definitionlist` :
 
 Terme simple

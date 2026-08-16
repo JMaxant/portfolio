@@ -156,3 +156,20 @@ hr {
     width: 100%;
   }
 }
+
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-2xs) var(--spacing-md);
+}
+
+dt {
+  grid-column: 1;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+dd {
+  grid-column: 2;
+}
+
