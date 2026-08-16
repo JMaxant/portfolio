@@ -16,7 +16,7 @@
     "@types/node": "^26.2.0",
     "ajv": "^8.20.0",
     "editorconfig-checker": "^6.1.1",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "globals": "^17.9.0",
     "http-server": "^14.1.1",
     "lefthook": "^2.1.10",
