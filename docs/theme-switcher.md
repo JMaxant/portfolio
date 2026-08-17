@@ -1,6 +1,6 @@
 ---
 title: Light / dark switch
-version: 2.1.1
+version: 2.2.0
 date_published: 2026-08-03
 date_modified: 2026-08-17
 ---
@@ -59,15 +59,22 @@ the system.
 4. **Other tabs** — `theme.js` listens for `storage`, so a choice made in one tab is applied
    in every other tab of the same origin without waiting for a reload.
 5. **CSS** — `base/tokens.css` declares the primitive colours of both palettes once and assigns
-   the semantic tokens (`--color-bg`, `--color-text`, `--color-link`…) to the light values by
-   default. The same file reassigns those semantic tokens in three contexts:
-   `@media (prefers-color-scheme: dark)` (system), `:root[data-theme="dark"]` and
-   `:root[data-theme="light"]` (explicit choice). The `:root[data-theme=…]` selectors are
-   more specific than `:root` alone, so an explicit choice always beats the system
-   preference, whatever the order of the rules in the file.
+   the semantic tokens (`--color-bg`, `--color-text`, `--color-link`…) to the light values on
+   bare `:root`. Two blocks then reassign them to the dark palette:
+   `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }` for the system
+   preference, and `:root[data-theme="dark"]` for an explicit choice.
 
-The three palettes are written out twice on purpose. `light-dark()` would collapse them into
-one, but it needs Chrome 123 / Safari 17.5 and the `browserslist` floor in `package.json` is
+There is deliberately **no `:root[data-theme="light"]` block**. The `:not()` guard on the
+media query is what removes the need for one: an explicit light choice makes the media block
+stop matching, and the light values `:root` already carries apply. Without the guard the
+light palette would have to be written a second time, and the two copies would drift.
+
+Specificity, for the record: `:root:not([data-theme="light"])` and `:root[data-theme="dark"]`
+are both (0,2,0) and beat bare `:root` (0,1,0). The two are equal, so the dark choice wins by
+coming later in the file — that ordering is load-bearing.
+
+Both palettes are still written out in full. `light-dark()` would collapse them into one, but
+it needs Chrome 123 / Safari 17.5 and the `browserslist` floor in `package.json` is
 Chrome 105 / Safari 16. Revisit when that floor moves.
 
 ## Panel display (refs #72)
