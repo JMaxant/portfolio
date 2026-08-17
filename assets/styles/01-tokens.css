@@ -9,7 +9,10 @@
   --light-surface: #fff;
   --light-surface-alt: #eef0f5;
   --light-border: #d8dce4;
-  --light-border-strong: #b6bdcb;
+
+  /* Bounds a UI component, so it must clear 3:1 (RGAA 3.3). Worst case is
+     --light-surface-alt, not --light-bg: 3.16:1. See docs/css-tokens.md. */
+  --light-border-strong: #7c87a0;
 
   /* Syntax highlighting. Every value clears AAA (7:1) against --light-surface-alt;
      the measured ratio is in the comment. Re-measure before changing one. */
@@ -30,7 +33,10 @@
   --dark-surface: #1c1f27;
   --dark-surface-alt: #21252e;
   --dark-border: #2b3040;
-  --dark-border-strong: #414b60;
+
+  /* Same 3:1 constraint as --light-border-strong; worst case is
+     --dark-surface-alt: 3.14:1. */
+  --dark-border-strong: #637191;
 
   /* Syntax highlighting, measured against --dark-surface-alt. */
   --dark-code-comment: #a9b1ba; /* 7.09:1 */
