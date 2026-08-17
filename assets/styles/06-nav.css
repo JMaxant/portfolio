@@ -15,9 +15,8 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 4.4rem;
-  height: 4.4rem;
-  padding: 0.6rem;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
   color: var(--color-text);
   appearance: none;
   cursor: pointer;
@@ -36,7 +35,7 @@
 
   .menu-toggle__icon {
     position: relative;
-    width: 2rem;
+    width: var(--size-icon);
     height: 1.4rem;
 
     span {
@@ -46,7 +45,7 @@
       height: 2px;
       background: currentcolor;
       border-radius: 2px;
-      transition: transform 0.2s ease, opacity 0.2s ease, top 0.2s ease;
+      transition: transform var(--transition-duration) ease, opacity var(--transition-duration) ease, top var(--transition-duration) ease;
     }
 
     span:nth-child(1) {
@@ -79,10 +78,10 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .menu-toggle .menu-toggle__icon span {
-    transition: none;
-  }
+/* Without JS the toggle can never do anything, so it is hidden rather than left inert.
+   Counterpart of the `:root:not(.js) .site-nav` rule below. */
+:root:not(.js) .menu-toggle {
+  display: none;
 }
 
 @media screen and (width <= 768px) {
@@ -94,15 +93,23 @@
     display: none;
   }
 
+  /* Nothing adds `.is-open` without JS, so the nav goes back in flow instead — otherwise it
+     is unreachable at this width. 0-2-0 beats the 0-1-0 above, no `!important` needed. */
+  :root:not(.js) .site-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
   .site-nav.is-open {
     position: fixed;
     inset: 0;
-    z-index: 1;
+    z-index: var(--z-nav-panel);
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xl);
     align-items: stretch;
-    padding: calc(var(--header-height, 8rem) + var(--spacing-lg)) var(--spacing-md) var(--spacing-lg);
+    padding: calc(var(--header-height) + var(--spacing-lg)) var(--spacing-md) var(--spacing-lg);
     overflow-y: auto;
     background: var(--color-bg);
   }

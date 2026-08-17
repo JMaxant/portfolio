@@ -138,14 +138,21 @@ test.describe('layout below 768px', () => {
 });
 
 test.describe('without JavaScript', () => {
-  test('the trigger is hidden rather than inert', async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false, viewport: DESKTOP });
-    const page = await context.newPage();
-    await page.goto('/');
+  // The radios drive nothing without JS, so the whole widget is hidden — see
+  // docs/theme-switcher.md#without-javascript. Both viewports, since the panel is laid out by
+  // two rule sets, and visibility explicitly: `toBeChecked()` passes on a hidden input.
+  for (const [name, viewport] of [['above 768px', DESKTOP], ['below 768px', MOBILE]]) {
+    test(`the whole switcher is hidden ${name}`, async ({ browser }) => {
+      const context = await browser.newContext({ javaScriptEnabled: false, viewport });
+      const page = await context.newPage();
+      await page.goto('/');
 
-    await expect(page.locator('.theme-switcher__toggle')).toBeHidden();
-    await expect(page.locator('#theme-system')).toBeChecked();
+      await expect(page.locator('.theme-switcher')).toBeHidden();
+      await expect(page.locator('.theme-switcher__toggle')).toBeHidden();
+      await expect(page.locator('#theme-switcher-panel')).toBeHidden();
+      await expect(page.locator('#theme-dark')).toBeHidden();
 
-    await context.close();
-  });
+      await context.close();
+    });
+  }
 });

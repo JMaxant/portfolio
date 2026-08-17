@@ -18,7 +18,11 @@
   const { isOpen, setOpen } = window.createDisclosure({
     toggle,
     panel,
-    onOpen: () => {
+    onChange: (open) => {
+      if (!open) {
+        return;
+      }
+
       const checked = inputs.find((input) => input.checked);
       (checked || inputs[0])?.focus();
     },

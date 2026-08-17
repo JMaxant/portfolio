@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.6.0
+version: 1.7.0
 date_published: 2026-08-08
-date_modified: 2026-08-16
+date_modified: 2026-08-17
 ---
 
 # Components — partials and integration
@@ -258,8 +258,24 @@ panel.
 
 `assets/scripts/nav-toggle.js` (loaded automatically, see `layouts/_default/baseof.html`)
 toggles `aria-expanded`, closes on `Escape` (returning focus to the button), and closes
-when a nav link is activated. It is a disclosure widget, not a dialog: no focus trap — the
-panel stays in the document flow and is reachable by keyboard without special handling.
+when a nav link is activated. It stays a disclosure widget rather than a dialog: no focus
+trap, no `role="dialog"`, no focus restoration beyond `Escape`.
+
+That classification does not settle what happens to the content behind it, though. Below
+768px the open panel is `position: fixed; inset: 0` with an opaque background, so it covers
+the page instead of pushing it down — a modal in everything but name. Left alone, `Tab`
+walked out of the last nav control into a `<main>` the user could not see, with no
+indication of where focus had gone (WCAG 2.4.3 Focus Order, and 2.4.11 Focus Not Obscured
+in WCAG 2.2). `nav-toggle.js` therefore sets `inert` on `<main>` and `.site-footer` while
+the panel is open, guarded on `matchMedia('(max-width: 768px)')` so the desktop row — which
+obscures nothing — is untouched. One attribute removes that content from the tab order and
+from the accessibility tree at once; `body:has(…) { overflow: hidden }` above only handles
+the scroll half of the same problem.
+
+Crossing the breakpoint upwards with the panel open closes it, the same reset
+`theme-toggle.js` performs: above 768px the toggle is hidden, so a leftover
+`aria-expanded="true"` would describe a control the user can no longer reach — and the
+closing pass is what releases `inert`.
 
 The `aria-expanded` toggling, the `.is-open` mirroring and the `Escape` handler are not
 written here: they come from `assets/scripts/00-disclosure.js`, shared with the theme
@@ -267,6 +283,24 @@ switcher, which is the other disclosure in the header. The `00-` prefix is load-
 `baseof.html` bundles `resources.Match "scripts/*.js"`, which sorts by path, so the helper
 has to concatenate before its two consumers. It publishes on `window` because after
 concatenation each script is still its own IIFE.
+
+The helper's `onChange` callback fires on every transition, opening and closing alike, and
+is what both consumers hook into — `nav-toggle.js` for `inert`, `theme-switcher.html` for
+moving focus onto the checked radio. A caller cannot get the same effect by wrapping the
+returned `setOpen`, because the helper's own click and `Escape` handlers call the internal
+one directly and would bypass the wrapper.
+
+**Without JavaScript** — nothing can add `.is-open`, so a panel left at `display: none`
+below 768px means no reachable navigation at all: menu, language links and theme switcher
+are all inside `.site-nav`. `06-nav.css` hides `.menu-toggle` under `:root:not(.js)` and
+puts `.site-nav` back in flow at the same width, the same treatment `03-theme.css` applies
+to the theme trigger. `:root:not(.js) .site-nav` is 0-2-0 against the 0-1-0 of the
+`display: none` rule, so it wins on specificity without `!important` and without depending
+on rule order, and `theme-init.js` adds the class before the first paint so the scripted
+case never flashes an expanded nav.
+
+`tests/nav.spec.js` covers the disclosure behaviour, the scroll lock, focus containment,
+the breakpoint reset and the no-JS rendering on both sides of the breakpoint.
 
 ### `theme-switcher.html`
 
@@ -279,8 +313,8 @@ Behaviour, storage contract and accessibility rationale live in
 
 | Class | Role |
 |-------|------|
-| `theme-switcher` | Block: the positioning context (`position: relative`) the popover anchors to. Applied by `nav.html`, not by the partial |
-| `theme-switcher__toggle` | Element: the disclosure button. Hidden below 768px, and hidden by `:root:not(.js)` when scripting is off |
+| `theme-switcher` | Block: the positioning context (`position: relative`) the popover anchors to. Applied by `nav.html`, not by the partial. Hidden whole by `:root:not(.js)` — see [theme-switcher.md](theme-switcher.md#without-javascript) for why the radios cannot stand on their own |
+| `theme-switcher__toggle` | Element: the disclosure button. Hidden below 768px, where the panel is always open |
 | `theme-switcher__icon` | Element: the sun glyph, rendered twice — in the trigger, and in the `<legend>` where it only shows below 768px |
 | `theme-switcher__panel` | Element: the `<fieldset>`. `display: none` until `.is-open` above 768px, permanently visible below it |
 | `theme-switcher__body` | Element: the `clear: both` wrapper that the floated `<legend>` needs |

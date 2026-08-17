@@ -1,8 +1,8 @@
 ---
 title: Light / dark switch
-version: 2.0.0
+version: 2.1.0
 date_published: 2026-08-03
-date_modified: 2026-08-16
+date_modified: 2026-08-17
 ---
 
 # Light / dark switch
@@ -48,10 +48,11 @@ the system.
    value exists, sets `data-theme` on `<html>` **before** the first paint, so the wrong
    theme never flashes. It also adds the `js` class to `<html>`, which is what lets the CSS
    hide controls that only JavaScript can operate — see [Without JavaScript](#without-javascript).
-2. **Rendering the `<fieldset>`** — the "System" radio is `checked` in the HTML (the default
-   state, correct with no JS at all). `theme.js`, deferred through the
-   `resources.Match "scripts/*.js"` bundle, then checks the radio matching the stored choice
-   if there is one.
+2. **Rendering the `<fieldset>`** — the "System" radio is `checked` in the HTML, so the
+   markup already shows the default state before any script runs. `theme.js`, deferred
+   through the `resources.Match "scripts/*.js"` bundle, then checks the radio matching the
+   stored choice if there is one. That static default is what the *scripted* page starts
+   from; it is not a no-JS fallback, see [Without JavaScript](#without-javascript).
 3. **Changing the choice** — on a radio's `change`, `theme.js` updates `localStorage` and
    `data-theme`: both removed for "System", written otherwise. It also updates the trigger's
    hidden label so its accessible name always states the current theme.
@@ -99,11 +100,27 @@ absolutely positioned inside the burger menu.
 
 ## Without JavaScript
 
-Above 768px the panel only ever opens through JavaScript, so the trigger would otherwise be a
-button that announces `aria-expanded` and can never do anything. `03-theme.css` hides it with
-`:root:not(.js)`, and `theme-init.js` adds that class before the first paint, so nothing
-flashes. Below the breakpoint the trigger is hidden anyway and the panel stands on its own,
-with "System" checked in the markup.
+The switcher is hidden entirely — `:root:not(.js) .theme-switcher { display: none }`, with
+`theme-init.js` adding that class before the first paint so nothing flashes. Not just the
+trigger: the whole widget, at both breakpoints.
+
+The reason is that the radios drive nothing on their own. No rule in this file reassigns a
+`--color-*` token from `:checked`; the only `:checked` rules colour the label itself. The
+theme comes from `data-theme`, which `theme.js` writes, and from `prefers-color-scheme`.
+Without JavaScript, selecting "Dark" moves the highlight and changes no colour on the page.
+
+Keying the tokens off `:root:has(input[value="dark"]:checked)` would make it work — `:has()`
+is Chrome 105 / Safari 15.4 / Firefox 121, all under the `browserslist` floor, and is already
+used in this file. It was rejected because the choice could not persist. With no
+`localStorage` there is nowhere to record it, and every page is served as fresh static HTML
+with "System" checked in the markup, so the selection would be lost on the next link the user
+follows. Browsers restore form state on reload and on the back button, which makes the
+failure intermittent rather than obvious — worse, not better. A control that silently resets
+mid-navigation reports a choice that was not kept.
+
+Hidden, the site follows `prefers-color-scheme`: the preference the user has already stated
+to their operating system, and the correct default. The same principle as the trigger being
+hidden rather than left inert on mobile — hide what cannot work, do not fake it.
 
 Storage that throws — Safari with "block all cookies", some enterprise policies, certain
 webviews — is caught rather than allowed to propagate. The choice then applies to the current

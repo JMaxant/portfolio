@@ -1,6 +1,6 @@
 .site-header {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-header);
   background: var(--color-bg);
   border-block-end: var(--border-thin);
 
@@ -14,7 +14,7 @@
 
     .site-header__bar {
       position: relative;
-      z-index: 2;
+      z-index: var(--z-header);
       display: flex;
       gap: var(--spacing-sm);
       align-items: center;
