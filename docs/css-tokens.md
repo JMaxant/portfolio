@@ -1,13 +1,13 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.9.0
+version: 1.10.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
 
 # CSS tokens and breakpoints
 
-Ref: issues #49, #63, #69, #77. Describes the contents of `assets/styles/01-tokens.css` and the
+Ref: issues #49, #57, #63, #69, #77. Describes the contents of `assets/styles/01-tokens.css` and the
 breakpoint convention. For browser compatibility and the respective roles of `css.Build`
 and Stylelint, see [css-compat.md](css-compat.md).
 
@@ -68,15 +68,36 @@ only — hue and saturation untouched — until they just cleared the threshold,
 change stayed minimal. The flip side is that *any* change to a `surface-alt` token drops
 them below AAA. Re-measure before touching a background.
 
+Nothing here is measured by hand any more: `scripts/quality/check-contrast.mjs` reads the
+hex values straight out of `01-tokens.css`, checks every pair below, and runs in pre-commit
+and CI (issue #57). The 7:1 above is what it enforces for text — deliberately stricter than
+RGAA 3.2's 4.5:1, because at 4.5 the palette could lose two full points with the check still
+green. It also **fails on any colour token that appears in no pair**, so a token added later
+cannot slip through unmeasured; put it in a pair, or in the script's `DECORATIVE` map with a
+reason.
+
 Two pairs are easy to forget because the roles are inverted: `.cta` and the checked state of
 the theme switcher paint `--color-bg` **on** `--color-link`. Both clear 7:1 (7.61 light,
 8.11 dark), and they follow `--color-link`, so they move whenever it does.
 
-Borders are out of scope for this target. `--*-border` and `--*-border-strong` sit between
-1.2:1 and 2.0:1 against their backgrounds, below the 3:1 of WCAG 1.4.11 — which applies to
-visual information *required* to identify a component or its state. The borders here are
-decorative: a tag, a card and a switcher are all identifiable without them. If a border ever
-becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being true.
+Borders are out of scope for the 7:1 target, but they split into two cases under WCAG
+1.4.11, which requires 3:1 for visual information *required* to identify a component or its
+state.
+
+`--*-border` is decorative and stays out of scope: it draws `hr` and the `--border-thin` /
+`--border-thick` rules, and sits around 1.3:1 against its backgrounds. A tag or a card is
+identifiable without it.
+
+`--*-border-strong` **is** in scope, and clears 3:1 as of #57. The theme switcher's hover
+state is the reason: its background tint is only 1.08:1 against the page, so the border is
+the sole carrier of the state (`03-theme.css`). The token also bounds the switcher panel and
+the `.parcours` separator. Same method as the text colours — lightness moved, hue and
+saturation untouched — against the same worst-case background:
+
+| Theme | Token | Value | Ratio vs `surface-alt` |
+|-------|-------|-------|------------------------|
+| light | `--light-border-strong` | `#7c87a0` | 3.16 |
+| dark | `--dark-border-strong` | `#637191` | 3.14 |
 
 ## Scales
 

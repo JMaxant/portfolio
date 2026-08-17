@@ -34,6 +34,10 @@ pre-commit:
       glob: "assets/cv.json"
       run: node scripts/quality/check-cv-schema.mjs {staged_files}
 
+    contrast:
+      glob: "assets/styles/01-tokens.css"
+      run: node scripts/quality/check-contrast.mjs
+
     actionlint:
       glob: ".github/workflows/*.yml"
       run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 {staged_files}
