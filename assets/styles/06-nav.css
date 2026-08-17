@@ -93,14 +93,6 @@
     display: none;
   }
 
-  /* Nothing adds `.is-open` without JS, so the nav goes back in flow instead — otherwise it
-     is unreachable at this width. 0-2-0 beats the 0-1-0 above, no `!important` needed. */
-  :root:not(.js) .site-nav {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-
   .site-nav.is-open {
     position: fixed;
     inset: 0;
@@ -136,5 +128,28 @@
 
   body:has(.site-nav.is-open) {
     overflow: hidden;
+  }
+
+  /* Nothing adds `.is-open` without JS, so the nav goes back in flow instead. */
+  :root:not(.js) .site-nav {
+    display: block;
+
+    /* `.menu` is this same `<ul>`, and the rule below sets `flex-direction: column` for the
+       burger panel. Restate it here or the items keep stacking. */
+    .menu {
+      display: flex;
+      flex-flow: row wrap;
+      gap: var(--spacing-xs) var(--spacing-lg);
+
+      li {
+        flex: 0 0 40%;
+
+        /* Odd count: the last one takes the full row, and `.menu a` is `display: block`, so
+           centring it means centring its text. */
+        &:last-child {
+          flex-basis: 100%;
+        }
+      }
+    }
   }
 }
