@@ -24,10 +24,6 @@
     max-width: 62ch;
     margin-block: var(--spacing-2xs) var(--spacing-xs);
   }
-
-  .tags {
-    flex-wrap: wrap;
-  }
 }
 
 /* 560px — no token, custom properties are illegal in media conditions.

@@ -1,6 +1,6 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.7.0
+version: 1.8.0
 date_published: 2026-08-08
 date_modified: 2026-08-16
 ---
@@ -251,9 +251,9 @@ Three thresholds are used across the project:
 
 | Value | Locations | Purpose |
 |-------|-----------|---------|
-| `768px` | `04-header.css`, `06-nav.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
+| `768px` | `04-header.css`, `06-nav.css`, `03-theme.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
 | `576px` | `05-footer.css`, `08-home.css`, `10-single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
-| `560px` | `09-entry-list.css`, `02-base.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers |
+| `560px` | `09-entry-list.css`, `02-base.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers; definition lists stack instead of using a `max-content` term column |
 
 Agreed syntax, used consistently: `@media screen and (width <= Npx)`. The range syntax is
 transpiled by `css.Build` down to `max-width` (see [css-compat.md](css-compat.md)).

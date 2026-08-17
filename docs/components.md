@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.5.0
+version: 1.6.0
 date_published: 2026-08-08
 date_modified: 2026-08-16
 ---
@@ -220,7 +220,7 @@ Renders the primary navigation: `menu.html`, the language-switcher links, and
 current page context, not a dict — called once from `header.html` right after
 `.site-header__bar`. `theme-switcher.html` lives here (not in `header.html`) so it ends up
 inside the mobile full-screen panel below 768px, rather than needing a second toggle of its
-own — see [theme-switcher.md](theme-switcher.md#affichage-du-panneau-refs-72) for how the
+own — see [theme-switcher.md](theme-switcher.md#panel-display-refs-72) for how the
 same markup becomes a desktop popover vs. an always-open panel on mobile.
 
 **Integration** (`06-nav.css`, refs #72) — `#primary-nav` is the disclosure panel
@@ -260,6 +260,38 @@ panel.
 toggles `aria-expanded`, closes on `Escape` (returning focus to the button), and closes
 when a nav link is activated. It is a disclosure widget, not a dialog: no focus trap — the
 panel stays in the document flow and is reachable by keyboard without special handling.
+
+The `aria-expanded` toggling, the `.is-open` mirroring and the `Escape` handler are not
+written here: they come from `assets/scripts/00-disclosure.js`, shared with the theme
+switcher, which is the other disclosure in the header. The `00-` prefix is load-bearing —
+`baseof.html` bundles `resources.Match "scripts/*.js"`, which sorts by path, so the helper
+has to concatenate before its two consumers. It publishes on `window` because after
+concatenation each script is still its own IIFE.
+
+### `theme-switcher.html`
+
+Icon trigger plus a group of three radios (light / dark / system). **Expected context:
+none** — the partial reads nothing from the page, only `i18n`, so it is called with an empty
+`dict` from `nav.html`.
+
+Behaviour, storage contract and accessibility rationale live in
+[theme-switcher.md](theme-switcher.md); only the CSS contract is repeated here.
+
+| Class | Role |
+|-------|------|
+| `theme-switcher` | Block: the positioning context (`position: relative`) the popover anchors to. Applied by `nav.html`, not by the partial |
+| `theme-switcher__toggle` | Element: the disclosure button. Hidden below 768px, and hidden by `:root:not(.js)` when scripting is off |
+| `theme-switcher__icon` | Element: the sun glyph, rendered twice — in the trigger, and in the `<legend>` where it only shows below 768px |
+| `theme-switcher__panel` | Element: the `<fieldset>`. `display: none` until `.is-open` above 768px, permanently visible below it |
+| `theme-switcher__body` | Element: the `clear: both` wrapper that the floated `<legend>` needs |
+| `theme-switcher__wrapper` | Element: the segmented row of the three options |
+| `theme-switcher__value` | Element: the hidden span carrying the current theme inside the trigger's accessible name, kept in sync by `theme.js` |
+| `is-open` | State, on the panel: mirrors the trigger's `aria-expanded`, same pattern as `site-nav` |
+
+The mobile rules state `position: static` for both `.theme-switcher__panel` and
+`.theme-switcher__panel.is-open`. That second selector is not redundant: a media query adds
+no specificity, so the popover's `.is-open` rules (0-3-0) would otherwise outrank the mobile
+block (0-2-0) and leave the panel absolutely positioned inside the burger menu.
 
 ### `menu.html`
 

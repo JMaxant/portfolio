@@ -3,21 +3,10 @@ import { PAGES } from './pages.js';
 
 const WIDTHS = [320, 560, 561, 576, 577, 768, 769, 2560];
 
-// #72 : nav header ne wrap pas. Retirer cette entrée quand #72 ferme —
-// un test.fail() qui passe fera alors échouer la suite, exprès.
-const KNOWN_OVERFLOWS = [
-  { widths: [300, 320], matches: (_name) => true }, // toutes les pages, header partagé
-];
-
 for (const width of WIDTHS) {
   test.describe(`${width}px`, () => {
     for (const [name, path] of PAGES) {
       test(`${name} fits the viewport`, async ({ page }) => {
-        const known = KNOWN_OVERFLOWS.find(
-          (k) => width >= k.widths[0] && width <= k.widths[1] && k.matches(name),
-        );
-        test.fail(!!known, known ? `see #72 — ${name} at ${width}px` : undefined);
-
         await page.setViewportSize({ width, height: 900 });
         await page.goto(path);
 

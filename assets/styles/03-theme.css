@@ -78,8 +78,11 @@
     border: 1px solid transparent;
     border-radius: var(--border-radius);
 
+    /* The tint alone is 1.08:1 against the page background, so the border does the work.
+       It is declared transparent above to keep hover from shifting the layout. */
     &:hover {
       background: var(--color-surface-alt);
+      border-color: var(--color-border-strong);
     }
 
     &:focus-visible {
@@ -88,19 +91,11 @@
     }
   }
 
-  &:has(fieldset.is-open) .theme-switcher__toggle {
-    background-color: var(--color-surface-alt);
-
-    svg {
-      stroke: var(--color-text-soft);
-    }
-  }
-
   .theme-switcher__panel {
     display: none;
     padding: var(--spacing-sm);
     background: var(--color-surface);
-    border: var(--border-thin);
+    border: 1px solid var(--color-border-strong);
     border-radius: var(--border-radius);
 
     &.is-open {
@@ -134,7 +129,7 @@
       margin-block-start: var(--spacing-sm);
     }
 
-    .theme-switcher--wrapper {
+    .theme-switcher__wrapper {
       display: flex;
       align-self: flex-start;
       overflow: hidden;
@@ -149,7 +144,11 @@
       padding: var(--spacing-2xs) var(--spacing-xs);
       font-size: var(--text-sm);
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+
+      + label {
+        border-left: var(--border-thin);
+      }
 
       &:has(input:checked) {
         font-weight: var(--font-weight-bold);
@@ -158,8 +157,16 @@
       }
 
       &:has(input:focus-visible) {
-        outline: 2px dashed var(--color-bg);
+        outline: 2px dashed currentcolor;
         outline-offset: -3px;
+      }
+
+      @media (forced-colors: active) {
+        &:has(input:checked) {
+          color: highlighttext;
+          forced-color-adjust: none;
+          background-color: highlight;
+        }
       }
     }
 
@@ -174,8 +181,10 @@
       display: none;
     }
 
-    .theme-switcher__panel {
+    .theme-switcher__panel,
+    .theme-switcher__panel.is-open {
       position: static;
+      z-index: auto;
       display: block;
       padding: 0;
       background: none;
@@ -185,13 +194,21 @@
         display: block;
       }
 
-      .theme-switcher__body {
-        margin-block-start: var(--spacing-sm);
-      }
-
       label {
         min-height: 4.4rem;
       }
     }
+  }
+}
+
+:root:not(.js) .theme-switcher__toggle {
+  display: none;
+}
+
+.theme-switcher:has(fieldset.is-open) .theme-switcher__toggle {
+  background-color: var(--color-surface-alt);
+
+  svg {
+    stroke: var(--color-text-soft);
   }
 }

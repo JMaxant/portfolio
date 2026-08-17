@@ -99,6 +99,7 @@ pre {
 
 .tags {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
 }
 
@@ -178,5 +179,23 @@ dt {
 
 dd {
   grid-column: 2;
+}
+
+/* 560px — no token, custom properties are illegal in media conditions.
+   See docs/css-tokens.md.
+
+   The term column is sized to max-content, which at narrow widths reserves the full
+   unwrapped width of the longest term and pushes the definitions past the viewport. Below
+   this width the two columns stack instead. */
+@media screen and (width <= 560px) {
+  dl {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  dd {
+    grid-column: 1;
+    margin-block-end: var(--spacing-sm);
+  }
 }
 
