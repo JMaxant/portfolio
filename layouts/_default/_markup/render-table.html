@@ -1,0 +1,31 @@
+{{- /* Table render hook: wraps every Markdown table in a horizontally scrollable region.
+
+       A table's min-content width depends on fonts the site does not ship. An inline
+       `<code>` token in a monospace fallback measures 80px on one machine and 91px on
+       another, so no column layout can be guaranteed to fit 320px. The wrapper scrolls
+       instead of pushing the page sideways. See docs/components.md#tables.
+
+       Expected context: the render hook's own, not a dict. */ -}}
+
+<div class="table-scroll" role="region" tabindex="0" aria-label="{{ i18n "table" }}">
+  <table>
+    <thead>
+      {{- range .THead }}
+      <tr>
+        {{- range . }}
+        <th{{ with .Alignment }} class="align-{{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </thead>
+    <tbody>
+      {{- range .TBody }}
+      <tr>
+        {{- range . }}
+        <td{{ with .Alignment }} class="align-{{ . }}"{{ end }}>{{ .Text }}</td>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </tbody>
+  </table>
+</div>

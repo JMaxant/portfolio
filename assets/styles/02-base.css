@@ -138,9 +138,34 @@ blockquote {
   }
 }
 
+/* Add to table by layouts/_default/_markup/render-table.html.
+   A table's min-content width depends on fonts we're not shipping, so it cannot be made to
+   fit 320px by styling alone — it scrolls instead of pushing the page sideways.
+   `tabindex="0"` in the hook is what lets a keyboard reach that scroll (WCAG 2.1.1). */
+.table-scroll {
+  overflow-x: auto;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+}
+
 table {
   border-collapse: collapse;
   border: var(--border-thin);
+
+  .align-left {
+    text-align: left;
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .align-right {
+    text-align: right;
+  }
 
   th, td {
     padding: var(--spacing-2xs);

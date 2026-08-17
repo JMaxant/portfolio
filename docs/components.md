@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.7.0
+version: 1.8.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
@@ -428,6 +428,36 @@ expression on its own so its rule aligns with the header's.
 so by [Where styles live](#where-styles-live) it should have its own file. It currently sits
 in `10-single.css`, which no longer describes it. Moving it belongs to the CSS tree
 reorganisation (#69); until then, expect to find it there.
+
+## Tables
+
+Markdown tables go through `layouts/_default/_markup/render-table.html`, a render hook that
+wraps every one of them in `<div class="table-scroll" role="region" tabindex="0" aria-label>`.
+`02-base.css` gives that wrapper `overflow-x: auto`.
+
+The reason is that a table's **min-content width is not a property of the design**. It depends
+on fonts the site does not ship: the widest cell here holds a `<code>` token, and the
+`--font-mono` stack (`ui-monospace`, `Cascadia Code`, `monospace`) resolves to whatever the
+machine has. The same column measured 80px on one machine, 91px with Liberation Mono, and
+about 121px on the CI runner. At 320px the content column is 288px wide and the table's
+min-content was 264px — 24px of headroom, which a wider monospace eats entirely.
+
+So no amount of column styling makes a table fit every visitor's font. It scrolls instead.
+This is not only a CI concern: a visitor whose default monospace is wide would have pushed the
+whole page sideways.
+
+`tabindex="0"` is not decoration. A region that scrolls but cannot take focus is unreachable
+without a mouse (WCAG 2.1.1, and axe's `scrollable-region-focusable` rule), which is why the
+hook emits it and `.table-scroll` carries a `:focus-visible` ring.
+
+The hook re-emits the table itself rather than wrapping the default output, because Hugo
+render hooks replace rather than decorate. Cell alignment is carried as `align-left` /
+`align-center` / `align-right` classes rather than a `style` attribute, so the value stays out
+of the markup — `02-base.css` holds the three rules.
+
+`tests/table.spec.js` asserts the wrapping, the keyboard reachability, and that the page does
+not overflow at 320px **with an artificially widened font** — testing with the shipped font
+only would reproduce exactly the blind spot that let this reach CI.
 
 ## Templating pitfalls
 
