@@ -1,4 +1,4 @@
-// Checks the colour palette in assets/styles/01-tokens.css against WCAG contrast ratios.
+// Checks the colour palette in assets/styles/base/tokens.css against WCAG contrast ratios.
 //
 // The pairs below are declared by suffix and expanded over both themes, so light and dark
 // can never drift apart. Values are read from the stylesheet rather than repeated here —
@@ -8,7 +8,7 @@
 import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 
-const TOKENS_PATH = fileURLToPath(new URL("../../assets/styles/01-tokens.css", import.meta.url));
+const TOKENS_PATH = fileURLToPath(new URL("../../assets/styles/base/tokens.css", import.meta.url));
 
 // AAA for text, not the AA 4.5:1 of RGAA 3.2: the smallest text on the site is 12px
 // (--text-xs, used by .tag). Lowering this to 4.5 would let the palette regress by two

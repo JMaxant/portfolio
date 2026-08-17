@@ -1,19 +1,48 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.10.0
+version: 1.11.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
 
 # CSS tokens and breakpoints
 
-Ref: issues #49, #57, #63, #69, #77. Describes the contents of `assets/styles/01-tokens.css` and the
+Ref: issues #49, #57, #63, #69, #77. Describes the contents of `assets/styles/base/tokens.css` and the
 breakpoint convention. For browser compatibility and the respective roles of `css.Build`
 and Stylelint, see [css-compat.md](css-compat.md).
 
+## Tree
+
+Ref: issue #69. Stylesheets are grouped by nature, not by a numeric prefix encoding the
+cascade order:
+
+```text
+assets/styles/
+  main.css            the only file carrying @import; holds the cascade order
+  base/
+    reset.css         normalisation
+    tokens.css        raw palettes, semantic tokens, theme switching, scales
+    elements.css      bare element styles (h1…h4, p, a, table, blockquote…)
+  components/         theme-switcher, menu, card, entry-list, tag, cta, code
+  layout/             header, footer, page, home, single, parcours, error
+  utils.css           .container, .visually-hidden, .meta
+```
+
+Adding a component means creating one file and adding one line to `main.css` — no
+renumbering. Two constraints that the tree does not make visible on its own:
+
+- **The import list is ordered, not alphabetical.** The reset comes first, the tokens before
+  anything reading them, and `utils.css` last (see [Utilities](#utilities)). `main.css`
+  carries a comment per section stating what each ordering constraint is for.
+- **An `@import` is only inlined when it precedes every rule in its file.** Written after a
+  rule, esbuild leaves it verbatim in the built CSS, where it becomes a runtime request for
+  a path that does not exist in `public/`. Hugo emits no warning and
+  `scripts/quality/check-hugo-build.sh` does not catch it. This is why the imports are
+  concentrated in `main.css` and no file re-exports its neighbours.
+
 ## Principle
 
-Every token is a custom property declared on `:root` in a single file, `01-tokens.css`. No
+Every token is a custom property declared on `:root` in a single file, `base/tokens.css`. No
 raw value — colour, spacing, font size — may appear anywhere else in the stylesheets.
 
 ## Base unit: 1rem = 10px
@@ -34,7 +63,7 @@ Colours go through two stages, deliberately:
    `--color-surface`, `--color-border`… These, and only these, are what components use.
 
 Switching theme means reassigning the semantic tokens to the other palette, in
-`03-theme.css`. A component consuming `--color-surface` follows the theme without knowing
+`base/tokens.css`. A component consuming `--color-surface` follows the theme without knowing
 anything about the palettes. A component consuming `--light-surface` would break in dark
 mode: that is the mistake to avoid.
 
@@ -69,7 +98,7 @@ change stayed minimal. The flip side is that *any* change to a `surface-alt` tok
 them below AAA. Re-measure before touching a background.
 
 Nothing here is measured by hand any more: `scripts/quality/check-contrast.mjs` reads the
-hex values straight out of `01-tokens.css`, checks every pair below, and runs in pre-commit
+hex values straight out of `base/tokens.css`, checks every pair below, and runs in pre-commit
 and CI (issue #57). The 7:1 above is what it enforces for text — deliberately stricter than
 RGAA 3.2's 4.5:1, because at 4.5 the palette could lose two full points with the check still
 green. It also **fails on any colour token that appears in no pair**, so a token added later
@@ -90,7 +119,7 @@ identifiable without it.
 
 `--*-border-strong` **is** in scope, and clears 3:1 as of #57. The theme switcher's hover
 state is the reason: its background tint is only 1.08:1 against the page, so the border is
-the sole carrier of the state (`03-theme.css`). The token also bounds the switcher panel and
+the sole carrier of the state (`components/theme-switcher.css`). The token also bounds the switcher panel and
 the `.parcours` separator. Same method as the text colours — lightness moved, hue and
 saturation untouched — against the same worst-case background:
 
@@ -114,7 +143,7 @@ saturation untouched — against the same worst-case background:
 
 ### `--header-height`
 
-Declared in `01-tokens.css` but not a token in the usual sense: `nav-toggle.js` overwrites it
+Declared in `base/tokens.css` but not a token in the usual sense: `nav-toggle.js` overwrites it
 on `:root` with the header's measured height, because the title wraps and the value is not a
 constant. What the file holds is only the fallback for the window before the deferred script
 runs.
@@ -131,7 +160,7 @@ themeable at all: inline styles cannot be overridden from a stylesheet, and the 
 `monokai` background is hardcoded dark regardless of the active theme.
 
 The palette follows the same two-stage indirection as every other colour — raw values in
-`01-tokens.css`, semantic assignment in `03-theme.css`:
+`base/tokens.css`, where the semantic assignment lives too:
 
 | Semantic token | Role |
 |----------------|------|
@@ -142,7 +171,7 @@ The palette follows the same two-stage indirection as every other colour — raw
 | `--color-code-string` | String literals, inserted diff lines |
 | `--color-code-number` | Numeric literals |
 
-`11-code.css` maps Chroma's class names onto these six, and nothing else in the project may
+`components/code.css` maps Chroma's class names onto these six, and nothing else in the project may
 reference them. Token groups that are not mapped — punctuation, operators, whitespace —
 fall back to `--color-text`: an uncoloured token is a degradation, not a defect.
 
@@ -155,7 +184,7 @@ languages this site actually publishes.
 
 Every syntax colour clears **AAA (7:1) against `--color-surface-alt`**, which is the code
 block background, in both themes. The measured ratio sits in a comment next to each value
-in `01-tokens.css` — the tightest is 7.06:1, so there is no headroom. Re-measure before
+in `base/tokens.css` — the tightest is 7.06:1, so there is no headroom. Re-measure before
 changing any of them.
 
 The AAA target is what shapes the palette: on a light background it forces dark, saturated
@@ -163,7 +192,7 @@ hues, and on a dark one it forces pastels. Anything more vivid fails.
 
 ## Utilities
 
-Utilities live in `12-utils.css`, and `main.css` imports it **last**. That position is
+Utilities live in `utils.css`, and `main.css` imports it **last**. That position is
 load-bearing, not tidiness: a utility and a component class often have the same specificity
 — `.meta` and `.card__body` are both (0,1,0) — and only source order separates them. Move
 the import up and utilities silently stop applying wherever a component declares the same
@@ -193,7 +222,7 @@ Two consequences worth knowing before using it:
 
 ## Article layout grid
 
-Ref: issue #77. `.container-content-grid` (`10-single.css`) is a grid with named columns, and
+Ref: issue #77. `.container-content-grid` (`layout/single.css`) is a grid with named columns, and
 **it is the source of the reading measure** — there is no `.container--reading` utility any
 more. The
 reason is the unit: `--container-reading` is `70ch`, measured in the font of the element that
@@ -253,7 +282,7 @@ the bottom side only**, so that no two siblings can ever contribute to the same 
 | Rule | Declaration | Effect |
 |------|-------------|--------|
 | `.container-content-grid > *` | `margin-block-end: var(--spacing-md)` | The step below every direct child |
-| `.container-content-grid h2, h3, h4, h5` | `margin-block: 0 var(--spacing-md)` | Headings drop the top margin they carry in `02-base.css` |
+| `.container-content-grid h2, h3, h4, h5` | `margin-block: 0 var(--spacing-md)` | Headings drop the top margin they carry in `base/elements.css` |
 
 The result is a flat **`--spacing-md` (16px) between every pair of blocks**, headings
 included — measured end to end on a page exercising headings, lists, a blockquote, a table,
@@ -265,16 +294,16 @@ anyway.
 
 Three consequences worth knowing:
 
-- **The grid overrides the element rhythm of `02-base.css` by specificity.**
+- **The grid overrides the element rhythm of `base/elements.css` by specificity.**
   `.container-content-grid > *` is (0,1,0) and beats `p` (0,0,1), so the 24px of
   `--spacing-lg` becomes 16px inside an article. `.container-content-grid h3` is (0,1,1) and
-  beats `h3` (0,0,1), so `margin-block: 40px 12px` becomes `0 16px`. Reading `02-base.css`
+  beats `h3` (0,0,1), so `margin-block: 40px 12px` becomes `0 16px`. Reading `base/elements.css`
   alone gives the wrong numbers for anything inside the grid.
 - **Only the bottom side may carry the rhythm.** A top margin on a direct child adds to the
   bottom margin of the one before it instead of collapsing into it.
 - **The heading rule is a descendant selector, the step rule is a child selector.** Headings
   nested in a `blockquote` or an `li` are reset too; other nested blocks keep the margins of
-  `02-base.css`, which is what makes a paragraph inside a blockquote behave normally.
+  `base/elements.css`, which is what makes a paragraph inside a blockquote behave normally.
 
 A new element type needs no rule unless it wants something other than the step. A new heading
 level does — add it to the heading list. That is what #78 has to do for `h6`.
@@ -285,16 +314,16 @@ Three thresholds are used across the project:
 
 | Value | Locations | Purpose |
 |-------|-----------|---------|
-| `768px` | `04-header.css`, `06-nav.css`, `03-theme.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
-| `576px` | `05-footer.css`, `08-home.css`, `10-single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
-| `560px` | `09-entry-list.css`, `02-base.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers; definition lists stack instead of using a `max-content` term column |
+| `768px` | `layout/header.css`, `components/menu.css`, `components/theme-switcher.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
+| `576px` | `layout/footer.css`, `layout/home.css`, `layout/single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
+| `560px` | `components/entry-list.css`, `base/elements.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers; definition lists stack instead of using a `max-content` term column |
 
 Agreed syntax, used consistently: `@media screen and (width <= Npx)`. The range syntax is
 transpiled by `css.Build` down to `max-width` (see [css-compat.md](css-compat.md)).
 
 ### Why the values are hardcoded
 
-`01-tokens.css` declares `--bp-tablet: 768px` and `--bp-mobile: 576px`, but **those tokens
+`base/tokens.css` declares `--bp-tablet: 768px` and `--bp-mobile: 576px`, but **those tokens
 are referenced nowhere**, and they cannot be: custom properties are not allowed in media
 query conditions. The specification requires a literal value, evaluated before the cascade
 applies.
@@ -315,20 +344,21 @@ The table above is the reference list to work through.
 
 The fate of the `--bp-tablet` / `--bp-mobile` tokens is undecided: keep them as a statement
 of intent, or drop them because they suggest a single source of truth that does not exist.
-To be settled alongside the CSS tree reorganisation (#69).
+They are declared and consumed nowhere. Left untouched by the tree reorganisation (#69),
+which changed no value; to be settled on its own.
 
 ## Rules
 
 - Never write a colour, spacing or size literal inside a component.
 - Never re-declare `--text-sm` + `--color-text-soft` in a component: apply `.meta`.
-- Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`.
-- Add tokens to `01-tokens.css` only, never to a component file.
-- A value the CSS reads but JavaScript writes still gets declared in `01-tokens.css`, with
+- Never consume a raw palette (`--light-*`, `--dark-*`) outside `base/tokens.css`.
+- Add tokens to `base/tokens.css` only, never to a component file.
+- A value the CSS reads but JavaScript writes still gets declared in `base/tokens.css`, with
   the static fallback as its value — see [`--header-height`](#--header-height). An
   undeclared custom property is invisible to anyone reading the stylesheet.
 - Adding a breakpoint means updating the table above.
 - Changing any colour token means re-measuring against AAA, including the backgrounds:
   the text colours were solved against `surface-alt` and have no headroom.
-- Never reference a `--color-code-*` token outside `11-code.css`.
+- Never reference a `--color-code-*` token outside `components/code.css`.
 - Never break one of the four [article grid invariants](#invariants); never declare a top
   margin on a direct child of `.container-content-grid` — the rhythm is the bottom side.

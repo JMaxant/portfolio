@@ -1,6 +1,6 @@
 ---
 title: Light / dark switch
-version: 2.1.0
+version: 2.1.1
 date_published: 2026-08-03
 date_modified: 2026-08-17
 ---
@@ -38,8 +38,8 @@ the system.
 | `assets/scripts/00-disclosure.js` | Disclosure behaviour shared with the burger menu |
 | `assets/scripts/theme-toggle.js` | Opens and closes the panel (desktop only, refs #72) |
 | `assets/scripts/theme.js` | Applies the choice, keeps the radios and the trigger's label in sync |
-| `assets/styles/01-tokens.css` | Primitives (`--light-*`, `--dark-*`) and semantic tokens (`--color-*`) |
-| `assets/styles/03-theme.css` | Switching rules (`@media`, `[data-theme]`) and the switcher's layout |
+| `assets/styles/base/tokens.css` | Primitives (`--light-*`, `--dark-*`), semantic tokens (`--color-*`) and the switching rules (`@media`, `[data-theme]`) |
+| `assets/styles/components/theme-switcher.css` | The switcher's own layout and states |
 
 ## How it works
 
@@ -58,9 +58,9 @@ the system.
    hidden label so its accessible name always states the current theme.
 4. **Other tabs** — `theme.js` listens for `storage`, so a choice made in one tab is applied
    in every other tab of the same origin without waiting for a reload.
-5. **CSS** — `01-tokens.css` declares the primitive colours of both palettes once and assigns
+5. **CSS** — `base/tokens.css` declares the primitive colours of both palettes once and assigns
    the semantic tokens (`--color-bg`, `--color-text`, `--color-link`…) to the light values by
-   default. `03-theme.css` reassigns those same semantic tokens in three contexts:
+   default. The same file reassigns those semantic tokens in three contexts:
    `@media (prefers-color-scheme: dark)` (system), `:root[data-theme="dark"]` and
    `:root[data-theme="light"]` (explicit choice). The `:root[data-theme=…]` selectors are
    more specific than `:root` alone, so an explicit choice always beats the system
@@ -74,7 +74,7 @@ Chrome 105 / Safari 16. Revisit when that floor moves.
 
 The radio group is rendered once by `theme-switcher.html`, but behaves differently on either
 side of the 768px breakpoint (see [css-tokens.md](css-tokens.md#breakpoints)) — driven by
-`03-theme.css`, not by two separate templates:
+`components/theme-switcher.css`, not by two separate templates:
 
 - **Above 768px** — hidden by default (`display: none`), revealed as a popover anchored under
   the sun icon (`.theme-switcher__toggle`) on click. `theme-toggle.js` handles
@@ -93,7 +93,7 @@ the keyboard.
 Crossing the breakpoint downwards while the popover is open resets it: `theme-toggle.js`
 watches `matchMedia('(max-width: 768px)')` and clears `.is-open` and `aria-expanded`, which
 would otherwise describe a trigger the user can no longer see. The mobile rules in
-`03-theme.css` also state `position: static` for both `.theme-switcher__panel` and
+`components/theme-switcher.css` also state `position: static` for both `.theme-switcher__panel` and
 `.theme-switcher__panel.is-open`: a media query adds no specificity, so without the second
 selector the popover's `.is-open` rules would outrank them and the panel would stay
 absolutely positioned inside the burger menu.

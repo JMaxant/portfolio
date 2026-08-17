@@ -1,6 +1,6 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.7.0
+version: 1.7.1
 date_published: 2026-08-01
 date_modified: 2026-08-17
 ---
@@ -28,7 +28,7 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 | `markdownlint`             | `markdownlint-cli2` (npx, épinglé)     | Markdown, hors `docs/**`                                                            |
 | `stylelint`                | `stylelint` (devDependency)            | CSS (`stylelint-config-standard` + `stylelint-config-recess-order` pour l'ordre des propriétés + `stylelint-no-unsupported-browser-features`) |
 | `cv-schema`                | `ajv` (devDependency)                  | `scripts/quality/check-cv-schema.mjs`: `assets/cv.json` against `schemas/cv.schema.json` |
-| `contrast`                 | `scripts/quality/check-contrast.mjs` (no dependency) | Contrast ratios of the `01-tokens.css` palette: 7:1 for text, 3:1 for `--*-border-strong`. Also fails on a colour token covered by no pair. See [css-tokens.md](css-tokens.md) |
+| `contrast`                 | `scripts/quality/check-contrast.mjs` (no dependency) | Contrast ratios of the `base/tokens.css` palette: 7:1 for text, 3:1 for `--*-border-strong`. Also fails on a colour token covered by no pair. See [css-tokens.md](css-tokens.md) |
 | `actionlint`               | `actionlint` (via `go run`, épinglé)   | Workflows GitHub Actions (`.github/workflows/*.yml`)                                |
 | `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
 

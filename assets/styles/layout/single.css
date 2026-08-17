@@ -28,12 +28,6 @@
   }
 }
 
-/* See if applicable globally to ctas. */
-.container-content-grid > .cta {
-  justify-self: start;
-}
-
-
 .single__intro {
   font-size: var(--text-base);
   font-style: italic;

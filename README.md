@@ -13,7 +13,7 @@ Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](htt
 ## CSS stack
 
 - Plain CSS
-- Numbered files in `assets/styles/` (e.g. `01-base.css`) are imported by `assets/styles/main.css`
+- `assets/styles/` is split into `base/` (reset, tokens, element styles), `components/`, `layout/` and `utils.css`; `assets/styles/main.css` is the only file carrying `@import` and holds the cascade order
 - Built with Hugo's native `css.Build`
 - Minified and fingerprinted in production only
 - served with a linked sourcemap in development for debugging.

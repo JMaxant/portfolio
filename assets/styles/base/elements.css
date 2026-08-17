@@ -92,41 +92,6 @@ pre {
   outline-offset: 2px;
 }
 
-/* Page wrapper for list and single templates. */
-.page {
-  padding-block: var(--spacing-lg) var(--spacing-xl);
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-}
-
-:where(.tag) {
-  color: var(--color-text-soft);
-}
-
-.tag {
-  display: inline-block;
-  padding: var(--spacing-2xs);
-  padding-inline: var(--spacing-2xs);
-  margin-block: 0;
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  text-align: center;
-  border: var(--border-thin);
-  border-radius: var(--border-radius);
-
-  &.tag--accented {
-    background-color: var(--color-surface-alt);
-  }
-
-  &.tag--light {
-    color: var(--color-text)
-  }
-}
-
 blockquote {
   padding-block: var(--spacing-sm);
   padding-inline-start: var(--spacing-sm);

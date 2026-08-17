@@ -125,3 +125,62 @@
 
   font-size: 62.5%; /* 1rem = 10px */
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--dark-bg);
+    --color-text: var(--dark-text);
+    --color-text-soft: var(--dark-text-alt);
+    --color-link: var(--dark-link);
+    --color-link-hover: var(--dark-link-hover);
+    --color-link-visited: var(--dark-link-visited);
+    --color-surface: var(--dark-surface);
+    --color-surface-alt: var(--dark-surface-alt);
+    --color-border: var(--dark-border);
+    --color-border-strong: var(--dark-border-strong);
+    --color-code-comment: var(--dark-code-comment);
+    --color-code-keyword: var(--dark-code-keyword);
+    --color-code-type: var(--dark-code-type);
+    --color-code-function: var(--dark-code-function);
+    --color-code-string: var(--dark-code-string);
+    --color-code-number: var(--dark-code-number);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: var(--dark-bg);
+  --color-text: var(--dark-text);
+  --color-text-soft: var(--dark-text-alt);
+  --color-link: var(--dark-link);
+  --color-link-hover: var(--dark-link-hover);
+  --color-link-visited: var(--dark-link-visited);
+  --color-surface: var(--dark-surface);
+  --color-surface-alt: var(--dark-surface-alt);
+  --color-border: var(--dark-border);
+  --color-border-strong: var(--dark-border-strong);
+  --color-code-comment: var(--dark-code-comment);
+  --color-code-keyword: var(--dark-code-keyword);
+  --color-code-type: var(--dark-code-type);
+  --color-code-function: var(--dark-code-function);
+  --color-code-string: var(--dark-code-string);
+  --color-code-number: var(--dark-code-number);
+}
+
+:root[data-theme="light"] {
+  --color-bg: var(--light-bg);
+  --color-text: var(--light-text);
+  --color-text-soft: var(--light-text-alt);
+  --color-link: var(--light-link);
+  --color-link-hover: var(--light-link-hover);
+  --color-link-visited: var(--light-link-visited);
+  --color-surface: var(--light-surface);
+  --color-surface-alt: var(--light-surface-alt);
+  --color-border: var(--light-border);
+  --color-border-strong: var(--light-border-strong);
+  --color-code-comment: var(--light-code-comment);
+  --color-code-keyword: var(--light-code-keyword);
+  --color-code-type: var(--light-code-type);
+  --color-code-function: var(--light-code-function);
+  --color-code-string: var(--light-code-string);
+  --color-code-number: var(--light-code-number);
+}

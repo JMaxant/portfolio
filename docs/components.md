@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.8.0
+version: 1.9.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
@@ -57,10 +57,19 @@ same pairing existed before with `container--reading single`.
 
 ### Where styles live
 
-A component reused beyond a single page gets its own file in `assets/styles/`
-(`07-card.css`), imported by `main.css`. Styles specific to one template stay in that
-template's file (`08-home.css`). Generic elements reused everywhere live in `02-base.css`
-(`.tag`, `.tags`) or in `12-utils.css` (`.cta`, `.meta`, `.visually-hidden`).
+Four destinations, decided by scope rather than by the template that happens to use the
+class first — see [css-tokens.md](css-tokens.md#tree) for the tree itself.
+
+| Destination | What goes there |
+|-------------|-----------------|
+| `base/elements.css` | Bare element selectors, no class: `h1`, `p`, `a`, `table`, `blockquote` |
+| `components/` | A named block reused beyond a single page: `components/card.css`, `components/tag.css`, `components/cta.css` |
+| `layout/` | Page chrome and per-template styles: `layout/header.css`, `layout/home.css`, `layout/page.css` |
+| `utils.css` | Single-purpose classes composed onto anything: `.container`, `.visually-hidden`, `.meta` |
+
+A class used by one template only still belongs in `layout/`, not in `components/` — the
+distinction is reuse, and it is what stops the `.cta`-under-`.home__hero` mistake from
+coming back.
 
 ## Inventory
 
@@ -77,7 +86,7 @@ Home page header.
 without being escaped again.
 
 **Integration** — the partial emits no class of its own; it is styled by the enclosing
-section (`.home--hero` in `08-home.css`), which targets `h1`, `p` and `.cta` directly.
+section (`.home--hero` in `layout/home.css`), which targets `h1`, `p` and `.cta` directly.
 
 ### `card.html`
 
@@ -95,7 +104,7 @@ build** through `errorf`; it is not silently ignored.
 
 If `variant` is absent, no extra class is emitted — no empty `card--`.
 
-**Integration** (`07-card.css`):
+**Integration** (`components/card.css`):
 
 | Class | Role |
 |-------|------|
@@ -110,11 +119,11 @@ keeps the footers of a grid row on the same baseline when the descriptions diffe
 length; without it each footer sits right under its own text and the row looks ragged.
 
 `card__body` also carries the `meta` class, which is where its size and colour come from.
-`07-card.css` deliberately does not re-declare either — see the note on `.meta` in
-`12-utils.css`.
+`components/card.css` deliberately does not re-declare either — see the note on `.meta` in
+`utils.css`.
 
 The component also emits `tag tag--light` (status) and `tag tag--accented` (taxonomy
-terms), styled in `02-base.css`.
+terms), styled in `components/tag.css`.
 
 **Container** — cards go inside `cards cards--grid`, an `auto-fit` grid using
 `minmax(min(280px, 100%), 1fr)`: it reflows without a media query and does not overflow
@@ -149,7 +158,7 @@ same marker independently: `entry-link.html` owns the internal/external title li
 don't overlap enough to share one partial.
 
 **Integration** — the partial emits `ul.byline.meta`, the same block as the byline of a
-blog article (`10-single.css`). It holds more entries there, hence the `flex-wrap` on
+blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
 `.byline`. No class of its own: a project meta line *is* a byline, only richer.
 
 ### `entry-link.html`
@@ -187,12 +196,12 @@ Call-to-action link.
 | `label` | yes | — | Visible label |
 | `variant` | no | none | Class suffix: `cta--<variant>` |
 
-**Integration** — `.cta` is defined in `12-utils.css`, so it is available everywhere,
+**Integration** — `.cta` is defined in `components/cta.css`, so it is available everywhere,
 including inside an article. `cta--<variant>` is an unstyled extension point so far.
 
 Inside an article the shortcode's output is **not** wrapped in a `<p>` by Hugo, so the `<a>`
 becomes a direct child of the article grid and therefore a grid item: blockified, and
-stretched over the whole measure by default. `10-single.css` carries
+stretched over the whole measure by default. `layout/single.css` carries
 `.container-content-grid > .cta { justify-self: start }` to restore its intrinsic width. Any
 other inline element that can end up as a direct child of `.Content` needs the same guard.
 
@@ -223,7 +232,7 @@ inside the mobile full-screen panel below 768px, rather than needing a second to
 own — see [theme-switcher.md](theme-switcher.md#panel-display-refs-72) for how the
 same markup becomes a desktop popover vs. an always-open panel on mobile.
 
-**Integration** (`06-nav.css`, refs #72) — `#primary-nav` is the disclosure panel
+**Integration** (`components/menu.css`, refs #72) — `#primary-nav` is the disclosure panel
 controlled by the `.menu-toggle` button rendered in `header.html`. The two are not
 adjacent siblings (the button sits inside `.site-header__bar`), so a CSS combinator can't
 link them: `nav-toggle.js` toggles both `aria-expanded` on the button and an `.is-open`
@@ -292,8 +301,9 @@ one directly and would bypass the wrapper.
 
 **Without JavaScript** — nothing can add `.is-open`, so a panel left at `display: none`
 below 768px means no reachable navigation at all: menu, language links and theme switcher
-are all inside `.site-nav`. `06-nav.css` hides `.menu-toggle` under `:root:not(.js)` and
-puts `.site-nav` back in flow at the same width, the same treatment `03-theme.css` applies
+are all inside `.site-nav`. `components/menu.css` hides `.menu-toggle` under `:root:not(.js)` and
+puts `.site-nav` back in flow at the same width, the same treatment
+`components/theme-switcher.css` applies
 to the theme trigger. `:root:not(.js) .site-nav` is 0-2-0 against the 0-1-0 of the
 `display: none` rule, so it wins on specificity without `!important` and without depending
 on rule order, and `theme-init.js` adds the class before the first paint so the scripted
@@ -365,7 +375,7 @@ full value stays in the `datetime` attribute.
 rendered inert. Emitting the link unconditionally would produce a `/tags/<slug>/` that Hugo
 never builds, and the link checker would report it.
 
-**Integration** (`13-parcours.css`):
+**Integration** (`layout/parcours.css`):
 
 | Class | Role |
 |-------|------|
@@ -375,7 +385,7 @@ never builds, and the link checker would report it.
 | `timeline__title` | Title, `--text-md` |
 | `timeline__body` | Description, capped at 62ch |
 
-The inline-start rule reuses the `blockquote` border of `02-base.css` rather than
+The inline-start rule reuses the `blockquote` border of `base/elements.css` rather than
 introducing a second vertical accent.
 
 **Callers** — `layouts/parcours/single.html` only.
@@ -411,7 +421,7 @@ The full definition, its four invariants and the vertical rhythm model are in
   emits its top-level blocks flat, so each `p`, `h2`, `ul`, `blockquote` and `div.highlight`
   is an item.
 - **Widening a block is one declaration**: `grid-column: wide` or `grid-column: full`, added
-  in `10-single.css`. Do not reach for a negative margin.
+  in `layout/single.css`. Do not reach for a negative margin.
 - **Only direct children can be placed.** A block nested in a `blockquote` or an `li` cannot
   leave the `content` column.
 - **Never declare a top margin on a direct child.** Grid does not collapse margins, so it
@@ -426,14 +436,15 @@ expression on its own so its rule aligns with the header's.
 
 `container-content-grid` is a reusable layout primitive, not a style of the `single` template,
 so by [Where styles live](#where-styles-live) it should have its own file. It currently sits
-in `10-single.css`, which no longer describes it. Moving it belongs to the CSS tree
-reorganisation (#69); until then, expect to find it there.
+in `layout/single.css`, which no longer describes it. The tree reorganisation (#69) left it
+there on purpose: moving it reorders the cascade, which that ticket ruled out. Until a
+follow-up moves it, expect to find it there.
 
 ## Tables
 
 Markdown tables go through `layouts/_default/_markup/render-table.html`, a render hook that
 wraps every one of them in `<div class="table-scroll" role="region" tabindex="0" aria-label>`.
-`02-base.css` gives that wrapper `overflow-x: auto`.
+`base/elements.css` gives that wrapper `overflow-x: auto`.
 
 The reason is that a table's **min-content width is not a property of the design**. It depends
 on fonts the site does not ship: the widest cell here holds a `<code>` token, and the
@@ -453,7 +464,7 @@ hook emits it and `.table-scroll` carries a `:focus-visible` ring.
 The hook re-emits the table itself rather than wrapping the default output, because Hugo
 render hooks replace rather than decorate. Cell alignment is carried as `align-left` /
 `align-center` / `align-right` classes rather than a `style` attribute, so the value stays out
-of the markup — `02-base.css` holds the three rules.
+of the markup — `base/elements.css` holds the three rules.
 
 `tests/table.spec.js` asserts the wrapping, the keyboard reachability, and that the page does
 not overflow at 320px **with an artificially widened font** — testing with the shipped font
@@ -505,8 +516,7 @@ been opened, so that no fragment is emitted ahead of the failure.
 - `card--<variant>` and `cta--<variant>` are emitted on demand but have no CSS. Any variant
   introduced must come with its rule, otherwise it produces a dead class.
 - The inventory above only covers existing components. List and taxonomy templates are still
-  to be themed (#48, #51), and the CSS tree reorganisation (#69) may move the files
-  referenced here.
+  to be themed (#48, #51).
 - `assets/cv.json` is the single source of the Parcours page: it is both read by
   `layouts/parcours/single.html` and republished untouched at `/cv.json`, so the page and
   the machine-readable CV cannot drift. Adding a section to the page means adding it to the
