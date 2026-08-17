@@ -27,10 +27,15 @@
 }
 
 /* 560px — no token, custom properties are illegal in media conditions.
-   See docs/css-tokens.md. */
+   See docs/css-tokens.md.
+
+   Targets .entry-list__item, not li. A media query adds no specificity, so `.entry-list li`
+   (0,1,1) loses to the base `.entry-list .entry-list__item` (0,2,0) and the grid never
+   collapses — while .entry-list__body below, at equal specificity, moves anyway and lands in
+   the date column. */
 @media screen and (width <= 560px) {
   .entry-list {
-    li {
+    .entry-list__item {
       grid-template-columns: 1fr;
     }
 
