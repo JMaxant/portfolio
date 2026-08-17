@@ -1,6 +1,6 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.12.0
+version: 1.13.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
@@ -315,12 +315,32 @@ Three thresholds are used across the project:
 
 | Value | Locations | Purpose |
 |-------|-----------|---------|
-| `768px` | `layout/header.css`, `components/menu.css`, `components/theme-switcher.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
+| `768px` | `layout/header.css`, `components/menu.css`, `components/theme-switcher.css`, `components/card.css`, `base/elements.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle; the card grid drops from two fixed columns to an `auto-fit` track; `hr` goes full width instead of 75% centred |
 | `576px` | `layout/footer.css`, `layout/home.css`, `layout/single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
-| `560px` | `components/entry-list.css`, `base/elements.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers; definition lists stack instead of using a `max-content` term column |
+| `560px` | `components/entry-list.css`, `base/elements.css` | Entry date moves above the title instead of sitting in its own column; definition lists stack instead of using a `max-content` term column |
 
-Agreed syntax, used consistently: `@media screen and (width <= Npx)`. The range syntax is
-transpiled by `css.Build` down to `max-width` (see [css-compat.md](css-compat.md)).
+Agreed syntax, used consistently: `@media screen and (width <= Npx)` — every breakpoint is
+written desktop-first, as a max-width. The range syntax is transpiled by `css.Build` down to
+`max-width` (see [css-compat.md](css-compat.md)).
+
+**Never mix in a min-width.** `components/card.css` used to carry the project's only
+`width >= 768px`, and at exactly 768px both branches matched: mobile header and navigation
+with desktop card spacing. One direction per threshold, or the boundary belongs to both.
+
+### Overriding inside a media query
+
+A media query adds **no specificity**. An override written there must match or beat the
+specificity of the rule it replaces, or it is dead — and the failure is silent, since nothing
+in the toolchain flags it.
+
+`components/entry-list.css` hit this: the base rule is `.entry-list .entry-list__item`
+(0,2,0) and the 560px override was written `.entry-list li` (0,1,1). The grid never
+collapsed. Worse, the neighbouring `.entry-list__body` override *was* (0,2,0), so it applied
+and moved the entry body into a date column that had never been collapsed — 120px of text in
+a 288px item at 320px wide. Half-applied is worse than not applied at all.
+
+When narrowing a nested block, repeat the class the base rule uses, not the tag underneath
+it. `tests/breakpoints.spec.js` locks this one.
 
 ### Why the values are hardcoded
 
