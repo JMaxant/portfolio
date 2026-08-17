@@ -1,6 +1,6 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.11.0
+version: 1.12.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
@@ -24,7 +24,7 @@ assets/styles/
     tokens.css        raw palettes, semantic tokens, theme switching, scales
     elements.css      bare element styles (h1…h4, p, a, table, blockquote…)
   components/         theme-switcher, menu, card, entry-list, tag, cta, code
-  layout/             header, footer, page, home, single, parcours, error
+  layout/             header, footer, page, home, content-grid, single, parcours, error
   utils.css           .container, .visually-hidden, .meta
 ```
 
@@ -222,7 +222,7 @@ Two consequences worth knowing before using it:
 
 ## Article layout grid
 
-Ref: issue #77. `.container-content-grid` (`layout/single.css`) is a grid with named columns, and
+Ref: issue #77. `.container-content-grid` (`layout/content-grid.css`) is a grid with named columns, and
 **it is the source of the reading measure** — there is no `.container--reading` utility any
 more. The
 reason is the unit: `--container-reading` is `70ch`, measured in the font of the element that
@@ -266,12 +266,13 @@ written** — breaking one brings back horizontal overflow on the whole page.
 - **Keep the `100% - 2 * var(--gutter)` ceiling in step with the outer tracks' minimum.** It
   is what keeps the content column inside the page below 70ch.
 
-`--gutter` and `--breakout` are declared on `.container-content-grid, .post-nav`, not on
-`:root`. A custom property is substituted at the point of use, so a `ch` length resolves in
+`--gutter` and `--breakout` are declared on `.container-content-grid`, not on `:root`. A custom property is substituted at the point of use, so a `ch` length resolves in
 the consuming element's font — a token holding the measure would be wrong inside a `pre`.
 
 `.post-nav` sits outside the article, so it resolves the same `min()` expression on its own
-`width` to stay aligned with the content column.
+`width` to stay aligned with the content column. It therefore repeats `--gutter` in
+`layout/single.css` — the two declarations move together. It does not repeat `--breakout`,
+which only the grid tracks consume.
 
 ### Vertical rhythm: bottom margins only
 

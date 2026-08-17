@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.9.0
+version: 1.10.0
 date_published: 2026-08-08
 date_modified: 2026-08-17
 ---
@@ -434,11 +434,9 @@ expression on its own so its rule aligns with the header's.
 
 ### Where the grid lives
 
-`container-content-grid` is a reusable layout primitive, not a style of the `single` template,
-so by [Where styles live](#where-styles-live) it should have its own file. It currently sits
-in `layout/single.css`, which no longer describes it. The tree reorganisation (#69) left it
-there on purpose: moving it reorders the cascade, which that ticket ruled out. Until a
-follow-up moves it, expect to find it there.
+`container-content-grid` is a reusable layout primitive, not a style of the `single` template
+— `layouts/404.html` uses it too. By [Where styles live](#where-styles-live) it gets its own
+file, `layout/content-grid.css`, extracted from `layout/single.css` by #69.
 
 ## Tables
 
