@@ -1,18 +1,42 @@
-<fieldset>
-  <legend>{{ i18n "theme" }}</legend>
+{{- /* Theme switcher: an icon trigger plus a group of three radios (light / dark / system).
 
-  <div class="theme-switcher--wrapper">
-    <label for="theme-light">
-      <input type="radio" name="theme" value="light" id="theme-light">
-      {{ i18n "light" }}
-    </label>
-    <label for="theme-dark">
-      <input type="radio" name="theme" value="dark" id="theme-dark">
-      {{ i18n "dark" }}
-    </label>
-    <label for="theme-system">
-      <input type="radio" name="theme" value="system" id="theme-system" checked>
-      {{ i18n "system" }}
-    </label>
+       Expected context: none. The partial reads nothing from the page, only i18n, so call
+       it with an empty dict.
+
+       The markup is rendered once and behaves differently on either side of the 768px
+       breakpoint — desktop popover, always-open panel inside the burger menu below it —
+       driven entirely by 03-theme.css. See docs/theme-switcher.md. */ -}}
+
+{{ $icon := `<svg class="theme-switcher__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"></path></svg>` }}
+
+<button type="button" class="theme-switcher__toggle" aria-expanded="false" aria-controls="theme-switcher-panel">
+  {{ $icon | safeHTML }}
+  {{/* The value mirrors the checked radio, kept in sync by theme.js: collapsed, this is the
+       only thing telling a screen reader which theme is active. It ships with the same
+       default as the checked radio below, so it is already right without JavaScript. */}}
+  <span class="visually-hidden">{{ i18n "theme" }} <span class="theme-switcher__value">{{ i18n "system" }}</span></span>
+</button>
+
+<fieldset id="theme-switcher-panel" class="theme-switcher__panel">
+  <legend>
+    {{ $icon | safeHTML }}
+    {{ i18n "theme" }}
+  </legend>
+
+  <div class="theme-switcher__body">
+    <div class="theme-switcher__wrapper">
+      <label for="theme-light">
+        <input type="radio" name="theme" value="light" id="theme-light">
+        {{ i18n "light" }}
+      </label>
+      <label for="theme-dark">
+        <input type="radio" name="theme" value="dark" id="theme-dark">
+        {{ i18n "dark" }}
+      </label>
+      <label for="theme-system">
+        <input type="radio" name="theme" value="system" id="theme-system" checked>
+        {{ i18n "system" }}
+      </label>
+    </div>
   </div>
 </fieldset>

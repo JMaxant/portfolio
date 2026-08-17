@@ -58,27 +58,96 @@
 }
 
 .theme-switcher {
-  fieldset {
-    display: flex;
-    padding: 0;
-    border: none;
+  position: relative;
 
-    legend {
-      font-size: var(--text-sm);
+  .theme-switcher__icon {
+    width: var(--size-icon);
+    height: var(--size-icon);
+  }
+
+  .theme-switcher__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-touch-target);
+    height: var(--size-touch-target);
+      color: var(--color-text);
+    cursor: pointer;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+
+    /* The tint alone is 1.08:1 against the page background, so the border does the work.
+       It is declared transparent above to keep hover from shifting the layout. */
+    &:hover {
+      background: var(--color-surface-alt);
+      border-color: var(--color-border-strong);
     }
 
-    .theme-switcher--wrapper {
+    &:focus-visible {
+      outline: 2px solid var(--color-link);
+      outline-offset: 2px;
+    }
+  }
+
+  .theme-switcher__panel {
+    display: none;
+    padding: var(--spacing-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--border-radius);
+
+    &.is-open {
+      position: absolute;
+      inset-block-start: calc(100% + var(--spacing-xs));
+      inset-inline-end: 0;
+      z-index: var(--z-popover);
+      display: block;
+    }
+
+    legend {
+      float: left;
       display: flex;
+      gap: var(--spacing-2xs);
+      align-items: center;
+      margin-block-end: var(--spacing-sm);
+      font-size: var(--text-sm);
+
+      .theme-switcher__icon {
+        display: none;
+        width: var(--size-icon-sm);
+        height: var(--size-icon-sm);
+      }
+    }
+
+    .theme-switcher__body {
+      clear: both;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      margin-block-start: var(--spacing-sm);
+    }
+
+    .theme-switcher__wrapper {
+      display: flex;
+      align-self: flex-start;
       overflow: hidden;
       border: var(--border-thin);
       border-radius: var(--border-radius);
     }
 
     label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: var(--spacing-2xs) var(--spacing-xs);
       font-size: var(--text-sm);
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      transition: color var(--transition-duration) var(--transition-easing), background-color var(--transition-duration) var(--transition-easing);
+
+      + label {
+        border-left: var(--border-thin);
+      }
 
       &:has(input:checked) {
         font-weight: var(--font-weight-bold);
@@ -87,8 +156,16 @@
       }
 
       &:has(input:focus-visible) {
-        outline: 2px dashed var(--color-bg);
+        outline: 2px dashed currentcolor;
         outline-offset: -3px;
+      }
+
+      @media (forced-colors: active) {
+        &:has(input:checked) {
+          color: highlighttext;
+          forced-color-adjust: none;
+          background-color: highlight;
+        }
       }
     }
 
@@ -96,5 +173,44 @@
       appearance: none;
       outline: none;
     }
+  }
+
+  @media screen and (width <= 768px) {
+    .theme-switcher__toggle {
+      display: none;
+    }
+
+    .theme-switcher__panel,
+    .theme-switcher__panel.is-open {
+      position: static;
+      z-index: auto;
+      display: block;
+      padding: 0;
+      background: none;
+      border: none;
+
+      legend .theme-switcher__icon {
+        display: block;
+      }
+
+      label {
+        min-height: var(--size-touch-target);
+      }
+    }
+  }
+}
+
+/* The whole widget, not just the trigger: no rule here reassigns a `--color-*` from
+   `:checked`, so without JS the radios change nothing. Making them work is possible but the
+   choice could not persist — see docs/theme-switcher.md#without-javascript. */
+:root:not(.js) .theme-switcher {
+  display: none;
+}
+
+.theme-switcher:has(fieldset.is-open) .theme-switcher__toggle {
+  background-color: var(--color-surface-alt);
+
+  svg {
+    stroke: var(--color-text-soft);
   }
 }

@@ -13,6 +13,9 @@ other = "Répondre à cet article par email"
 [skip-link]
 other = "Aller au contenu principal"
 
+[menu]
+other = "Menu"
+
 [project-status]
 other = "Statut"
 
@@ -114,3 +117,6 @@ other = "02/01/2006"
 
 [latest-content]
 other = "Derniers contenus"
+
+[table]
+other = "Tableau, défilable horizontalement"

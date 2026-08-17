@@ -1,5 +1,151 @@
+.site-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
 .menu {
   display: flex;
   gap: var(--spacing-lg);
   font-size: var(--text-base);
+}
+
+.menu-toggle {
+  display: none;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
+  color: var(--color-text);
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+
+  &:hover {
+    background: var(--color-surface-alt);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+
+  .menu-toggle__icon {
+    position: relative;
+    width: var(--size-icon);
+    height: 1.4rem;
+
+    span {
+      position: absolute;
+      inset-inline-start: 0;
+      width: 100%;
+      height: 2px;
+      background: currentcolor;
+      border-radius: 2px;
+      transition: transform var(--transition-duration) ease, opacity var(--transition-duration) ease, top var(--transition-duration) ease;
+    }
+
+    span:nth-child(1) {
+      top: 0;
+    }
+
+    span:nth-child(2) {
+      top: 0.6rem;
+    }
+
+    span:nth-child(3) {
+      top: 1.2rem;
+    }
+  }
+
+  &[aria-expanded="true"] .menu-toggle__icon {
+    span:nth-child(1) {
+      top: 0.6rem;
+      transform: rotate(45deg);
+    }
+
+    span:nth-child(2) {
+      opacity: 0;
+    }
+
+    span:nth-child(3) {
+      top: 0.6rem;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+/* Without JS the toggle can never do anything, so it is hidden rather than left inert.
+   Counterpart of the `:root:not(.js) .site-nav` rule below. */
+:root:not(.js) .menu-toggle {
+  display: none;
+}
+
+@media screen and (width <= 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .site-nav.is-open {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-nav-panel);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    align-items: stretch;
+    padding: calc(var(--header-height) + var(--spacing-lg)) var(--spacing-md) var(--spacing-lg);
+    overflow-y: auto;
+    background: var(--color-bg);
+  }
+
+  .menu {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .menu a {
+    display: block;
+    padding-block: var(--spacing-sm);
+    font-size: var(--text-md);
+    border-block-end: var(--border-thin);
+  }
+
+  .menu li:last-child a {
+    border-block-end: none;
+  }
+
+  .theme-switcher {
+    margin-block-start: auto;
+  }
+
+  body:has(.site-nav.is-open) {
+    overflow: hidden;
+  }
+
+  /* Nothing adds `.is-open` without JS, so the nav goes back in flow instead. */
+  :root:not(.js) .site-nav {
+    display: block;
+
+    .menu {
+      display: flex;
+      flex-flow: row wrap;
+      gap: var(--spacing-xs) var(--spacing-lg);
+
+      li {
+        flex: 0 0 40%;
+
+        &:last-child {
+          flex-basis: 100%;
+        }
+      }
+    }
+  }
 }

@@ -1,8 +1,8 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.7.0
+version: 1.9.0
 date_published: 2026-08-08
-date_modified: 2026-08-16
+date_modified: 2026-08-17
 ---
 
 # CSS tokens and breakpoints
@@ -87,7 +87,20 @@ becomes the sole carrier of a state, it needs 3:1 and this paragraph stops being
 | Font weights | `--font-weight-thin`, `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold` | 200, 300, 400, 600 — matches the Alexandria variants imported in `main.css` |
 | Line heights | `--line-height-heading`, `--line-height-base` | |
 | Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px, and is consumed by the article grid rather than by a utility — see [Article layout grid](#article-layout-grid) |
-| Misc | `--border-radius`, `--border-thin`, `--transition` | `--border-thin` composes `--color-border`, so it follows the theme |
+| Controls | `--size-touch-target`, `--size-icon`, `--size-icon-sm` | `--size-touch-target` is 4.4rem = 44px, the WCAG 2.5.5 (AAA) target size. It is an accessibility constant, not a look — do not shrink it to fit a layout |
+| Stacking | `--z-nav-panel`, `--z-header`, `--z-popover` | 1 / 2 / 10. The whole ordering of the header, in one place. `.site-header__bar` needs `--z-header` above the panel's `--z-nav-panel` because the two are siblings — see [components.md](components.md#navhtml) |
+| Misc | `--border-radius`, `--border-thin`, `--transition`, `--transition-duration`, `--transition-easing` | `--border-thin` composes `--color-border`, so it follows the theme. `--transition` is the `all` shorthand; components that must not animate `all` compose the two parts instead |
+
+### `--header-height`
+
+Declared in `01-tokens.css` but not a token in the usual sense: `nav-toggle.js` overwrites it
+on `:root` with the header's measured height, because the title wraps and the value is not a
+constant. What the file holds is only the fallback for the window before the deferred script
+runs.
+
+Keep that fallback close to reality. It read `8rem` when the header measures 127px at every
+width the site supports, so any paint before the script landed put the first nav link 47px
+under the header. If the header's design changes, re-measure and update it.
 
 ## Syntax highlighting
 
@@ -251,9 +264,9 @@ Three thresholds are used across the project:
 
 | Value | Locations | Purpose |
 |-------|-----------|---------|
-| `768px` | `04-header.css` | Header stacks vertically (title, navigation, theme switcher) |
+| `768px` | `04-header.css`, `06-nav.css`, `03-theme.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle |
 | `576px` | `05-footer.css`, `08-home.css`, `10-single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
-| `560px` | `09-entry-list.css`, `02-base.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers |
+| `560px` | `09-entry-list.css`, `02-base.css` | Entry date moves above the title instead of sitting in its own column; `hr` narrows to 75% and centers; definition lists stack instead of using a `max-content` term column |
 
 Agreed syntax, used consistently: `@media screen and (width <= Npx)`. The range syntax is
 transpiled by `css.Build` down to `max-width` (see [css-compat.md](css-compat.md)).
@@ -289,6 +302,9 @@ To be settled alongside the CSS tree reorganisation (#69).
 - Never re-declare `--text-sm` + `--color-text-soft` in a component: apply `.meta`.
 - Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`.
 - Add tokens to `01-tokens.css` only, never to a component file.
+- A value the CSS reads but JavaScript writes still gets declared in `01-tokens.css`, with
+  the static fallback as its value — see [`--header-height`](#--header-height). An
+  undeclared custom property is invisible to anyone reading the stylesheet.
 - Adding a breakpoint means updating the table above.
 - Changing any colour token means re-measuring against AAA, including the backgrounds:
   the text colours were solved against `surface-alt` and have no headroom.

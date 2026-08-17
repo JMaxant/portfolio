@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.5.0
+version: 1.8.0
 date_published: 2026-08-08
-date_modified: 2026-08-16
+date_modified: 2026-08-17
 ---
 
 # Components — partials and integration
@@ -213,6 +213,120 @@ Careful with URLs: do not wrap an address in angle brackets (`<…>`). Markdown 
 as an autolink and they end up percent-encoded as `%3c`/`%3e` in the `href`, breaking the
 link.
 
+### `nav.html`
+
+Renders the primary navigation: `menu.html`, the language-switcher links, and
+`theme-switcher.html`, wrapped in `<div class="site-nav" id="primary-nav">`. Takes the
+current page context, not a dict — called once from `header.html` right after
+`.site-header__bar`. `theme-switcher.html` lives here (not in `header.html`) so it ends up
+inside the mobile full-screen panel below 768px, rather than needing a second toggle of its
+own — see [theme-switcher.md](theme-switcher.md#panel-display-refs-72) for how the
+same markup becomes a desktop popover vs. an always-open panel on mobile.
+
+**Integration** (`06-nav.css`, refs #72) — `#primary-nav` is the disclosure panel
+controlled by the `.menu-toggle` button rendered in `header.html`. The two are not
+adjacent siblings (the button sits inside `.site-header__bar`), so a CSS combinator can't
+link them: `nav-toggle.js` toggles both `aria-expanded` on the button and an `.is-open`
+class on `.site-nav` from the same call, keeping them in sync from one source of truth in
+JS.
+
+| Class | Role |
+|-------|------|
+| `menu-toggle` | Block: the disclosure button. Hidden above 768px, a fixed square below it |
+| `menu-toggle__icon` | Element: the three-bar icon, morphs into a cross via CSS when `aria-expanded="true"` |
+| `site-nav` | Block: above 768px, an inline row (menu, language links, theme switcher). Below it, hidden until `.is-open`, then a `position: fixed` panel covering the full viewport |
+
+Below 768px the open panel is `position: fixed; inset: 0`, not a panel confined to the
+header's own box — a `max-height` accordion here reads as broken, not subtle, on a phone
+screen. `.site-header` carries `background: var(--color-bg)` so it stays opaque against the
+panel, but `z-index` alone on `.site-header` is not enough: `.site-nav` is a sibling of
+`.site-header__bar` (both children of `.container--wide`), so their stacking order is
+decided against each other, not against the ancestor. `.site-header__bar` therefore needs
+its own `position: relative; z-index: 2` — one above the panel's `z-index: 1` — so the
+title and the toggle button (with its now-a-cross icon) stay visibly on top of, and clip,
+the part of the fixed panel that would otherwise paint over them.
+
+Clipping the overlap visually is not enough on its own: the panel's own content still needs
+to start below the header, or the first link renders underneath it. `nav-toggle.js` measures
+`.site-header`'s real height (title wraps to two lines, so this isn't a constant) and writes
+it to `--header-height` on `:root`; `.site-nav.is-open`'s `padding-block-start` reads that
+custom property (`calc(var(--header-height, 8rem) + var(--spacing-lg))`) instead of a fixed
+token. Re-measured on `resize`.
+
+`body:has(.site-nav.is-open) { overflow: hidden }` stops the page scrolling behind the
+panel.
+
+`assets/scripts/nav-toggle.js` (loaded automatically, see `layouts/_default/baseof.html`)
+toggles `aria-expanded`, closes on `Escape` (returning focus to the button), and closes
+when a nav link is activated. It stays a disclosure widget rather than a dialog: no focus
+trap, no `role="dialog"`, no focus restoration beyond `Escape`.
+
+That classification does not settle what happens to the content behind it, though. Below
+768px the open panel is `position: fixed; inset: 0` with an opaque background, so it covers
+the page instead of pushing it down — a modal in everything but name. Left alone, `Tab`
+walked out of the last nav control into a `<main>` the user could not see, with no
+indication of where focus had gone (WCAG 2.4.3 Focus Order, and 2.4.11 Focus Not Obscured
+in WCAG 2.2). `nav-toggle.js` therefore sets `inert` on `<main>` and `.site-footer` while
+the panel is open, guarded on `matchMedia('(max-width: 768px)')` so the desktop row — which
+obscures nothing — is untouched. One attribute removes that content from the tab order and
+from the accessibility tree at once; `body:has(…) { overflow: hidden }` above only handles
+the scroll half of the same problem.
+
+Crossing the breakpoint upwards with the panel open closes it, the same reset
+`theme-toggle.js` performs: above 768px the toggle is hidden, so a leftover
+`aria-expanded="true"` would describe a control the user can no longer reach — and the
+closing pass is what releases `inert`.
+
+The `aria-expanded` toggling, the `.is-open` mirroring and the `Escape` handler are not
+written here: they come from `assets/scripts/00-disclosure.js`, shared with the theme
+switcher, which is the other disclosure in the header. The `00-` prefix is load-bearing —
+`baseof.html` bundles `resources.Match "scripts/*.js"`, which sorts by path, so the helper
+has to concatenate before its two consumers. It publishes on `window` because after
+concatenation each script is still its own IIFE.
+
+The helper's `onChange` callback fires on every transition, opening and closing alike, and
+is what both consumers hook into — `nav-toggle.js` for `inert`, `theme-switcher.html` for
+moving focus onto the checked radio. A caller cannot get the same effect by wrapping the
+returned `setOpen`, because the helper's own click and `Escape` handlers call the internal
+one directly and would bypass the wrapper.
+
+**Without JavaScript** — nothing can add `.is-open`, so a panel left at `display: none`
+below 768px means no reachable navigation at all: menu, language links and theme switcher
+are all inside `.site-nav`. `06-nav.css` hides `.menu-toggle` under `:root:not(.js)` and
+puts `.site-nav` back in flow at the same width, the same treatment `03-theme.css` applies
+to the theme trigger. `:root:not(.js) .site-nav` is 0-2-0 against the 0-1-0 of the
+`display: none` rule, so it wins on specificity without `!important` and without depending
+on rule order, and `theme-init.js` adds the class before the first paint so the scripted
+case never flashes an expanded nav.
+
+`tests/nav.spec.js` covers the disclosure behaviour, the scroll lock, focus containment,
+the breakpoint reset and the no-JS rendering on both sides of the breakpoint.
+
+### `theme-switcher.html`
+
+Icon trigger plus a group of three radios (light / dark / system). **Expected context:
+none** — the partial reads nothing from the page, only `i18n`, so it is called with an empty
+`dict` from `nav.html`.
+
+Behaviour, storage contract and accessibility rationale live in
+[theme-switcher.md](theme-switcher.md); only the CSS contract is repeated here.
+
+| Class | Role |
+|-------|------|
+| `theme-switcher` | Block: the positioning context (`position: relative`) the popover anchors to. Applied by `nav.html`, not by the partial. Hidden whole by `:root:not(.js)` — see [theme-switcher.md](theme-switcher.md#without-javascript) for why the radios cannot stand on their own |
+| `theme-switcher__toggle` | Element: the disclosure button. Hidden below 768px, where the panel is always open |
+| `theme-switcher__icon` | Element: the sun glyph, rendered twice — in the trigger, and in the `<legend>` where it only shows below 768px |
+| `theme-switcher__panel` | Element: the `<fieldset>`. `display: none` until `.is-open` above 768px, permanently visible below it |
+| `theme-switcher__body` | Element: the `clear: both` wrapper that the floated `<legend>` needs |
+| `theme-switcher__wrapper` | Element: the segmented row of the three options |
+| `theme-switcher__value` | Element: the hidden span carrying the current theme inside the trigger's accessible name, kept in sync by `theme.js` |
+| `is-open` | State, on the panel: mirrors the trigger's `aria-expanded`, same pattern as `site-nav` |
+
+The mobile rules state `position: static` for both `.theme-switcher__panel` and
+`.theme-switcher__panel.is-open`. That second selector is not redundant: a media query adds
+no specificity, so the popover's `.is-open` rules (0-3-0) would otherwise outrank the mobile
+block (0-2-0) and leave the panel absolutely positioned inside the burger menu.
+
 ### `menu.html`
 
 Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name.
@@ -314,6 +428,36 @@ expression on its own so its rule aligns with the header's.
 so by [Where styles live](#where-styles-live) it should have its own file. It currently sits
 in `10-single.css`, which no longer describes it. Moving it belongs to the CSS tree
 reorganisation (#69); until then, expect to find it there.
+
+## Tables
+
+Markdown tables go through `layouts/_default/_markup/render-table.html`, a render hook that
+wraps every one of them in `<div class="table-scroll" role="region" tabindex="0" aria-label>`.
+`02-base.css` gives that wrapper `overflow-x: auto`.
+
+The reason is that a table's **min-content width is not a property of the design**. It depends
+on fonts the site does not ship: the widest cell here holds a `<code>` token, and the
+`--font-mono` stack (`ui-monospace`, `Cascadia Code`, `monospace`) resolves to whatever the
+machine has. The same column measured 80px on one machine, 91px with Liberation Mono, and
+about 121px on the CI runner. At 320px the content column is 288px wide and the table's
+min-content was 264px — 24px of headroom, which a wider monospace eats entirely.
+
+So no amount of column styling makes a table fit every visitor's font. It scrolls instead.
+This is not only a CI concern: a visitor whose default monospace is wide would have pushed the
+whole page sideways.
+
+`tabindex="0"` is not decoration. A region that scrolls but cannot take focus is unreachable
+without a mouse (WCAG 2.1.1, and axe's `scrollable-region-focusable` rule), which is why the
+hook emits it and `.table-scroll` carries a `:focus-visible` ring.
+
+The hook re-emits the table itself rather than wrapping the default output, because Hugo
+render hooks replace rather than decorate. Cell alignment is carried as `align-left` /
+`align-center` / `align-right` classes rather than a `style` attribute, so the value stays out
+of the markup — `02-base.css` holds the three rules.
+
+`tests/table.spec.js` asserts the wrapping, the keyboard reachability, and that the page does
+not overflow at 320px **with an artificially widened font** — testing with the shipped font
+only would reproduce exactly the blind spot that let this reach CI.
 
 ## Templating pitfalls
 

@@ -1,22 +1,28 @@
 <div class="container--wide">
   <a class="skip-link" href="#main-content">{{ i18n "skip-link" }}</a>
 
-  {{ if .IsHome }}
-  <div class="site-title">
-    {{ .Site.Title }}
-    <span>{{ .Site.Params.baseline }}</span>
-  </div>
-  {{ else }}
-  <div>
-    <a href="{{ relURL .Site.Home.RelPermalink }}" class="site-title">
+  <div class="site-header__bar">
+    {{ if .IsHome }}
+    <div class="site-title">
       {{ .Site.Title }}
       <span>{{ .Site.Params.baseline }}</span>
-    </a>
+    </div>
+    {{ else }}
+    <div>
+      <a href="{{ relURL .Site.Home.RelPermalink }}" class="site-title">
+        {{ .Site.Title }}
+        <span>{{ .Site.Params.baseline }}</span>
+      </a>
+    </div>
+    {{ end }}
+
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">
+      <span class="menu-toggle__icon" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+      <span class="visually-hidden">{{ i18n "menu" }}</span>
+    </button>
   </div>
-  {{ end }}
 
   {{- partial "nav.html" . -}}
-
-  <div class="theme-switcher">{{- partial "theme-switcher.html" . -}}</div>
-
 </div>

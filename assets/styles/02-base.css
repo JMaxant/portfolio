@@ -7,7 +7,7 @@ body {
   font-size: var(--text-base);
   color: var(--color-text);
   background-color: var(--color-bg);
-  transition: all 0.2s ease-in-out;
+  transition: var(--transition);
 }
 
 main {
@@ -99,6 +99,7 @@ pre {
 
 .tags {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
 }
 
@@ -137,9 +138,34 @@ blockquote {
   }
 }
 
+/* Add to table by layouts/_default/_markup/render-table.html.
+   A table's min-content width depends on fonts we're not shipping, so it cannot be made to
+   fit 320px by styling alone — it scrolls instead of pushing the page sideways.
+   `tabindex="0"` in the hook is what lets a keyboard reach that scroll (WCAG 2.1.1). */
+.table-scroll {
+  overflow-x: auto;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+}
+
 table {
   border-collapse: collapse;
   border: var(--border-thin);
+
+  .align-left {
+    text-align: left;
+  }
+
+  .align-center {
+    text-align: center;
+  }
+
+  .align-right {
+    text-align: right;
+  }
 
   th, td {
     padding: var(--spacing-2xs);
@@ -178,5 +204,23 @@ dt {
 
 dd {
   grid-column: 2;
+}
+
+/* 560px — no token, custom properties are illegal in media conditions.
+   See docs/css-tokens.md.
+
+   The term column is sized to max-content, which at narrow widths reserves the full
+   unwrapped width of the longest term and pushes the definitions past the viewport. Below
+   this width the two columns stack instead. */
+@media screen and (width <= 560px) {
+  dl {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  dd {
+    grid-column: 1;
+    margin-block-end: var(--spacing-sm);
+  }
 }
 

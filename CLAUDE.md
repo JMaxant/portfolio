@@ -41,6 +41,15 @@ running the linter directly on the file is this, every time: compare with
 
 ## Conventions
 
+### Comments
+
+Keep them **short — a few lines at most**. A comment says what the code cannot: the trap, the
+constraint, the reason a value is what it is. The long-form reasoning belongs in `docs/`, and
+the comment links to it (`See docs/components.md#navhtml`) rather than restating it.
+
+In JavaScript, use `//` repeated on each line, not a `/* … */` block. CSS has no line comment,
+so `/* */` there is unavoidable.
+
 ### Commits
 
 `type: short description - refs #N`, types `feat` / `fix` / `docs` / `chore` /
@@ -59,7 +68,12 @@ Validate parameters with `errorf` against a whitelist, before emitting any outpu
 ### CSS
 
 - Every value comes from a token in `01-tokens.css`. No hardcoded colour, spacing or font
-  size in a component.
+  size in a component. That covers sizes, z-indexes and durations too — a control size, a
+  stacking order or a transition duration repeated across two files is a token waiting to be
+  named.
+- A custom property that JavaScript writes at runtime is still declared in `01-tokens.css`,
+  holding its static fallback. Undeclared, it is invisible to anyone reading the stylesheet,
+  and its fallback drifts silently (`--header-height` read `8rem` for a 127px header).
 - Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`. Components
   use semantic tokens (`--color-surface`, `--color-text-soft`) so theming keeps working.
 - BEM: `bloc__element` for a sub-part, `bloc bloc--modifier` for a variant. If both classes

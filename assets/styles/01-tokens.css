@@ -96,8 +96,23 @@
   --font-sans: 'Alexandria', system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', monospace;
 
+  /* Controls. 4.4rem = 44px, the WCAG 2.5.5 (AAA) target size. */
+  --size-touch-target: 4.4rem;
+  --size-icon: 2rem;
+  --size-icon-sm: 1.6rem;
+
+  /* Stacking order inside the header. */
+  --z-nav-panel: 1;
+  --z-header: 2;
+  --z-popover: 10;
+
+  /* Fallback value: overwritten at runtime by nav-toggle.js. */
+  --header-height: 12.8rem;
+
   /* Misc. */
-  --transition: all 0.2s ease-in-out;
+  --transition-duration: 0.2s;
+  --transition-easing: ease-in-out;
+  --transition: all var(--transition-duration) var(--transition-easing);
   --border-radius: 0.4rem;
   --border-thin: 1px solid var(--color-border);
   --border-thick: 5px solid var(--color-border);
