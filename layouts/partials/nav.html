@@ -1,5 +1,5 @@
 <div class="site-nav" id="primary-nav">
-  {{ partial "menu.html" (dict "menuName" "main") }}
+  {{ partial "menu.html" (dict "page" . "menuName" "main") }}
 
   <!-- Convert this page's translations into a dict -->
   {{ $translations := dict }}

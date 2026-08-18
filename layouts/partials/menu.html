@@ -1,15 +1,44 @@
-{{- /* Expected context (dict): menuName (required) */ -}}
+{{- /*
+  Expected context (dict):
+    menuName (required) — "main" or "error"
+    page     (required) — the page being rendered, for the active trail
+
+  IsMenuCurrent takes the menu *identifier*, not the menu object, and both methods only
+  ever match an entry declared with `pageRef`. See docs/components.md#menuhtml.
+*/ -}}
 {{- $allowed := slice "main" "error" -}}
 {{- if not (in $allowed .menuName) -}}
   {{- errorf "partial menu.html: invalid menuName %q, expected one of %v" .menuName $allowed -}}
 {{- end -}}
+{{- if not .page -}}
+  {{- errorf "partial menu.html: missing required \"page\" parameter" -}}
+{{- end -}}
+{{- $page := .page -}}
+{{- $menuName := .menuName -}}
 
 {{ with .menuName }}
 <nav>
   <ul class="menu menu--{{ . }}" role="list">
     {{ range (index site.Menus .).ByWeight }}
+    {{- $current := $page.IsMenuCurrent $menuName . -}}
+    {{- $ancestor := $page.HasMenuCurrent $menuName . -}}
     <li>
-      <a href="{{ .URL }}">{{ .Name }}</a>
+      {{- if $current }}
+        <span
+          aria-current="page">
+            {{ .Name }}
+        </span>
+      {{- else if $ancestor }}
+        <a
+          aria-current="true"
+          href="{{ .URL }}">
+          {{ .Name }}
+        </a>
+      {{- else }}
+        <a href="{{ .URL }}">
+          {{ .Name }}
+        </a>
+      {{ end }}
     </li>
     {{ end }}
   </ul>

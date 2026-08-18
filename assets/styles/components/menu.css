@@ -8,6 +8,21 @@
   display: flex;
   gap: var(--spacing-lg);
   font-size: var(--text-base);
+
+  a {
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: var(--color-link-hover);
+    }
+  }
+
+  [aria-current] {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    text-decoration: underline;
+  }
 }
 
 .menu-toggle {
