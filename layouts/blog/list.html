@@ -1,39 +1,10 @@
 {{ define "main" }}
-<div class="page">
-  <div class="container">
-    <h1>{{ .Title }}</h1>
-    {{ with .Content }}{{ . }}{{ end }}
+  <div class="page">
+    <div class="container">
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}{{ . }}{{ end }}
 
-    <ul class="entry-list" role="list">
-      {{ range .Pages }}
-      <li class="entry-list__item">
-        <time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">
-        {{ time.Format "2 Jan 2006" .Date }}
-        </time>
-
-        <div class="entry-list__body">
-          <a class="entry-list__title" href="{{ .RelPermalink }}">
-            {{ .Title }}
-          </a>
-
-          {{ with .Params.description }}
-          <p class="meta">{{ . }}</p>
-          {{ end }}
-          {{ with .GetTerms "tags" }}
-          <ul role="list" class="tags">
-            {{ range . }}
-            <li class="tag tag--accented">
-              <a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
-            </li>
-            {{ end }}
-          </ul>
-          {{ end }}
-        </div>
-      </li>
-      {{ else }}
-      <li>{{ i18n "no-links" }}</li>
-      {{ end }}
-    </ul>
+      {{ partial "entry-list.html" (dict "pages" .Pages) }}
+    </div>
   </div>
-</div>
 {{ end }}

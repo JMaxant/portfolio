@@ -58,8 +58,8 @@ other = "Veille"
 [external-link]
 other = "lien externe"
 
-[no-links]
-other = "Aucun lien pour l'instant"
+[no-entries]
+other = "Rien à afficher pour l'instant"
 
 [no-projects]
 other = "Aucun projet pour l'instant"
