@@ -27,7 +27,6 @@
 /* Page chrome, then the templates. */
 @import url("layout/header.css");
 @import url("layout/footer.css");
-@import url("layout/page.css");
 @import url("layout/home.css");
 @import url("layout/content-grid.css");
 @import url("layout/single.css");

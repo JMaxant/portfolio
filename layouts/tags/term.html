@@ -1,7 +1,9 @@
 {{ define "main" }}
-  <div class="container term">
-    <h1>{{ .Title }}</h1>
+  <div class="page">
+    <div class="container">
+      <h1>{{ .Title }}</h1>
 
-    {{ partial "entry-list.html" (dict "pages" .Pages) }}
+      {{ partial "entry-list.html" (dict "pages" .Pages) }}
+    </div>
   </div>
 {{ end }}
