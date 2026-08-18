@@ -3,18 +3,22 @@ import { test, expect } from '@playwright/test';
 // #69 : deux régressions de media query que la suite overflow ne peut pas voir, parce
 // qu'aucune des deux ne fait déborder la page.
 //
-// 1. Sous 560px, la grille de .entry-list__item doit se replier sur une colonne. L'override
-//    était écrit `.entry-list li` (0,1,1) face à une base `.entry-list .entry-list__item`
-//    (0,2,0) : mort, alors que le déplacement de .entry-list__body, lui, s'appliquait.
-// 2. À 768px pile, une seule des deux mises en page doit être active. La grille de cartes
-//    était en min-width quand tout le reste est en max-width.
+// 1. Sous --bp-mobile, la grille de .entry-list__item doit se replier sur une colonne.
+//    L'override était écrit `.entry-list li` (0,1,1) face à une base
+//    `.entry-list .entry-list__item` (0,2,0) : mort, alors que le déplacement de
+//    .entry-list__body, lui, s'appliquait.
+// 2. À --bp-tablet pile, une seule des deux mises en page doit être active. La grille de
+//    cartes était en min-width quand tout le reste est en max-width.
+//
+// Les valeurs sont recopiées des tokens, comme les media queries elles-mêmes ; c'est
+// scripts/quality/check-breakpoints.mjs qui garantit qu'elles restent alignées.
 
-const COLLAPSE = 560;
+const MOBILE = 576;
 const TABLET = 768;
 
-test.describe('entry list below 560px', () => {
+test.describe('entry list below the mobile breakpoint', () => {
   test('the item grid collapses to a single column', async ({ page }) => {
-    await page.setViewportSize({ width: COLLAPSE - 1, height: 900 });
+    await page.setViewportSize({ width: MOBILE - 1, height: 900 });
     await page.goto('/blog/');
 
     const { item, body } = await page.evaluate(() => {
@@ -32,7 +36,7 @@ test.describe('entry list below 560px', () => {
   });
 
   test('the two-column layout is still there just above the breakpoint', async ({ page }) => {
-    await page.setViewportSize({ width: COLLAPSE + 1, height: 900 });
+    await page.setViewportSize({ width: MOBILE + 1, height: 900 });
     await page.goto('/blog/');
 
     const columns = await page.locator('.entry-list__item').first()

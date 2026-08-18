@@ -171,13 +171,13 @@ dd {
   grid-column: 2;
 }
 
-/* 560px — no token, custom properties are illegal in media conditions.
-   See docs/css-tokens.md.
+/* 576px = --bp-mobile, repeated as a literal: custom properties are illegal in media
+   conditions. scripts/quality/check-breakpoints.mjs keeps the two in step.
 
    The term column is sized to max-content, which at narrow widths reserves the full
    unwrapped width of the longest term and pushes the definitions past the viewport. Below
    this width the two columns stack instead. */
-@media screen and (width <= 560px) {
+@media screen and (width <= 576px) {
   dl {
     grid-template-columns: 1fr;
     gap: 0;
