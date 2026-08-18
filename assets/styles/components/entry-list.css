@@ -3,14 +3,14 @@
 .entry-list {
   .entry-list__item {
     display: grid;
-    grid-template-columns: 12rem 1fr;
+    grid-template-columns: var(--size-col-date) 1fr;
     gap: var(--spacing-2xs) var(--spacing-lg);
     padding-block: var(--spacing-md);
     border-block-start: var(--border-thin);
   }
 
   time {
-    padding-block-start: 0.2rem;
+    padding-block-start: var(--size-date-nudge);
     font-variant-numeric: tabular-nums;
   }
 
@@ -30,7 +30,7 @@
 
 .entry-list--compact {
   .entry-list__item {
-    grid-template-columns: 8rem 6rem 1fr;
+    grid-template-columns: var(--size-col-date-compact) var(--size-col-type) 1fr;
     gap: var(--spacing-md);
     align-items: baseline;
     padding-block: var(--spacing-xs);

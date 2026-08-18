@@ -67,20 +67,23 @@ a:active {
 
 .skip-link {
   position: absolute;
-  top: -999rem;
-  left: -999rem;
-  z-index: 100000;
-  padding: 0.75rem 1.25rem;
+
+  /* Parked far enough off-screen that no layout brings it back, and moved by :focus only.
+     The three offsets below are placement, not design values. */
+  top: -999rem; /* token-exception: off-screen parking, not a spacing value */
+  left: -999rem; /* token-exception: off-screen parking, not a spacing value */
+  z-index: var(--z-skip-link);
+  padding: 0.75rem 1.25rem; /* token-exception: off the spacing scale, changing it moves the box */
   font-weight: var(--font-weight-bold);
-  color: #fff;
+  color: #fff; /* token-exception: outside the theme, it paints over whatever is under it */
   text-decoration: none;
-  background: #000;
-  border-radius: 0 0 4px 4px;
+  background: #000; /* token-exception: outside the theme, it paints over whatever is under it */
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 .skip-link:focus {
   top: 0;
-  left: 1rem;
+  left: 1rem; /* token-exception: off the spacing scale, changing it moves the box */
 }
 
 pre {
@@ -88,8 +91,8 @@ pre {
 }
 
 :focus-visible {
-  outline: 2px dashed var(--color-text);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) dashed var(--color-text);
+  outline-offset: var(--focus-ring-offset);
 }
 
 blockquote {
@@ -111,8 +114,8 @@ blockquote {
   overflow-x: auto;
 
   &:focus-visible {
-    outline: 2px solid var(--color-link);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--color-link);
+    outline-offset: var(--focus-ring-offset);
   }
 }
 

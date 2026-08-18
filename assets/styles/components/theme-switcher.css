@@ -15,7 +15,7 @@
     color: var(--color-text);
     cursor: pointer;
     background: none;
-    border: 1px solid transparent;
+    border: var(--border-width-thin) solid transparent;
     border-radius: var(--border-radius);
 
     /* The tint alone is 1.08:1 against the page background, so the border does the work.
@@ -26,8 +26,8 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-link);
-      outline-offset: 2px;
+      outline: var(--focus-ring-width) solid var(--color-link);
+      outline-offset: var(--focus-ring-offset);
     }
   }
 
@@ -35,7 +35,7 @@
     display: none;
     padding: var(--spacing-sm);
     background: var(--color-surface);
-    border: 1px solid var(--color-border-strong);
+    border: var(--border-width-thin) solid var(--color-border-strong);
     border-radius: var(--border-radius);
 
     &.is-open {
@@ -97,8 +97,8 @@
       }
 
       &:has(input:focus-visible) {
-        outline: 2px dashed currentcolor;
-        outline-offset: -3px;
+        outline: var(--focus-ring-width) dashed currentcolor;
+        outline-offset: var(--focus-ring-offset-inset);
       }
 
       @media (forced-colors: active) {

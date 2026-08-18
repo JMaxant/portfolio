@@ -1,6 +1,6 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.8.0
+version: 1.9.0
 date_published: 2026-08-01
 date_modified: 2026-08-18
 ---
@@ -30,6 +30,7 @@ Seule la vérification de liens vit uniquement en CI (trop lente pour un pre-com
 | `cv-schema`                | `ajv` (devDependency)                  | `scripts/quality/check-cv-schema.mjs`: `assets/cv.json` against `schemas/cv.schema.json` |
 | `contrast`                 | `scripts/quality/check-contrast.mjs` (no dependency) | Contrast ratios of the `base/tokens.css` palette: 7:1 for text, 3:1 for `--*-border-strong`. Also fails on a colour token covered by no pair. See [css-tokens.md](css-tokens.md) |
 | `breakpoints`              | `scripts/quality/check-breakpoints.mjs` (no dependency) | Every width media query under `assets/styles/` against the `--bp-*` tokens: fails on a width matching no token, on a query opening upwards (`min-width`), and on a token no query uses. See [css-tokens.md](css-tokens.md#breakpoints) |
+| `tokens`                   | `scripts/quality/check-tokens.mjs` (no dependency) | Hardcoded design values under `assets/styles/`: colours, lengths, durations and `z-index` literals outside `base/tokens.css`. An idiom is accepted with a `/* token-exception: <reason> */` comment on the line. See [css-tokens.md](css-tokens.md#no-hardcoded-value) |
 | `actionlint`               | `actionlint` (via `go run`, épinglé)   | Workflows GitHub Actions (`.github/workflows/*.yml`)                                |
 | `hugo-build`               | `scripts/quality/check-hugo-build.sh`  | `hugo --gc --minify`, tout `WARN` = échec                                           |
 
