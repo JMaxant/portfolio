@@ -42,7 +42,7 @@
    The auto-fit track reflows on its own below the breakpoint and does not overflow at 280px. */
 @media screen and (width <= 768px) {
   .cards.cards--grid {
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); /* token-exception: reflow bound, see the comment above */
     gap: var(--spacing-md);
   }
 }

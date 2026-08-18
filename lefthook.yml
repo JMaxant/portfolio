@@ -42,6 +42,10 @@ pre-commit:
       glob: "*.css"
       run: node scripts/quality/check-breakpoints.mjs
 
+    tokens:
+      glob: "*.css"
+      run: node scripts/quality/check-tokens.mjs
+
     actionlint:
       glob: ".github/workflows/*.yml"
       run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 {staged_files}

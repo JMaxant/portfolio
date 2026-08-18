@@ -1,6 +1,6 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.15.0
+version: 1.16.0
 date_published: 2026-08-08
 date_modified: 2026-08-18
 ---
@@ -66,6 +66,12 @@ Switching theme means reassigning the semantic tokens to the other palette, in
 `base/tokens.css`. A component consuming `--color-surface` follows the theme without knowing
 anything about the palettes. A component consuming `--light-surface` would break in dark
 mode: that is the mistake to avoid.
+
+**Two colours sit outside both stages**, and outside the token file: the `#fff` on `#000`
+of `.skip-link`, in `base/elements.css`. The skip link paints over whatever the page puts
+under it and must stay legible in both themes, so it follows neither. Tokens would have
+named a pair nothing else can consume, so they stay literal with a
+[`token-exception`](#no-hardcoded-value) each.
 
 See [theme-switcher.md](theme-switcher.md) for the switching mechanism.
 
@@ -136,10 +142,13 @@ saturation untouched — against the same worst-case background:
 | Text sizes | `--text-xs` … `--text-hero` | `--text-base` is the body text size |
 | Font weights | `--font-weight-thin`, `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold` | 200, 300, 400, 600 — matches the Alexandria variants imported in `main.css` |
 | Line heights | `--line-height-heading`, `--line-height-base` | |
+| Letter spacing | `--letter-spacing-wide` | `0.05em`, uppercase labels only (`layout/parcours.css`) — without the extra tracking the caps run into each other |
 | Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px, and is consumed by the article grid rather than by a utility — see [Article layout grid](#article-layout-grid) |
+| List columns | `--size-col-date`, `--size-col-date-compact`, `--size-col-type`, `--size-date-nudge` | The date column of `entry-list`, at its two widths, plus the type column of the compact variant. `--size-date-nudge` is the optical `0.2rem` that lines a date up with a bigger title |
+| Focus ring | `--focus-ring-width`, `--focus-ring-offset`, `--focus-ring-offset-inset` | `2px` / `2px`, an RGAA 10.7 decision. The inset offset (`-3px`) pulls the ring inside a filled control, where the outward one would land outside its container |
 | Controls | `--size-touch-target`, `--size-icon`, `--size-icon-sm` | `--size-touch-target` is 4.4rem = 44px, the WCAG 2.5.5 (AAA) target size. It is an accessibility constant, not a look — do not shrink it to fit a layout |
-| Stacking | `--z-nav-panel`, `--z-header`, `--z-popover` | 1 / 2 / 10. The whole ordering of the header, in one place. `.site-header__bar` needs `--z-header` above the panel's `--z-nav-panel` because the two are siblings — see [components.md](components.md#navhtml) |
-| Misc | `--border-radius`, `--border-thin`, `--transition`, `--transition-duration`, `--transition-easing` | `--border-thin` composes `--color-border`, so it follows the theme. `--transition` is the `all` shorthand; components that must not animate `all` compose the two parts instead |
+| Stacking | `--z-nav-panel`, `--z-header`, `--z-popover`, `--z-skip-link` | 1 / 2 / 10 / 100000. The whole ordering of the header, in one place. `.site-header__bar` needs `--z-header` above the panel's `--z-nav-panel` because the two are siblings — see [components.md](components.md#navhtml) |
+| Misc | `--border-radius`, `--border-width-thin`, `--border-thin`, `--transition`, `--transition-duration`, `--transition-easing` | `--border-thin` composes `--border-width-thin` and `--color-border`, so it follows the theme; the width alone is for the borders that need another colour (a transparent one, `--color-border-strong`, a dashed style). `--transition` is the `all` shorthand; components that must not animate `all` compose the two parts instead |
 
 ### `--header-height`
 
@@ -379,12 +388,66 @@ When narrowing a nested block, repeat the class the base rule uses, not the tag 
 it. `tests/breakpoints.spec.js` locks this one.
 
 
+## No hardcoded value
+
+`scripts/quality/check-tokens.mjs` enforces the first rule below. It scans everything under
+`assets/styles/` except `base/tokens.css`, and fails on a colour (hex, `rgb()`, `hsl()`), a
+length (`px`, `rem`, `em`), a duration (`s`, `ms`) or a numeric `z-index` written literally.
+Percentages, `fr`, `ch` and `deg` are out: those are ratios and geometry, not design values.
+Media conditions are out too — a query cannot read a custom property, so those literals are
+[checked against the `--bp-*` tokens](#breakpoints) instead.
+
+Some values are idioms rather than decisions, and a check that shouted at them would be
+switched off within a week. Those are accepted **where they live**, with their reason:
+
+```css
+.visually-hidden {
+  width: 1px; /* token-exception: the visually-hidden idiom, not a size */
+}
+```
+
+The fifteen exceptions currently accepted: the `1px` / `-1px` of `.visually-hidden`, the
+`-999rem` parking, off-scale padding and out-of-theme `#fff` / `#000` of `.skip-link`, the
+`280px` reflow bound of the card grid, the `0.01ms` of the reduced-motion block, and the two
+seed values of the [burger geometry](#component-local-custom-properties). Anything else is a
+token.
+
+The audit that produced this check (#108) found 38 literals over 7 files, among them a focus
+ring copied by hand into four of them and a `z-index: 100000` that no stacking token knew
+about. The rule had been written in `CLAUDE.md` since the beginning; what it lacked was
+something that fails.
+
+### Component-local custom properties
+
+A value used by one component only, several times, does not become a global token: it stays
+a custom property declared on the component's own root. `--gutter` and `--breakout` in
+`layout/content-grid.css` did it first; the burger geometry of `components/menu.css` follows.
+
+```css
+.menu-toggle__icon {
+  --burger-height: 1.4rem; /* token-exception: burger geometry, local to this component */
+  --burger-bar: 2px; /* token-exception: burger geometry, local to this component */
+  --burger-center: calc((var(--burger-height) - var(--burger-bar)) / 2);
+}
+```
+
+What is bought here is the derivation, not the naming: the three bars of the closed and open
+states are computed from two values instead of being four literals that have to agree. A
+global token would have promised reuse that cannot happen — no other file can consume a
+burger's geometry. The two seed values are literals like any other and carry their exception.
+
+The line is the one in `CLAUDE.md`: a value repeated **across two files** is a token. Inside
+one file, it is a local property.
+
 ## Rules
 
-- Never write a colour, spacing or size literal inside a component.
+- Never write a colour, spacing or size literal inside a component. `check-tokens.mjs` fails
+  on one — see [No hardcoded value](#no-hardcoded-value) for the accepted idioms.
 - Never re-declare `--text-sm` + `--color-text-soft` in a component: apply `.meta`.
 - Never consume a raw palette (`--light-*`, `--dark-*`) outside `base/tokens.css`.
-- Add tokens to `base/tokens.css` only, never to a component file.
+- Add tokens to `base/tokens.css` only, never to a component file. A value one component
+  repeats internally is not a token: it is a
+  [local custom property](#component-local-custom-properties) on that component.
 - A value the CSS reads but JavaScript writes still gets declared in `base/tokens.css`, with
   the static fallback as its value — see [`--header-height`](#--header-height). An
   undeclared custom property is invisible to anyone reading the stylesheet.

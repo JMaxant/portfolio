@@ -21,7 +21,7 @@
   appearance: none;
   cursor: pointer;
   background: none;
-  border: 1px solid transparent;
+  border: var(--border-width-thin) solid transparent;
   border-radius: var(--border-radius);
 
   &:hover {
@@ -29,22 +29,28 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-link);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--color-link);
+    outline-offset: var(--focus-ring-offset);
   }
 
   .menu-toggle__icon {
+    /* Local to this component: three bar positions derived from two values, used nowhere
+       else. A global token would name a geometry no other file can consume. */
+    --burger-height: 1.4rem; /* token-exception: burger geometry, local to this component */
+    --burger-bar: 2px; /* token-exception: burger geometry, local to this component */
+    --burger-center: calc((var(--burger-height) - var(--burger-bar)) / 2);
+
     position: relative;
     width: var(--size-icon);
-    height: 1.4rem;
+    height: var(--burger-height);
 
     span {
       position: absolute;
       inset-inline-start: 0;
       width: 100%;
-      height: 2px;
+      height: var(--burger-bar);
       background: currentcolor;
-      border-radius: 2px;
+      border-radius: var(--burger-bar);
       transition: transform var(--transition-duration) ease, opacity var(--transition-duration) ease, top var(--transition-duration) ease;
     }
 
@@ -53,17 +59,17 @@
     }
 
     span:nth-child(2) {
-      top: 0.6rem;
+      top: var(--burger-center);
     }
 
     span:nth-child(3) {
-      top: 1.2rem;
+      top: calc(var(--burger-height) - var(--burger-bar));
     }
   }
 
   &[aria-expanded="true"] .menu-toggle__icon {
     span:nth-child(1) {
-      top: 0.6rem;
+      top: var(--burger-center);
       transform: rotate(45deg);
     }
 
@@ -72,7 +78,7 @@
     }
 
     span:nth-child(3) {
-      top: 0.6rem;
+      top: var(--burger-center);
       transform: rotate(-45deg);
     }
   }

@@ -67,7 +67,7 @@
 
 .skills__level--direction {
   padding-block-start: var(--spacing-md);
-  border-block-start: 1px dashed var(--color-border-strong);
+  border-block-start: var(--border-width-thin) dashed var(--color-border-strong);
 }
 
 .skills__label {
@@ -75,7 +75,7 @@
   font-weight: var(--font-weight-normal);
   color: var(--color-text-soft);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 .proofs {
@@ -97,7 +97,7 @@
   margin-block-end: var(--spacing-2xs);
   font-size: var(--text-sm);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 .resume__cv-json {

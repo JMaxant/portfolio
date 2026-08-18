@@ -54,8 +54,8 @@ ol[role="list"] {
   *::before,
   *::after {
     scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important; /* token-exception: the reduced-motion idiom, not a duration */
+    animation-duration: 0.01ms !important; /* token-exception: the reduced-motion idiom, not a duration */
     animation-iteration-count: 1 !important;
   }
 }

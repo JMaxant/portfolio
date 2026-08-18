@@ -70,7 +70,12 @@ Validate parameters with `errorf` against a whitelist, before emitting any outpu
 - Every value comes from a token in `base/tokens.css`. No hardcoded colour, spacing or font
   size in a component. That covers sizes, z-indexes and durations too — a control size, a
   stacking order or a transition duration repeated across two files is a token waiting to be
-  named.
+  named. `scripts/quality/check-tokens.mjs` enforces it; an idiom that is not a design value
+  (the `1px` of `.visually-hidden`, the reduced-motion `0.01ms`) is accepted with a
+  `/* token-exception: <reason> */` comment on the line, and nothing else is.
+- A value one component repeats internally is not a global token: declare a custom property
+  on the component's own root, as `--gutter` does in `layout/content-grid.css` and
+  `--burger-*` in `components/menu.css`. `base/tokens.css` is for what crosses two files.
 - A custom property that JavaScript writes at runtime is still declared in `base/tokens.css`,
   holding its static fallback. Undeclared, it is invisible to anyone reading the stylesheet,
   and its fallback drifts silently (`--header-height` read `8rem` for a 127px header).
