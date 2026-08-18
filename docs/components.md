@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.10.0
+version: 1.11.0
 date_published: 2026-08-08
-date_modified: 2026-08-17
+date_modified: 2026-08-18
 ---
 
 # Components — partials and integration
@@ -508,6 +508,23 @@ value ever come from front matter.
 
 Parameter validation belongs **before** any output from the partial, not after a tag has
 been opened, so that no fragment is emitted ahead of the failure.
+
+### `<time>` carries two dates, not one
+
+The `datetime` attribute is the machine date; the element's text is the human one. They use
+different formats and the templates must not share an expression between them.
+
+```gotemplate
+<time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">
+  {{ time.Format (i18n "date-format") .Date }}
+</time>
+```
+
+`i18n "date-format"` is `02/01/2006` — a display layout. Passed to the attribute it produced
+`datetime="28/07/2026"`, which no parser and no assistive technology can read, on the home
+page and in `card-taxonomy.html`. Nothing caught it: no page overflowed, and axe does not
+validate the *value* of a `datetime`. `tests/time.spec.js` does, on every template that
+emits a `<time>`.
 
 ## Points to watch
 

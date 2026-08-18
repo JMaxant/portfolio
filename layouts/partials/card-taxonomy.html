@@ -21,7 +21,7 @@
           </a>
         </p>
         {{ partial "entry-link.html" (dict "page" .) }}
-        <time class="meta" datetime='{{ .Date.Format (i18n "date-format") }}' pubdate>
+        <time class="meta" datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
           {{ .Date.Format (default  (i18n "date-format")  .Site.Params.dateFormat) }}
         </time>
       </li>

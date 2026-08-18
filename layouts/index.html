@@ -36,8 +36,8 @@
         <ul class="activites" role="list">
           {{ range . }}
           <li>
-            <time datetime='{{ .Lastmod.Format (i18n "date-format") }}' class="meta">
-            {{ time.Format (i18n "date-format") .Lastmod }}
+            <time class="meta" datetime="{{ .Lastmod.Format "2006-01-02" }}">
+              {{ time.Format (i18n "date-format") .Lastmod }}
             </time>
             <span class="tag">
               <a href="{{ .CurrentSection.RelPermalink }}">
