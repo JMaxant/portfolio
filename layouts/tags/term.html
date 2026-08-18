@@ -2,29 +2,6 @@
   <div class="container term">
     <h1>{{ .Title }}</h1>
 
-    <ul class="entry-list" role="list">
-      {{ range .Pages }}
-        <li class="entry-list__item">
-          <time class="meta" datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
-            {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
-          </time>
-          <div class="entry-list__body">
-            {{ partial "entry-link.html" (dict "page" . "title_class" "entry-list__title") }}
-            {{ with .Params.description }}
-              <p class="meta">{{ . }}</p>
-            {{ end }}
-            {{ with .GetTerms "tags" }}
-            <ul role="list" class="tags">
-              {{ range . }}
-              <li class="tag tag--accented"><a href="{{ .Permalink }}">{{ lower .LinkTitle }}</a></li>
-              {{ end }}
-            </ul>
-            {{ end }}
-          </div>
-        </li>
-      {{ else }}
-        <li>{{ i18n "no-posts" }}</li>
-      {{ end }}
-    </ul>
+    {{ partial "entry-list.html" (dict "pages" .Pages) }}
   </div>
 {{ end }}

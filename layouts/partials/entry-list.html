@@ -1,0 +1,47 @@
+{{/*
+  entry-list.html — the `<ul class="entry-list">` of a section or taxonomy listing: one
+  entry per page (date, title link, description, tags), or a single empty-state item when
+  the list holds no page.
+
+  The `datetime` attribute carries the machine date and never the displayed one
+  (see tests/time.spec.js). Home page and taxonomy card order their children differently
+  and stay out: they share the CSS modifiers, not this markup.
+
+  Dict:
+    pages (required) the pages to list, may be empty
+
+  Usage:
+    {{ partial "entry-list.html" (dict "pages" .Pages) }}
+*/}}
+{{- if not (isset . "pages") -}}
+  {{- errorf "partial entry-list.html: missing required \"pages\" parameter" -}}
+{{- end -}}
+
+<ul class="entry-list" role="list">
+  {{- range .pages }}
+    <li class="entry-list__item">
+      <time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">
+        {{ time.Format (i18n "date-format") .Date }}
+      </time>
+
+      <div class="entry-list__body">
+        {{ partial "entry-link.html" (dict "page" . "title_class" "entry-list__title") }}
+
+        {{ with .Params.description }}
+          <p class="meta">{{ . }}</p>
+        {{ end }}
+        {{ with .GetTerms "tags" }}
+          <ul role="list" class="tags">
+            {{ range . }}
+              <li class="tag tag--accented">
+                <a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </div>
+    </li>
+  {{- else }}
+    <li>{{ i18n "no-entries" }}</li>
+  {{- end }}
+</ul>

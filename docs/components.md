@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.12.0
+version: 1.13.0
 date_published: 2026-08-08
 date_modified: 2026-08-18
 ---
@@ -161,11 +161,43 @@ don't overlap enough to share one partial.
 blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
 `.byline`. No class of its own: a project meta line *is* a byline, only richer.
 
-### `entry-list` (CSS only)
+### `entry-list.html`
 
-List of entries. No partial yet — five templates emit the markup by hand (#69). The block
-lives in `components/entry-list.css`; the modifiers are declared there too, so no other
-component reaches into it.
+The `<ul>` of a section or taxonomy listing: one entry per page — date, title link,
+description, tags — or a single empty-state item when the list holds no page.
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `pages` | yes | — | The pages to list, may be empty |
+
+An empty list is a legitimate call, not an error, so the guard tests `isset . "pages"`
+rather than the truthiness of the value: `not .pages` would fail the build on a section
+that simply has no content yet.
+
+The empty case is inside the partial on purpose. Left to the callers it would be three
+copies of the same `{{ else }}` branch, which is how the four divergences below were born
+in the first place.
+
+**Callers** — `layouts/blog/list.html`, `layouts/veille/list.html`, `layouts/tags/term.html`.
+The home page and `card-taxonomy.html` order their children differently (`date, tag, title`
+and `tag, title, date`, against `date | body` here) and the home page reads `.Lastmod` where
+the others read `.Date`. They share the CSS modifiers below, not this markup: a `variant`
+parameter reordering the children is the point where a partial stops being readable.
+
+**What the partial aligned** (#107) — the three templates had drifted apart with no intent
+behind the differences: the blog list emitted a raw `<a>` instead of `entry-link.html`, the
+term page linked tags with `.Permalink` (absolute URLs inside the site) and carried a
+`pubdate` attribute dropped from HTML5, and the empty message existed under two i18n keys.
+A fifth divergence only showed up in the built HTML: the term page read
+`.Site.Params.dateFormat`, a parameter defined nowhere, so its `default "2006-01-02"` always
+won and dates rendered as `2026-06-30` against `30 juin 2026` on the two other lists. All
+four dates now go through `i18n "date-format"`; the attribute keeps the machine format, see
+[`<time>` carries two dates](#time-carries-two-dates-not-one).
+
+The empty message is `i18n "no-entries"`, neutral between articles and links. `no-posts`
+stays for the taxonomy list and the bear-cub theme; `no-links` is gone.
+
+**Integration** (`components/entry-list.css`):
 
 | Class | Role |
 |-------|------|
@@ -176,8 +208,9 @@ component reaches into it.
 | `entry-list--compact` | Latest activity on the home page: date, type tag, title, one row |
 | `entry-list--stacked` | Inside a taxonomy card: type tag, title, date, one row |
 
-The default arrangement is `date | body`. Both modifiers replace it with a three-column row
-and have **no** `entry-list__body`; the title is then a direct child of the item.
+The default arrangement is `date | body`, and it is the one the partial emits. Both
+modifiers replace it with a three-column row and have **no** `entry-list__body`; the title
+is then a direct child of the item. They are written by hand in the two templates above.
 
 Three things to know before touching them.
 
