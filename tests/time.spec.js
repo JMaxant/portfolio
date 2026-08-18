@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-// #69 : l'attribut `datetime` d'un <time> doit porter la date machine, pas la date
-// affichée. Deux gabarits passaient le format i18n (`02/01/2006`) dans l'attribut et
-// émettaient `datetime="28/07/2026"`, que rien ne sait lire — ni les AT, ni un parseur.
-// Le texte visible, lui, reste au format i18n : c'est tout l'intérêt de l'attribut.
+// #69: the `datetime` attribute of a <time> must carry the machine date, not the displayed
+// one. Two templates passed the i18n format (`02/01/2006`) into the attribute and emitted
+// `datetime="28/07/2026"`, which nothing can read — neither assistive technology nor a
+// parser. The visible text stays in the i18n format: that is the whole point of the attribute.
 //
-// Aucune page ne débordait et aucune règle CSS n'était en cause, donc ni la suite overflow
-// ni axe ne pouvaient le voir : axe ne valide pas la valeur d'un `datetime`.
+// No page overflowed and no CSS rule was involved, so neither the overflow suite nor axe
+// could see it: axe does not validate the value of a `datetime`.
 
-// Les gabarits qui émettent un <time>, un par forme de liste.
+// The templates that emit a <time>, one per list shape.
 const PAGES = [
   ['home', '/'],
   ['blog list', '/blog/'],
@@ -19,8 +19,8 @@ const PAGES = [
   ['parcours', '/parcours/'],
 ];
 
-// Formes acceptées par HTML pour un <time> : année, mois, date, et date+heure. La timeline
-// du parcours émet des `2017-01`, qui sont valides.
+// Shapes HTML accepts for a <time>: year, month, date, and date plus time. The Parcours
+// timeline emits `2017-01` values, which are valid.
 const VALID = /^\d{4}(-\d{2}(-\d{2}(T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2})?)?)?)?$/;
 
 for (const [name, path] of PAGES) {
@@ -30,11 +30,11 @@ for (const [name, path] of PAGES) {
     const values = await page.locator('time[datetime]')
       .evaluateAll((nodes) => nodes.map((node) => node.getAttribute('datetime')));
 
-    // Une page sans <time> passerait à vide et ne prouverait rien : le gabarit a pu perdre
-    // son bloc sans que personne ne le voie.
+    // A page with no <time> would pass on an empty set and prove nothing: the template may
+    // have lost its block without anyone noticing.
     expect(values.length).toBeGreaterThan(0);
 
     const invalid = values.filter((value) => !VALID.test(value));
-    expect(invalid, `datetime non parsables : ${invalid.join(', ')}`).toEqual([]);
+    expect(invalid, `unparsable datetime values: ${invalid.join(', ')}`).toEqual([]);
   });
 }
