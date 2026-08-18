@@ -35,8 +35,12 @@ pre-commit:
       run: node scripts/quality/check-cv-schema.mjs {staged_files}
 
     contrast:
-      glob: "assets/styles/01-tokens.css"
+      glob: "assets/styles/base/tokens.css"
       run: node scripts/quality/check-contrast.mjs
+
+    breakpoints:
+      glob: "*.css"
+      run: node scripts/quality/check-breakpoints.mjs
 
     actionlint:
       glob: ".github/workflows/*.yml"

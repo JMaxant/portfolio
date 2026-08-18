@@ -67,30 +67,39 @@ Validate parameters with `errorf` against a whitelist, before emitting any outpu
 
 ### CSS
 
-- Every value comes from a token in `01-tokens.css`. No hardcoded colour, spacing or font
+- Every value comes from a token in `base/tokens.css`. No hardcoded colour, spacing or font
   size in a component. That covers sizes, z-indexes and durations too — a control size, a
   stacking order or a transition duration repeated across two files is a token waiting to be
   named.
-- A custom property that JavaScript writes at runtime is still declared in `01-tokens.css`,
+- A custom property that JavaScript writes at runtime is still declared in `base/tokens.css`,
   holding its static fallback. Undeclared, it is invisible to anyone reading the stylesheet,
   and its fallback drifts silently (`--header-height` read `8rem` for a 127px header).
-- Never consume a raw palette (`--light-*`, `--dark-*`) outside `03-theme.css`. Components
+- Never consume a raw palette (`--light-*`, `--dark-*`) outside `base/tokens.css`. Components
   use semantic tokens (`--color-surface`, `--color-text-soft`) so theming keeps working.
 - BEM: `bloc__element` for a sub-part, `bloc bloc--modifier` for a variant. If both classes
   sit on the same element, the second is a modifier and takes `--`.
-- Breakpoints are hardcoded (custom properties are illegal in media query conditions). The
-  authoritative list of values and locations is in `docs/css-tokens.md` — update it when
-  adding one.
-- Numbered files in `assets/styles/` are imported by `main.css`.
+- Breakpoints are hardcoded (custom properties are illegal in media query conditions), so
+  the `--bp-*` tokens are declarative only. Two values, `768px` and `576px`, always written
+  `@media screen and (width <= Npx)` — desktop-first, never a `min-width`. Reuse one:
+  `scripts/quality/check-breakpoints.mjs` fails on a width matching no token, and on a token
+  no query uses. Values and locations in `docs/css-tokens.md`, update it when adding one.
+- `assets/styles/` is split into `base/`, `components/`, `layout/` and `utils.css`.
+  `main.css` is the only file carrying `@import`: it holds the cascade order, which is not
+  alphabetical, and `utils.css` stays last. An `@import` written after a rule is not
+  inlined by esbuild and reaches the built CSS as a 404 — with no Hugo warning.
 
 ### Documentation
 
 Lives in `docs/` only. Frontmatter: `title`, `version`, `date_published`, `date_modified`.
 
 **Write documentation in English** — that includes new files, edits to existing ones, and
-the README. Some older documents are still in French and are being migrated (#73); do not
-take them as the convention. Code comments and commit messages are English too. French is
-for conversation, not for anything committed.
+the README. Code comments and commit messages are English too, `tests/*.spec.js` included,
+and so is anything published to GitHub: **issue bodies, pull request titles and
+descriptions**. French is for conversation in the chat, nothing else.
+
+Some older files are still in French and are being migrated (#73). Do not read them as the
+convention, and do not justify a new French file by the ones next to it — check what the
+majority of comparable files actually do before claiming to follow the local style.
 
 ## Do not touch
 

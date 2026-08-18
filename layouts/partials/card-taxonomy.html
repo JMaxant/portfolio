@@ -12,7 +12,7 @@
   {{ printf "</%s>" $level | safeHTML }}
   <div class="card__body">
     <p class="card__description">{{ i18n "latest-content" }}</p>
-    <ul class="entry-list" role="list">
+    <ul class="entry-list entry-list--stacked" role="list">
       {{ range first 3 .term.Pages.ByDate.Reverse }}
       <li class="entry-list__item">
         <p>
@@ -21,7 +21,7 @@
           </a>
         </p>
         {{ partial "entry-link.html" (dict "page" .) }}
-        <time class="meta" datetime='{{ .Date.Format (i18n "date-format") }}' pubdate>
+        <time class="meta" datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
           {{ .Date.Format (default  (i18n "date-format")  .Site.Params.dateFormat) }}
         </time>
       </li>

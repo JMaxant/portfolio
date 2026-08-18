@@ -33,11 +33,11 @@
     <section class="home home--latest">
       <div class="container--wide">
         <h2>{{ i18n "home-latest" }}</h2>
-        <ul class="activites" role="list">
+        <ul class="entry-list entry-list--compact" role="list">
           {{ range . }}
-          <li>
-            <time datetime='{{ .Lastmod.Format (i18n "date-format") }}' class="meta">
-            {{ time.Format (i18n "date-format") .Lastmod }}
+          <li class="entry-list__item">
+            <time class="meta" datetime="{{ .Lastmod.Format "2006-01-02" }}">
+              {{ time.Format (i18n "date-format") .Lastmod }}
             </time>
             <span class="tag">
               <a href="{{ .CurrentSection.RelPermalink }}">

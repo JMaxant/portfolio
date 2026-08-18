@@ -1,17 +1,40 @@
+/* The only file in assets/styles/ carrying @import. Every other file is a leaf, so the
+   cascade is read here and nowhere else. Two rules when adding one:
+
+   - the list is ordered, not alphabetical — see the section notes below;
+   - esbuild only inlines an @import placed before any rule in the file. Written after one,
+     it survives verbatim into the built CSS as a runtime request that 404s, and Hugo
+     reports no warning. See docs/css-tokens.md#tree. */
+
 @import url("https://fonts.bunny.net/css?family=alexandria:200,300,400,600");
-@import url("00-reset.css");
-@import url("01-tokens.css");
-@import url("02-base.css");
-@import url("03-theme.css");
-@import url("04-header.css");
-@import url("05-footer.css");
-@import url("06-nav.css");
-@import url("07-card.css");
-@import url("08-home.css");
-@import url("09-entry-list.css");
-@import url("10-single.css");
-@import url("11-code.css");
-@import url("12-utils.css");
-@import url("13-parcours.css");
-@import url("14-404.css");
-@import url("15-taxonomy-term.css");
+
+/* Layers. Order imposed: the reset first, the tokens before anything reading them, the
+   element styles on top. */
+@import url("base/reset.css");
+@import url("base/tokens.css");
+@import url("base/elements.css");
+
+/* Components. Interchangeable, except theme-switcher which stays ahead of menu: the mobile
+   navigation restyles the switcher inside its panel and has to keep winning the ties. */
+@import url("components/theme-switcher.css");
+@import url("components/menu.css");
+@import url("components/card.css");
+@import url("components/entry-list.css");
+@import url("components/tag.css");
+@import url("components/cta.css");
+@import url("components/code.css");
+
+/* Page chrome, then the templates. */
+@import url("layout/header.css");
+@import url("layout/footer.css");
+@import url("layout/page.css");
+@import url("layout/home.css");
+@import url("layout/content-grid.css");
+@import url("layout/single.css");
+@import url("layout/parcours.css");
+@import url("layout/error.css");
+
+/* Utilities last, and the position is load-bearing: a utility and a component class often
+   share a specificity of (0,1,0), so only source order separates them. Moved up, utilities
+   silently stop applying. See docs/css-tokens.md#utilities. */
+@import url("utils.css");

@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { PAGES } from './pages.js';
 
-// #90 : sur une page plus courte que le viewport, le footer doit rester ancré
-// en bas de l'écran plutôt que de suivre directement le contenu.
+// #90: on a page shorter than the viewport, the footer must stay anchored to the bottom of
+// the screen rather than following straight on from the content.
 const TALL_VIEWPORT = { width: 1280, height: 3000 };
 
 for (const [name, path] of PAGES) {

@@ -14,7 +14,7 @@
   setHeaderHeight();
   window.addEventListener('resize', setHeaderHeight);
 
-  // Mirrors the 768px breakpoint of 06-nav.css.
+  // Mirrors the 768px breakpoint of components/menu.css.
   const mobile = window.matchMedia('(max-width: 768px)');
 
   // Below the breakpoint the open panel covers the page, so Tab would walk out of it into a

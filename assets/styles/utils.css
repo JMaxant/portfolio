@@ -1,0 +1,31 @@
+.container--wide {
+  max-width: var(--container-wide);
+}
+
+.container {
+  max-width: var(--container-default);
+}
+
+.container,
+.container--wide {
+  padding-inline: var(--spacing-md);
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+/* Secondary text: metadata, bylines, summaries, etc. */
+.meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-soft);
+}

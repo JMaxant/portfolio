@@ -2,8 +2,8 @@
 .cards {
   &.cards--grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
     place-items: stretch stretch;
   }
 }
@@ -34,22 +34,15 @@
     align-items: center;
     font-size: var(--text-sm);
   }
-
-  &.card--taxonomy {
-    .entry-list {
-      padding-inline-start: var(--spacing-md);
-
-      .entry-list__item {
-        grid-template-columns: max-content 1fr max-content;
-
-      }
-    }
-  }
 }
 
-@media screen and (width >= 768px) {
+/* Desktop-first, like every other breakpoint here: the base is the two-column grid and this
+   narrows it. Written as `width >= 768px` it was the only min-width query in the project, and
+   both branches matched at exactly 768px — mobile chrome with desktop card spacing.
+   The auto-fit track reflows on its own below the breakpoint and does not overflow at 280px. */
+@media screen and (width <= 768px) {
   .cards.cards--grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-xl);
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: var(--spacing-md);
   }
 }

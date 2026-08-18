@@ -1,8 +1,8 @@
 ---
 title: CSS browser compatibility
-version: 1.2.1
+version: 1.2.2
 date_published: 2026-08-04
-date_modified: 2026-08-09
+date_modified: 2026-08-17
 ---
 
 # CSS browser compatibility
@@ -37,7 +37,8 @@ The linter checks source files and does not know a transpiler runs afterwards. F
 baseline. Both features are natively supported from Safari 15.4, so raising the baseline
 to Safari 16 (issue #63) made the plugin stop flagging them. Verified by removing each
 entry and re-running Stylelint: no error is reported. `scroll-behavior` and `appearance`
-are still used in `00-reset.css` and `03-theme.css` — only the exemptions became useless.
+are still used in `base/reset.css` and `components/theme-switcher.css` — only the
+exemptions became useless.
 
 Note that `-webkit-appearance` is **no longer emitted** in the built CSS with the current
 `safari16` target, contrary to what the removed entry claimed. No prefix is needed across

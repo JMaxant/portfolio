@@ -8,7 +8,7 @@
 
   const inputs = [...panel.querySelectorAll('input[name="theme"]')];
 
-  /* Mirrors the 768px breakpoint of 03-theme.css. Spelled max-width rather than the
+  /* Mirrors the 768px breakpoint of components/theme-switcher.css. Spelled max-width rather than the
      project's `width <= 768px` range syntax: matchMedia gets none of the css.Build
      transpilation, and the range syntax needs Safari 16.4, above the browserslist floor. */
   const mobile = window.matchMedia('(max-width: 768px)');

@@ -46,7 +46,10 @@
   --dark-code-string: #9edcae; /* 9.72:1 */
   --dark-code-number: #f2bd92; /* 9.11:1 */
 
-  /* Breakpoint */
+  /* Breakpoints. Declarative only: custom properties are illegal in a media condition, so
+     every query repeats the literal. scripts/quality/check-breakpoints.mjs fails on a width
+     that matches no token here, and on a token no query uses. Two values, and adding a third
+     means adding it here first. See docs/css-tokens.md#breakpoints. */
   --bp-tablet: 768px;
   --bp-mobile: 576px;
 
@@ -124,4 +127,47 @@
   --border-thick: 5px solid var(--color-border);
 
   font-size: 62.5%; /* 1rem = 10px */
+}
+
+/* The guard is what makes a third block unnecessary: with it, an explicit light choice
+   falls back to the palette :root already assigns above, so the light values are written
+   once. Dropping it would need a :root[data-theme="light"] block repeating them. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: var(--dark-bg);
+    --color-text: var(--dark-text);
+    --color-text-soft: var(--dark-text-alt);
+    --color-link: var(--dark-link);
+    --color-link-hover: var(--dark-link-hover);
+    --color-link-visited: var(--dark-link-visited);
+    --color-surface: var(--dark-surface);
+    --color-surface-alt: var(--dark-surface-alt);
+    --color-border: var(--dark-border);
+    --color-border-strong: var(--dark-border-strong);
+    --color-code-comment: var(--dark-code-comment);
+    --color-code-keyword: var(--dark-code-keyword);
+    --color-code-type: var(--dark-code-type);
+    --color-code-function: var(--dark-code-function);
+    --color-code-string: var(--dark-code-string);
+    --color-code-number: var(--dark-code-number);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: var(--dark-bg);
+  --color-text: var(--dark-text);
+  --color-text-soft: var(--dark-text-alt);
+  --color-link: var(--dark-link);
+  --color-link-hover: var(--dark-link-hover);
+  --color-link-visited: var(--dark-link-visited);
+  --color-surface: var(--dark-surface);
+  --color-surface-alt: var(--dark-surface-alt);
+  --color-border: var(--dark-border);
+  --color-border-strong: var(--dark-border-strong);
+  --color-code-comment: var(--dark-code-comment);
+  --color-code-keyword: var(--dark-code-keyword);
+  --color-code-type: var(--dark-code-type);
+  --color-code-function: var(--dark-code-function);
+  --color-code-string: var(--dark-code-string);
+  --color-code-number: var(--dark-code-number);
 }

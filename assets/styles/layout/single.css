@@ -1,39 +1,3 @@
-.container-content-grid,
-.post-nav {
-  --gutter: var(--spacing-md);
-  --breakout: var(--spacing-2xl);
-}
-
-.container-content-grid {
-  display: grid;
-  grid-template-columns:
-    [full-start] minmax(var(--gutter), 1fr)
-    [wide-start] minmax(0, var(--breakout))
-    [content-start] min(var(--container-reading), 100% - 2 * var(--gutter)) [content-end]
-    minmax(0, var(--breakout)) [wide-end]
-    minmax(var(--gutter), 1fr) [full-end];
-  padding-block: var(--spacing-lg);
-
-  & > * {
-    grid-column: content;
-    margin-block-end: var(--spacing-md);
-  }
-
-  .highlight {
-    grid-column: wide;
-  }
-
-  h2, h3, h4, h5 {
-    margin-block: 0 var(--spacing-md);
-  }
-}
-
-/* See if applicable globally to ctas. */
-.container-content-grid > .cta {
-  justify-self: start;
-}
-
-
 .single__intro {
   font-size: var(--text-base);
   font-style: italic;
@@ -51,7 +15,12 @@
   align-items: baseline;
 }
 
+/* Sits outside the article and resolves the same min() as the grid's content column, so it
+   repeats the --gutter that layout/content-grid.css declares. Change one, change the other.
+   (--breakout is not repeated: only the grid tracks use it.) */
 .post-nav {
+  --gutter: var(--spacing-md);
+
   width: min(var(--container-reading), 100% - 2 * var(--gutter));
   padding-block: var(--spacing-lg);
   margin-inline: auto;

@@ -1,0 +1,33 @@
+/* Reusable article grid, applied by layouts/blog/single.html and layouts/404.html. It is
+   the source of the reading measure — there is no .container--reading utility.
+
+   --gutter and --breakout are declared here rather than on :root because a custom property
+   is substituted at the point of use: a ch length has to resolve in the consuming element's
+   font. layout/single.css repeats them on .post-nav, which resolves the same min()
+   expression to stay aligned. See docs/css-tokens.md#article-layout-grid. */
+.container-content-grid {
+  --gutter: var(--spacing-md);
+  --breakout: var(--spacing-2xl);
+
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [wide-start] minmax(0, var(--breakout))
+    [content-start] min(var(--container-reading), 100% - 2 * var(--gutter)) [content-end]
+    minmax(0, var(--breakout)) [wide-end]
+    minmax(var(--gutter), 1fr) [full-end];
+  padding-block: var(--spacing-lg);
+
+  & > * {
+    grid-column: content;
+    margin-block-end: var(--spacing-md);
+  }
+
+  .highlight {
+    grid-column: wide;
+  }
+
+  h2, h3, h4, h5 {
+    margin-block: 0 var(--spacing-md);
+  }
+}
