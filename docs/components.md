@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.11.0
+version: 1.12.0
 date_published: 2026-08-08
 date_modified: 2026-08-18
 ---
@@ -160,6 +160,43 @@ don't overlap enough to share one partial.
 **Integration** — the partial emits `ul.byline.meta`, the same block as the byline of a
 blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
 `.byline`. No class of its own: a project meta line *is* a byline, only richer.
+
+### `entry-list` (CSS only)
+
+List of entries. No partial yet — five templates emit the markup by hand (#69). The block
+lives in `components/entry-list.css`; the modifiers are declared there too, so no other
+component reaches into it.
+
+| Class | Role |
+|-------|------|
+| `entry-list` | Block, on the `<ul>` |
+| `entry-list__item` | One entry, on the `<li>`. Grid |
+| `entry-list__body` | Title, description and tags of an entry, second column |
+| `entry-list__title` | Title link, `--text-md` |
+| `entry-list--compact` | Latest activity on the home page: date, type tag, title, one row |
+| `entry-list--stacked` | Inside a taxonomy card: type tag, title, date, one row |
+
+The default arrangement is `date | body`. Both modifiers replace it with a three-column row
+and have **no** `entry-list__body`; the title is then a direct child of the item.
+
+Three things to know before touching them.
+
+**The mobile collapse belongs to the default arrangement only.** Below `--bp-mobile` the
+base grid drops to a single column, which would be wrong for both modifiers — `--compact`
+lets the title span its three columns instead, `--stacked` fits at 320px as it is. The media
+query is scoped with `:not(.entry-list--compact, .entry-list--stacked)`, which is `(0,3,0)`
+and beats the base `(0,2,0)`. `tests/breakpoints.spec.js` locks it.
+
+**`entry-list--stacked` is written with both classes.** Its indent has to beat
+`ul[role="list"] { padding: 0 }` in `base/reset.css`, which is `(0,1,1)`. The modifier alone
+is `(0,1,0)` and loses — silently, the list just goes flush left.
+
+**`entry-list--compact` undoes two `time` rules.** The base nudges the date down by `0.2rem`
+to line it up with a bigger title, and sets tabular figures. Under the baseline alignment of
+the compact row the nudge pushes the whole row down instead, and Alexandria's tabular figures
+are 10px wider than proportional — measured 90px of text for a date, in an `8rem` column.
+Both are undone rather than made conditional in the base, so the full lists keep reading as
+one rule.
 
 ### `entry-link.html`
 

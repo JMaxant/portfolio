@@ -1,6 +1,6 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.14.0
+version: 1.15.0
 date_published: 2026-08-08
 date_modified: 2026-08-18
 ---
@@ -316,7 +316,7 @@ Two thresholds are used across the project, and both are declared in `base/token
 | Token | Value | Locations | Purpose |
 |-------|-------|-----------|---------|
 | `--bp-tablet` | `768px` | `layout/header.css`, `components/menu.css`, `components/theme-switcher.css`, `components/card.css`, `base/elements.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle; the card grid drops from two fixed columns to an `auto-fit` track; `hr` goes full width instead of 75% centred |
-| `--bp-mobile` | `576px` | `layout/footer.css`, `layout/home.css`, `layout/single.css`, `components/entry-list.css`, `base/elements.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks; the entry date moves above the title instead of sitting in its own column; definition lists stack instead of using a `max-content` term column |
+| `--bp-mobile` | `576px` | `layout/footer.css`, `layout/single.css`, `components/entry-list.css`, `base/elements.css` | Footer stacks vertically; post navigation stacks; the entry date moves above the title instead of sitting in its own column, and in `entry-list--compact` the title moves to its own line; definition lists stack instead of using a `max-content` term column |
 
 Agreed syntax, used consistently: `@media screen and (width <= Npx)` — every breakpoint is
 written desktop-first, as a max-width. The range syntax is transpiled by `css.Build` down to

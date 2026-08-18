@@ -1,3 +1,5 @@
+/* A list of entries. The default arrangement is a date column and a body; the two modifiers
+   below rearrange the columns and nothing else. See docs/components.md#entry-list-css-only. */
 .entry-list {
   .entry-list__item {
     display: grid;
@@ -26,15 +28,30 @@
   }
 }
 
-/* 576px = --bp-mobile, repeated as a literal: custom properties are illegal in media
-   conditions. scripts/quality/check-breakpoints.mjs keeps the two in step.
+.entry-list--compact {
+  .entry-list__item {
+    grid-template-columns: 8rem 6rem 1fr;
+    gap: var(--spacing-md);
+    align-items: baseline;
+    padding-block: var(--spacing-xs);
+  }
 
-   Targets .entry-list__item, not li. A media query adds no specificity, so `.entry-list li`
-   (0,1,1) loses to the base `.entry-list .entry-list__item` (0,2,0) and the grid never
-   collapses — while .entry-list__body below, at equal specificity, moves anyway and lands in
-   the date column. */
+  time {
+    padding-block-start: 0;
+    font-variant-numeric: normal;
+  }
+}
+
+.entry-list.entry-list--stacked {
+  padding-inline-start: var(--spacing-md);
+
+  .entry-list__item {
+    grid-template-columns: max-content 1fr max-content;
+  }
+}
+
 @media screen and (width <= 576px) {
-  .entry-list {
+  .entry-list:not(.entry-list--compact, .entry-list--stacked) {
     .entry-list__item {
       grid-template-columns: 1fr;
     }
@@ -42,5 +59,9 @@
     .entry-list__body {
       grid-column: 1;
     }
+  }
+
+  .entry-list--compact a {
+    grid-column: 1 / -1;
   }
 }

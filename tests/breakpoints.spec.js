@@ -70,3 +70,34 @@ test.describe('768px boundary', () => {
     });
   }
 });
+
+// Le repli sous --bp-mobile n'appartient qu'à l'agencement par défaut. Les deux variantes
+// gardent leurs colonnes — d'où le `:not()` dans components/entry-list.css, qui vaut (0,3,0)
+// et bat la base (0,2,0). Sans lui elles se replieraient toutes les deux.
+test.describe('the entry-list modifiers keep their columns below the breakpoint', () => {
+  test('--compact keeps three columns and lets the title span them', async ({ page }) => {
+    await page.setViewportSize({ width: MOBILE - 1, height: 900 });
+    await page.goto('/');
+
+    const { columns, title } = await page.evaluate(() => {
+      const item = document.querySelector('.entry-list--compact .entry-list__item');
+      return {
+        columns: getComputedStyle(item).gridTemplateColumns.split(' ').length,
+        title: getComputedStyle(item.querySelector(':scope > a')).gridColumnEnd,
+      };
+    });
+
+    expect(columns).toBe(3);
+    expect(title).toBe('-1');
+  });
+
+  test('--stacked keeps three columns down to 320px', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.goto('/tags/');
+
+    const columns = await page.locator('.entry-list--stacked .entry-list__item').first()
+      .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+
+    expect(columns).toBe(3);
+  });
+});

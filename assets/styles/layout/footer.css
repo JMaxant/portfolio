@@ -1,12 +1,11 @@
 .site-footer {
-  border-block-end: var(--border-thin);
+  border-block-start: var(--border-thin);
 
   .container--wide {
     display: flex;
     justify-content: space-between;
     padding-block: var(--spacing-lg);
     font-size: var(--text-sm);
-    border-block-start: var(--border-thin);
   }
 }
 

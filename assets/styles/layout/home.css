@@ -28,23 +28,4 @@
   &.home--projets {
     background: var(--color-surface-alt);
   }
-
-  &.home--latest {
-    ul {
-      li {
-        display: grid;
-        grid-template-columns: 8rem 6rem 1fr;
-        gap: var(--spacing-md);
-        align-items: baseline;
-        padding-block: var(--spacing-xs);
-        border-block-start: var(--border-thin);
-      }
-
-      @media screen and (width <= 576px) {
-        a {
-          grid-column: 1 / -1;
-        }
-      }
-    }
-  }
 }
