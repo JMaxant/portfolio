@@ -1,8 +1,8 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.13.0
+version: 1.14.0
 date_published: 2026-08-08
-date_modified: 2026-08-17
+date_modified: 2026-08-18
 ---
 
 # CSS tokens and breakpoints
@@ -311,43 +311,32 @@ level does — add it to the heading list. That is what #78 has to do for `h6`.
 
 ## Breakpoints
 
-Three thresholds are used across the project:
+Two thresholds are used across the project, and both are declared in `base/tokens.css`:
 
-| Value | Locations | Purpose |
-|-------|-----------|---------|
-| `768px` | `layout/header.css`, `components/menu.css`, `components/theme-switcher.css`, `components/card.css`, `base/elements.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle; the card grid drops from two fixed columns to an `auto-fit` track; `hr` goes full width instead of 75% centred |
-| `576px` | `layout/footer.css`, `layout/home.css`, `layout/single.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks |
-| `560px` | `components/entry-list.css`, `base/elements.css` | Entry date moves above the title instead of sitting in its own column; definition lists stack instead of using a `max-content` term column |
+| Token | Value | Locations | Purpose |
+|-------|-------|-----------|---------|
+| `--bp-tablet` | `768px` | `layout/header.css`, `components/menu.css`, `components/theme-switcher.css`, `components/card.css`, `base/elements.css` | Header stacks vertically (title bar, navigation, theme switcher); navigation collapses behind the menu toggle; the card grid drops from two fixed columns to an `auto-fit` track; `hr` goes full width instead of 75% centred |
+| `--bp-mobile` | `576px` | `layout/footer.css`, `layout/home.css`, `layout/single.css`, `components/entry-list.css`, `base/elements.css` | Footer stacks vertically; the title in the latest-activity list moves to its own line; post navigation stacks; the entry date moves above the title instead of sitting in its own column; definition lists stack instead of using a `max-content` term column |
 
 Agreed syntax, used consistently: `@media screen and (width <= Npx)` — every breakpoint is
 written desktop-first, as a max-width. The range syntax is transpiled by `css.Build` down to
 `max-width` (see [css-compat.md](css-compat.md)).
 
+**A third threshold needs a token first.** `--bp-*` is the list; a query on a width absent
+from it fails `task qa`. The entry list and the definition lists used to break at `560px`,
+16px from `--bp-mobile` and covered by no token — two near-identical list layouts collapsing
+at two different widths, for no reason anyone could name. They were aligned on `576px` in #69,
+which changes nothing structural: measured on `/blog/` at 561px, the two-column item was 529px
+wide with a 385px body and no overflow, so collapsing 16px earlier costs nothing.
+
 **Never mix in a min-width.** `components/card.css` used to carry the project's only
 `width >= 768px`, and at exactly 768px both branches matched: mobile header and navigation
 with desktop card spacing. One direction per threshold, or the boundary belongs to both.
 
-### Overriding inside a media query
-
-A media query adds **no specificity**. An override written there must match or beat the
-specificity of the rule it replaces, or it is dead — and the failure is silent, since nothing
-in the toolchain flags it.
-
-`components/entry-list.css` hit this: the base rule is `.entry-list .entry-list__item`
-(0,2,0) and the 560px override was written `.entry-list li` (0,1,1). The grid never
-collapsed. Worse, the neighbouring `.entry-list__body` override *was* (0,2,0), so it applied
-and moved the entry body into a date column that had never been collapsed — 120px of text in
-a 288px item at 320px wide. Half-applied is worse than not applied at all.
-
-When narrowing a nested block, repeat the class the base rule uses, not the tag underneath
-it. `tests/breakpoints.spec.js` locks this one.
-
 ### Why the values are hardcoded
 
-`base/tokens.css` declares `--bp-tablet: 768px` and `--bp-mobile: 576px`, but **those tokens
-are referenced nowhere**, and they cannot be: custom properties are not allowed in media
-query conditions. The specification requires a literal value, evaluated before the cascade
-applies.
+A threshold cannot be read from its token: custom properties are not allowed in media query
+conditions. The specification requires a literal value, evaluated before the cascade applies.
 
 ```css
 /* Does not work — the condition is ignored */
@@ -358,15 +347,37 @@ There is no workaround in plain CSS. The alternatives (`@custom-media`, preproce
 variables) assume tooling the project does not have and does not want, the rule being plain
 CSS.
 
-Practical consequence: **changing a threshold means changing it in every file concerned**.
-The table above is the reference list to work through.
+So `--bp-tablet` and `--bp-mobile` are **declarative**: they name the thresholds and give the
+list somewhere to live, but every query repeats the literal, and changing a threshold means
+changing it in every file concerned. The table above is the reference list to work through.
 
-### Pending decision
+### The check that makes them true
 
-The fate of the `--bp-tablet` / `--bp-mobile` tokens is undecided: keep them as a statement
-of intent, or drop them because they suggest a single source of truth that does not exist.
-They are declared and consumed nowhere. Left untouched by the tree reorganisation (#69),
-which changed no value; to be settled on its own.
+Declarative on its own is decorative — that is how `560px` appeared and stayed. Enforced by
+`scripts/quality/check-breakpoints.mjs`, run by the `breakpoints` job on any staged `.css`
+(see [qa-ci.md](qa-ci.md)). It scans every `@media` prelude under `assets/styles/` and fails on:
+
+- a width matching no `--bp-*` token;
+- a query opening upwards (`min-width`, `width >=`), for the reason above;
+- a `--bp-*` token no query uses — the same failure in reverse, a name describing nothing.
+
+Comments are blanked before scanning, so prose quoting a query is not read as one.
+
+### Overriding inside a media query
+
+A media query adds **no specificity**. An override written there must match or beat the
+specificity of the rule it replaces, or it is dead — and the failure is silent, since nothing
+in the toolchain flags it.
+
+`components/entry-list.css` hit this: the base rule is `.entry-list .entry-list__item`
+(0,2,0) and the override was written `.entry-list li` (0,1,1). The grid never collapsed.
+Worse, the neighbouring `.entry-list__body` override *was* (0,2,0), so it applied and moved
+the entry body into a date column that had never been collapsed — 120px of text in a 288px
+item at 320px wide. Half-applied is worse than not applied at all.
+
+When narrowing a nested block, repeat the class the base rule uses, not the tag underneath
+it. `tests/breakpoints.spec.js` locks this one.
+
 
 ## Rules
 
@@ -377,7 +388,8 @@ which changed no value; to be settled on its own.
 - A value the CSS reads but JavaScript writes still gets declared in `base/tokens.css`, with
   the static fallback as its value — see [`--header-height`](#--header-height). An
   undeclared custom property is invisible to anyone reading the stylesheet.
-- Adding a breakpoint means updating the table above.
+- Reuse an existing breakpoint. A new threshold means a new `--bp-*` token, the table
+  above updated, and `check-breakpoints.mjs` green — it fails on a width with no token.
 - Changing any colour token means re-measuring against AAA, including the backgrounds:
   the text colours were solved against `surface-alt` and have no headroom.
 - Never reference a `--color-code-*` token outside `components/code.css`.

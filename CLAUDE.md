@@ -78,9 +78,11 @@ Validate parameters with `errorf` against a whitelist, before emitting any outpu
   use semantic tokens (`--color-surface`, `--color-text-soft`) so theming keeps working.
 - BEM: `bloc__element` for a sub-part, `bloc bloc--modifier` for a variant. If both classes
   sit on the same element, the second is a modifier and takes `--`.
-- Breakpoints are hardcoded (custom properties are illegal in media query conditions). The
-  authoritative list of values and locations is in `docs/css-tokens.md` — update it when
-  adding one.
+- Breakpoints are hardcoded (custom properties are illegal in media query conditions), so
+  the `--bp-*` tokens are declarative only. Two values, `768px` and `576px`, always written
+  `@media screen and (width <= Npx)` — desktop-first, never a `min-width`. Reuse one:
+  `scripts/quality/check-breakpoints.mjs` fails on a width matching no token, and on a token
+  no query uses. Values and locations in `docs/css-tokens.md`, update it when adding one.
 - `assets/styles/` is split into `base/`, `components/`, `layout/` and `utils.css`.
   `main.css` is the only file carrying `@import`: it holds the cascade order, which is not
   alphabetical, and `utils.css` stays last. An `@import` written after a rule is not
