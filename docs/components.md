@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.13.0
+version: 1.14.0
 date_published: 2026-08-08
 date_modified: 2026-08-18
 ---
@@ -297,7 +297,8 @@ link.
 Renders the primary navigation: `menu.html`, the language-switcher links, and
 `theme-switcher.html`, wrapped in `<div class="site-nav" id="primary-nav">`. Takes the
 current page context, not a dict — called once from `header.html` right after
-`.site-header__bar`. `theme-switcher.html` lives here (not in `header.html`) so it ends up
+`.site-header__bar`. It forwards that page to `menu.html`, which needs it to resolve the
+[active trail](#the-active-trail). `theme-switcher.html` lives here (not in `header.html`) so it ends up
 inside the mobile full-screen panel below 768px, rather than needing a second toggle of its
 own — see [theme-switcher.md](theme-switcher.md#panel-display-refs-72) for how the
 same markup becomes a desktop popover vs. an always-open panel on mobile.
@@ -409,17 +410,76 @@ block (0-2-0) and leave the panel absolutely positioned inside the burger menu.
 
 ### `menu.html`
 
-Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name.
+Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name, and marks the active
+trail on the entry the visitor is currently under.
 
 | Key | Required | Default | Description |
 |-----|----------|---------|-------------|
 | `menuName` | yes | — | Menu identifier: `main` or `error` |
+| `page` | yes | — | The page being rendered, against which the trail is resolved |
 
 `menuName` is checked against a whitelist with `errorf` before any output, since Go
 templates cannot do dynamic field access (`.Site.Menus.$menuName`) — the menu is fetched
 with `index site.Menus .menuName` instead. The resulting class is `menu--<menuName>`.
 
-**Callers** — `nav.html` (`menuName: main`), `layouts/404.html` (`menuName: error`).
+**Callers** — `nav.html` (`menuName: main`), `layouts/404.html` (`menuName: error`). Both
+pass `page`; the parameter is required, so a caller that forgets it fails the build rather
+than rendering a menu that silently marks nothing.
+
+#### The active trail
+
+Two methods, and each answers a different question:
+
+| Method | True when | Rendered as |
+|--------|-----------|-------------|
+| `page.IsMenuCurrent "main" .` | the entry **is** the page being read | `<span aria-current="page">` |
+| `page.HasMenuCurrent "main" .` | the page being read is **under** the entry | `<a aria-current="true">` |
+
+Measured on the built site: `/blog/` marks Blog `page`, `/blog/<article>/` marks it `true`,
+`/` marks Accueil and nothing else. `HasMenuCurrent` does cover section descendants, despite
+a wording that suggests it only walks nested menu entries.
+
+Three traps, each of which produces a menu where **nothing is ever active, with no build
+error at all**:
+
+1. **The first argument is the menu identifier, a string** — `"main"`, not the menu object.
+   Passing `index site.Menus "main"` returns false for every entry.
+2. **Only an entry declared with `pageRef` can match.** With `url`, the entry has no `.Page`
+   and neither method ever returns true, not even on its own page. All `main` entries in
+   `config/_default/menus.toml` therefore use `pageRef`.
+3. **The dict key must be the one the partial reads.** `.currentPage` where the caller
+   passed `page` evaluates to nil, and Hugo calls a method on nil without complaining — the
+   condition is simply always false. This is the `.page.` prefix trap from
+   [Dictionary-based calls](#dictionary-based-calls), in its most silent form.
+
+**What matches nothing, by construction**: taxonomy pages (`/tags/`, `/tags/<term>/`) and
+pages sitting at the root, since neither is under a menu entry. Their location is covered by
+their own `h1`, and by the breadcrumb tracked in #114.
+
+**The current page is not a link.** It renders as a `<span>`, so it leaves the tab order:
+on `/blog/`, tabbing goes Accueil → Projets → Veille → Parcours. The ancestor entry stays a
+link. `aria-current` carries the semantics either way.
+
+**Integration** (`components/menu.css`):
+
+| Class / selector | Role |
+|------------------|------|
+| `menu` | Block, on the `<ul>`; `menu--main`, `menu--error`, `menu--footer` for the variants |
+| `[aria-current]` | The active entry, whatever the element |
+
+The selector is written without an element on purpose: it has to match the `<span>` of the
+current page as well as the `<a>` of the ancestor. For the same reason the rule repeats
+`font-weight` — a `<span>` inherits nothing from the `a` rule in `base/elements.css`.
+
+The active entry is marked by an **underline plus a colour**, while the other entries carry
+no underline. The colour alone would fail RGAA 3.3, and it disappears entirely under
+`forced-colors: active`, where every link is painted the same system colour — the underline
+survives, a `background` or a `box-shadow` would not.
+
+Watch the specificity when adding to this block: `.menu [aria-current]` is `(0,2,0)` and
+`a:hover` is `(0,1,1)`, so a rule written too strongly freezes the hover colour on the
+active entry — it was the only link in the menu not reacting to the pointer until
+`&:hover` was declared inside it.
 
 ### `timeline-item.html`
 
@@ -600,8 +660,6 @@ emits a `<time>`.
 
 - `card--<variant>` and `cta--<variant>` are emitted on demand but have no CSS. Any variant
   introduced must come with its rule, otherwise it produces a dead class.
-- The inventory above only covers existing components. List and taxonomy templates are still
-  to be themed (#48, #51).
 - `assets/cv.json` is the single source of the Parcours page: it is both read by
   `layouts/parcours/single.html` and republished untouched at `/cv.json`, so the page and
   the machine-readable CV cannot drift. Adding a section to the page means adding it to the

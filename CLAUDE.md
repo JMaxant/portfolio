@@ -120,5 +120,7 @@ majority of comparable files actually do before claiming to follow the local sty
   anything ordered by it reorders on a fresh clone. Tracked by #70.
 - Do not wrap a URL in angle brackets in Markdown (`url="<mailto:…>"`): they are treated as
   an autolink and end up percent-encoded in the `href`, breaking the link.
-- The bear-cub `_default/list.html` emits no `h1`. List and taxonomy pages currently have
-  none — do not assume the theme provides one.
+- The bear-cub `_default/list.html` emits no `h1`, so every list template overrides it and
+  emits its own: `blog`, `veille`, `projets`, `tags/taxonomy.html`, `tags/term.html`. No page
+  falls back to the theme's template — check with `hugo --templateMetrics` before assuming
+  one does.

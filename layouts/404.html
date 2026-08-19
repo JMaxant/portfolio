@@ -11,6 +11,6 @@
   {{ partial "cta.html" (dict "url" "/" "label" $label) }}
 
 
-  {{ partial "menu.html" (dict "menuName" "error") }}
+  {{ partial "menu.html" (dict "page" . "menuName" "error") }}
 </div>
 {{ end }}

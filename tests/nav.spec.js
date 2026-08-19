@@ -109,6 +109,98 @@ test.describe('above 768px', () => {
   });
 });
 
+// The trail is resolved by menu.html from IsMenuCurrent / HasMenuCurrent, and three of its
+// failure modes are silent: a wrong menu identifier, a menu entry declared with `url`
+// instead of `pageRef`, and a mismatched dict key all produce a menu where nothing is ever
+// marked, with no build error. Only a rendered page can tell.
+// See docs/components.md#the-active-trail.
+const MAIN = '.menu--main';
+const marked = (page) => page.locator(`${MAIN} [aria-current]`);
+
+const decoration = (locator) => locator.evaluate(
+  (node) => getComputedStyle(node).textDecorationLine,
+);
+
+test.describe('active trail', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+  });
+
+  test('a section page marks its own entry, and only it', async ({ page }) => {
+    await page.goto('/blog/');
+
+    await expect(marked(page)).toHaveCount(1);
+    await expect(marked(page)).toHaveAttribute('aria-current', 'page');
+    await expect(marked(page)).toHaveText('Blog');
+  });
+
+  test('the page being read is not a link', async ({ page }) => {
+    await page.goto('/blog/');
+
+    // A <span> keeps the entry out of the tab order: an assertion on the tag name is what
+    // says this is a decision and not an accident.
+    expect(await marked(page).evaluate((node) => node.tagName)).toBe('SPAN');
+  });
+
+  test('a page inside a section marks that section as an ancestor', async ({ page }) => {
+    await page.goto('/blog/');
+    await page.locator('.entry-list__title').first().click();
+    expect(new URL(page.url()).pathname).toMatch(/^\/blog\/.+/);
+
+    await expect(marked(page)).toHaveCount(1);
+    await expect(marked(page)).toHaveAttribute('aria-current', 'true');
+    await expect(marked(page)).toHaveText('Blog');
+    // The ancestor stays reachable, unlike the page being read.
+    await expect(marked(page)).toHaveAttribute('href', '/blog/');
+  });
+
+  test('the home page marks the home entry and nothing else', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(marked(page)).toHaveCount(1);
+    await expect(marked(page)).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('a page under no menu entry marks nothing', async ({ page }) => {
+    // Taxonomy pages sit under no entry of the main menu, so an empty result is the
+    // expected answer here — not a trail that failed to resolve.
+    await page.goto('/tags/hugo/');
+
+    await expect(marked(page)).toHaveCount(0);
+  });
+
+  test('the active entry is distinguished by more than its colour', async ({ page }) => {
+    await page.goto('/blog/');
+
+    // RGAA 3.3: colour cannot be the only carrier, and it is the one thing
+    // `forced-colors: active` erases.
+    expect(await decoration(marked(page))).toBe('underline');
+    expect(await decoration(page.locator(`${MAIN} a:not([aria-current])`).first())).toBe('none');
+  });
+
+  test('the ancestor entry still reacts to the pointer', async ({ page }) => {
+    await page.goto('/blog/');
+    await page.locator('.entry-list__title').first().click();
+
+    // `.menu [aria-current]` outweighs `a:hover`, so the active link stops responding to
+    // hover unless the rule declares it — it did, for a while.
+    const colour = () => marked(page).evaluate((node) => getComputedStyle(node).color);
+    const resting = await colour();
+    await marked(page).hover();
+
+    await expect.poll(colour).not.toBe(resting);
+  });
+
+  test('the trail is marked in the mobile panel too', async ({ page }) => {
+    await page.setViewportSize(MOBILE);
+    await page.goto('/blog/');
+    await page.click('.menu-toggle');
+
+    await expect(marked(page)).toBeVisible();
+    await expect(marked(page)).toHaveAttribute('aria-current', 'page');
+  });
+});
+
 test.describe('without JavaScript', () => {
   // Nothing can add `.is-open`, so a hidden panel would leave no reachable navigation at all
   // below the breakpoint. The toggle is hidden and the nav goes back in flow instead.
