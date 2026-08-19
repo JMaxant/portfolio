@@ -31,8 +31,7 @@
     <li>
       <a href="{{ . }}" target="_blank" rel="noopener">
         {{ i18n "project-repo" }}
-        <span aria-hidden="true">&#8618;</span>
-        <span class="visually-hidden">{{ i18n "external-link" }}</span>
+        {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
       </a>
     </li>
   {{- end }}
@@ -40,8 +39,7 @@
     <li>
       <a href="{{ . }}" target="_blank" rel="noopener">
         {{ i18n "project-demo" }}
-        <span aria-hidden="true">&#8618;</span>
-        <span class="visually-hidden">{{ i18n "external-link" }}</span>
+        {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
       </a>
     </li>
   {{- end }}

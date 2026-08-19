@@ -1,8 +1,8 @@
 ---
 title: Light / dark switch
-version: 2.2.0
+version: 2.3.0
 date_published: 2026-08-03
-date_modified: 2026-08-17
+date_modified: 2026-08-19
 ---
 
 # Light / dark switch
@@ -33,7 +33,7 @@ the system.
 
 | File | Role |
 |------|------|
-| `layouts/partials/theme-switcher.html` | Icon trigger + a group of 3 radios (light/dark/system), included from `nav.html` |
+| `layouts/partials/theme-switcher.html` | Icon trigger + a group of 3 radios (light/dark/system), each labelled by an `icon.html` icon and its text, included from `nav.html` |
 | `assets/scripts/inline/theme-init.js` | Anti-flash: sets `data-theme` before the first paint, and marks `<html class="js">` |
 | `assets/scripts/00-disclosure.js` | Disclosure behaviour shared with the burger menu |
 | `assets/scripts/theme-toggle.js` | Opens and closes the panel (desktop only, refs #72) |

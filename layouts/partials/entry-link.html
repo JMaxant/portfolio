@@ -1,6 +1,7 @@
 {{/*
   entry-link.html — title link of an `.entry-list__item` entry: an external link built
-  from `.Params.link` (with `hreflang`, the "↪" icon and a visually-hidden label), or a
+  from `.Params.link` (with `hreflang`, the external-link icon and its text equivalent),
+  or a
   fallback to the page's own permalink when `.Params.link` is absent.
 
   Dict:
@@ -20,8 +21,7 @@
 {{- if $page.Params.link -}}
   <a{{ with $titleClass }} class="{{ . }}"{{ end }} href="{{ $page.Params.link }}" target="_blank" rel="noopener"{{ with $lang }} hreflang="{{ . }}"{{ end }}>
     <span{{ with $lang }} lang="{{ . }}"{{ end }}>{{ $page.Title }}</span>
-    <span aria-hidden="true">&#8618;</span>
-    <span class="visually-hidden">{{ i18n "external-link" }}</span>
+    {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
   </a>
 {{- else -}}
   <a{{ with $titleClass }} class="{{ . }}"{{ end }} href="{{ $page.RelPermalink }}">{{ $page.Title }}</a>

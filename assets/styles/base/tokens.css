@@ -113,6 +113,9 @@
   --size-icon: 2rem;
   --size-icon-sm: 1.6rem;
 
+  /* Icons inside a line of text follow its size, not the control sizes above. */
+  --size-icon-inline: 1em;
+
   /* Entry list columns: the same date column at two widths, plus the type column of the
      compact variant. --size-date-nudge lines the date up optically with a bigger title. */
   --size-col-date: 12rem;

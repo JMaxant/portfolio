@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.14.0
+version: 1.15.0
 date_published: 2026-08-08
-date_modified: 2026-08-18
+date_modified: 2026-08-19
 ---
 
 # Components — partials and integration
@@ -72,6 +72,85 @@ distinction is reuse, and it is what stops the `.cta`-under-`.home__hero` mistak
 coming back.
 
 ## Inventory
+
+### `icon.html`
+
+One icon of the SVG sprite, referenced with `<use>`. The primitive the other components
+compose with, so it opens the inventory.
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `name` | yes | — | Symbol name without its `icon-` prefix, checked against a whitelist |
+| `label` | no | none | Text equivalent, emitted `visually-hidden` right after the icon |
+| `class` | no | none | Extra class on the `<svg>`, next to `icon` |
+
+```gotemplate
+{{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
+{{ partial "icon.html" (dict "name" "sun" "class" "theme-switcher__icon") }}
+```
+
+Available names — `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
+build through `errorf`; the whitelist mirrors the symbol ids of `assets/icons/sprite.svg`
+and has to be edited alongside it.
+
+**Accessibility** — the `<svg>` always carries `aria-hidden="true"` and `focusable="false"`,
+so the icon never reaches assistive technology. It must therefore never be the only carrier
+of the information (RGAA 1.2 and 3.3): pass `label` when nothing else names the element,
+leave it out when adjacent text already does.
+
+**The sprite is inlined, not referenced** — `baseof.html` prints
+`assets/icons/sprite.svg` once at the top of `<body>` (minified, ~1.2 KB), and `<use>`
+points at a same-page fragment. Referencing the file instead (`href="/sprite.svg#icon-sun"`)
+works too, and `currentColor` does cross the document boundary — verified in Chromium,
+WebKit and Firefox — but it costs a request before the first icon appears and imposes the
+same-origin rule. Inlining wins while the sprite stays this small; the arbitration flips
+around thirty icons, when the bytes repeated on every page outweigh one cached request.
+
+**Callers** — `entry-link.html` and `projets-meta.html` for the external-link marker,
+`theme-switcher.html` for the sun of the trigger and the three icons of the radio group.
+
+**Drawing** — 24×24 `viewBox`, `stroke-width` 1.8, `stroke` and `fill` in `currentColor`
+only, so the icons follow the semantic tokens and therefore both themes. A standalone `.svg`
+needs `xmlns` to be parsed; inlined in HTML it does not, and Hugo's minifier drops it.
+
+**Integration** — `.icon` in `components/icon.css` sizes the icon with
+`--size-icon-inline` (`1em`), so it follows the text it sits next to rather than a fixed
+control size, and nudges it onto the optical baseline. The chrome sizes `--size-icon` and
+`--size-icon-sm` remain for icons that are a control rather than a glyph in a line of text.
+
+### `favicon.html`
+
+Overrides the bear-cub partial of the same name, which emitted a `<link rel="shortcut icon">`
+only when `Site.Params.favicon` was set — a parameter this site never defined, so the built
+`<head>` carried no icon at all. Takes no context; called once from `baseof.html`.
+
+Three files, in `static/` so Hugo publishes them at the root paths the `href`s use — an icon
+left in `assets/` is never copied to `public/` unless it goes through the resource pipeline,
+and every link 404s silently:
+
+| File | Role |
+|------|------|
+| `favicon.svg` | Modern browsers, any size from one file |
+| `favicon.ico` | Raster fallback, 16/32/48 packed as PNG frames in one container |
+| `apple-touch-icon.png` | 180×180, the home screen icon iOS wants — it reads neither the SVG nor a manifest |
+
+`sizes="32x32"` on the `.ico` line is what makes a browser that supports both formats prefer
+the SVG. The `.ico` is generated from the SVG, each frame rasterised at its own size rather
+than downscaled from one bitmap, so the 16px stays sharp.
+
+`<meta name="theme-color">` is a **single flat value on purpose** (issue #80): a brand band,
+not chrome blending into the page, so it stays the same in both themes and needs neither a
+`media="(prefers-color-scheme: dark)"` variant nor a runtime update. Do not "fix" it by
+adding one — with a switcher whose explicit choice overrides the system preference, a `media`
+variant follows the wrong signal and mismatches exactly the visitors who chose a theme.
+Making it follow the theme means updating the tag from `theme.js`, which is a separate
+decision, not an oversight.
+
+The value repeats `--light-link` as a literal, because a meta tag cannot read a custom
+property. It is a deliberate duplicate of `base/tokens.css`, outside what
+`check-tokens.mjs` can see: change the brand colour there and this line has to follow.
+`#2042c2` carries 8.02:1 against white, so the label the browser paints over it stays
+readable.
 
 ### `hero.html`
 
@@ -149,9 +228,12 @@ the field (`role`, `status`, `repo`, `demo`, `tags`). A missing `page` fails the
 through `errorf`.
 
 **External links** — `repo` and `demo` leave the site, so they get the same marker as
-[`entry-link.html`](#entry-linkhtml) below: `target="_blank" rel="noopener"`, a `↪` glyph
-hidden from assistive technology (`aria-hidden`), and a `visually-hidden` text equivalent.
-Colour is not the only carrier of the distinction, which is what RGAA 3.3 asks for.
+[`entry-link.html`](#entry-linkhtml) below: `target="_blank" rel="noopener"`, and
+[`icon.html`](#iconhtml) called with `name: external-link` and `label: (i18n "external-link")`,
+which emits the icon hidden from assistive technology plus its `visually-hidden` text
+equivalent. Until issue #80 that marker was a `↪` character (U+21AA) drawn by the system
+font, with no control over its shape or its weight.
+Colour is not the only carrier of the distinction, which is what RGAA 3.1 asks for.
 Internal links — the title, the tags — carry none of that. The two partials render the
 same marker independently: `entry-link.html` owns the internal/external title link of an
 `.entry-list__item`, `projets-meta.html` owns a project's byline, and the two contracts
@@ -247,9 +329,9 @@ other; that split existed by accident in `layouts/tags/term.html` before this pa
 extracted (issue #94) and was not preserved.
 
 **External branch** — when `.Params.link` is set, the `<a>` targets it with
-`target="_blank" rel="noopener"`, an optional `hreflang` from `.Params.source_lang`, a `↪`
-glyph hidden from assistive technology (`aria-hidden`), and a `visually-hidden` text
-equivalent (`i18n "external-link"`). See the note on `projets-meta.html` above for why
+`target="_blank" rel="noopener"`, an optional `hreflang` from `.Params.source_lang`, and the
+external-link marker of [`icon.html`](#iconhtml) — the icon itself hidden from assistive
+technology, followed by its `visually-hidden` text equivalent (`i18n "external-link"`). See the note on `projets-meta.html` above for why
 that partial repeats the marker instead of calling this one.
 
 **Callers** — `layouts/veille/list.html` and `layouts/tags/term.html` (both pass
@@ -396,12 +478,18 @@ Behaviour, storage contract and accessibility rationale live in
 |-------|------|
 | `theme-switcher` | Block: the positioning context (`position: relative`) the popover anchors to. Applied by `nav.html`, not by the partial. Hidden whole by `:root:not(.js)` — see [theme-switcher.md](theme-switcher.md#without-javascript) for why the radios cannot stand on their own |
 | `theme-switcher__toggle` | Element: the disclosure button. Hidden below 768px, where the panel is always open |
-| `theme-switcher__icon` | Element: the sun glyph, rendered twice — in the trigger, and in the `<legend>` where it only shows below 768px |
+| `theme-switcher__icon` | Element: the sun of [`icon.html`](#iconhtml), rendered twice — in the trigger, and in the `<legend>` where it only shows below 768px. The class is passed through the partial's `class` key and sizes the icon with `--size-icon`, overriding the `1em` of `.icon` because `icon.css` is imported first |
 | `theme-switcher__panel` | Element: the `<fieldset>`. `display: none` until `.is-open` above 768px, permanently visible below it |
 | `theme-switcher__body` | Element: the `clear: both` wrapper that the floated `<legend>` needs |
 | `theme-switcher__wrapper` | Element: the segmented row of the three options |
 | `theme-switcher__value` | Element: the hidden span carrying the current theme inside the trigger's accessible name, kept in sync by `theme.js` |
 | `is-open` | State, on the panel: mirrors the trigger's `aria-expanded`, same pattern as `site-nav` |
+
+Each radio carries the icon of the theme it selects (`sun`, `moon`, `theme-system`) next to
+its visible label, which stays — the icon is `aria-hidden`, so removing the text would leave
+the option nameless (RGAA 1.2). Spacing is a `margin-inline-end` on the icon rather than a
+`gap` on the label: the radio is a zero-width flex item, and a gap would pad the label
+asymmetrically.
 
 The mobile rules state `position: static` for both `.theme-switcher__panel` and
 `.theme-switcher__panel.is-open`. That second selector is not redundant: a media query adds
@@ -472,7 +560,7 @@ current page as well as the `<a>` of the ancestor. For the same reason the rule 
 `font-weight` — a `<span>` inherits nothing from the `a` rule in `base/elements.css`.
 
 The active entry is marked by an **underline plus a colour**, while the other entries carry
-no underline. The colour alone would fail RGAA 3.3, and it disappears entirely under
+no underline. The colour alone would fail RGAA 3.1, and it disappears entirely under
 `forced-colors: active`, where every link is painted the same system colour — the underline
 survives, a `background` or a `box-shadow` would not.
 

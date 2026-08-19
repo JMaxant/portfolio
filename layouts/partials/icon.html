@@ -1,0 +1,20 @@
+{{- /*
+  icon.html — one icon of the sprite, as a <use> reference.
+
+  Dict:
+    name  (required) — symbol name without its "icon-" prefix, whitelisted below
+    label (optional) — text equivalent, emitted visually-hidden right after the icon
+    class (optional) — extra class on the <svg>, e.g. "theme-switcher__icon"
+
+  The <svg> is always aria-hidden: an icon never carries the information on its own
+  (RGAA 1.2 and 3.3). Pass `label` when nothing else names the element, leave it out when
+  adjacent text already does. The whitelist mirrors the symbol ids of
+  assets/icons/sprite.svg, which baseof.html inlines once per page.
+  See docs/components.md#iconhtml.
+*/ -}}
+{{- $allowed := slice "external-link" "moon" "sun" "theme-system" -}}
+{{- if not (in $allowed .name) -}}
+  {{- errorf "partial icon.html: invalid name %q, expected one of %v" .name $allowed -}}
+{{- end -}}
+<svg class="icon{{ with .class }} {{ . }}{{ end }}" aria-hidden="true" focusable="false"><use href="#icon-{{ .name }}"></use></svg>
+{{- with .label }}<span class="visually-hidden">{{ . }}</span>{{ end -}}

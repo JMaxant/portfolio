@@ -172,7 +172,7 @@ test.describe('active trail', () => {
   test('the active entry is distinguished by more than its colour', async ({ page }) => {
     await page.goto('/blog/');
 
-    // RGAA 3.3: colour cannot be the only carrier, and it is the one thing
+    // RGAA 3.1: colour cannot be the only carrier, and it is the one thing
     // `forced-colors: active` erases.
     expect(await decoration(marked(page))).toBe('underline');
     expect(await decoration(page.locator(`${MAIN} a:not([aria-current])`).first())).toBe('none');

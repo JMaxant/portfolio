@@ -49,9 +49,22 @@
     if (currentValue && target) {
       currentValue.textContent = target.closest('label').textContent.trim();
     }
+    const ICONS = {light: '#icon-sun', dark: '#icon-moon'};
+    for (const use of document.querySelectorAll('.theme-switcher__icon use')) {
+      use.setAttribute('href', ICONS[theme] ?? '#icon-theme-system');
+    }
   };
 
   applyTheme(readTheme());
+
+  const updateSwitchIcon = (theme) => {
+    const use = document.querySelector('.theme-switcher .icon use');
+    const values = {
+      light: '#icon-sun',
+      dark: '#icon-moon',
+    }
+    use.href.baseVal = theme ? values[theme] : '#icon-theme-system'
+  }
 
   inputs.forEach((input) => {
     input.addEventListener('change', () => {
@@ -59,6 +72,7 @@
 
       writeTheme(theme);
       applyTheme(theme);
+      updateSwitchIcon(theme);
     });
   });
 

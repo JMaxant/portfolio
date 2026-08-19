@@ -1,0 +1,14 @@
+/* Sprite icon emitted by icon.html. `display` is restored: base/reset.css blocks every svg,
+   which would break the line an inline icon sits on. `flex: none` keeps a flex parent from
+   crushing it: inside the theme switcher labels it was shrunk to a width of zero. Sized in
+   em so the icon follows the text next to it, then nudged onto the optical baseline.
+   See docs/components.md#iconhtml. */
+.icon {
+  --icon-baseline-nudge: -0.125em; /* token-exception: optical alignment, local to this component */
+
+  display: inline-block;
+  flex: none;
+  width: var(--size-icon-inline);
+  height: var(--size-icon-inline);
+  vertical-align: var(--icon-baseline-nudge);
+}

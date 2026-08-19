@@ -25,3 +25,6 @@ noClasses = false
 [module]
 [[module.imports]]
 path = 'github.com/clente/hugo-bearcub'
+
+[params.meta]
+favicon = false
