@@ -2,12 +2,11 @@
 <html lang="{{ with .Site.Language.Locale }}{{ . }}{{ else }}en-US{{ end }}">
 
 <head>
-  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {{- partial "favicon.html" -}}
   {{ $themeInit := resources.Get "scripts/inline/theme-init.js" | minify }}
   <script>{{ $themeInit.Content | safeJS }}</script>
-  {{- partial "favicon.html" . -}}
   <title>{{- block "title" . }}{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}{{- end }}</title>
 
   {{- partial "seo_tags.html" . -}}
@@ -24,6 +23,11 @@
 </head>
 
 <body>
+  {{- /* Inlined rather than referenced: four symbols weigh less than the request they would
+         cost, and a same-page fragment sidesteps the same-origin rule on external <use>. */ -}}
+  {{- with resources.Get "icons/sprite.svg" -}}
+    {{- (. | minify).Content | safeHTML -}}
+  {{- end }}
   <header class="site-header">
     {{- partial "header.html" . -}}
   </header>

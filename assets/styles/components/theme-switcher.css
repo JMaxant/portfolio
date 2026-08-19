@@ -86,6 +86,12 @@
       cursor: pointer;
       transition: color var(--transition-duration) var(--transition-easing), background-color var(--transition-duration) var(--transition-easing);
 
+      /* Not a `gap`: the radio is a zero-width flex item, so a gap would pad the label
+         asymmetrically. */
+      .icon {
+        margin-inline-end: var(--spacing-2xs);
+      }
+
       + label {
         border-left: var(--border-thin);
       }

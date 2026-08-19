@@ -1,0 +1,8 @@
+{{- /* Icon set, kept to three files: the SVG for modern browsers, favicon.ico as the raster
+       fallback (16/32/48 packed in one file), and the 180×180 PNG iOS insists on for the
+       home screen. `sizes="32x32"` on the .ico is what makes a browser supporting both
+       prefer the SVG. See docs/components.md#faviconhtml. */ -}}
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#2042c2">

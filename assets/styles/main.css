@@ -16,6 +16,7 @@
 
 /* Components. Interchangeable, except theme-switcher which stays ahead of menu: the mobile
    navigation restyles the switcher inside its panel and has to keep winning the ties. */
+@import url("components/icon.css");
 @import url("components/theme-switcher.css");
 @import url("components/menu.css");
 @import url("components/card.css");
