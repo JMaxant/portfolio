@@ -1,6 +1,9 @@
 {{ define "main" }}
   {{- /* Same reading template as a blog article, with the project meta line in
          place of the byline. See docs/components.md. */ -}}
+
+{{ partial "breadcrumb.html" . }}
+
   <article class="single container-content-grid">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>

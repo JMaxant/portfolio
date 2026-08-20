@@ -2,6 +2,8 @@
   {{- /* Reading time and post navigation are for blog articles only. This template
          also serves /parcours/, which carries no date and is left untouched. */ -}}
   {{- $isPost := eq .Section "blog" }}
+  {{ partial "breadcrumb.html" . }}
+
   <article class="single container-content-grid">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>

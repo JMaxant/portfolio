@@ -16,7 +16,7 @@
     [content-start] min(var(--container-reading), 100% - 2 * var(--gutter)) [content-end]
     minmax(0, var(--breakout)) [wide-end]
     minmax(var(--gutter), 1fr) [full-end];
-  padding-block: var(--spacing-lg);
+  padding-block-end: var(--spacing-lg);
 
   & > * {
     grid-column: content;

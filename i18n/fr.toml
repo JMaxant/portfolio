@@ -120,3 +120,6 @@ other = "Derniers contenus"
 
 [table]
 other = "Tableau, défilable horizontalement"
+
+[home]
+other = "Accueil"

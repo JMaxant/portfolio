@@ -1,0 +1,23 @@
+.breadcrumb {
+  margin-block-end: var(--spacing-lg);
+
+  .breadcrumb--list {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    justify-content: flex-start;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-light);
+
+    p {
+      margin: auto;
+    }
+
+    li:not(:last-child) {
+      &::after {
+        display: inline;
+        content: '>';
+      }
+    }
+  }
+}

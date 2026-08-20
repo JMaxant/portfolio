@@ -1,0 +1,22 @@
+{{/*
+Breadcrumb.
+Expected context :
+page (required)
+
+Usage:  partial "breadcrumb.html" .
+*/}}
+
+<div class="container--wide">
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ol class="breadcrumb--list" role="list">
+      {{- range page.Ancestors.Reverse }}
+      <li class="breadcrumb--list__item">
+        <a href="{{ .RelPermalink }}">{{ if .IsHome }}{{ i18n "home" }}{{ else }}{{ .Title }}{{ end }}</a>
+      </li>
+      {{- end }}
+      <li class="breadcrumb--list__item active">
+        <p aria-current="location">{{ .Title }}</p>
+      </li>
+    </ol>
+  </nav>
+</div>

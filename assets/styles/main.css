@@ -1,21 +1,12 @@
-/* The only file in assets/styles/ carrying @import. Every other file is a leaf, so the
-   cascade is read here and nowhere else. Two rules when adding one:
-
-   - the list is ordered, not alphabetical — see the section notes below;
-   - esbuild only inlines an @import placed before any rule in the file. Written after one,
-     it survives verbatim into the built CSS as a runtime request that 404s, and Hugo
-     reports no warning. See docs/css-tokens.md#tree. */
-
 @import url("https://fonts.bunny.net/css?family=alexandria:200,300,400,600");
 
-/* Layers. Order imposed: the reset first, the tokens before anything reading them, the
+/* Layers. reset first, the tokens before anything reading them, the
    element styles on top. */
 @import url("base/reset.css");
 @import url("base/tokens.css");
 @import url("base/elements.css");
 
-/* Components. Interchangeable, except theme-switcher which stays ahead of menu: the mobile
-   navigation restyles the switcher inside its panel and has to keep winning the ties. */
+/* Components. Interchangeable, except theme-switcher which stays ahead of menu. */
 @import url("components/icon.css");
 @import url("components/theme-switcher.css");
 @import url("components/menu.css");
@@ -24,8 +15,9 @@
 @import url("components/tag.css");
 @import url("components/cta.css");
 @import url("components/code.css");
+@import url("components/breadcrumb.css");
 
-/* Page chrome, then the templates. */
+/* Layouts. */
 @import url("layout/header.css");
 @import url("layout/footer.css");
 @import url("layout/home.css");
@@ -34,7 +26,5 @@
 @import url("layout/parcours.css");
 @import url("layout/error.css");
 
-/* Utilities last, and the position is load-bearing: a utility and a component class often
-   share a specificity of (0,1,0), so only source order separates them. Moved up, utilities
-   silently stop applying. See docs/css-tokens.md#utilities. */
+/* Misc (utils). */
 @import url("utils.css");

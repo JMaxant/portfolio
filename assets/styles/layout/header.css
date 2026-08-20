@@ -1,6 +1,7 @@
 .site-header {
   position: relative;
   z-index: var(--z-header);
+  margin-block-end: var(--spacing-lg);
   background: var(--color-bg);
   border-block-end: var(--border-thin);
 
