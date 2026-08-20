@@ -1,16 +1,17 @@
 {{ define "main" }}
   {{- /* Same reading template as a blog article, with the project meta line in
          place of the byline. See docs/components.md. */ -}}
-
-{{ partial "breadcrumb.html" . }}
+  {{ partial "breadcrumb.html" (dict "page" .) }}
 
   <article class="single container-content-grid">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
-      {{ with .Params.description }}
-        <p class="single__intro">{{ . }}</p>
-      {{ end }}
-      {{ partial "projets-meta.html" (dict "page" .) }}
+      <div class="single__intro">
+        {{ with .Params.description }}
+          <p class="single__intro-text">{{ . }}</p>
+        {{ end }}
+        {{ partial "projets-meta.html" (dict "page" .) }}
+      </div>
     </header>
 
     {{ .Content }}

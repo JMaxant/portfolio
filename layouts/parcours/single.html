@@ -71,14 +71,14 @@
     {{- end -}}
   {{- end -}}
 
-{{ partial "breadcrumb.html" . }}
+  {{ partial "breadcrumb.html" (dict "page" .) }}
 
   <article class="single container-content-grid resume">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
       {{ with $cv.basics.summary }}
       <div class="single__intro">
-        <p class="intro-text">{{ . | markdownify }}</p>
+        <p class="single__intro-text">{{ . | markdownify }}</p>
       </div>
       {{ end }}
     </header>

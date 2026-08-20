@@ -123,3 +123,6 @@ other = "Tableau, défilable horizontalement"
 
 [home]
 other = "Accueil"
+
+[breadcrumb]
+other = "Fil d'Ariane"

@@ -1,24 +1,18 @@
 .breadcrumb {
   margin-block-end: var(--spacing-lg);
+}
 
-  .breadcrumb--list {
-    display: flex;
-    gap: var(--spacing-xs);
-    align-items: center;
-    justify-content: flex-start;
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-light);
+.breadcrumb__list {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-light);
+}
 
-    p {
-      margin: auto;
-    }
-
-    li:not(:last-child) {
-      &::after {
-        display: inline;
-        padding-inline-start: var(--spacing-xs);
-        content: '>';
-      }
-    }
-  }
+/* The empty alt-text keeps the separator out of the accessibility tree, so the trail is
+   not read as "Accueil > Blog > title". */
+.breadcrumb__item:not(:last-child)::after {
+  padding-inline-start: var(--spacing-xs);
+  content: '>' / '';
 }

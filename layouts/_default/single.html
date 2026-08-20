@@ -2,14 +2,14 @@
   {{- /* Reading time and post navigation are for blog articles only. This template
          also serves /parcours/, which carries no date and is left untouched. */ -}}
   {{- $isPost := eq .Section "blog" }}
-  {{ partial "breadcrumb.html" . }}
+  {{ partial "breadcrumb.html" (dict "page" .) }}
 
   <article class="single container-content-grid">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
       <div class="single__intro">
         {{ with .Params.description }}
-         <p class="intro-text">{{ . }}</p>
+          <p class="single__intro-text">{{ . }}</p>
         {{ end }}
         <ul class="byline meta" role="list">
           <li>
@@ -27,7 +27,6 @@
           {{ end }}
         </ul>
       </div>
-
     </header>
 
     {{ .Content }}

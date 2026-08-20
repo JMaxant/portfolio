@@ -1,7 +1,7 @@
 {{ define "main" }}
-  <div class="page">
-    {{ partial "breadcrumb.html" . }}
+  {{ partial "breadcrumb.html" (dict "page" .) }}
 
+  <div class="page">
     <div class="container">
       <h1>{{ .Title }}</h1>
       {{ with .Content }}{{ . }}{{ end }}

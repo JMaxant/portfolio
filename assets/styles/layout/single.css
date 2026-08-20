@@ -4,12 +4,14 @@
 
   .single__intro {
     padding-block-end: var(--spacing-md);
-    font-size: var(--text-base);
-    font-style: italic;
   }
 
-  .intro-text {
+  /* Italic on the paragraph, not on the wrapper: the byline sits in there too, and it
+     inherits everything the wrapper sets. */
+  .single__intro-text {
     margin-block-end: var(--spacing-xs);
+    font-size: var(--text-base);
+    font-style: italic;
   }
 
   .byline {

@@ -1,7 +1,10 @@
 @import url("https://fonts.bunny.net/css?family=alexandria:200,300,400,600");
 
-/* Layers. reset first, the tokens before anything reading them, the
-   element styles on top. */
+/* The only file carrying @import, so the cascade order is read here and nowhere else.
+   An @import written after a rule is not inlined by esbuild and 404s at runtime, with no
+   Hugo warning. See docs/css-tokens.md#tree. */
+
+/* Layers. Reset first, tokens before anything reading them, element styles on top. */
 @import url("base/reset.css");
 @import url("base/tokens.css");
 @import url("base/elements.css");
@@ -26,5 +29,5 @@
 @import url("layout/parcours.css");
 @import url("layout/error.css");
 
-/* Misc (utils). */
+/* Utilities last, and the position is load-bearing. See docs/css-tokens.md#utilities. */
 @import url("utils.css");
