@@ -611,6 +611,19 @@ for a position in a wider sense, such as a step in a wizard.
 | `breadcrumb__list` | The `<ol>`, laid out with `flex` |
 | `breadcrumb__item` | One crumb |
 
+**The trail never wraps.** `white-space: nowrap` on the list, `flex-shrink: 0` on the
+ancestors, and the current crumb alone shrinks — `flex-shrink: 1`, `min-width: 0`,
+`overflow: hidden`, `text-overflow: ellipsis`. Without `min-width: 0` a flex item refuses to
+go below its min-content width, so the item never shrinks, the ellipsis never appears and
+the page overflows horizontally instead; without `flex-shrink: 1` the `flex-shrink: 0` of
+the base rule wins and does the same. Truncation starts around 500 px on a long article
+title and costs nothing: `text-overflow` clips the rendering only, the accessible name stays
+whole, and the `h1` repeats the title in full immediately below.
+
+Wrapping was the alternative, and it is the reason `align-items` can stay `center`: as soon
+as the current crumb takes two lines, the short crumbs centre themselves against it and the
+separators shift. One line at every width removes the problem rather than realigning it.
+
 The separator is generated content on `breadcrumb__item:not(:last-child)`, written
 `content: '>' / ''`. The empty alt-text is what keeps it out of the accessibility tree —
 Chromium exposes generated content, and without it the trail is read as
