@@ -1,13 +1,13 @@
 ---
 title: Components — partials and integration
-version: 1.15.0
+version: 1.16.0
 date_published: 2026-08-08
-date_modified: 2026-08-19
+date_modified: 2026-08-20
 ---
 
 # Components — partials and integration
 
-Ref: issues #45, #47, #48, #66, #77. Describes the reusable components from both sides: the **template
+Ref: issues #45, #47, #48, #66, #77, #114. Describes the reusable components from both sides: the **template
 contract** (how you call them) and the **CSS contract** (what they expose to integration).
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
@@ -542,7 +542,7 @@ error at all**:
 
 **What matches nothing, by construction**: taxonomy pages (`/tags/`, `/tags/<term>/`) and
 pages sitting at the root, since neither is under a menu entry. Their location is covered by
-their own `h1`, and by the breadcrumb tracked in #114.
+their own `h1`, and by [`breadcrumb.html`](#breadcrumbhtml), which they do carry.
 
 **The current page is not a link.** It renders as a `<span>`, so it leaves the tab order:
 on `/blog/`, tabbing goes Accueil → Projets → Veille → Parcours. The ancestor entry stays a
@@ -568,6 +568,80 @@ Watch the specificity when adding to this block: `.menu [aria-current]` is `(0,2
 `a:hover` is `(0,1,1)`, so a rule written too strongly freezes the hover colour on the
 active entry — it was the only link in the menu not reacting to the pointer until
 `&:hover` was declared inside it.
+
+### `breadcrumb.html`
+
+The page's ancestor trail, current page last. Built from `Ancestors`, so nothing is
+hand-maintained: a new section appears in the trail as soon as it has a `_index.md`.
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `page` | yes | — | The page whose trail is rendered |
+
+```gotemplate
+{{ partial "breadcrumb.html" (dict "page" .) }}
+```
+
+**Hugo's global `page` is not the passed context.** It resolves to the page the *top-level*
+template is rendering, so a partial reading `page.Ancestors` while reading `.page.Title` for
+the current item mixes two pages — inside a `range .Pages` on `/blog/`, that renders the
+ancestors of `/blog/` under the title of an article, silently dropping the `Blog` crumb. The
+partial therefore binds `$page := .page` and reads everything from it. The missing-key
+`errorf` fires before any output, so a caller that forgets the dict fails the build.
+
+**The home crumb is not `.Title`.** The home page title is the site title, which reads wrong
+in a trail, so `IsHome` swaps it for `i18n "home"`.
+
+**Callers** — every template that renders a page below the root: `_default/single.html`,
+`blog/list.html`, `veille/list.html`, `projets/list.html`, `projets/single.html`,
+`parcours/single.html`, `tags/taxonomy.html`, `tags/term.html`. Not the home page, which has
+no ancestors, and not `404.html`, which has no location.
+
+**Accessibility** — the `<nav>` is named with `i18n "breadcrumb"`, never a literal: an
+English landmark name inside a French document is announced as-is. The current page follows
+the `menu.html` rule — a `<span aria-current="page">`, not a link, so it leaves the tab
+order. `page` is the value defined for the current entry of a navigation set; `location` is
+for a position in a wider sense, such as a step in a wizard.
+
+**Integration** (`components/breadcrumb.css`):
+
+| Class / selector | Role |
+|------------------|------|
+| `breadcrumb` | Block, on the `<nav>` |
+| `breadcrumb__list` | The `<ol>`, laid out with `flex` |
+| `breadcrumb__item` | One crumb |
+
+**The trail never wraps.** `white-space: nowrap` on the list, `flex-shrink: 0` on the
+ancestors, and the current crumb alone shrinks — `flex-shrink: 1`, `min-width: 0`,
+`overflow: hidden`, `text-overflow: ellipsis`. Without `min-width: 0` a flex item refuses to
+go below its min-content width, so the item never shrinks, the ellipsis never appears and
+the page overflows horizontally instead; without `flex-shrink: 1` the `flex-shrink: 0` of
+the base rule wins and does the same. Truncation starts around 500 px on a long article
+title and costs nothing: `text-overflow` clips the rendering only, the accessible name stays
+whole, and the `h1` repeats the title in full immediately below.
+
+Wrapping was the alternative, and it is the reason `align-items` can stay `center`: as soon
+as the current crumb takes two lines, the short crumbs centre themselves against it and the
+separators shift. One line at every width removes the problem rather than realigning it.
+
+The separator is generated content on `breadcrumb__item:not(:last-child)`, written
+`content: '>' / ''`. The empty alt-text is what keeps it out of the accessibility tree —
+Chromium exposes generated content, and without it the trail is read as
+"Accueil > Blog > title". The current crumb carries no class of its own: like the menu, it
+is reachable through `[aria-current]`, so the ARIA state and the visual state cannot drift.
+
+**The wrapper belongs to the partial, and it is `container--wide` on purpose.** The trail
+lines up with the header, not with the content below it: `header.html` wraps its own bar in
+the same utility, so both resolve the same `--container-wide` and the same
+`padding-inline`, and their inline-start edges land on the same pixel — measured at 1600,
+1280, 900 and 390 px viewport widths. A caller therefore places the partial *outside* its
+`.page` / `.container`, never inside; wrapping it in a narrower container would break the
+alignment silently, since nothing in the CSS depends on it.
+
+The consequence is that on a reading template the trail does **not** align with the article:
+`container-content-grid` resolves `content` to `--container-reading`, which is much narrower.
+That is the intended reading — the breadcrumb is page chrome, tied to the header, rather than
+part of the article.
 
 ### `timeline-item.html`
 
@@ -619,8 +693,8 @@ because what a template puts inside an `<article>` lands directly in a grid.
 <article class="single container-content-grid">
 ```
 
-- **`single`** is the BEM block. It owns the sub-parts — `single__heading`, `single__intro` —
-  and carries no layout of its own.
+- **`single`** is the BEM block. It owns the sub-parts — `single__heading`, `single__intro`,
+  `single__intro-text` — and carries no layout of its own.
 - **`container-content-grid`** is the layout. It is what makes the element a grid with three
   named columns: `content` (the reading measure), `wide` (the measure plus a breakout each
   side, used by code blocks) and `full` (edge to edge, unused so far).

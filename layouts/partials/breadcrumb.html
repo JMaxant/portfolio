@@ -1,0 +1,27 @@
+{{- /*
+  Expected context (dict):
+    page (required) — the page whose ancestor trail is rendered
+
+  Uses .page.Ancestors, never Hugo's global `page`: the global resolves to the page the
+  top-level template is rendering, so inside a range it silently returns another page's
+  trail. See docs/components.md#breadcrumbhtml.
+*/ -}}
+{{- if not .page -}}
+  {{- errorf "partial breadcrumb.html: missing required \"page\" parameter" -}}
+{{- end -}}
+{{- $page := .page -}}
+
+<div class="container--wide">
+  <nav class="breadcrumb" aria-label="{{ i18n "breadcrumb" }}">
+    <ol class="breadcrumb__list" role="list">
+      {{- range $page.Ancestors.Reverse }}
+      <li class="breadcrumb__item">
+        <a href="{{ .RelPermalink }}">{{ if .IsHome }}{{ i18n "home" }}{{ else }}{{ .Title }}{{ end }}</a>
+      </li>
+      {{- end }}
+      <li class="breadcrumb__item">
+        <span aria-current="page">{{ $page.Title }}</span>
+      </li>
+    </ol>
+  </nav>
+</div>

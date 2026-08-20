@@ -13,7 +13,7 @@
 }
 
 .page {
-  padding-block: var(--spacing-lg) var(--spacing-xl);
+  margin-block-end: var(--spacing-lg);
 }
 
 .visually-hidden {

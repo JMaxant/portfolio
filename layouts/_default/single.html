@@ -2,27 +2,31 @@
   {{- /* Reading time and post navigation are for blog articles only. This template
          also serves /parcours/, which carries no date and is left untouched. */ -}}
   {{- $isPost := eq .Section "blog" }}
+  {{ partial "breadcrumb.html" (dict "page" .) }}
+
   <article class="single container-content-grid">
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
-      {{ with .Params.description }}
-       <p class="single__intro">{{ . }}</p>
-      {{ end }}
-      <ul class="byline meta" role="list">
-        <li>
-          <time pubdate="pubdate" datetime='{{ .Date.Format "2006-01-02" }}'>
-            {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
-          </time>
-        </li>
-        {{ if $isPost }}
+      <div class="single__intro">
+        {{ with .Params.description }}
+          <p class="single__intro-text">{{ . }}</p>
+        {{ end }}
+        <ul class="byline meta" role="list">
+          <li>
+            <time pubdate="pubdate" datetime='{{ .Date.Format "2006-01-02" }}'>
+              {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+            </time>
+          </li>
+          {{ if $isPost }}
           <li>{{ i18n "reading-time" .ReadingTime }}</li>
-        {{ end }}
-        {{ range (.GetTerms "tags") }}
-        <li>
-          <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
-        </li>
-        {{ end }}
-      </ul>
+          {{ end }}
+          {{ range (.GetTerms "tags") }}
+          <li>
+            <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+          </li>
+          {{ end }}
+        </ul>
+      </div>
     </header>
 
     {{ .Content }}
