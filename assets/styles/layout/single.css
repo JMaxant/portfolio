@@ -1,18 +1,23 @@
-.single__intro {
-  font-size: var(--text-base);
-  font-style: italic;
-}
-
 .single__heading {
-  padding-block-end: var(--spacing-md);
+  margin-block-end: var(--spacing-xl);
   border-bottom: var(--border-thin);
-}
 
-.byline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs) var(--spacing-sm);
-  align-items: baseline;
+  .single__intro {
+    padding-block-end: var(--spacing-md);
+    font-size: var(--text-base);
+    font-style: italic;
+  }
+
+  .intro-text {
+    margin-block-end: var(--spacing-xs);
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: baseline;
+  }
 }
 
 /* Sits outside the article and resolves the same min() as the grid's content column, so it

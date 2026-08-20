@@ -16,6 +16,7 @@
     li:not(:last-child) {
       &::after {
         display: inline;
+        padding-inline-start: var(--spacing-xs);
         content: '>';
       }
     }

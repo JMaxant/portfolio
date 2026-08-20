@@ -77,7 +77,9 @@
     <header class="single__heading">
       <h1>{{ .Title }}</h1>
       {{ with $cv.basics.summary }}
-        <p class="single__intro">{{ . | markdownify }}</p>
+      <div class="single__intro">
+        <p class="intro-text">{{ . | markdownify }}</p>
+      </div>
       {{ end }}
     </header>
 

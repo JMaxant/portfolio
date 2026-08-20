@@ -1,6 +1,4 @@
 .resume__section {
-  margin-block-start: var(--spacing-2xl);
-
   > h2 {
     display: flex;
     flex-wrap: wrap;
