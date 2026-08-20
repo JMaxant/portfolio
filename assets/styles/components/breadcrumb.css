@@ -11,9 +11,6 @@
   white-space: nowrap;
 }
 
-/* One line at every width: the ancestors are section titles and stay whole, the current
-   crumb absorbs the shrink. text-overflow clips the rendering only — the accessible name
-   stays complete, and the h1 below repeats the title in full. */
 .breadcrumb__item {
   flex-shrink: 0;
 }
