@@ -6,5 +6,5 @@ description = "La documentation des build options, utilisée pour cette section 
 tags = ['hugo']
 translationKey = 'hugo-build-options'
 source_lang = 'en'
-link = 'https://gohugo.io/content-management/build-options/'
+source_link = 'https://gohugo.io/content-management/build-options/'
 +++

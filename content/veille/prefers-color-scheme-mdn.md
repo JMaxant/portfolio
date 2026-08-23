@@ -6,5 +6,5 @@ description = "La page MDN de référence pour le switch clair/sombre. Le point 
 tags = ['css', 'a11y']
 translationKey = 'prefers-color-scheme'
 source_lang = 'en'
-link = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme'
+source_link = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme'
 +++

@@ -6,6 +6,7 @@ description = 'Ce qui surprend, ce qui manque, ce qui libère : retour après un
 tags = ['go', 'apprentissage']
 translationKey = 'apprendre-go-venant-de-php'
 cover = ''
+lastmod = '2026-08-23'
 +++
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Après huit ans de

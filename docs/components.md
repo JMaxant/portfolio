@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.16.0
+version: 1.18.0
 date_published: 2026-08-08
-date_modified: 2026-08-20
+date_modified: 2026-08-23
 ---
 
 # Components — partials and integration
@@ -277,7 +277,9 @@ four dates now go through `i18n "date-format"`; the attribute keeps the machine 
 [`<time>` carries two dates](#time-carries-two-dates-not-one).
 
 The empty message is `i18n "no-entries"`, neutral between articles and links. `no-posts`
-stays for the taxonomy list and the bear-cub theme; `no-links` is gone.
+stays for the taxonomy list and the bear-cub theme, reworded to "Aucun contenu à afficher
+pour l'instant" because the taxonomy page lists tags, not articles (#93); `no-links` is
+gone.
 
 **Integration** (`components/entry-list.css`):
 
@@ -315,7 +317,7 @@ one rule.
 
 ### `entry-link.html`
 
-Title link of an `.entry-list__item` entry: an external link built from `.Params.link`, or
+Title link of an `.entry-list__item` entry: an external link built from `.Params.source_link`, or
 a fallback to the page's own permalink when that field is absent.
 
 | Key | Required | Default | Description |
@@ -328,7 +330,7 @@ branch renders — external or internal — so a caller cannot style one branch 
 other; that split existed by accident in `layouts/tags/term.html` before this partial was
 extracted (issue #94) and was not preserved.
 
-**External branch** — when `.Params.link` is set, the `<a>` targets it with
+**External branch** — when `.Params.source_link` is set, the `<a>` targets it with
 `target="_blank" rel="noopener"`, an optional `hreflang` from `.Params.source_lang`, and the
 external-link marker of [`icon.html`](#iconhtml) — the icon itself hidden from assistive
 technology, followed by its `visually-hidden` text equivalent (`i18n "external-link"`). See the note on `projets-meta.html` above for why
@@ -817,6 +819,49 @@ different formats and the templates must not share an expression between them.
 page and in `card-taxonomy.html`. Nothing caught it: no page overflowed, and axe does not
 validate the *value* of a `datetime`. `tests/time.spec.js` does, on every template that
 emits a `<time>`.
+
+## Dates
+
+Two dates exist per page and they do not come from the same place.
+
+`date` is the publication date, always in front matter. `lastmod` is the update date and is
+**written by hand**, also in front matter: it is absent from the archetypes on purpose,
+since a page being created has nothing to have updated yet. Hugo's default `lastmod` chain
+is `[':git', 'lastmod', 'date', …]`, so with `enableGitInfo` off the `:git` entry is inert
+and the front matter field is picked up with no configuration at all.
+
+`:git` was considered and rejected (#70). It resolves to the last commit touching the file,
+which cannot tell a content edit from a mechanical one: renaming a front matter key across
+`content/veille/*.md` would have restamped all four pages as updated that day. A forgotten
+`lastmod` leaves an honest date behind; an automatic one invents a wrong date on every
+repo-wide pass. `enableGitInfo` also demands `fetch-depth: 0` on every CI checkout, and
+would have constrained the still-open hosting decision — hosts that shallow-clone silently
+produce dates that differ from the local build.
+
+**Display** — `layouts/_default/single.html` labels both dates, "Publié le …" and
+"Mis à jour le …", the second guarded by `{{ if .Lastmod.After .Date }}` so it appears only
+on a page that carries an explicit `lastmod`. Two dates side by side with only one of them
+named is what forces a reader to stop, so the publication date is labelled too even though
+it is the only one on most pages.
+
+The byline is a wrapping flex row with nothing but a gap between items, which read as one
+sentence once an item became a two-part phrase. The textual items therefore carry
+`byline__meta` and take a `·` separator between them:
+
+```css
+.byline__meta + .byline__meta::before {
+  padding-inline-end: var(--spacing-xs);
+  content: '·' / '';
+}
+```
+
+The empty alt text keeps the separator out of the accessibility tree, the same idiom as
+`components/breadcrumb.css`. The tags are deliberately excluded: they are already set apart
+by their border, and a separator between bordered pills is noise.
+
+The home page's "Dernières activités" block sorts on `.ByLastmod` and shows the bare date
+with no label at all: its compact grid gives the date a fixed `--size-col-date-compact`
+column, which a label would overflow.
 
 ## Points to watch
 

@@ -6,5 +6,5 @@ description = "La référence officielle sur les idiomes du langage. Relue en d�
 tags = ['go']
 translationKey = 'effective-go'
 source_lang = 'en'
-link = 'https://go.dev/doc/effective_go'
+source_link = 'https://go.dev/doc/effective_go'
 +++

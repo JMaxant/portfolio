@@ -17,6 +17,14 @@
     flex-wrap: wrap;
     gap: var(--spacing-sm);
     align-items: baseline;
+
+    /* Empty alt text keeps the separator out of the accessibility tree, same idiom as
+       components/breadcrumb.css. Only the textual items carry it: the tags are already
+       set apart by their border. */
+    .byline__meta + .byline__meta::before {
+      padding-inline-end: var(--spacing-xs);
+      content: '·' / '';
+    }
   }
 }
 

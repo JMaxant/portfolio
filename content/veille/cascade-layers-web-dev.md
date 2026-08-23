@@ -6,5 +6,5 @@ description = "Une explication claire de @layer et de son effet sur la spécific
 tags = ['css']
 translationKey = 'cascade-layers'
 source_lang = 'en'
-link = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'
+source_link = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@layer'
 +++

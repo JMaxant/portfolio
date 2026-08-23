@@ -2,7 +2,7 @@
 other = "Filtré par"
 
 [no-posts]
-other = "Aucun article pour l'instant"
+other = "Aucun contenu à afficher pour l'instant"
 
 [email-subject]
 other = "Répondre à "
@@ -114,6 +114,12 @@ other = "Retour à l'accueil"
 
 [date-format]
 other = "02/01/2006"
+
+[published-on]
+other = "Publié le"
+
+[updated-on]
+other = "Mis à jour le"
 
 [latest-content]
 other = "Derniers contenus"
