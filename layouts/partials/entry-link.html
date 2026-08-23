@@ -1,8 +1,7 @@
 {{/*
   entry-link.html — title link of an `.entry-list__item` entry: an external link built
-  from `.Params.link` (with `hreflang`, the external-link icon and its text equivalent),
-  or a
-  fallback to the page's own permalink when `.Params.link` is absent.
+  from `.Params.source_link` (with `hreflang`, the external-link icon and its text
+  equivalent), or a fallback to the page's own permalink when that field is absent.
 
   Dict:
     page        (required) the entry page
@@ -18,8 +17,8 @@
 {{- $titleClass := .title_class -}}
 {{- $lang := $page.Params.source_lang -}}
 
-{{- if $page.Params.link -}}
-  <a{{ with $titleClass }} class="{{ . }}"{{ end }} href="{{ $page.Params.link }}" target="_blank" rel="noopener"{{ with $lang }} hreflang="{{ . }}"{{ end }}>
+{{- if $page.Params.source_link -}}
+  <a{{ with $titleClass }} class="{{ . }}"{{ end }} href="{{ $page.Params.source_link }}" target="_blank" rel="noopener"{{ with $lang }} hreflang="{{ . }}"{{ end }}>
     <span{{ with $lang }} lang="{{ . }}"{{ end }}>{{ $page.Title }}</span>
     {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
   </a>

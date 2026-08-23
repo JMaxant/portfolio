@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.16.0
+version: 1.16.1
 date_published: 2026-08-08
-date_modified: 2026-08-20
+date_modified: 2026-08-23
 ---
 
 # Components — partials and integration
@@ -315,7 +315,7 @@ one rule.
 
 ### `entry-link.html`
 
-Title link of an `.entry-list__item` entry: an external link built from `.Params.link`, or
+Title link of an `.entry-list__item` entry: an external link built from `.Params.source_link`, or
 a fallback to the page's own permalink when that field is absent.
 
 | Key | Required | Default | Description |
@@ -328,7 +328,7 @@ branch renders — external or internal — so a caller cannot style one branch 
 other; that split existed by accident in `layouts/tags/term.html` before this partial was
 extracted (issue #94) and was not preserved.
 
-**External branch** — when `.Params.link` is set, the `<a>` targets it with
+**External branch** — when `.Params.source_link` is set, the `<a>` targets it with
 `target="_blank" rel="noopener"`, an optional `hreflang` from `.Params.source_lang`, and the
 external-link marker of [`icon.html`](#iconhtml) — the icon itself hidden from assistive
 technology, followed by its `visually-hidden` text equivalent (`i18n "external-link"`). See the note on `projets-meta.html` above for why
