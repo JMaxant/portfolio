@@ -32,7 +32,7 @@
           <li class="byline__meta">{{ i18n "reading-time" .ReadingTime }}</li>
           {{ end }}
           {{ range (.GetTerms "tags") }}
-          <li class="tags">
+          <li>
             <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
           </li>
           {{ end }}
