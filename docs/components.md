@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.16.1
+version: 1.16.2
 date_published: 2026-08-08
 date_modified: 2026-08-23
 ---
@@ -277,7 +277,9 @@ four dates now go through `i18n "date-format"`; the attribute keeps the machine 
 [`<time>` carries two dates](#time-carries-two-dates-not-one).
 
 The empty message is `i18n "no-entries"`, neutral between articles and links. `no-posts`
-stays for the taxonomy list and the bear-cub theme; `no-links` is gone.
+stays for the taxonomy list and the bear-cub theme, reworded to "Aucun contenu à afficher
+pour l'instant" because the taxonomy page lists tags, not articles (#93); `no-links` is
+gone.
 
 **Integration** (`components/entry-list.css`):
 

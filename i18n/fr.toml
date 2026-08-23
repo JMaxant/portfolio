@@ -2,7 +2,7 @@
 other = "Filtré par"
 
 [no-posts]
-other = "Aucun article pour l'instant"
+other = "Aucun contenu à afficher pour l'instant"
 
 [email-subject]
 other = "Répondre à "
