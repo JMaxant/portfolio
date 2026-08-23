@@ -13,10 +13,20 @@
         {{ end }}
         <ul class="byline meta" role="list">
           <li>
-            <time pubdate="pubdate" datetime='{{ .Date.Format "2006-01-02" }}'>
-              {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+            <time datetime='{{ .Date.Format "2006-01-02" }}'>
+              {{ time.Format (i18n "date-format") .Date }}
             </time>
           </li>
+          {{/* `lastmod` is a manual front matter field, so this only shows on a page
+               actually edited since publication. See docs/components.md#dates. */}}
+          {{ if .Lastmod.After .Date }}
+          <li>
+            {{ i18n "updated-on" }}
+            <time datetime='{{ .Lastmod.Format "2006-01-02" }}'>
+              {{ time.Format (i18n "date-format") .Lastmod }}
+            </time>
+          </li>
+          {{ end }}
           {{ if $isPost }}
           <li>{{ i18n "reading-time" .ReadingTime }}</li>
           {{ end }}

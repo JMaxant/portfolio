@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.16.2
+version: 1.17.0
 date_published: 2026-08-08
 date_modified: 2026-08-23
 ---
@@ -819,6 +819,30 @@ different formats and the templates must not share an expression between them.
 page and in `card-taxonomy.html`. Nothing caught it: no page overflowed, and axe does not
 validate the *value* of a `datetime`. `tests/time.spec.js` does, on every template that
 emits a `<time>`.
+
+## Dates
+
+Two dates exist per page and they do not come from the same place.
+
+`date` is the publication date, always in front matter. `lastmod` is the update date and is
+**written by hand**, also in front matter: it is absent from the archetypes on purpose,
+since a page being created has nothing to have updated yet. Hugo's default `lastmod` chain
+is `[':git', 'lastmod', 'date', …]`, so with `enableGitInfo` off the `:git` entry is inert
+and the front matter field is picked up with no configuration at all.
+
+`:git` was considered and rejected (#70). It resolves to the last commit touching the file,
+which cannot tell a content edit from a mechanical one: renaming a front matter key across
+`content/veille/*.md` would have restamped all four pages as updated that day. A forgotten
+`lastmod` leaves an honest date behind; an automatic one invents a wrong date on every
+repo-wide pass. `enableGitInfo` also demands `fetch-depth: 0` on every CI checkout, and
+would have constrained the still-open hosting decision — hosts that shallow-clone silently
+produce dates that differ from the local build.
+
+**Display** — `layouts/_default/single.html` adds a "Mis à jour le …" entry to the byline,
+guarded by `{{ if .Lastmod.After .Date }}`, so it appears only on a page that carries an
+explicit `lastmod`. The home page's "Dernières activités" block sorts on `.ByLastmod` and
+shows the bare date without that label: its compact grid gives the date a fixed
+`--size-col-date-compact` column, which a label would overflow.
 
 ## Points to watch
 

@@ -115,6 +115,9 @@ other = "Retour à l'accueil"
 [date-format]
 other = "02/01/2006"
 
+[updated-on]
+other = "Mis à jour le"
+
 [latest-content]
 other = "Derniers contenus"
 
