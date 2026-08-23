@@ -12,15 +12,16 @@
           <p class="single__intro-text">{{ . }}</p>
         {{ end }}
         <ul class="byline meta" role="list">
-          <li>
+          {{/* `byline__meta` marks the textual items, which alone take the separator.
+               See docs/components.md#dates. */}}
+          <li class="byline__meta">
+            {{ i18n "published-on" }}
             <time datetime='{{ .Date.Format "2006-01-02" }}'>
               {{ time.Format (i18n "date-format") .Date }}
             </time>
           </li>
-          {{/* `lastmod` is a manual front matter field, so this only shows on a page
-               actually edited since publication. See docs/components.md#dates. */}}
           {{ if .Lastmod.After .Date }}
-          <li>
+          <li class="byline__meta">
             {{ i18n "updated-on" }}
             <time datetime='{{ .Lastmod.Format "2006-01-02" }}'>
               {{ time.Format (i18n "date-format") .Lastmod }}
@@ -28,10 +29,10 @@
           </li>
           {{ end }}
           {{ if $isPost }}
-          <li>{{ i18n "reading-time" .ReadingTime }}</li>
+          <li class="byline__meta">{{ i18n "reading-time" .ReadingTime }}</li>
           {{ end }}
           {{ range (.GetTerms "tags") }}
-          <li>
+          <li class="tags">
             <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
           </li>
           {{ end }}

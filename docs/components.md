@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.17.0
+version: 1.18.0
 date_published: 2026-08-08
 date_modified: 2026-08-23
 ---
@@ -838,11 +838,30 @@ repo-wide pass. `enableGitInfo` also demands `fetch-depth: 0` on every CI checko
 would have constrained the still-open hosting decision — hosts that shallow-clone silently
 produce dates that differ from the local build.
 
-**Display** — `layouts/_default/single.html` adds a "Mis à jour le …" entry to the byline,
-guarded by `{{ if .Lastmod.After .Date }}`, so it appears only on a page that carries an
-explicit `lastmod`. The home page's "Dernières activités" block sorts on `.ByLastmod` and
-shows the bare date without that label: its compact grid gives the date a fixed
-`--size-col-date-compact` column, which a label would overflow.
+**Display** — `layouts/_default/single.html` labels both dates, "Publié le …" and
+"Mis à jour le …", the second guarded by `{{ if .Lastmod.After .Date }}` so it appears only
+on a page that carries an explicit `lastmod`. Two dates side by side with only one of them
+named is what forces a reader to stop, so the publication date is labelled too even though
+it is the only one on most pages.
+
+The byline is a wrapping flex row with nothing but a gap between items, which read as one
+sentence once an item became a two-part phrase. The textual items therefore carry
+`byline__meta` and take a `·` separator between them:
+
+```css
+.byline__meta + .byline__meta::before {
+  padding-inline-end: var(--spacing-xs);
+  content: '·' / '';
+}
+```
+
+The empty alt text keeps the separator out of the accessibility tree, the same idiom as
+`components/breadcrumb.css`. The tags are deliberately excluded: they are already set apart
+by their border, and a separator between bordered pills is noise.
+
+The home page's "Dernières activités" block sorts on `.ByLastmod` and shows the bare date
+with no label at all: its compact grid gives the date a fixed `--size-col-date-compact`
+column, which a label would overflow.
 
 ## Points to watch
 
