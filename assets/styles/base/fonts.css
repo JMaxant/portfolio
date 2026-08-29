@@ -1,0 +1,15 @@
+@font-face {
+  font-family: Spectral;
+  font-style: normal;
+  font-weight: 300 600;
+  src: url('../fonts/Spectral-Variable.woff2') format('woff2-variations');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Spectral;
+  font-style: italic;
+  font-weight: 300 600;
+  src: url('../fonts/Spectral-Italic-Variable.woff2') format('woff2-variations');
+  font-display: swap;
+}

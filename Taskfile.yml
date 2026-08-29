@@ -17,6 +17,12 @@ tasks:
       - npm ci
       - npx lefthook install
 
+  setup:fonts:
+    desc: Create/refresh the local Python venv with fontmake and fonttools (see docs/fonts.md).
+    cmds:
+      - uv venv scripts/fonts/.venv
+      - uv pip sync --python scripts/fonts/.venv/bin/python scripts/fonts/requirements.txt
+
   qa:
     desc: Run every quality check on all files (exactly what CI's quality job runs).
     cmd: npx lefthook run pre-commit --all-files
@@ -28,16 +34,17 @@ tasks:
       - npx --yes @taplo/cli@0.7.0 fmt $(git ls-files '*.toml')
       - npx --yes markdownlint-cli2@0.23.2 --fix $(git ls-files '*.md' ':!docs/**')
 
-  test:layout:browser:
-    desc: Download the Chromium build Playwright drives.
-    cmd: npx playwright install chromium
-
   test:layout:
     desc: Run the Playwright layout suite (horizontal overflow) — not part of `task qa`, see docs/tests-layout.md.
     # Chromium only: firefox/webkit run in CI (.github/workflows/playwright.yml).
     cmds:
       - task: test:layout:browser
       - npx playwright test --project=chromium
+
+  test:layout:browser:
+    desc: Download the Chromium build Playwright drives.
+    cmd: npx playwright install chromium
+
 
   hugo:serve:
     aliases: [serve, dev, run]
