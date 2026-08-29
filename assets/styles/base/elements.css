@@ -3,7 +3,7 @@ body {
   flex-direction: column;
   max-width: unset;
   min-height: 100vh;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: var(--text-base);
   color: var(--color-text);
   background-color: var(--color-bg);

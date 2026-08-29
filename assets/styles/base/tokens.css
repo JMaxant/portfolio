@@ -24,27 +24,27 @@
   --light-code-number: #8a3200; /* 7.26:1 */
 
   /* Dark theme. */
-  --dark-bg: #16181d;
-  --dark-text: #d6d8dd;
-  --dark-text-alt: #aab0b7;
+  --dark-bg: #0a140e;
+  --dark-text: #d8e4db;
+  --dark-text-alt: #9fb5a5;
   --dark-link: #99acf6;
   --dark-link-hover: #b4c3fa;
   --dark-link-visited: #b9a7d9;
-  --dark-surface: #1c1f27;
-  --dark-surface-alt: #21252e;
-  --dark-border: #2b3040;
+  --dark-surface: #0f2015;
+  --dark-surface-alt: #13281a;
+  --dark-border: #22392a;
 
   /* Same 3:1 constraint as --light-border-strong; worst case is
-     --dark-surface-alt: 3.14:1. */
+     --dark-surface-alt: 3.20:1. */
   --dark-border-strong: #637191;
 
   /* Syntax highlighting, measured against --dark-surface-alt. */
-  --dark-code-comment: #a9b1ba; /* 7.09:1 */
-  --dark-code-keyword: #f7a8cd; /* 8.36:1 */
-  --dark-code-type: #86d9e6; /* 9.56:1 */
-  --dark-code-function: #adc4ff; /* 8.85:1 */
-  --dark-code-string: #9edcae; /* 9.72:1 */
-  --dark-code-number: #f2bd92; /* 9.11:1 */
+  --dark-code-comment: #a9b1ba; /* 7.19:1 */
+  --dark-code-keyword: #f7a8cd; /* 8.50:1 */
+  --dark-code-type: #86d9e6; /* 9.72:1 */
+  --dark-code-function: #adc4ff; /* 9.00:1 */
+  --dark-code-string: #9edcae; /* 9.88:1 */
+  --dark-code-number: #f2bd92; /* 9.26:1 */
 
   /* Breakpoints. Declarative only: custom properties are illegal in a media condition, so
      every query repeats the literal. scripts/quality/check-breakpoints.mjs fails on a width
@@ -63,14 +63,14 @@
   --spacing-2xl: 6.4rem;
 
   /* Type scale */
-  --text-xs: 1.2rem;
-  --text-sm: 1.4rem;
-  --text-base: 1.6rem;
-  --text-md: 1.8rem;
-  --text-lg: 2.2rem;
-  --text-xl: 3rem;
-  --text-2xl: 3.6rem;
-  --text-hero: 4.4rem;
+  --text-xs: 1.4rem;
+  --text-sm: 1.6rem;
+  --text-base: 1.8rem;
+  --text-md: 2rem;
+  --text-lg: 2.4rem;
+  --text-xl: 3.2rem;
+  --text-2xl: 3.8rem;
+  --text-hero: 4.6rem;
 
   /* Line heights */
   --line-height-heading: 1.2;
@@ -104,8 +104,7 @@
   --font-weight-bold: 600;
   --font-weight-normal: 400;
   --font-weight-light: 300;
-  --font-weight-thin: 200;
-  --font-sans: 'Alexandria', system-ui, sans-serif;
+  --font-serif: 'Spectral', 'Georgia', 'Times New Roman', serif;
   --font-mono: ui-monospace, 'Cascadia Code', monospace;
 
   /* Controls. 4.4rem = 44px, the WCAG 2.5.5 (AAA) target size. */

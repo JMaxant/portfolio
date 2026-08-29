@@ -1,8 +1,8 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.16.0
+version: 1.17.0
 date_published: 2026-08-08
-date_modified: 2026-08-18
+date_modified: 2026-08-27
 ---
 
 # CSS tokens and breakpoints
@@ -21,6 +21,7 @@ assets/styles/
   main.css            the only file carrying @import; holds the cascade order
   base/
     reset.css         normalisation
+    fonts.css         the @font-face rules of the self-hosted typeface
     tokens.css        raw palettes, semantic tokens, theme switching, scales
     elements.css      bare element styles (h1…h4, p, a, table, blockquote…)
   components/         theme-switcher, menu, card, entry-list, tag, cta, code
@@ -89,14 +90,14 @@ is the only pair worth solving.
 
 Tightest pairs, all measured against `surface-alt`:
 
-| Theme | Token | Ratio |
-|-------|-------|-------|
-| light | `--light-link` | 7.03 |
-| light | `--light-text-alt` | 7.04 |
-| light | `--light-link-visited` | 7.06 |
-| dark | `--dark-link` | 7.00 |
-| dark | `--dark-link-visited` | 7.01 |
-| dark | `--dark-text-alt` | 7.02 |
+| Theme | Token                  | Ratio |
+|-------|------------------------|-------|
+| light | `--light-link`         | 7.03  |
+| light | `--light-text-alt`     | 7.04  |
+| light | `--light-link-visited` | 7.06  |
+| dark  | `--dark-link`          | 7.12  |
+| dark  | `--dark-link-visited`  | 7.13  |
+| dark  | `--dark-text-alt`      | 7.15  |
 
 **The margin is thin by construction**: these six values were derived by moving lightness
 only — hue and saturation untouched — until they just cleared the threshold, so the visual
@@ -132,23 +133,35 @@ saturation untouched — against the same worst-case background:
 | Theme | Token | Value | Ratio vs `surface-alt` |
 |-------|-------|-------|------------------------|
 | light | `--light-border-strong` | `#7c87a0` | 3.16 |
-| dark | `--dark-border-strong` | `#637191` | 3.14 |
+| dark | `--dark-border-strong` | `#637191` | 3.20 |
+
+## Typefaces
+
+`base/fonts.css` holds the `@font-face` rules and nothing else; the family lands in
+`base/tokens.css` as `--font-serif`, and that is what components consume.
+
+Spectrail Serif is **self-hosted** and served as six files, each covering the `wght` axis from 300 to 600.
+
+The `url()` in `@font-face` is relative to `base/fonts.css`. `css.Build` rewrites it to the
+fingerprinted copy esbuild publishes in `public/styles/`, so the font files need no pipeline
+of their own. A missing file is a hard build error, not a silent fallback — esbuild reports
+`Could not resolve "../fonts/…"` and the build stops.
 
 ## Scales
 
-| Family | Tokens | Notes |
-|--------|--------|-------|
-| Spacing | `--spacing-2xs` … `--spacing-2xl` | 0.4rem to 6.4rem |
-| Text sizes | `--text-xs` … `--text-hero` | `--text-base` is the body text size |
-| Font weights | `--font-weight-thin`, `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold` | 200, 300, 400, 600 — matches the Alexandria variants imported in `main.css` |
-| Line heights | `--line-height-heading`, `--line-height-base` | |
-| Letter spacing | `--letter-spacing-wide` | `0.05em`, uppercase labels only (`layout/parcours.css`) — without the extra tracking the caps run into each other |
-| Container widths | `--container-wide`, `--container-default`, `--container-reading` | `--container-reading` is in `ch`, not px, and is consumed by the article grid rather than by a utility — see [Article layout grid](#article-layout-grid) |
-| List columns | `--size-col-date`, `--size-col-date-compact`, `--size-col-type`, `--size-date-nudge` | The date column of `entry-list`, at its two widths, plus the type column of the compact variant. `--size-date-nudge` is the optical `0.2rem` that lines a date up with a bigger title |
-| Focus ring | `--focus-ring-width`, `--focus-ring-offset`, `--focus-ring-offset-inset` | `2px` / `2px`, an RGAA 10.7 decision. The inset offset (`-3px`) pulls the ring inside a filled control, where the outward one would land outside its container |
-| Controls | `--size-touch-target`, `--size-icon`, `--size-icon-sm` | `--size-touch-target` is 4.4rem = 44px, the WCAG 2.5.5 (AAA) target size. It is an accessibility constant, not a look — do not shrink it to fit a layout |
-| Stacking | `--z-nav-panel`, `--z-header`, `--z-popover`, `--z-skip-link` | 1 / 2 / 10 / 100000. The whole ordering of the header, in one place. `.site-header__bar` needs `--z-header` above the panel's `--z-nav-panel` because the two are siblings — see [components.md](components.md#navhtml) |
-| Misc | `--border-radius`, `--border-width-thin`, `--border-thin`, `--transition`, `--transition-duration`, `--transition-easing` | `--border-thin` composes `--border-width-thin` and `--color-border`, so it follows the theme; the width alone is for the borders that need another colour (a transparent one, `--color-border-strong`, a dashed style). `--transition` is the `all` shorthand; components that must not animate `all` compose the two parts instead |
+| Family           | Tokens                                                                                                                    | Notes                                                                                                                                                                                                                                                                                                                               |
+|------------------|---------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Spacing          | `--spacing-2xs` … `--spacing-2xl`                                                                                         | 0.4rem to 6.4rem                                                                                                                                                                                                                                                                                                                    |
+| Text sizes       | <br/>`--text-xs` … `--text-hero`                                                                                               | `--text-base` is the body text size                                                                                                                                                                                                                                                                                                 |
+| Font weights     | `--font-weight-light`, `--font-weight-normal`, `--font-weight-bold`                                                       | 300, 400, 600 — all three sit inside the 300-600 `wght` axis of Spectral Serif, see [Typefaces](#typefaces)                                                                                                                                                                                                                         |
+| Line heights     | `--line-height-heading`, `--line-height-base`                                                                             |                                                                                                                                                                                                                                                                                                                                     |
+| Letter spacing   | `--letter-spacing-wide`                                                                                                   | `0.05em`, uppercase labels only (`layout/parcours.css`) — without the extra tracking the caps run into each other                                                                                                                                                                                                                   |
+| Container widths | `--container-wide`, `--container-default`, `--container-reading`                                                          | `--container-reading` is in `ch`, not px, and is consumed by the article grid rather than by a utility — see [Article layout grid](#article-layout-grid)                                                                                                                                                                            |
+| List columns     | `--size-col-date`, `--size-col-date-compact`, `--size-col-type`, `--size-date-nudge`                                      | The date column of `entry-list`, at its two widths, plus the type column of the compact variant. `--size-date-nudge` is the optical `0.2rem` that lines a date up with a bigger title                                                                                                                                               |
+| Focus ring       | `--focus-ring-width`, `--focus-ring-offset`, `--focus-ring-offset-inset`                                                  | `2px` / `2px`, an RGAA 10.7 decision. The inset offset (`-3px`) pulls the ring inside a filled control, where the outward one would land outside its container                                                                                                                                                                      |
+| Controls         | `--size-touch-target`, `--size-icon`, `--size-icon-sm`                                                                    | `--size-touch-target` is 4.4rem = 44px, the WCAG 2.5.5 (AAA) target size. It is an accessibility constant, not a look — do not shrink it to fit a layout                                                                                                                                                                            |
+| Stacking         | `--z-nav-panel`, `--z-header`, `--z-popover`, `--z-skip-link`                                                             | 1 / 2 / 10 / 100000. The whole ordering of the header, in one place. `.site-header__bar` needs `--z-header` above the panel's `--z-nav-panel` because the two are siblings — see [components.md](components.md#navhtml)                                                                                                             |
+| Misc             | `--border-radius`, `--border-width-thin`, `--border-thin`, `--transition`, `--transition-duration`, `--transition-easing` | `--border-thin` composes `--border-width-thin` and `--color-border`, so it follows the theme; the width alone is for the borders that need another colour (a transparent one, `--color-border-strong`, a dashed style). `--transition` is the `all` shorthand; components that must not animate `all` compose the two parts instead |
 
 ### `--header-height`
 
