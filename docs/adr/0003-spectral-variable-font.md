@@ -1,6 +1,6 @@
 ---
 title: ADR 0003 — Self-build a Spectral variable font from upstream UFO sources
-version: 1.0.0
+version: 1.1.0
 date_published: 2026-08-29
 date_modified: 2026-08-29
 ---
@@ -30,6 +30,19 @@ Sources aren't vendored into this repo — same pattern as the previous static f
 shipped as committed binaries with no build sources in-tree. The pinned commit above is the
 audit trail; `assets/styles/fonts/OFL.txt` is the upstream license, copied verbatim (the
 previous static files shipped with no license file at all — this fixes that gap too).
+
+### No renaming needed
+
+The OFL only requires renaming a modified font when the original declares a Reserved Font
+Name (RFN) — the rename obligation is conditional on that declaration, not a blanket rule
+for any modification ([openfontlicense.org](https://openfontlicense.org/how-to-modify-ofl-fonts/):
+"RFNs are optional and not required" / renaming is needed "when authors have reserved names
+via the RFN mechanism"). `assets/styles/fonts/OFL.txt` declares none — nothing follows the
+copyright line (`Copyright 2017 Production Type ...`), and "Spectral" doesn't otherwise
+appear in the license text. So this build — despite being a genuine Modified Version under
+OFL's definition (rebuilt from source, axis remapped, glyphs normalized and subset) — keeps
+the name "Spectral" in both the font's internal name table and `--font-serif`/CSS, with no
+licensing issue.
 
 ## Two files, not one
 
