@@ -55,6 +55,29 @@ To run every check on all files (not just staged ones):
 task qa
 ```
 
+## Optional tooling
+
+Neither of these runs as part of `task setup`/`task qa` — both are on-demand, for the
+specific work that needs them.
+
+### Font tooling
+
+`scripts/fonts/` holds a `fontmake`/`fonttools` Python toolchain (in a local `uv`-managed
+venv, gitignored) used to build the self-hosted Spectral variable fonts under
+`assets/styles/fonts/` from upstream sources. Provisioned with `task setup:fonts`. See
+[Font tooling](docs/fonts.md) for setup/usage and
+[ADR 0003](docs/adr/0003-spectral-variable-font.md) for why this exists and how those font
+files were built.
+
+### Playwright layout/functional tests
+
+```sh
+task test:layout
+```
+
+Real-browser tests (accessibility, nav, breakpoints, overflow, theme switcher, and more)
+under `tests/`, too slow for a pre-commit hook. See [Playwright test suite](docs/tests-layout.md).
+
 ## CI
 
 Two GitHub Actions workflows, independent of deployment:
