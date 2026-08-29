@@ -140,7 +140,13 @@ saturation untouched — against the same worst-case background:
 `base/fonts.css` holds the `@font-face` rules and nothing else; the family lands in
 `base/tokens.css` as `--font-serif`, and that is what components consume.
 
-Spectrail Serif is **self-hosted** and served as six files, each covering the `wght` axis from 300 to 600.
+Spectral Serif is **self-hosted** as two variable font files — one roman, one italic —
+each covering the whole `wght` axis from 300 to 600 in a single file (`font-weight: 300 600;`
+range syntax in the `@font-face` rule). Built with `fontmake`/`fonttools`
+(`docs/fonts.md`) from the official [`googlefonts/spectral`](https://github.com/googlefonts/spectral)
+UFO sources, since Spectral has no official variable release; provenance and licensing are
+recorded in [ADR 0003](adr/0003-spectral-variable-font.md). `assets/styles/fonts/OFL.txt`
+is the upstream SIL Open Font License.
 
 The `url()` in `@font-face` is relative to `base/fonts.css`. `css.Build` rewrites it to the
 fingerprinted copy esbuild publishes in `public/styles/`, so the font files need no pipeline

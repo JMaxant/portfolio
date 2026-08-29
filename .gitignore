@@ -5,6 +5,7 @@ _vendor/
 .claude
 node_modules/
 CODE_REVIEW.md
+scripts/fonts/.venv/
 
 # Playwright
 /test-results/
