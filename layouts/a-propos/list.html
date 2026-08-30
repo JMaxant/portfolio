@@ -1,0 +1,20 @@
+{{ define "main" }}
+  {{- /* Section index of a-propos, standing in for a single page: the section holds exactly
+         one child (Parcours), already reachable from its own top-level menu entry, so this
+         renders as plain content rather than listing .Pages. No byline: same reasoning as
+         layouts/parcours/single.html, this page carries no date. */ -}}
+  {{ partial "breadcrumb.html" (dict "page" .) }}
+
+  <article class="single container-content-grid">
+    <header class="single__heading">
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}
+      <div class="single__intro">
+        <p class="single__intro-text">{{ . }}</p>
+      </div>
+      {{ end }}
+    </header>
+
+    {{ .Content }}
+  </article>
+{{ end }}

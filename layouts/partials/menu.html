@@ -4,8 +4,8 @@
     page     (required) — the page being rendered, for the active trail
 
   Thin wrapper: resolves the top-level menu by name and renders the <nav><ul> shell. All <li>
-  rendering — including recursion into submenus — is delegated to menu-items.html, which is
-  not meant to be called except from here and from itself.
+  rendering is delegated to menu-items.html, which is not meant to be called except from
+  here.
 
   IsMenuCurrent takes the menu *identifier*, not the menu object, and both methods only
   ever match an entry declared with `pageRef`. See docs/components.md#menuhtml.

@@ -1,16 +1,12 @@
 {{- /*
   Expected context (dict):
     entries  (required) — a Menu (slice of *navigation.MenuEntry), already sorted (.ByWeight)
-    page     (required) — forwarded unchanged at every recursion depth; IsMenuCurrent/
-                           HasMenuCurrent are resolved against menuName + the entry, so this
-                           must not be re-derived
-    menuName (required) — the string identifier IsMenuCurrent/HasMenuCurrent need, and also
-                           used to namespace generated submenu ids; passed through unchanged,
-                           never re-derived from entries
+    page     (required) — the page being rendered, against which IsMenuCurrent/
+                           HasMenuCurrent are resolved
+    menuName (required) — the string identifier IsMenuCurrent/HasMenuCurrent need
 
-  Not meant to be called directly except by menu.html and by itself: it renders <li> for a
-  flat list of entries and recurses into a nested <ul class="submenu"> for any entry with
-  children, at any depth. See docs/components.md#menu-itemshtml.
+  Not meant to be called directly except by menu.html: renders <li> for a flat list of menu
+  entries. See docs/components.md#menu-itemshtml.
 */ -}}
 {{- if not .entries -}}
   {{- errorf "partial menu-items.html: missing required \"entries\" parameter" -}}
@@ -27,25 +23,8 @@
 {{ range .entries }}
 {{- $current := $page.IsMenuCurrent $menuName . -}}
 {{- $ancestor := $page.HasMenuCurrent $menuName . -}}
-<li class="menu__item{{ if .HasChildren }} menu__item--has-children{{ end }}">
-  {{ if .HasChildren }}
-    {{- /* menuName is folded into the id, not just KeyName, so "main" and "error" — both
-           rendered on 404.html — can never collide even if an entry in each ever shared an
-           identifier. */ -}}
-    {{- $id := printf "submenu-%s-%s" $menuName (.KeyName | default (substr (md5 .Name) 0 8)) -}}
-    <button
-      type="button"
-      class="submenu-toggle"
-      aria-expanded="false"
-      aria-controls="{{ $id }}"
-      aria-label="Ouvrir le sous-menu {{ .Name }}">
-      {{ .Name }}
-      {{ partial "icon.html" (dict "name" "chevron-down" "class" "submenu-toggle__caret") }}
-    </button>
-    <ul class="submenu" id="{{ $id }}" role="list">
-      {{ partial "menu-items.html" (dict "entries" .Children.ByWeight "page" $page "menuName" $menuName) }}
-    </ul>
-  {{ else if $current }}
+<li class="menu__item">
+  {{ if $current }}
     <span aria-current="page">{{ .Name }}</span>
   {{ else if $ancestor }}
     <a aria-current="true" href="{{ .URL }}">{{ .Name }}</a>

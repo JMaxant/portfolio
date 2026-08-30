@@ -20,20 +20,13 @@ weight = 40
 
 [[main]]
 name = 'A propos'
+pageRef = '/a-propos/'
 weight = 50
-identifier = 'a-propos'
-
-[[main]]
-name = 'Qui suis-je ?'
-parent = 'a-propos'
-pageRef = '/a-propos/qui-suis-je'
-weight = 10
 
 [[main]]
 name = 'Parcours'
-parent = 'a-propos'
 pageRef = '/a-propos/parcours'
-weight = 20
+weight = 60
 
 [[error]]
 name = 'Projets'
