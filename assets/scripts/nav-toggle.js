@@ -31,19 +31,7 @@
   const { isOpen, setOpen } = window.createDisclosure({
     toggle,
     panel: nav,
-    onChange: (open) => {
-      setInert(open);
-
-      // A closed panel hides any open submenu-toggle inside it; reset the state directly
-      // rather than reopening it, or the next open would show it pre-expanded.
-      // See docs/components.md#menu-itemshtml.
-      if (!open) {
-        nav.querySelectorAll('.submenu-toggle[aria-expanded="true"]').forEach((submenuToggle) => {
-          submenuToggle.setAttribute('aria-expanded', 'false');
-          document.getElementById(submenuToggle.getAttribute('aria-controls'))?.classList.remove('is-open');
-        });
-      }
-    },
+    onChange: setInert,
   });
 
   nav.querySelectorAll('a').forEach((link) => {
