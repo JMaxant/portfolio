@@ -9,7 +9,9 @@
          to this page only — the "Avant" paragraph — stays in the Markdown body, and the
          front matter description keeps its own job, the meta description.
 
-         Unlike _default/single.html this template emits no byline: /parcours/ carries no date.
+         Unlike _default/single.html this template emits no byline: /a-propos/parcours/ carries
+         no date. Selected via the front matter `type = 'parcours'`, since the content now
+         lives under the a-propos section rather than a parcours one.
 
          Everything read from cv.json is resolved and validated in this preamble, before any
          output, so a broken CV fails the build instead of rendering a page with silent holes. */ -}}

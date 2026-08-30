@@ -28,28 +28,7 @@
     },
   });
 
-  document.addEventListener('click', (event) => {
-    if (
-      isOpen()
-      && !panel.contains(event.target)
-      && !toggle.contains(event.target)
-    ) {
-      setOpen(false);
-    }
-  });
-
-  /* Focus leaving the widget dismisses it, so Tab cannot strand the user in the page with
-     an open popover floating above it. No focus is moved here: it has already gone where
-     the user asked it to go. */
-  document.addEventListener('focusin', (event) => {
-    if (
-      isOpen()
-      && !panel.contains(event.target)
-      && !toggle.contains(event.target)
-    ) {
-      setOpen(false);
-    }
-  });
+  window.dismissOnOutside({ toggle, panel, isOpen, setOpen });
 
   /* Below the breakpoint the panel is permanently visible and the trigger is hidden, so a
      leftover aria-expanded="true" would describe a control the user can no longer reach. */

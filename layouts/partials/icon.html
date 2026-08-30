@@ -12,7 +12,7 @@
   assets/icons/sprite.svg, which baseof.html inlines once per page.
   See docs/components.md#iconhtml.
 */ -}}
-{{- $allowed := slice "external-link" "moon" "sun" "theme-system" -}}
+{{- $allowed := slice "chevron-down" "external-link" "moon" "sun" "theme-system" -}}
 {{- if not (in $allowed .name) -}}
   {{- errorf "partial icon.html: invalid name %q, expected one of %v" .name $allowed -}}
 {{- end -}}

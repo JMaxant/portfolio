@@ -7,7 +7,7 @@ date_modified: 2026-08-14
 
 # Contributing to the Parcours page
 
-Ref: issue #47. How to edit the content of `/parcours/` — the résumé/CV page. For the
+Ref: issue #47. How to edit the content of `/a-propos/parcours/` — the résumé/CV page. For the
 template and CSS contract (partials, classes, integration points), see
 [components.md](components.md#timeline-itemhtml) instead; this document is about the data,
 not the markup.
@@ -19,12 +19,17 @@ Two files, two different jobs — never move content between them:
 | File | Holds | Rendered as |
 |------|-------|-------------|
 | `assets/cv.json` | Positions, education, skills — what a CV holds | The timeline and the skills sections, and republished verbatim at `/cv.json` |
-| `content/parcours/index.md` | The `description` front matter (meta description) and the free-text paragraph about the years before the reconversion | The `<h1>`/intro and the "Avant" section body |
+| `content/a-propos/parcours.md` | The `description` front matter (meta description) and the free-text paragraph about the years before the reconversion | The `<h1>`/intro and the "Avant" section body |
 
 `assets/cv.json` is written in [JSON Resume](https://jsonresume.org/schema/) format, with a
 few site-specific extensions prefixed `x_` (`x_tags`, `x_preuve`) that upstream does not
 define. Adding a section to the page means adding data to `cv.json`, not editing
 `layouts/parcours/single.html` — the template only ever reads what's already there.
+
+The page lives under `content/a-propos/`, but keeps `type = 'parcours'` in its front matter:
+Hugo's template lookup follows `.Type`, and without it the page would fall into the
+`a-propos` section and render through `layouts/_default/single.html` instead, silently
+dropping the whole timeline/skills/`cv.json` output.
 
 ## Editing `cv.json`
 

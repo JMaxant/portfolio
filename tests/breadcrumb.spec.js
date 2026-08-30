@@ -10,7 +10,7 @@ const cases = [
   { name: 'projet', url: '/projets/api-suivi-go/', links: ['Accueil', 'Projets'], current: 'API de suivi en Go' },
   { name: 'tags list', url: '/tags/', links: ['Accueil'], current: 'Tags' },
   { name: 'tag term', url: '/tags/go/', links: ['Accueil', 'Tags'], current: 'Go' },
-  { name: 'parcours', url: '/parcours/', links: ['Accueil'], current: 'Parcours' },
+  { name: 'parcours', url: '/a-propos/parcours/', links: ['Accueil', 'A propos'], current: 'Parcours' },
 ];
 
 for (const { name, url, links, current } of cases) {
