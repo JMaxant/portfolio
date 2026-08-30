@@ -5,23 +5,35 @@ weight = 10
 
 [[main]]
 name = 'Projets'
-pageRef = '/projets'
+pageRef = '/projets/'
 weight = 20
 
 [[main]]
 name = 'Blog'
-pageRef = '/blog'
+pageRef = '/blog/'
 weight = 30
 
 [[main]]
 name = 'Veille'
-pageRef = '/veille'
+pageRef = '/veille/'
 weight = 40
 
 [[main]]
-name = 'Parcours'
-pageRef = '/parcours'
+name = 'A propos'
 weight = 50
+identifier = 'a-propos'
+
+[[main]]
+name = 'Qui suis-je ?'
+parent = 'a-propos'
+pageRef = '/a-propos/qui-suis-je'
+weight = 10
+
+[[main]]
+name = 'Parcours'
+parent = 'a-propos'
+pageRef = '/a-propos/parcours'
+weight = 20
 
 [[error]]
 name = 'Projets'
@@ -40,5 +52,5 @@ weight = 40
 
 [[error]]
 name = 'Parcours'
-url = '/parcours/'
+url = '/a-propos/parcours/'
 weight = 50

@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.18.0
+version: 1.19.0
 date_published: 2026-08-08
-date_modified: 2026-08-23
+date_modified: 2026-08-30
 ---
 
 # Components — partials and integration
@@ -89,7 +89,7 @@ compose with, so it opens the inventory.
 {{ partial "icon.html" (dict "name" "sun" "class" "theme-switcher__icon") }}
 ```
 
-Available names — `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
+Available names — `chevron-down`, `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
 build through `errorf`; the whitelist mirrors the symbol ids of `assets/icons/sprite.svg`
 and has to be edited alongside it.
 
@@ -107,7 +107,8 @@ same-origin rule. Inlining wins while the sprite stays this small; the arbitrati
 around thirty icons, when the bytes repeated on every page outweigh one cached request.
 
 **Callers** — `entry-link.html` and `projets-meta.html` for the external-link marker,
-`theme-switcher.html` for the sun of the trigger and the three icons of the radio group.
+`theme-switcher.html` for the sun of the trigger and the three icons of the radio group,
+`menu-items.html` for the chevron of a submenu toggle.
 
 **Drawing** — 24×24 `viewBox`, `stroke-width` 1.8, `stroke` and `fill` in `currentColor`
 only, so the icons follow the semantic tokens and therefore both themes. A standalone `.svg`
@@ -365,7 +366,7 @@ other inline element that can end up as a direct child of `.Content` needs the s
 validates its parameters then delegates to the partial.
 
 ```markdown
-{{< cta url="/parcours/" label="Mon parcours" >}}
+{{< cta url="/a-propos/parcours/" label="Mon parcours" >}}
 {{< cta url="/contact/" label="Me contacter" variant="ghost" >}}
 ```
 
@@ -501,7 +502,9 @@ block (0-2-0) and leave the panel absolutely positioned inside the burger menu.
 ### `menu.html`
 
 Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name, and marks the active
-trail on the entry the visitor is currently under.
+trail on the entry the visitor is currently under. It is a thin wrapper: it resolves the menu
+and renders the `<nav><ul class="menu menu--<menuName>">` shell, then delegates every `<li>` —
+including recursion into submenus — to [`menu-items.html`](#menu-itemshtml).
 
 | Key | Required | Default | Description |
 |-----|----------|---------|-------------|
@@ -541,6 +544,10 @@ error at all**:
    passed `page` evaluates to nil, and Hugo calls a method on nil without complaining — the
    condition is simply always false. This is the `.page.` prefix trap from
    [Dictionary-based calls](#dictionary-based-calls), in its most silent form.
+4. **A `HasChildren` entry needs its own `identifier`.** `KeyName()` falls back to the raw
+   `Name` when `identifier` is absent, and `Name` can contain spaces or punctuation
+   (`Qui suis-je ?`) — not a valid HTML `id`. Every menu entry with children in
+   `config/_default/menus.toml` must set `identifier`, exactly like `a-propos` does.
 
 **What matches nothing, by construction**: taxonomy pages (`/tags/`, `/tags/<term>/`) and
 pages sitting at the root, since neither is under a menu entry. Their location is covered by
@@ -550,12 +557,21 @@ their own `h1`, and by [`breadcrumb.html`](#breadcrumbhtml), which they do carry
 on `/blog/`, tabbing goes Accueil → Projets → Veille → Parcours. The ancestor entry stays a
 link. `aria-current` carries the semantics either way.
 
+**An entry with children is never a link, even with a `pageRef`.** The button/link branches
+in `menu-items.html` are mutually exclusive — this is why "A propos" has only `identifier`,
+no `pageRef`: giving it one would be silently ignored, since `HasChildren` wins. An entry that
+needs to be both a landing page and a submenu trigger is not supported.
+
 **Integration** (`components/menu.css`):
 
 | Class / selector | Role |
 |------------------|------|
 | `menu` | Block, on the `<ul>`; `menu--main`, `menu--error`, `menu--footer` for the variants |
 | `[aria-current]` | The active entry, whatever the element |
+| `menu__item` | Element: one entry; `position: relative` anchors a desktop submenu dropdown |
+| `menu__item--has-children` | Modifier: entry rendered as a disclosure trigger instead of a link |
+| `submenu-toggle` | The disclosure button; caret via `submenu-toggle__caret`, wired by `submenu-toggle.js` through `createDisclosure` and `dismissOnOutside` |
+| `submenu` | The nested `<ul>`; `display: none` until `.is-open`, absolute dropdown above 768px (`--z-popover`), inline block below it |
 
 The selector is written without an element on purpose: it has to match the `<span>` of the
 current page as well as the `<a>` of the ancestor. For the same reason the rule repeats
@@ -570,6 +586,45 @@ Watch the specificity when adding to this block: `.menu [aria-current]` is `(0,2
 `a:hover` is `(0,1,1)`, so a rule written too strongly freezes the hover colour on the
 active entry — it was the only link in the menu not reacting to the pointer until
 `&:hover` was declared inside it.
+
+**Without JavaScript**, `.submenu-toggle` is hidden and `.submenu` is forced back into normal
+flow, always shown — same "hide the control, keep the content" philosophy as `.menu-toggle`/
+`.site-nav` below. The difference: this rule applies **unconditionally**, not only below
+768px. The top-level burger only needs JS on mobile — above 768px `.site-nav` sits in flow
+regardless — but a submenu is collapsed by JS at every width, so without JS it has no
+open/closed state to fall back to at any width and must simply stay expanded.
+
+### `menu-items.html`
+
+Renders `<li>` for a flat list of menu entries, and recurses into a nested
+`<ul class="submenu">` for any entry with children — at any depth. Not meant to be called
+directly except by [`menu.html`](#menuhtml) and by itself.
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `entries` | yes | — | A `Menu` (already sorted, e.g. `.ByWeight`) |
+| `page` | yes | — | Forwarded unchanged at every recursion depth |
+| `menuName` | yes | — | Forwarded unchanged at every recursion depth |
+
+Only `entries` changes across the recursion — `page` and `menuName` are threaded through as-is
+so `IsMenuCurrent`/`HasMenuCurrent` behave identically at every depth, the same active-trail
+traps documented under `menu.html` included.
+
+**Submenu ids** are built as `submenu-<menuName>-<KeyName>`, e.g. `submenu-main-a-propos`.
+`menuName` is folded in, not just `KeyName`, because `main` and `error` are both rendered on
+`layouts/404.html` — without it, an identifier shared between the two menus would produce two
+elements with the same `id`.
+
+**The submenu never opens by itself.** Even when the current page is inside it (`Parcours`
+under `A propos`), the panel stays closed until clicked — open/closed state is owned entirely
+by `submenu-toggle.js`, exactly like the mobile nav panel doesn't auto-open just because the
+visitor is on a page under it.
+
+**Only one submenu is open at a time.** `submenu-toggle.js` keeps a `toggle`/`setOpen` pair
+per instance; opening one closes every other still expanded, so two dropdowns can never
+overlap on screen. Each instance also closes on an outside click and when focus leaves it,
+through `dismissOnOutside` in `00-disclosure.js` — the same behaviour as the theme popover,
+see `docs/theme-switcher.md`.
 
 ### `breadcrumb.html`
 

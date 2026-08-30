@@ -5,6 +5,7 @@
 }
 
 .menu {
+  position: relative;
   display: flex;
   gap: var(--spacing-lg);
   font-size: var(--text-base);
@@ -23,6 +24,79 @@
     color: var(--color-text);
     text-decoration: underline;
   }
+}
+
+.submenu-toggle {
+  display: inline-flex;
+  gap: var(--spacing-2xs);
+  align-items: center;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+
+  &:hover,
+  &:focus {
+    color: var(--color-link-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-link);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
+.submenu-toggle__caret {
+  transition: transform var(--transition-duration) var(--transition-easing);
+}
+
+.submenu-toggle[aria-expanded="true"] .submenu-toggle__caret {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  display: none;
+  background: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border-strong);
+
+  &.is-open {
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    z-index: var(--z-popover);
+    display: block;
+    min-width: 100%;
+    padding-block: var(--spacing-xs);
+    padding-inline: var(--spacing-sm);
+    box-shadow: var(--box-shadow);
+  }
+
+  .menu__item {
+    padding-block: var(--spacing-xs);
+
+    + .menu__item {
+    border-top: var(--border-thin);
+    }
+  }
+}
+
+/* Without JS neither .submenu-toggle nor .submenu can ever change state, so the control is
+   hidden and its content is shown unconditionally — not only below 768px like .site-nav,
+   because unlike the burger this disclosure is collapsed by JS at every width, not just on
+   mobile. */
+:root:not(.js) .submenu-toggle {
+  display: none;
+}
+
+:root:not(.js) .submenu {
+  position: static;
+  z-index: auto;
+  display: block;
+  padding: 0;
+  background: none;
+  border: none;
 }
 
 .menu-toggle {
@@ -139,7 +213,24 @@
     border-block-end: var(--border-thin);
   }
 
-  .menu li:last-child a {
+  .submenu-toggle {
+    justify-content: space-between;
+    width: 100%;
+    padding-block: var(--spacing-sm);
+    font-size: var(--text-md);
+    border-block-end: var(--border-thin);
+  }
+
+  /* Same specificity trick as .theme-switcher__panel.is-open: a media query adds no
+     specificity, so `.submenu.is-open` (0-2-0) needs repeating here to outrank the desktop
+     absolute-positioning rule above, which is also 0-2-0 — source order decides. */
+  .submenu.is-open {
+    position: static;
+    z-index: auto;
+  }
+
+  .menu li:last-child a,
+  .menu li:last-child .submenu-toggle {
     border-block-end: none;
   }
 

@@ -3,5 +3,5 @@
 export const PAGES = [
   ['blog list', '/blog/'],
   ['cas max', '/cas-max/'],
-  ['parcours', '/parcours/'],
+  ['parcours', '/a-propos/parcours/'],
 ];
