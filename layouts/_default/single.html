@@ -1,6 +1,5 @@
 {{ define "main" }}
-  {{- /* Reading time and post navigation are for blog articles only. This template
-         also serves /parcours/, which carries no date and is left untouched. */ -}}
+  {{- /* Reading time and post navigation are for blog articles only. */ -}}
   {{- $isPost := eq .Section "blog" }}
   {{ partial "breadcrumb.html" (dict "page" .) }}
 

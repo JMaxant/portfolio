@@ -149,6 +149,7 @@
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
   --focus-ring-offset-inset: -3px;
+  --box-shadow: 0 5px 10px 0 var(--color-surface-alt);
 
   font-size: 62.5%; /* 1rem = 10px */
 }

@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.18.0
+version: 1.20.0
 date_published: 2026-08-08
-date_modified: 2026-08-23
+date_modified: 2026-08-30
 ---
 
 # Components — partials and integration
@@ -365,7 +365,7 @@ other inline element that can end up as a direct child of `.Content` needs the s
 validates its parameters then delegates to the partial.
 
 ```markdown
-{{< cta url="/parcours/" label="Mon parcours" >}}
+{{< cta url="/a-propos/parcours/" label="Mon parcours" >}}
 {{< cta url="/contact/" label="Me contacter" variant="ghost" >}}
 ```
 
@@ -501,7 +501,9 @@ block (0-2-0) and leave the panel absolutely positioned inside the burger menu.
 ### `menu.html`
 
 Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name, and marks the active
-trail on the entry the visitor is currently under.
+trail on the entry the visitor is currently under. It is a thin wrapper: it resolves the menu
+and renders the `<nav><ul class="menu menu--<menuName>">` shell, then delegates every `<li>`
+to [`menu-items.html`](#menu-itemshtml).
 
 | Key | Required | Default | Description |
 |-----|----------|---------|-------------|
@@ -556,6 +558,7 @@ link. `aria-current` carries the semantics either way.
 |------------------|------|
 | `menu` | Block, on the `<ul>`; `menu--main`, `menu--error`, `menu--footer` for the variants |
 | `[aria-current]` | The active entry, whatever the element |
+| `menu__item` | Element: one entry |
 
 The selector is written without an element on purpose: it has to match the `<span>` of the
 current page as well as the `<a>` of the ancestor. For the same reason the rule repeats
@@ -570,6 +573,23 @@ Watch the specificity when adding to this block: `.menu [aria-current]` is `(0,2
 `a:hover` is `(0,1,1)`, so a rule written too strongly freezes the hover colour on the
 active entry — it was the only link in the menu not reacting to the pointer until
 `&:hover` was declared inside it.
+
+### `menu-items.html`
+
+Renders `<li>` for a flat list of menu entries. Not meant to be called directly except by
+[`menu.html`](#menuhtml).
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `entries` | yes | — | A `Menu` (already sorted, e.g. `.ByWeight`) |
+| `page` | yes | — | The page being rendered, against which the active trail is resolved |
+| `menuName` | yes | — | The string identifier IsMenuCurrent/HasMenuCurrent need |
+
+**No nested menus.** Every entry in `config/_default/menus.toml` is flat, and this partial
+does not recurse into children. A menu entry with children used to render as a
+`submenu-toggle` disclosure (`submenu-toggle.js`, `.submenu`/`.submenu-toggle` in
+`menu.css`), removed once the only entry using it ("A propos") became a plain link — check
+git history if a nested menu is needed again.
 
 ### `breadcrumb.html`
 

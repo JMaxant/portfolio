@@ -46,7 +46,7 @@ Trois piliers de contenu à couvrir, par ordre de priorité :
                         de 2-3 projets phares, dernier(s) article(s) de blog, CTA contact
 /projets/             → liste des réalisations
 /projets/<slug>/      → étude de cas détaillée par projet
-/parcours/            → CV / timeline d'expérience + formations + compétences
+/a-propos/parcours/   → CV / timeline d'expérience + formations + compétences
 /blog/                → liste des articles
 /blog/<slug>/         → article
 /veille/              → liste de liens externes commentés (teaser-only : aucune
@@ -54,7 +54,7 @@ Trois piliers de contenu à couvrir, par ordre de priorité :
 /contact/ (ou ancre)  → coordonnées / liens
 ```
 
-**Décidé** : le CV est une page HTML native (`/parcours/`), pas un PDF téléchargeable. Plus facile à faire évoluer qu'un PDF réexporté à chaque mise à jour, et cohérent avec un contenu géré en Markdown comme le reste du site.
+**Décidé** : le CV est une page HTML native (`/a-propos/parcours/`), pas un PDF téléchargeable. Plus facile à faire évoluer qu'un PDF réexporté à chaque mise à jour, et cohérent avec un contenu géré en Markdown comme le reste du site.
 
 ## 5bis. Structure de la page Parcours / CV
 

@@ -1,0 +1,35 @@
+{{- /*
+  Expected context (dict):
+    entries  (required) — a Menu (slice of *navigation.MenuEntry), already sorted (.ByWeight)
+    page     (required) — the page being rendered, against which IsMenuCurrent/
+                           HasMenuCurrent are resolved
+    menuName (required) — the string identifier IsMenuCurrent/HasMenuCurrent need
+
+  Not meant to be called directly except by menu.html: renders <li> for a flat list of menu
+  entries. See docs/components.md#menu-itemshtml.
+*/ -}}
+{{- if not .entries -}}
+  {{- errorf "partial menu-items.html: missing required \"entries\" parameter" -}}
+{{- end -}}
+{{- if not .page -}}
+  {{- errorf "partial menu-items.html: missing required \"page\" parameter" -}}
+{{- end -}}
+{{- if not .menuName -}}
+  {{- errorf "partial menu-items.html: missing required \"menuName\" parameter" -}}
+{{- end -}}
+{{- $page := .page -}}
+{{- $menuName := .menuName -}}
+
+{{ range .entries }}
+{{- $current := $page.IsMenuCurrent $menuName . -}}
+{{- $ancestor := $page.HasMenuCurrent $menuName . -}}
+<li class="menu__item">
+  {{ if $current }}
+    <span aria-current="page">{{ .Name }}</span>
+  {{ else if $ancestor }}
+    <a aria-current="true" href="{{ .URL }}">{{ .Name }}</a>
+  {{ else }}
+    <a href="{{ .URL }}">{{ .Name }}</a>
+  {{ end }}
+</li>
+{{ end }}
