@@ -65,13 +65,11 @@
     },
     {
       "name": "Go",
-      "level": "En cours d'acquisition",
-      "x_preuve": "/blog/apprendre-go-venant-de-php/"
+      "level": "En cours d'acquisition"
     },
     {
       "name": "Kubernetes",
-      "level": "En cours d'acquisition",
-      "x_preuve": "/projets/api-suivi-go/"
+      "level": "En cours d'acquisition"
     },
     {
       "name": "Python",
