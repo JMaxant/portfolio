@@ -1,0 +1,24 @@
+{{- /*
+  Renders partial/timeline-item.html from Markdown. Same keys as the partial; `tags` is a
+  comma-separated list.
+
+{{< timeline-item debut="2020-01" fin="2023-01" titre="Développeur web"
+    organisation="Précédent poste" resume="One sentence." tags="drupal, php" >}}
+*/ -}}
+{{- $args := dict -}}
+{{- range $key := slice "debut" "fin" "titre" "organisation" "resume" -}}
+  {{- with $.Get $key -}}
+    {{- $args = merge $args (dict $key .) -}}
+  {{- end -}}
+{{- end -}}
+{{- with .Get "tags" -}}
+  {{- $tags := slice -}}
+  {{- range split . "," -}}
+    {{- with strings.TrimSpace . -}}
+      {{- $tags = $tags | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $args = merge $args (dict "tags" $tags) -}}
+{{- end -}}
+
+{{- partial "timeline-item.html" $args -}}

@@ -1,0 +1,23 @@
+{{- /*
+  One in-progress skill and the page that proves it, rendered as a card.
+
+{{< proof skill="Go" page="/projets/potager-go/" >}}
+*/ -}}
+{{- $skill := .Get "skill" -}}
+{{- if not $skill -}}
+  {{- errorf "shortcode proof: 'skill' parameter is required - %s" .Position -}}
+{{- end -}}
+{{- $path := .Get "page" -}}
+{{- if not $path -}}
+  {{- errorf "shortcode proof: 'page' parameter is required - %s" .Position -}}
+{{- end -}}
+{{- /* card.html does not check its page: a nil page renders an empty card silently. */ -}}
+{{- $page := site.GetPage $path -}}
+{{- if not $page -}}
+  {{- errorf "shortcode proof: %q resolves to no page - %s" $path .Position -}}
+{{- end -}}
+
+<li class="proofs__item">
+  <h4 class="proofs__skill">{{ $skill }}</h4>
+  {{ partial "card.html" (dict "page" $page "title_level" "h5") }}
+</li>

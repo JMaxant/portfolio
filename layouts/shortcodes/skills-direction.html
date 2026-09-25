@@ -1,0 +1,25 @@
+{{- /*
+  The in-progress skills, each backed by a proof shortcode. Only list a skill that something
+  published on the site backs. See docs/parcours-cv.md#adding-a-skill.
+
+{{< skills-direction title="Direction" label="en cours d'acquisition" >}}
+  {{< proof skill="Go" page="/projets/potager-go/" >}}
+{{< /skills-direction >}}
+*/ -}}
+{{- $title := .Get "title" -}}
+{{- if not $title -}}
+  {{- errorf "shortcode skills-direction: 'title' parameter is required - %s" .Position -}}
+{{- end -}}
+{{- if not (strings.TrimSpace .Inner) -}}
+  {{- errorf "shortcode skills-direction: no proof inside - %s" .Position -}}
+{{- end -}}
+
+<div class="skills__level skills__level--direction">
+  <h3>
+    {{ $title }}
+    {{ with .Get "label" }}<span class="skills__label">{{ . }}</span>{{ end }}
+  </h3>
+  <ul class="proofs cards cards--grid" role="list">
+    {{ .Inner }}
+  </ul>
+</div>
