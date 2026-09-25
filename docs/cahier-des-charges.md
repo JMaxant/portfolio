@@ -155,7 +155,8 @@ Pertinent vu la cible (recruteurs/devs) et le positionnement "vitrine technique"
 - **`robots.txt` permissif envers les crawlers IA connus** (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...) — à l'inverse de beaucoup de sites corporate qui les bloquent, ici l'objectif est la visibilité, pas la protection.
 - **`llms.txt`** — convention émergente et non standardisée (un résumé texte du site + liens clés, sur le modèle de `robots.txt`), adoption non garantie par les outils IA, mais coût d'ajout quasi nul. À considérer comme un plus, pas un prérequis.
 - **Prose factuelle et bien structurée** (titres, listes, affirmations claires du type "j'ai construit X pour résoudre Y avec Z") — sert autant un recruteur qui scanne rapidement qu'un LLM qui résume/extrait le contenu. Cohérent avec le ton déjà décidé en section 3.
-- **Décidé — prévu dès la V1** : `llms.txt` à la racine, et un CV machine-readable (format JSON Resume ou simple `/cv.json`) en complément de la page Parcours humaine.
+- **Décidé — prévu dès la V1** : `llms.txt` à la racine~~, et un CV machine-readable (format JSON Resume ou simple `/cv.json`) en complément de la page Parcours humaine~~.
+  The machine-readable CV was dropped on 2026-09-25: the Parcours page is now written as shortcodes in its content, and nothing generates `/cv.json`.
 
 ## 9. Analytics
 
@@ -203,7 +204,7 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 - [ ] Switch light/dark mode fonctionnel (préférence système détectée + bascule manuelle mémorisée).
 - [ ] Taxonomie tag en place sur au moins les articles/projets publiés au lancement.
 - [ ] `llms.txt` présent à la racine.
-- [ ] CV machine-readable (`/cv.json` ou équivalent JSON Resume) présent et à jour avec la page Parcours.
+- ~~CV machine-readable (`/cv.json` ou équivalent JSON Resume) présent et à jour avec la page Parcours.~~ Dropped, see section 8bis.
 
 ## 14. Points ouverts à trancher pendant le développement
 
@@ -265,7 +266,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [ ] Vérifier sitemap + RSS natifs du thème plutôt que les recréer.
 - [ ] `robots.txt` autorisant explicitement les crawlers IA connus (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...).
 - [ ] `llms.txt` — à écrire en dernier dans cette phase, une fois le contenu réel stabilisé (il le résume).
-- [ ] CV machine-readable (`/cv.json`) — à générer après la page Parcours définitive, pour rester synchronisé.
+- ~~CV machine-readable (`/cv.json`) — à générer après la page Parcours définitive, pour rester synchronisé.~~ Dropped, see section 8bis.
 
 ### Phase 5 — Déploiement
 

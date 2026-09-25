@@ -79,9 +79,6 @@ other = "Article plus ancien"
 [parcours-ongoing]
 other = "aujourd'hui"
 
-[cv-json]
-other = "Ce parcours au format JSON Resume"
-
 [404-title]
 other = "Cette page n'existe pas (ou plus)"
 

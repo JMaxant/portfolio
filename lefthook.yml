@@ -30,10 +30,6 @@ pre-commit:
       glob: "*.{js,mjs}"
       run: npx eslint {staged_files}
 
-    cv-schema:
-      glob: "assets/cv.json"
-      run: node scripts/quality/check-cv-schema.mjs {staged_files}
-
     contrast:
       glob: "assets/styles/base/tokens.css"
       run: node scripts/quality/check-contrast.mjs
