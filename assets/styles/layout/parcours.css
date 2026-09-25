@@ -97,7 +97,3 @@
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
 }
-
-.resume__cv-json {
-  margin-block-start: var(--spacing-2xl);
-}
