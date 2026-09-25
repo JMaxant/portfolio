@@ -1,8 +1,8 @@
 ---
 title: Playwright test suite
-version: 1.0.0
+version: 1.1.0
 date_published: 2026-08-29
-date_modified: 2026-08-29
+date_modified: 2026-09-25
 ---
 
 # Playwright test suite
@@ -20,13 +20,18 @@ it now runs the whole suite:
 | `a11y.spec.js` | Automated accessibility checks (`@axe-core/playwright`) across `tests/pages.js`'s page list |
 | `breadcrumb.spec.js` | Breadcrumb rendering |
 | `breakpoints.spec.js` | Behavior at the `--bp-*` breakpoints (`docs/css-tokens.md`) |
-| `fonts.spec.js` | Body/headings resolve to Spectral (not a silent fallback), italic byline styling |
-| `nav.spec.js` | Header/nav menu, including the mobile burger panel |
+| `fonts.spec.js` | Body/headings resolve to Spectral (not a silent fallback), italic intro text |
+| `nav.spec.js` | Header/nav menu, including the mobile burger panel and the active trail |
 | `overflow.spec.js` | No horizontal overflow across pages, at default size and (WCAG 1.4.4) at 200% text |
 | `sticky-footer.spec.js` | Footer stays pinned on short pages |
 | `table.spec.js` | Table rendering (`render-table.html`) |
 | `theme-switcher.spec.js` | Light/dark toggle |
 | `time.spec.js` | Date/time formatting |
+
+## Known limitation
+
+Several suites target real content pages by URL, so deleting or renaming a page breaks
+them without any template regression. Tracked by #139.
 
 ## Why not in `task qa`
 

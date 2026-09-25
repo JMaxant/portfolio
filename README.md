@@ -80,11 +80,12 @@ under `tests/`, too slow for a pre-commit hook. See [Playwright test suite](docs
 
 ## CI
 
-Two GitHub Actions workflows, independent of deployment:
+Three GitHub Actions workflows, independent of deployment:
 
 - **`ci.yml`** (every PR + push to `main`):
   - `quality` — runs `lefthook run pre-commit --all-files`, so `lefthook.yml` stays the single source of truth and CI can never drift from the local hook.
   - `links-internal` — builds the site and checks internal links and anchors with [lychee](https://github.com/lycheeverse/lychee) (offline, no network flakiness).
+- **`playwright.yml`** (every PR + push to `main`) — runs the Playwright suite across Chromium, Firefox and WebKit. See [Playwright test suite](docs/tests-layout.md).
 - **`links-external.yml`** (weekly + manual trigger) — checks external links online; on dead links it opens or updates an issue labeled `link-rot`.
 
 Shared lychee settings live in `lychee.toml`; the Hugo version used by CI is pinned in `.github/actions/setup-hugo/action.yml`.

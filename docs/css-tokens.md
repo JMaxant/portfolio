@@ -1,8 +1,8 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.17.0
+version: 1.17.1
 date_published: 2026-08-08
-date_modified: 2026-08-27
+date_modified: 2026-09-25
 ---
 
 # CSS tokens and breakpoints
@@ -127,7 +127,7 @@ identifiable without it.
 `--*-border-strong` **is** in scope, and clears 3:1 as of #57. The theme switcher's hover
 state is the reason: its background tint is only 1.08:1 against the page, so the border is
 the sole carrier of the state (`components/theme-switcher.css`). The token also bounds the switcher panel and
-the `.parcours` separator. Same method as the text colours — lightness moved, hue and
+the dashed separator above the Parcours in-progress skills (`.skills__level--direction`). Same method as the text colours — lightness moved, hue and
 saturation untouched — against the same worst-case background:
 
 | Theme | Token | Value | Ratio vs `surface-alt` |
