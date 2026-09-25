@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.20.0
+version: 1.21.0
 date_published: 2026-08-08
-date_modified: 2026-08-30
+date_modified: 2026-09-25
 ---
 
 # Components — partials and integration
@@ -667,9 +667,8 @@ part of the article.
 
 ### `timeline-item.html`
 
-One entry of the Parcours timeline. The caller normalises the two shapes the entry can take
-— a position from `work[]`, a diploma from `education[]` — so the partial sees a single
-contract and never has to know which array it came from.
+One entry of the Parcours timeline, a position or a diploma. Both render through the same
+contract. Entries are written by hand in the content, most recent first.
 
 | Key | Required | Default | Description |
 |-----|----------|---------|-------------|
@@ -684,7 +683,7 @@ The three required keys are checked with `errorf` before any output. Only the ye
 displayed, through `substr`, which is what makes all three date precisions acceptable; the
 full value stays in the `datetime` attribute.
 
-`tags` are plain strings from `cv.json`, not taxonomy terms, so each one is looked up with
+`tags` are plain strings, not taxonomy terms, so each one is looked up with
 `site.GetPage`: a tag that some content carries becomes a link, one that nothing carries is
 rendered inert. Emitting the link unconditionally would produce a `/tags/<slug>/` that Hugo
 never builds, and the link checker would report it.
@@ -702,7 +701,32 @@ never builds, and the link checker would report it.
 The inline-start rule reuses the `blockquote` border of `base/elements.css` rather than
 introducing a second vertical accent.
 
-**Callers** — `layouts/parcours/single.html` only.
+**Callers** — the `timeline-item` shortcode only.
+
+#### Parcours shortcodes
+
+The sections of `/a-propos/parcours/` are shortcodes written in its Markdown body;
+`layouts/parcours/single.html` only renders the header and `.Content`. Each shortcode
+validates its required parameters with `errorf`, reporting the position in the source file.
+
+| Shortcode | Parameters | Renders |
+|-----------|------------|---------|
+| `timeline` (paired) | `title`, `period` (optional) | `section.resume__section--now` with its `h2` and the `ol.timeline` |
+| `timeline-item` | same keys as the partial, `tags` comma-separated | `timeline-item.html` |
+| `resume-text` (paired) | `title`, `period` (optional) | `section.resume__section--before`, body rendered as Markdown |
+| `skills` (paired) | `title` | `section.resume__section--skills` and the `.skills` grid |
+| `skills-daily` | `title`, `items` comma-separated | `.skills__level` with a list of accented tags |
+| `skills-direction` (paired) | `title`, `label` (optional) | `.skills__level--direction` and the `ul.proofs` |
+| `proof` | `skill`, `page` | `li.proofs__item`: the skill and a `card.html` of the page |
+
+**Why one shortcode per section type, not a generic section wrapper.** A paired shortcode
+that renders its `.Inner` with `RenderString` drops the HTML of nested shortcodes (`Raw HTML
+omitted`, a `WARN`, so a failed build), because `markup.goldmark.renderer.unsafe` is off.
+So `resume-text` is the only one rendering Markdown, and it must not contain shortcodes; the
+others output `.Inner` as is, and must contain only shortcodes.
+
+`proof` fails the build when `page` resolves to nothing: `card.html` does not check its
+page, and would render an empty card silently.
 
 ## Article layout (`.container-content-grid`)
 
@@ -887,8 +911,6 @@ column, which a label would overflow.
 
 - `card--<variant>` and `cta--<variant>` are emitted on demand but have no CSS. Any variant
   introduced must come with its rule, otherwise it produces a dead class.
-- `assets/cv.json` is the single source of the Parcours page: it is both read by
-  `layouts/parcours/single.html` and republished untouched at `/cv.json`, so the page and
-  the machine-readable CV cannot drift. Adding a section to the page means adding it to the
-  JSON, not to the template. See [parcours-cv.md](parcours-cv.md) for the content-editing
-  guide.
+- The Parcours content lives in `content/a-propos/parcours.md`, as the
+  [Parcours shortcodes](#parcours-shortcodes). See [parcours-cv.md](parcours-cv.md) for the
+  content-editing guide.

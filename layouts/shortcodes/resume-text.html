@@ -1,0 +1,21 @@
+{{- /*
+  A free-text section of the Parcours page ("Avant"). The body is Markdown and must not
+  contain other shortcodes: RenderString drops their HTML without unsafe mode.
+  See docs/components.md#parcours-shortcodes.
+
+{{< resume-text title="Avant" period="jusqu'à 2017" >}}
+Markdown paragraph.
+{{< /resume-text >}}
+*/ -}}
+{{- $title := .Get "title" -}}
+{{- if not $title -}}
+  {{- errorf "shortcode resume-text: 'title' parameter is required - %s" .Position -}}
+{{- end -}}
+
+<section class="resume__section resume__section--before">
+  <h2>
+    {{ $title }}
+    {{ with .Get "period" }}<span class="resume__period">{{ . }}</span>{{ end }}
+  </h2>
+  {{ .InnerDeindent | .Page.RenderString (dict "display" "block") }}
+</section>

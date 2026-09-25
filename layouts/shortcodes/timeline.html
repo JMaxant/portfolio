@@ -1,0 +1,25 @@
+{{- /*
+  The "Maintenant" section of the Parcours page: a heading and the list of timeline-item
+  shortcodes it wraps, written most recent first. See docs/components.md#parcours-shortcodes.
+
+{{< timeline title="Maintenant" period="2017 → aujourd'hui" >}}
+  {{< timeline-item … >}}
+{{< /timeline >}}
+*/ -}}
+{{- $title := .Get "title" -}}
+{{- if not $title -}}
+  {{- errorf "shortcode timeline: 'title' parameter is required - %s" .Position -}}
+{{- end -}}
+{{- if not (strings.TrimSpace .Inner) -}}
+  {{- errorf "shortcode timeline: no timeline-item inside - %s" .Position -}}
+{{- end -}}
+
+<section class="resume__section resume__section--now">
+  <h2>
+    {{ $title }}
+    {{ with .Get "period" }}<span class="resume__period">{{ . }}</span>{{ end }}
+  </h2>
+  <ol class="timeline" role="list">
+    {{ .Inner }}
+  </ol>
+</section>

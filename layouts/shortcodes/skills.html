@@ -1,0 +1,20 @@
+{{- /*
+  The skills section of the Parcours page, wrapping skills-daily and skills-direction.
+  See docs/components.md#parcours-shortcodes.
+
+{{< skills title="Compétences" >}}
+  {{< skills-daily … >}}
+  {{< skills-direction … >}}…{{< /skills-direction >}}
+{{< /skills >}}
+*/ -}}
+{{- $title := .Get "title" -}}
+{{- if not $title -}}
+  {{- errorf "shortcode skills: 'title' parameter is required - %s" .Position -}}
+{{- end -}}
+
+<section class="resume__section resume__section--skills">
+  <h2>{{ $title }}</h2>
+  <div class="skills">
+    {{ .Inner }}
+  </div>
+</section>

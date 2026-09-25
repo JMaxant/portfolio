@@ -1,0 +1,27 @@
+{{- /*
+  The daily stack, as a list of tags. `items` is a comma-separated list.
+
+{{< skills-daily title="Stack quotidienne" items="PHP, Symfony, Vue" >}}
+*/ -}}
+{{- $title := .Get "title" -}}
+{{- if not $title -}}
+  {{- errorf "shortcode skills-daily: 'title' parameter is required - %s" .Position -}}
+{{- end -}}
+{{- $items := slice -}}
+{{- range split (.Get "items" | default "") "," -}}
+  {{- with strings.TrimSpace . -}}
+    {{- $items = $items | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $items -}}
+  {{- errorf "shortcode skills-daily: 'items' parameter is required - %s" .Position -}}
+{{- end -}}
+
+<div class="skills__level">
+  <h3>{{ $title }}</h3>
+  <ul class="tags" role="list">
+    {{ range $items }}
+      <li class="tag tag--accented">{{ . }}</li>
+    {{ end }}
+  </ul>
+</div>
