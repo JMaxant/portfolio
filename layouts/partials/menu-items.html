@@ -20,9 +20,18 @@
 {{- $page := .page -}}
 {{- $menuName := .menuName -}}
 
+{{- /* A page with its own entry marks that entry only, not its ancestor too (#140).
+       See docs/components.md#the-active-trail. */ -}}
+{{- $hasOwnEntry := false -}}
+{{- range .entries -}}
+  {{- if $page.IsMenuCurrent $menuName . -}}
+    {{- $hasOwnEntry = true -}}
+  {{- end -}}
+{{- end -}}
+
 {{ range .entries }}
 {{- $current := $page.IsMenuCurrent $menuName . -}}
-{{- $ancestor := $page.HasMenuCurrent $menuName . -}}
+{{- $ancestor := and (not $hasOwnEntry) ($page.HasMenuCurrent $menuName .) -}}
 <li class="menu__item">
   {{ if $current }}
     <span aria-current="page">{{ .Name }}</span>

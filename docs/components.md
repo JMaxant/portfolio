@@ -531,6 +531,12 @@ Measured on the built site: `/blog/` marks Blog `page`, `/blog/<article>/` marks
 `/` marks Accueil and nothing else. `HasMenuCurrent` does cover section descendants, despite
 a wording that suggests it only walks nested menu entries.
 
+**A page with its own entry marks no ancestor.** Parcours lives under A propos but has its
+own top-level entry, so on `/a-propos/parcours/` both methods return true on two different
+entries, and the menu showed two active items side by side (#140). `menu-items.html` first
+checks whether any entry `IsMenuCurrent`; if one does, no entry is marked as an ancestor. A
+blog article has no entry of its own, so Blog stays marked `true` there.
+
 Three traps, each of which produces a menu where **nothing is ever active, with no build
 error at all**:
 

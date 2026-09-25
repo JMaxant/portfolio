@@ -154,6 +154,16 @@ test.describe('active trail', () => {
     await expect(marked(page)).toHaveAttribute('href', '/blog/');
   });
 
+  // #140: Parcours lives under A propos but has its own entry. Marking both would show two
+  // active items side by side, so the page's own entry wins over its ancestor.
+  test('a page with its own entry does not mark its ancestor entry', async ({ page }) => {
+    await page.goto('/a-propos/parcours/');
+
+    await expect(marked(page)).toHaveCount(1);
+    await expect(marked(page)).toHaveAttribute('aria-current', 'page');
+    await expect(marked(page)).toHaveText('Parcours');
+  });
+
   test('the home page marks the home entry and nothing else', async ({ page }) => {
     await page.goto('/');
 
