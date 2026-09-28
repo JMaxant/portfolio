@@ -1,8 +1,8 @@
 ---
 title: Contributing to the Parcours page
-version: 3.0.0
+version: 3.1.0
 date_published: 2026-08-14
-date_modified: 2026-09-25
+date_modified: 2026-09-28
 ---
 
 # Contributing to the Parcours page
@@ -46,17 +46,19 @@ most recent first, and nothing sorts them for you.
 
 ## Adding a skill
 
-- **Daily stack**: add it to the `items` list of `skills-daily`.
-- **In-progress skill**: add a `proof` inside `skills-direction`, with the skill name and
-  the path of the page that demonstrates it. A path that resolves to no page fails the
-  build.
+The `skills` shortcode lists every tag actually used on the site — nothing to edit there,
+it follows content automatically. Tag a project, a blog post or a veille entry, and the
+skill appears, linked to its term page.
+
+For a skill nothing published backs yet, add it to `extra`:
 
 ```markdown
-{{</* proof skill="Go" page="/projets/potager-go/" */>}}
+{{</* skills title="Compétences" extra="Python, Kubernetes" */>}}
 ```
 
-Only show an in-progress skill that something published on the site backs. Do not add a
-placeholder proof to make a skill appear.
+`extra` renders as plain, unlinked tags. The build fails if an `extra` entry, lowercased,
+already matches a tag used in content — that skill has a term page and belongs there
+instead, not in `extra`.
 
 ## The pivot year
 
@@ -66,4 +68,4 @@ The year separating "Maintenant" from "Avant" (2017) is written by hand in the
 ## Validating a change
 
 `task qa` builds the site with any Hugo `WARN` treated as a failure. A missing required
-parameter or an unresolved proof fails the build through `errorf`.
+parameter or an `extra` entry that duplicates a tag fails the build through `errorf`.

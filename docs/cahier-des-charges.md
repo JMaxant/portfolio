@@ -71,6 +71,8 @@ Structure proposée :
 
 Point clé : ne pas laisser la section 4 comme une simple déclaration d'intention. Relier chaque compétence "en cours d'acquisition" à une preuve concrète ailleurs sur le site (article de blog documentant un apprentissage Go, side-project Python/K8s dans `/projets/`) — ça transforme une ambition affichée en trajectoire démontrable. Implique de prévoir un tag ou une catégorie commune (ex. `apprentissage`, `go`, `k8s`) pour que ces contenus soient facilement regroupables.
 
+**Décidé** (#10) : abandon de la distinction explicite "stack quotidienne" / "direction", et de la preuve par carte (un `proof` par compétence en cours pointant vers une page). La section Compétences liste désormais automatiquement tous les tags réellement utilisés sur le site (liés à leur page de taxonomie), plus une liste optionnelle de compétences pas encore rattachées à un contenu publié (`extra`, rendu sans lien). Le build échoue si une entrée de `extra` fait doublon avec un tag déjà utilisé, pour éviter la dérive entre les deux listes. La frontière quotidien/trajectoire reste visible (bordure en pointillés + tags non accentués pour `extra`), mais sans label ni carte dédiée par compétence.
+
 ## 5ter. Page d'accueil : sections dynamiques
 
 Deux idées évoquées : "Récemment publiés" (nouveau contenu) et "Dernières mises à jour" (contenu existant retouché) — ce sont deux signaux réellement différents, mais avec le faible volume de contenu au lancement, les séparer en deux sections risque de laisser l'une des deux vide ou anecdotique.

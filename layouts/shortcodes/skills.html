@@ -1,20 +1,38 @@
 {{- /*
-  The skills section of the Parcours page, wrapping skills-daily and skills-direction.
-  See docs/components.md#parcours-shortcodes.
+  Compétences: every tag actually used on the site, linked to its term page, plus optional
+  skills not yet backed by any content (comma-separated `extra`). See
+  docs/components.md#parcours-shortcodes.
 
-{{< skills title="Compétences" >}}
-  {{< skills-daily … >}}
-  {{< skills-direction … >}}…{{< /skills-direction >}}
-{{< /skills >}}
+{{< skills title="Compétences" extra="Python, Kubernetes" >}}
 */ -}}
 {{- $title := .Get "title" -}}
 {{- if not $title -}}
   {{- errorf "shortcode skills: 'title' parameter is required - %s" .Position -}}
 {{- end -}}
 
+{{- $tags := .Site.Taxonomies.tags -}}
+{{- $extra := slice -}}
+{{- range split (.Get "extra" | default "") "," -}}
+  {{- with strings.TrimSpace . -}}
+    {{- if isset $tags (lower .) -}}
+      {{- errorf "shortcode skills: %q in 'extra' already has a tag page, drop it from 'extra' - %s" . $.Position -}}
+    {{- end -}}
+    {{- $extra = $extra | append . -}}
+  {{- end -}}
+{{- end -}}
+
 <section class="resume__section resume__section--skills">
   <h2>{{ $title }}</h2>
   <div class="skills">
-    {{ .Inner }}
+    <ul class="tags" role="list">
+      {{ range $tags.Alphabetical }}
+      <li><a class="tag tag--accented" href="{{ .Page.RelPermalink }}">{{ lower .Page.LinkTitle }}</a></li>
+      {{ end }}
+      {{ with $extra }}
+        {{ range . }}
+          <li class="tag">{{ lower . }}</li>
+        {{ end }}
+      {{ end }}
+    </ul>
   </div>
 </section>

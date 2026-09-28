@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.21.0
+version: 1.22.0
 date_published: 2026-08-08
-date_modified: 2026-09-25
+date_modified: 2026-09-28
 ---
 
 # Components — partials and integration
@@ -209,9 +209,8 @@ terms), styled in `components/tag.css`.
 below 280px.
 
 **Callers** — `layouts/index.html` (featured projects, `title_level: h3` under the section
-`h2`), `layouts/projets/list.html` (the whole list, `title_level: h2` under the page `h1`)
-and `layouts/parcours/single.html` (skill proofs, `title_level: h5` under the `h4` naming
-the skill). The level is not decoration: it is what keeps the heading hierarchy of each page
+`h2`) and `layouts/projets/list.html` (the whole list, `title_level: h2` under the page
+`h1`). The level is not decoration: it is what keeps the heading hierarchy of each page
 correct with a single partial.
 
 ### `projets-meta.html`
@@ -720,19 +719,16 @@ validates its required parameters with `errorf`, reporting the position in the s
 | `timeline` (paired) | `title`, `period` (optional) | `section.resume__section--now` with its `h2` and the `ol.timeline` |
 | `timeline-item` | same keys as the partial, `tags` comma-separated | `timeline-item.html` |
 | `resume-text` (paired) | `title`, `period` (optional) | `section.resume__section--before`, body rendered as Markdown |
-| `skills` (paired) | `title` | `section.resume__section--skills` and the `.skills` grid |
-| `skills-daily` | `title`, `items` comma-separated | `.skills__level` with a list of accented tags |
-| `skills-direction` (paired) | `title`, `label` (optional) | `.skills__level--direction` and the `ul.proofs` |
-| `proof` | `skill`, `page` | `li.proofs__item`: the skill and a `card.html` of the page |
+| `skills` | `title`, `extra` comma-separated (optional) | `section.resume__section--skills` with its `h2` and one `ul.tags`: every tag the site actually uses, linked, followed by `extra` as plain, unlinked tags |
 
 **Why one shortcode per section type, not a generic section wrapper.** A paired shortcode
 that renders its `.Inner` with `RenderString` drops the HTML of nested shortcodes (`Raw HTML
 omitted`, a `WARN`, so a failed build), because `markup.goldmark.renderer.unsafe` is off.
-So `resume-text` is the only one rendering Markdown, and it must not contain shortcodes; the
-others output `.Inner` as is, and must contain only shortcodes.
+So `resume-text` is the only one rendering Markdown, and it must not contain shortcodes;
+`timeline` outputs its `.Inner` (`timeline-item` calls) as is instead.
 
-`proof` fails the build when `page` resolves to nothing: `card.html` does not check its
-page, and would render an empty card silently.
+`skills` fails the build when an `extra` entry, lowercased, matches an existing tag: that
+skill already has a term page and belongs in content (a `tags` list), not in `extra`.
 
 ## Article layout (`.container-content-grid`)
 
