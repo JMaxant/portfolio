@@ -1,23 +1,34 @@
 +++
 title = 'Parcours'
-description = "Développeur web depuis 2017, venu d'une première vie professionnelle ailleurs. Aujourd'hui PHP, Symfony, Drupal et Vue au quotidien ; Go, Python et Kubernetes en trajectoire."
+description = "Développeur web depuis 2017 : développement back, full-stack, mentorat, devops et facilitation."
 translationKey = 'parcours'
 type = 'parcours'
 +++
 
-{{< timeline title="Maintenant" period="Depuis 2017" >}}
-  {{< timeline-item debut="2023-01" titre="Développeur web" organisation="Entreprise actuelle"
-      resume="Développement et maintenance d'applications Symfony et Drupal ; montée en autonomie sur la partie front Vue."
-      tags="php, symfony, vue" >}}
-  {{< timeline-item debut="2020-01" fin="2023-01" titre="Développeur web" organisation="Précédent poste"
-      resume="Refonte d'un site Drupal 7 vers Drupal 9, mise en place d'une CI, premiers modules custom."
-      tags="drupal, php" >}}
-  {{< timeline-item debut="2017-01" fin="2020-01" titre="Reconversion professionnelle" organisation="Organisme de formation"
-      resume="Reconversion : bases PHP/JS, premiers projets professionnels."
-      tags="php, js" >}}
+{{< timeline title="Actuellement" period="Depuis 2017" >}}
+  {{< timeline-item
+    debut="2024-05"
+    titre="Lead developer/Lead tech"
+    organisation="Axess"
+    resume="Projets Drupal et Symfony build & TMA (site institutionnels, e-commerce, énergie), Dataviz (VueJS), participation à la R&D, mise en place d'environnements dockerisé (docker-compose, DDEV) et de tooling (Makefile, Taskfile), accompagnement, consolidation de process (onboarding, documentation, réversibilité et utilisation de l'IA)."
+    tags="php, symfony, drupal, vue, tooling, DDEV, IA" >}}
+  {{< timeline-item
+    debut="2021"
+    fin="2024"
+    titre="Développeur expert"
+    organisation="Ecedi"
+    resume="Projets Drupal (build & TMA de sites institutionnels), animation de la R&D, mentorat et accompagnement, tooling (Makefile, DDEV)"
+    tags="drupal, php, DDEV" >}}
+  {{< timeline-item
+      debut="2018"
+      fin="2021"
+      titre="Ingénieur d'études"
+      organisation="Niji"
+      resume="Pôle Run: TMA préventive, évolutive et corrective (full-stack Drupal 7/8), refontes partielles, tooling interne (dashboard de suivi Symfony 4)."
+      tags="php, js, css, drupal, docker" >}}
 {{< /timeline >}}
 
-{{< timeline title="Avant" period="Jusqu'à 2017" >}}
+{{< timeline title="Précédemment" period="Jusqu'à 2017" >}}
   {{< timeline-item
     debut="2014"
     fin="2017"
@@ -59,4 +70,4 @@ type = 'parcours'
     resume="Histoire, théorie et pratique musicale, recherche (esthétique et sémiotique) et philologie de la musique" >}}
 {{< /timeline >}}
 
-{{< skills title="Compétences" extra="Python, Kubernetes" >}}
+{{< skills title="Compétences" extra="Python, Kubernetes, Vue, JS, git, gitlab, github" >}}

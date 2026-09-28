@@ -1,4 +1,6 @@
 .resume__section {
+  margin-block-end: var(--spacing-xl);
+
   > h2 {
     display: flex;
     flex-wrap: wrap;
@@ -9,10 +11,6 @@
   &.resume__section--before p {
     max-width: 62ch;
     color: var(--color-text-soft);
-  }
-
-  &:has(+ .resume__section--skills) {
-    margin-block-end: var(--spacing-xl);
   }
 }
 
