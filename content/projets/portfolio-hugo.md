@@ -8,13 +8,17 @@ translationKey = 'portfolio-hugo'
 status = 'terminé'
 repo = 'https://github.com/JMaxant/portfolio'
 demo = ''
-role = 'Développeur'
+role = 'Lead developer'
 featured = true
 +++
 
-Ce site : Hugo, thème [bear-cub](https://github.com/clente/hugo-bearcub) personnalisé,
-CSS sur mesure sans framework, pipeline qualité (lint, tokens, contraste, build) qui
-tourne à l'identique en local et en CI.
+**En bref :** un site que je peux faire évoluer sans craindre de casser l'existant.
+Accessibilité, cohérence visuelle et qualité du build sont vérifiées automatiquement à
+chaque modification, plutôt que relues à la main.
+
+Techniquement : Hugo, thème [bear-cub](https://github.com/clente/hugo-bearcub)
+personnalisé, CSS sur mesure sans framework, pipeline qualité (lint, tokens, contraste,
+build) qui tourne à l'identique en local et en CI.
 
 ## Pourquoi Hugo
 
@@ -46,13 +50,13 @@ feuille de style elle-même plutôt que dissoute dans un système de composants.
   natif Hugo) prend en charge la transpilation et les préfixes vendeur
 * Une baseline navigateurs explicite (Chrome 105+, Firefox 121+, Safari 16+, Edge 105+)
   à tenir, alors que deux mécanismes différents la couvrent : transpilation de syntaxe
-  d'un côté, blocage de features runtime non transpilables de l'autre (`refs #63`)
+  d'un côté, blocage de features runtime non transpilables de l'autre
 * Contraste ciblé à AAA (7:1) plutôt que le AA/RGAA (4.5:1), sans dérive silencieuse
-  tolérée à mesure que la palette ou les composants évoluent (`refs #57`)
+  tolérée à mesure que la palette ou les composants évoluent
 * Aucune valeur de couleur, d'espacement ou de breakpoint écrite en dur dans un
-  composant — tout doit venir d'un token déclaré une seule fois (`refs #69`, `#108`)
+  composant — tout doit venir d'un token déclaré une seule fois
 * Le hook pre-commit local et la CI doivent exécuter la même définition, pour qu'aucun
-  contrôle qualité ne puisse diverger entre les deux (`refs #5`)
+  contrôle qualité ne puisse diverger entre les deux
 
 ## Les choix écartés
 

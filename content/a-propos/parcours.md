@@ -10,7 +10,7 @@ type = 'parcours'
     debut="2024-05"
     titre="Lead developer/Lead tech"
     organisation="Axess"
-    resume="Projets Drupal et Symfony build & TMA (site institutionnels, e-commerce, énergie), Dataviz (VueJS), participation à la R&D, mise en place d'environnements dockerisé (docker-compose, DDEV) et de tooling (Makefile, Taskfile), accompagnement, consolidation de process (onboarding, documentation, réversibilité et utilisation de l'IA)."
+    resume="Projets Drupal et Symfony build & TMA (sites institutionnels, e-commerce, énergie), Dataviz (VueJS), participation à la R&D, mise en place d'environnements dockerisés (docker-compose, DDEV) et de tooling (Makefile, Taskfile), accompagnement, consolidation de process (onboarding, documentation, réversibilité et utilisation de l'IA)."
     tags="php, symfony, drupal, vue, tooling, DDEV, IA" >}}
   {{< timeline-item
     debut="2021"
@@ -20,18 +20,18 @@ type = 'parcours'
     resume="Projets Drupal (build & TMA de sites institutionnels), animation de la R&D, mentorat et accompagnement, tooling (Makefile, DDEV)"
     tags="drupal, php, DDEV" >}}
   {{< timeline-item
-      debut="2018"
-      fin="2021"
-      titre="Ingénieur d'études"
-      organisation="Niji"
-      resume="Pôle Run: TMA préventive, évolutive et corrective (full-stack Drupal 7/8), refontes partielles, tooling interne (dashboard de suivi Symfony 4)."
-      tags="php, js, css, drupal, docker" >}}
+    debut="2018"
+    fin="2021"
+    titre="Ingénieur d'études"
+    organisation="Niji"
+    resume="Pôle Run : TMA préventive, évolutive et corrective (full-stack Drupal 7/8), refontes partielles, tooling interne (dashboard de suivi Symfony 4)."
+    tags="php, js, css, drupal, docker" >}}
 {{< /timeline >}}
 
 {{< timeline title="Précédemment" period="Jusqu'à 2017" >}}
   {{< timeline-item
     debut="2014"
-    fin="2017"
+    fin="2018"
     titre="Adjoint de direction"
     organisation="Louvre Hôtels Group"
     resume="Hôtel-restaurant 3*: gestion comptable, management, service, mise en place et structuration de process (hygiène, gestion et suivi des réservations, fidélisation)." >}}
@@ -46,7 +46,7 @@ type = 'parcours'
     fin="2012"
     titre="Veilleur de nuit/réceptionniste"
     organisation="Accor"
-    resume="Hôtel-restaurant 3*: Accueil de la clientèle, veille et sécurité, mise en place cuisine." >}}
+    resume="Hôtel-restaurant 3* : Accueil de la clientèle, veille et sécurité, mise en place cuisine." >}}
 {{< /timeline >}}
 
 {{< timeline title="Formation/Éducation" >}}
@@ -61,7 +61,7 @@ type = 'parcours'
     fin="2018"
     titre="Technicien intégrateur web"
     organisation="Buroscope"
-    resume="RNCP niveau 5 (III): formation transverse multimédia (full stack PHP, CSS, JS, HTML, SEO)" >}}
+    resume="RNCP niveau 5 (III) : formation transverse multimédia (full stack PHP, CSS, JS, HTML, SEO), stage e-commerce (prestashop) de février à avril 2018" >}}
   {{< timeline-item
     debut="2002"
     fin="2005"

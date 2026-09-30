@@ -17,7 +17,7 @@ featured = true
 * Refonte de site institutionnel
 * Drupal 10+ (10.3.x à sa mise en ligne)
 * Site multilingue
-* Important traffic international (notamment saisonnier), allant jusqu'à 15 000 visites uniques quotidiennes
+* Trafic international important (notamment saisonnier), allant jusqu'à 15 000 visites uniques quotidiennes
 
 Les contenus du site sont structurés en trois espaces distincts par public cible :
 
@@ -75,10 +75,11 @@ Le rendu dépend de cette valeur, pas de la route ni de l'utilisateur connecté 
 * le filtrage du menu (accès autorisé ou refusé par élément selon l'espace, via `AccessResult`) n'est associé à aucun contexte de cache existant : Drupal peut resservir un menu déjà filtré pour le mauvais espace ;
 * changer l'espace d'un contenu produit deux jeux de contextes de cache, avant et après, sans rien en commun aux yeux de Drupal — qui lève une erreur de redirection de cache.
 
-Le cache context personnalisé règle les deux en rendant l'espace explicite dans la clé de cache.
+Le cache context personnalisé rend l'espace explicite dans la clé de cache : le menu filtré n'est plus resservi au
+mauvais espace, et le changement d'espace d'un contenu ne provoque plus d'erreur de redirection de cache.
 
-Un seul point de vérité (le `ContextProvider`), pas de taxonomie parallèle à synchroniser.
+Le `ContextProvider` devient le point central de toute la mécanique, sans taxonomie parallèle à synchroniser ou de menu multiple à contribuer.
 
 ## Résultat
 
-En production, sans retour depuis la mise en ligne, sur un site à ~13 000 visites/jour. La classification est prise en main par les équipes éditoriales sans formation particulière — un seul champ à renseigner, dont le sens (quel espace) leur est déjà familier puisqu'il reprend directement la structure du menu qu'elles connaissent.
+En production, sans incident depuis la mise en ligne (septembre 2025), sur un site à fort trafic. La classification est prise en main par les équipes éditoriales sans formation particulière — un seul champ à renseigner, dont le sens (quel espace) leur est déjà familier puisqu'il reprend directement la structure du menu qu'elles connaissent.

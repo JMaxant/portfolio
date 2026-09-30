@@ -1,6 +1,6 @@
 +++
 date = '2026-09-23'
-draft = false
+draft = true
 title = 'DDEV : Docker sans avoir à écrire un docker-compose.yml'
 description = "Ce que DDEV automatise par-dessus Docker pour un projet Drupal — et ce qui reste à comprendre en dessous."
 tags = ['docker', 'drupal']

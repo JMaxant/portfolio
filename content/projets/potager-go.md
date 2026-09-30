@@ -1,6 +1,6 @@
 +++
 date = '2026-09-23'
-draft = false
+draft = true
 title = 'Potager : appli de gestion en Go'
 description = "Side-project d'apprentissage Go : suivi de plantations, rotations et arrosage d'un potager."
 tags = ['go']

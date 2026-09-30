@@ -19,7 +19,7 @@ pageRef = '/veille/'
 weight = 40
 
 [[main]]
-name = 'A propos'
+name = 'À propos'
 pageRef = '/a-propos/'
 weight = 50
 
