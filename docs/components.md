@@ -89,7 +89,7 @@ compose with, so it opens the inventory.
 {{ partial "icon.html" (dict "name" "sun" "class" "theme-switcher__icon") }}
 ```
 
-Available names — `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
+Available names — `arrow-right`, `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
 build through `errorf`; the whitelist mirrors the symbol ids of `assets/icons/sprite.svg`
 and has to be edited alongside it.
 

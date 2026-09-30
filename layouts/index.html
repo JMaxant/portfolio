@@ -2,7 +2,7 @@
 
   {{/* Hero */}}
   <section class="home home--hero">
-    {{ partial "hero.html" (dict "content" .Content "baseline" .Params.baseline) }}
+    {{ partial "hero.html" (dict "content" .Content) }}
   </section>
 
 
@@ -15,13 +15,16 @@
   {{/* Featured projects */}}
   {{ with $featured }}
     <section class="home home--projets">
-      <div class="container--wide">
+      <div class="container--wide home__body">
         <h2>{{ i18n "home-featured" }}</h2>
         <div class="cards cards--grid">
           {{ range . }}
            {{ partial "card.html" (dict "page" . "variant" "projet" "title_level" "h3") }}
           {{ end }}
         </div>
+      </div>
+      <div class="container--wide home__footer">
+        <a href="{{ (site.GetPage "projets").RelPermalink }}">{{ i18n "see-more-projects" }} {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
       </div>
     </section>
   {{ end }}
@@ -31,7 +34,7 @@
 
   {{ with first 3 $activites.ByLastmod.Reverse }}
     <section class="home home--latest">
-      <div class="container--wide">
+      <div class="container--wide home__body">
         <h2>{{ i18n "home-latest" }}</h2>
         <ul class="entry-list entry-list--compact" role="list">
           {{ range . }}
@@ -48,6 +51,9 @@
           </li>
           {{ end }}
         </ul>
+      </div>
+      <div class="container--wide home__footer">
+        <a href="{{ (site.GetPage "blog").RelPermalink }}">{{ i18n "see-more-blog" }} {{ partial "icon.html" (dict "name" "arrow-right") }}</a>
       </div>
     </section>
   {{ end }}

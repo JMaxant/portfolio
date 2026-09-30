@@ -28,4 +28,13 @@
   &.home--projets {
     background: var(--color-surface-alt);
   }
+
+  .home__body {
+    margin-block-end: var(--spacing-lg);
+  }
+
+  .home__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
 }

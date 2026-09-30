@@ -108,3 +108,9 @@ other = "Accueil"
 
 [breadcrumb]
 other = "Fil d'Ariane"
+
+[see-more-projects]
+other = "Voir plus de projets"
+
+[see-more-blog]
+other = "Voir plus d'articles"
