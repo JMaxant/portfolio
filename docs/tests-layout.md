@@ -1,8 +1,8 @@
 ---
 title: Playwright test suite
-version: 1.1.0
+version: 1.2.0
 date_published: 2026-08-29
-date_modified: 2026-09-25
+date_modified: 2026-09-30
 ---
 
 # Playwright test suite
@@ -28,10 +28,24 @@ it now runs the whole suite:
 | `theme-switcher.spec.js` | Light/dark toggle |
 | `time.spec.js` | Date/time formatting |
 
-## Known limitation
+## Fixtures
 
-Several suites target real content pages by URL, so deleting or renaming a page breaks
-them without any template regression. Tracked by #139.
+Suites never target editorial pages. `tests/fixtures/content/` holds minimal pages tailored
+to each assertion (a title long enough to overflow at 320px, an intro, a dated watch entry,
+a table), and `tests/pages.js` exports their URLs as `FIXTURES`.
+
+`tests/hugo.toml` mounts that directory over `content/` and is passed to the test server
+only (`--config tests/hugo.toml` in `playwright.config.ts`), so the production build never
+sees it. It is merged over `config/_default/`, and redeclares the default `content` mount
+because declaring any mount drops it. The server keeps `--environment production`, so the
+minified, fingerprinted CSS is what gets tested.
+
+A new test needing a content property adds a fixture rather than borrowing a real page.
+Two things still depend on real content, on purpose: the section lists (`/blog/`, `/tags/`,
+structural) and the `Parcours` menu entry in `nav.spec.js`, which tests `menus.toml`.
+
+With `reuseExistingServer`, a `hugo server` already running on port 1414 is reused and
+serves no fixtures: stop it before running the suite locally.
 
 ## Why not in `task qa`
 

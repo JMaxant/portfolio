@@ -72,7 +72,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'hugo server --environment production --minify --disableLiveReload --buildDrafts -p 1414',
+    command: 'hugo server --environment production --minify --disableLiveReload --buildDrafts --config tests/hugo.toml -p 1414',
     url: 'http://localhost:1414',
     reuseExistingServer: !process.env.CI,
   },

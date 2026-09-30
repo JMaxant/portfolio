@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { FIXTURES } from './pages.js';
 
 // A table's min-content width depends on fonts the site does not ship: the same `<code>`
 // token measured 80px locally and ~121px on CI, which is what made overflow.spec.js pass
 // here and fail there. The fix is a scroll container, so the guard has to be a font the page
 // cannot fit rather than the one this machine happens to have.
-const PAGE = '/cas-max/';
+const PAGE = FIXTURES.table.url;
 const NARROW = { width: 320, height: 900 };
 
 const geometry = (page) => page.evaluate(() => {
