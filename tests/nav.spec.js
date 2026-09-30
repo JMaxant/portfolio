@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXTURES } from './pages.js';
 
 // The navigation is an inline row above 768px and a full-screen panel behind the burger
 // toggle below it, so every assertion has to state which side of the breakpoint it is on.
@@ -174,7 +175,7 @@ test.describe('active trail', () => {
   test('a page under no menu entry marks nothing', async ({ page }) => {
     // Taxonomy pages sit under no entry of the main menu, so an empty result is the
     // expected answer here — not a trail that failed to resolve.
-    await page.goto('/tags/hugo/');
+    await page.goto(FIXTURES.tag.url);
 
     await expect(marked(page)).toHaveCount(0);
   });

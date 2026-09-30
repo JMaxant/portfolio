@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FIXTURES } from './pages.js';
 
 // #69: the `datetime` attribute of a <time> must carry the machine date, not the displayed
 // one. Two templates passed the i18n format (`02/01/2006`) into the attribute and emitted
@@ -14,9 +15,9 @@ const PAGES = [
   ['blog list', '/blog/'],
   ['veille list', '/veille/'],
   ['tags list', '/tags/'],
-  ['tag term', '/tags/hugo/'],
-  ['blog single', '/cas-max/'],
-  ['parcours', '/a-propos/parcours/'],
+  ['tag term', FIXTURES.tag.url],
+  ['blog single', FIXTURES.article.url],
+  ['parcours', FIXTURES.parcours.url],
 ];
 
 // Shapes HTML accepts for a <time>: year, month, date, and date plus time. The Parcours

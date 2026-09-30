@@ -21,8 +21,7 @@ for (const [name, path] of PAGES) {
 
     // Only meaningful when the page content is actually shorter than the
     // viewport — otherwise the footer is pushed below the fold regardless
-    // of the sticky-footer rule, and the assertion would be vacuous. "cas
-    // max" is a genuinely long case-study page and never fits here.
+    // of the sticky-footer rule, and the assertion would be vacuous.
     test.skip(!result.contentFitsViewport, `${name}'s content is taller than the test viewport`);
     expect(result.footerBottom).toBeCloseTo(result.innerHeight, 0);
   });
@@ -37,6 +36,8 @@ for (const [name, path] of PAGES) {
       return footer.getBoundingClientRect().top - main.getBoundingClientRect().bottom;
     });
 
-    expect(overlap).toBeGreaterThanOrEqual(0);
+    // Firefox reports fractional layout edges, so touching boxes can measure -0.00003px.
+    // Half a pixel is well below any real overlap.
+    expect(overlap).toBeGreaterThanOrEqual(-0.5);
   });
 }

@@ -1,0 +1,10 @@
+# Merged over config/ for the Playwright server only (playwright.config.ts). Mounts
+# tests/fixtures/content next to the editorial content; the default content mount is
+# redeclared because declaring any mount drops it. See docs/tests-layout.md#fixtures.
+[module]
+[[module.mounts]]
+source = 'content'
+target = 'content'
+[[module.mounts]]
+source = 'tests/fixtures/content'
+target = 'content'

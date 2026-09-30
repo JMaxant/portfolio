@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { PAGES } from './pages.js';
+import { FIXTURES, PAGES } from './pages.js';
 
 // Catches a silent fallback to Georgia/Times: nothing here fails the Hugo build (the font
 // files exist and bundle fine), only the rendered font-family would be wrong — a typo in
@@ -31,7 +31,7 @@ for (const [name, path] of PAGES) {
 // computed style can't tell the two apart — only that the italic @font-face is actually
 // reached (right family, right style), which is what a CSS regression would break.
 test('single__intro-text is styled italic in Spectral', async ({ page }) => {
-  await page.goto('/blog/apprendre-go-venant-de-php/');
+  await page.goto(FIXTURES.article.url);
 
   const intro = await page
     .locator('.single__intro-text')
