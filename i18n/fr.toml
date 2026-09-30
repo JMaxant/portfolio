@@ -76,32 +76,8 @@ other = "Article plus récent"
 [post-older]
 other = "Article plus ancien"
 
-[parcours-now]
-other = "Maintenant"
-
-[parcours-since]
-other = "{{ .Year }} → aujourd'hui"
-
-[parcours-before]
-other = "Avant"
-
-[parcours-until]
-other = "jusqu'à {{ .Year }}"
-
 [parcours-ongoing]
 other = "aujourd'hui"
-
-[parcours-skills]
-other = "Compétences"
-
-[skills-daily]
-other = "Stack quotidienne"
-
-[skills-direction]
-other = "Direction"
-
-[cv-json]
-other = "Ce parcours au format JSON Resume"
 
 [404-title]
 other = "Cette page n'existe pas (ou plus)"
@@ -132,3 +108,9 @@ other = "Accueil"
 
 [breadcrumb]
 other = "Fil d'Ariane"
+
+[see-more-projects]
+other = "Voir plus de projets"
+
+[see-more-blog]
+other = "Voir plus d'articles"

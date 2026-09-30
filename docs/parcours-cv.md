@@ -1,111 +1,71 @@
 ---
 title: Contributing to the Parcours page
-version: 1.0.0
+version: 3.1.0
 date_published: 2026-08-14
-date_modified: 2026-08-14
+date_modified: 2026-09-28
 ---
 
 # Contributing to the Parcours page
 
-Ref: issue #47. How to edit the content of `/parcours/` — the résumé/CV page. For the
-template and CSS contract (partials, classes, integration points), see
-[components.md](components.md#timeline-itemhtml) instead; this document is about the data,
-not the markup.
+Ref: issue #47. How to edit the content of `/a-propos/parcours/`, the résumé page. For the
+shortcode, partial and CSS contracts, see
+[components.md](components.md#parcours-shortcodes).
 
 ## Where the content lives
 
-Two files, two different jobs — never move content between them:
+Everything is in `content/a-propos/parcours.md`:
 
-| File | Holds | Rendered as |
-|------|-------|-------------|
-| `assets/cv.json` | Positions, education, skills — what a CV holds | The timeline and the skills sections, and republished verbatim at `/cv.json` |
-| `content/parcours/index.md` | The `description` front matter (meta description) and the free-text paragraph about the years before the reconversion | The `<h1>`/intro and the "Avant" section body |
+- the `description` front matter is both the intro paragraph under the `h1` and the meta
+  description;
+- the body is a sequence of shortcodes, one per section: `timeline` ("Maintenant"),
+  `resume-text` ("Avant"), `skills` ("Compétences").
 
-`assets/cv.json` is written in [JSON Resume](https://jsonresume.org/schema/) format, with a
-few site-specific extensions prefixed `x_` (`x_tags`, `x_preuve`) that upstream does not
-define. Adding a section to the page means adding data to `cv.json`, not editing
-`layouts/parcours/single.html` — the template only ever reads what's already there.
+Section titles and periods are shortcode parameters, written in the content like any other
+text. `layouts/parcours/single.html` renders only the header and the body.
 
-## Editing `cv.json`
+The page lives under `content/a-propos/` but keeps `type = 'parcours'` in its front matter.
+Hugo's template lookup follows `.Type`: without it, the page falls back to
+`layouts/_default/single.html` and loses the parcours styles.
 
-Every field the template reads is validated against
-`scripts/quality/schemas/cv.schema.json`, enforced both by lefthook (`cv-schema` hook, on
-`assets/cv.json` changes) and in CI. A field the template doesn't consume is rejected by the
-schema (`additionalProperties: false`) rather than silently ignored — so a typo fails at
-commit time instead of producing an empty section. Run `task qa` after editing to catch
-mistakes before they reach a PR.
+## Adding a job or a diploma
 
-### Adding a job or a diploma
+Add a `timeline-item` inside `timeline`, at its chronological place. Entries are written
+most recent first, and nothing sorts them for you.
 
-Append an object to `work[]` (job) or `education[]` (diploma):
-
-```json
-{
-  "name": "Employer name",
-  "position": "Job title",
-  "startDate": "2024-03",
-  "endDate": "2024-09",
-  "summary": "One sentence, inline Markdown allowed.",
-  "x_tags": ["php", "symfony"]
-}
+```markdown
+{{</* timeline-item debut="2024-03" fin="2024-09" titre="Job title" organisation="Employer"
+    resume="One sentence, inline Markdown allowed." tags="php, symfony" */>}}
 ```
 
-- `startDate` (required) and `endDate` (optional — omit for the current position) follow
-  ISO 8601: `"YYYY"`, `"YYYY-MM"` or `"YYYY-MM-DD"`. Only the year is ever displayed; the
+- `debut`, `titre` and `organisation` are required. `fin` is omitted for the current
+  position.
+- Dates follow ISO 8601: `YYYY`, `YYYY-MM` or `YYYY-MM-DD`. Only the year is displayed; the
   full value stays in the `<time datetime>` attribute.
-- `education[]` uses `institution`/`studyType` instead of `name`/`position`, same
-  `startDate`/`endDate`/`summary`/`x_tags`.
-- `x_tags` are lowercase slugs (`^[a-z0-9]+(-[a-z0-9]+)*$`). A tag renders as a link only if
-  a page in the site actually carries that taxonomy term — otherwise it's plain text. This
-  cannot break the build: a tag with no matching content just doesn't link anywhere yet.
-- Both arrays render into one antichronological timeline (`work` and `education` merged and
-  sorted by `startDate`, most recent first) — there's no need to interleave them by hand.
+- `tags` are lowercase slugs, comma-separated. A tag links to its term page only when some
+  content carries that term; otherwise it renders as plain text.
 
-### Adding a skill
+## Adding a skill
 
-Append an object to `skills[]`:
+The `skills` shortcode lists every tag actually used on the site — nothing to edit there,
+it follows content automatically. Tag a project, a blog post or a veille entry, and the
+skill appears, linked to its term page.
 
-```json
-{ "name": "Go", "level": "En cours d'acquisition", "x_preuve": "/blog/apprendre-go-venant-de-php/" }
+For a skill nothing published backs yet, add it to `extra`:
+
+```markdown
+{{</* skills title="Compétences" extra="Python, Kubernetes" */>}}
 ```
 
-- `level` is a closed enum, exactly one of the two strings below — anything else fails the
-  build (`errorf` in the template) and the commit (schema `enum`):
-  - `"Pratiqué au quotidien"` — daily stack, listed as plain tags.
-  - `"En cours d'acquisition"` — in-progress skills, each backed by a proof (see below).
-- `x_preuve` (optional, only meaningful for `"En cours d'acquisition"`): the root-relative
-  permalink of a page on this site that demonstrates the skill (a blog post, a project). If
-  present, it **must** resolve to a real page — a broken path fails the build, on purpose,
-  rather than dropping the skill silently.
-- **An in-progress skill with no `x_preuve` is left off the page entirely** — it still lives
-  in `cv.json` (the CV itself, read by `/cv.json`), but the human-facing page only shows
-  skills something published here actually backs. This is intentional curation, not a bug:
-  don't add a placeholder proof just to make a skill appear.
+`extra` renders as plain, unlinked tags. The build fails if an `extra` entry, lowercased,
+already matches a tag used in content — that skill has a term page and belongs there
+instead, not in `extra`.
 
-### The pivot year
+## The pivot year
 
-The boundary year shown in "Maintenant … → aujourd'hui" and "Avant … jusqu'à" is computed
-from the oldest entry across `work` and `education` — it is not a constant to keep in sync
-by hand. Adding an older entry moves the pivot automatically.
-
-## `basics`
-
-`name`, `label` and `summary` are required by the schema (summary is optional upstream, but
-required here since it's rendered as the page's intro paragraph). `email`, `url`, `profiles`,
-etc. are read by nothing on this page today — the schema still validates their shape if
-present, but only `name`/`label`/`summary` are consumed.
-
-## Wording (i18n)
-
-Section labels and connective text live in `i18n/fr.toml` under the `parcours-*` and
-`skills-*` keys (`parcours-now`, `parcours-since`, `parcours-before`, `parcours-until`,
-`parcours-ongoing`, `parcours-skills`, `skills-daily`, `skills-direction`, `cv-json`). These
-are UI strings, not content — change them here, not in `cv.json`, if the section headings or
-connective phrasing need editing.
+The year separating "Maintenant" from "Avant" (2017) is written by hand in the
+`description` and in the `period` of `timeline` and `resume-text`. Change all three together.
 
 ## Validating a change
 
-`task qa` runs the full chain: `cv-schema` (schema validation), the Hugo build with any
-`WARN` treated as failure (a missing `x_preuve` target, for instance), and the rest of the
-project's lint suite. There is no separate command for just this page — a broken `cv.json`
-fails the same gate as any other quality issue.
+`task qa` builds the site with any Hugo `WARN` treated as a failure. A missing required
+parameter or an `extra` entry that duplicates a tag fails the build through `errorf`.

@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.18.0
+version: 1.22.0
 date_published: 2026-08-08
-date_modified: 2026-08-23
+date_modified: 2026-09-28
 ---
 
 # Components — partials and integration
@@ -89,7 +89,7 @@ compose with, so it opens the inventory.
 {{ partial "icon.html" (dict "name" "sun" "class" "theme-switcher__icon") }}
 ```
 
-Available names — `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
+Available names — `arrow-right`, `external-link`, `moon`, `sun`, `theme-system`. Anything else fails the
 build through `errorf`; the whitelist mirrors the symbol ids of `assets/icons/sprite.svg`
 and has to be edited alongside it.
 
@@ -209,9 +209,8 @@ terms), styled in `components/tag.css`.
 below 280px.
 
 **Callers** — `layouts/index.html` (featured projects, `title_level: h3` under the section
-`h2`), `layouts/projets/list.html` (the whole list, `title_level: h2` under the page `h1`)
-and `layouts/parcours/single.html` (skill proofs, `title_level: h5` under the `h4` naming
-the skill). The level is not decoration: it is what keeps the heading hierarchy of each page
+`h2`) and `layouts/projets/list.html` (the whole list, `title_level: h2` under the page
+`h1`). The level is not decoration: it is what keeps the heading hierarchy of each page
 correct with a single partial.
 
 ### `projets-meta.html`
@@ -365,7 +364,7 @@ other inline element that can end up as a direct child of `.Content` needs the s
 validates its parameters then delegates to the partial.
 
 ```markdown
-{{< cta url="/parcours/" label="Mon parcours" >}}
+{{< cta url="/a-propos/parcours/" label="Mon parcours" >}}
 {{< cta url="/contact/" label="Me contacter" variant="ghost" >}}
 ```
 
@@ -501,7 +500,9 @@ block (0-2-0) and leave the panel absolutely positioned inside the burger menu.
 ### `menu.html`
 
 Renders a `<nav><ul>` from a Hugo menu, looked up dynamically by name, and marks the active
-trail on the entry the visitor is currently under.
+trail on the entry the visitor is currently under. It is a thin wrapper: it resolves the menu
+and renders the `<nav><ul class="menu menu--<menuName>">` shell, then delegates every `<li>`
+to [`menu-items.html`](#menu-itemshtml).
 
 | Key | Required | Default | Description |
 |-----|----------|---------|-------------|
@@ -528,6 +529,12 @@ Two methods, and each answers a different question:
 Measured on the built site: `/blog/` marks Blog `page`, `/blog/<article>/` marks it `true`,
 `/` marks Accueil and nothing else. `HasMenuCurrent` does cover section descendants, despite
 a wording that suggests it only walks nested menu entries.
+
+**A page with its own entry marks no ancestor.** Parcours lives under A propos but has its
+own top-level entry, so on `/a-propos/parcours/` both methods return true on two different
+entries, and the menu showed two active items side by side (#140). `menu-items.html` first
+checks whether any entry `IsMenuCurrent`; if one does, no entry is marked as an ancestor. A
+blog article has no entry of its own, so Blog stays marked `true` there.
 
 Three traps, each of which produces a menu where **nothing is ever active, with no build
 error at all**:
@@ -556,6 +563,7 @@ link. `aria-current` carries the semantics either way.
 |------------------|------|
 | `menu` | Block, on the `<ul>`; `menu--main`, `menu--error`, `menu--footer` for the variants |
 | `[aria-current]` | The active entry, whatever the element |
+| `menu__item` | Element: one entry |
 
 The selector is written without an element on purpose: it has to match the `<span>` of the
 current page as well as the `<a>` of the ancestor. For the same reason the rule repeats
@@ -570,6 +578,23 @@ Watch the specificity when adding to this block: `.menu [aria-current]` is `(0,2
 `a:hover` is `(0,1,1)`, so a rule written too strongly freezes the hover colour on the
 active entry — it was the only link in the menu not reacting to the pointer until
 `&:hover` was declared inside it.
+
+### `menu-items.html`
+
+Renders `<li>` for a flat list of menu entries. Not meant to be called directly except by
+[`menu.html`](#menuhtml).
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `entries` | yes | — | A `Menu` (already sorted, e.g. `.ByWeight`) |
+| `page` | yes | — | The page being rendered, against which the active trail is resolved |
+| `menuName` | yes | — | The string identifier IsMenuCurrent/HasMenuCurrent need |
+
+**No nested menus.** Every entry in `config/_default/menus.toml` is flat, and this partial
+does not recurse into children. A menu entry with children used to render as a
+`submenu-toggle` disclosure (`submenu-toggle.js`, `.submenu`/`.submenu-toggle` in
+`menu.css`), removed once the only entry using it ("A propos") became a plain link — check
+git history if a nested menu is needed again.
 
 ### `breadcrumb.html`
 
@@ -647,9 +672,8 @@ part of the article.
 
 ### `timeline-item.html`
 
-One entry of the Parcours timeline. The caller normalises the two shapes the entry can take
-— a position from `work[]`, a diploma from `education[]` — so the partial sees a single
-contract and never has to know which array it came from.
+One entry of the Parcours timeline, a position or a diploma. Both render through the same
+contract. Entries are written by hand in the content, most recent first.
 
 | Key | Required | Default | Description |
 |-----|----------|---------|-------------|
@@ -664,7 +688,7 @@ The three required keys are checked with `errorf` before any output. Only the ye
 displayed, through `substr`, which is what makes all three date precisions acceptable; the
 full value stays in the `datetime` attribute.
 
-`tags` are plain strings from `cv.json`, not taxonomy terms, so each one is looked up with
+`tags` are plain strings, not taxonomy terms, so each one is looked up with
 `site.GetPage`: a tag that some content carries becomes a link, one that nothing carries is
 rendered inert. Emitting the link unconditionally would produce a `/tags/<slug>/` that Hugo
 never builds, and the link checker would report it.
@@ -682,7 +706,29 @@ never builds, and the link checker would report it.
 The inline-start rule reuses the `blockquote` border of `base/elements.css` rather than
 introducing a second vertical accent.
 
-**Callers** — `layouts/parcours/single.html` only.
+**Callers** — the `timeline-item` shortcode only.
+
+#### Parcours shortcodes
+
+The sections of `/a-propos/parcours/` are shortcodes written in its Markdown body;
+`layouts/parcours/single.html` only renders the header and `.Content`. Each shortcode
+validates its required parameters with `errorf`, reporting the position in the source file.
+
+| Shortcode | Parameters | Renders |
+|-----------|------------|---------|
+| `timeline` (paired) | `title`, `period` (optional) | `section.resume__section--now` with its `h2` and the `ol.timeline` |
+| `timeline-item` | same keys as the partial, `tags` comma-separated | `timeline-item.html` |
+| `resume-text` (paired) | `title`, `period` (optional) | `section.resume__section--before`, body rendered as Markdown |
+| `skills` | `title`, `extra` comma-separated (optional) | `section.resume__section--skills` with its `h2` and one `ul.tags`: every tag the site actually uses, linked, followed by `extra` as plain, unlinked tags |
+
+**Why one shortcode per section type, not a generic section wrapper.** A paired shortcode
+that renders its `.Inner` with `RenderString` drops the HTML of nested shortcodes (`Raw HTML
+omitted`, a `WARN`, so a failed build), because `markup.goldmark.renderer.unsafe` is off.
+So `resume-text` is the only one rendering Markdown, and it must not contain shortcodes;
+`timeline` outputs its `.Inner` (`timeline-item` calls) as is instead.
+
+`skills` fails the build when an `extra` entry, lowercased, matches an existing tag: that
+skill already has a term page and belongs in content (a `tags` list), not in `extra`.
 
 ## Article layout (`.container-content-grid`)
 
@@ -867,8 +913,6 @@ column, which a label would overflow.
 
 - `card--<variant>` and `cta--<variant>` are emitted on demand but have no CSS. Any variant
   introduced must come with its rule, otherwise it produces a dead class.
-- `assets/cv.json` is the single source of the Parcours page: it is both read by
-  `layouts/parcours/single.html` and republished untouched at `/cv.json`, so the page and
-  the machine-readable CV cannot drift. Adding a section to the page means adding it to the
-  JSON, not to the template. See [parcours-cv.md](parcours-cv.md) for the content-editing
-  guide.
+- The Parcours content lives in `content/a-propos/parcours.md`, as the
+  [Parcours shortcodes](#parcours-shortcodes). See [parcours-cv.md](parcours-cv.md) for the
+  content-editing guide.

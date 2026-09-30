@@ -16,7 +16,7 @@ const PAGES = [
   ['tags list', '/tags/'],
   ['tag term', '/tags/hugo/'],
   ['blog single', '/cas-max/'],
-  ['parcours', '/parcours/'],
+  ['parcours', '/a-propos/parcours/'],
 ];
 
 // Shapes HTML accepts for a <time>: year, month, date, and date plus time. The Parcours

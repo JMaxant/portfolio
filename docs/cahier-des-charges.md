@@ -46,7 +46,7 @@ Trois piliers de contenu à couvrir, par ordre de priorité :
                         de 2-3 projets phares, dernier(s) article(s) de blog, CTA contact
 /projets/             → liste des réalisations
 /projets/<slug>/      → étude de cas détaillée par projet
-/parcours/            → CV / timeline d'expérience + formations + compétences
+/a-propos/parcours/   → CV / timeline d'expérience + formations + compétences
 /blog/                → liste des articles
 /blog/<slug>/         → article
 /veille/              → liste de liens externes commentés (teaser-only : aucune
@@ -54,7 +54,7 @@ Trois piliers de contenu à couvrir, par ordre de priorité :
 /contact/ (ou ancre)  → coordonnées / liens
 ```
 
-**Décidé** : le CV est une page HTML native (`/parcours/`), pas un PDF téléchargeable. Plus facile à faire évoluer qu'un PDF réexporté à chaque mise à jour, et cohérent avec un contenu géré en Markdown comme le reste du site.
+**Décidé** : le CV est une page HTML native (`/a-propos/parcours/`), pas un PDF téléchargeable. Plus facile à faire évoluer qu'un PDF réexporté à chaque mise à jour, et cohérent avec un contenu géré en Markdown comme le reste du site.
 
 ## 5bis. Structure de la page Parcours / CV
 
@@ -70,6 +70,8 @@ Structure proposée :
    - *Direction / en cours d'acquisition* : Go, Python, Kubernetes — présenté explicitement comme une trajectoire, pas comme une compétence acquise. Évite le sur-claim tout en assumant l'ambition.
 
 Point clé : ne pas laisser la section 4 comme une simple déclaration d'intention. Relier chaque compétence "en cours d'acquisition" à une preuve concrète ailleurs sur le site (article de blog documentant un apprentissage Go, side-project Python/K8s dans `/projets/`) — ça transforme une ambition affichée en trajectoire démontrable. Implique de prévoir un tag ou une catégorie commune (ex. `apprentissage`, `go`, `k8s`) pour que ces contenus soient facilement regroupables.
+
+**Décidé** (#10) : abandon de la distinction explicite "stack quotidienne" / "direction", et de la preuve par carte (un `proof` par compétence en cours pointant vers une page). La section Compétences liste désormais automatiquement tous les tags réellement utilisés sur le site (liés à leur page de taxonomie), plus une liste optionnelle de compétences pas encore rattachées à un contenu publié (`extra`, rendu sans lien). Le build échoue si une entrée de `extra` fait doublon avec un tag déjà utilisé, pour éviter la dérive entre les deux listes. La frontière quotidien/trajectoire reste visible (bordure en pointillés + tags non accentués pour `extra`), mais sans label ni carte dédiée par compétence.
 
 ## 5ter. Page d'accueil : sections dynamiques
 
@@ -155,7 +157,8 @@ Pertinent vu la cible (recruteurs/devs) et le positionnement "vitrine technique"
 - **`robots.txt` permissif envers les crawlers IA connus** (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...) — à l'inverse de beaucoup de sites corporate qui les bloquent, ici l'objectif est la visibilité, pas la protection.
 - **`llms.txt`** — convention émergente et non standardisée (un résumé texte du site + liens clés, sur le modèle de `robots.txt`), adoption non garantie par les outils IA, mais coût d'ajout quasi nul. À considérer comme un plus, pas un prérequis.
 - **Prose factuelle et bien structurée** (titres, listes, affirmations claires du type "j'ai construit X pour résoudre Y avec Z") — sert autant un recruteur qui scanne rapidement qu'un LLM qui résume/extrait le contenu. Cohérent avec le ton déjà décidé en section 3.
-- **Décidé — prévu dès la V1** : `llms.txt` à la racine, et un CV machine-readable (format JSON Resume ou simple `/cv.json`) en complément de la page Parcours humaine.
+- **Décidé — prévu dès la V1** : `llms.txt` à la racine~~, et un CV machine-readable (format JSON Resume ou simple `/cv.json`) en complément de la page Parcours humaine~~.
+  The machine-readable CV was dropped on 2026-09-25: the Parcours page is now written as shortcodes in its content, and nothing generates `/cv.json`.
 
 ## 9. Analytics
 
@@ -203,7 +206,7 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 - [ ] Switch light/dark mode fonctionnel (préférence système détectée + bascule manuelle mémorisée).
 - [ ] Taxonomie tag en place sur au moins les articles/projets publiés au lancement.
 - [ ] `llms.txt` présent à la racine.
-- [ ] CV machine-readable (`/cv.json` ou équivalent JSON Resume) présent et à jour avec la page Parcours.
+- ~~CV machine-readable (`/cv.json` ou équivalent JSON Resume) présent et à jour avec la page Parcours.~~ Dropped, see section 8bis.
 
 ## 14. Points ouverts à trancher pendant le développement
 
@@ -265,7 +268,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [ ] Vérifier sitemap + RSS natifs du thème plutôt que les recréer.
 - [ ] `robots.txt` autorisant explicitement les crawlers IA connus (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...).
 - [ ] `llms.txt` — à écrire en dernier dans cette phase, une fois le contenu réel stabilisé (il le résume).
-- [ ] CV machine-readable (`/cv.json`) — à générer après la page Parcours définitive, pour rester synchronisé.
+- ~~CV machine-readable (`/cv.json`) — à générer après la page Parcours définitive, pour rester synchronisé.~~ Dropped, see section 8bis.
 
 ### Phase 5 — Déploiement
 

@@ -7,6 +7,10 @@ pre {
   border-radius: var(--border-radius);
 }
 
+code {
+  font-size: 0.8em; /* token-exception: monospace font needs to be shrunk a bit to avoid visual scaling issue */
+}
+
 /* Comment */
 .chroma .c,
 .chroma .ch,

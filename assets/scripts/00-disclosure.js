@@ -33,3 +33,23 @@ window.createDisclosure = ({ toggle, panel, onChange }) => {
 
   return { isOpen, setOpen };
 };
+
+/* Closes a disclosure whose panel floats over content the user might click or tab into
+   elsewhere: the theme popover. Focus leaving the widget dismisses it too, so Tab cannot
+   strand the user in the page with an open popover floating above it — no focus is moved
+   here, it has already gone where the user asked it to go. */
+window.dismissOnOutside = ({ toggle, panel, isOpen, setOpen }) => {
+  const isOutside = (target) => !panel.contains(target) && !toggle.contains(target);
+
+  document.addEventListener('click', (event) => {
+    if (isOpen() && isOutside(event.target)) {
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener('focusin', (event) => {
+    if (isOpen() && isOutside(event.target)) {
+      setOpen(false);
+    }
+  });
+};
