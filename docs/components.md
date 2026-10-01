@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.22.0
+version: 1.23.0
 date_published: 2026-08-08
-date_modified: 2026-09-28
+date_modified: 2026-10-01
 ---
 
 # Components — partials and integration
@@ -13,7 +13,7 @@ Both live in the same document on purpose — two files indexed on the same comp
 drift apart.
 
 For tokens and breakpoints, see [css-tokens.md](css-tokens.md). Partials inherited from the
-bear-cub theme and not overridden are out of scope.
+a theme are gone since #56: the site has none.
 
 ## Conventions
 
@@ -120,7 +120,7 @@ control size, and nudges it onto the optical baseline. The chrome sizes `--size-
 
 ### `favicon.html`
 
-Overrides the bear-cub partial of the same name, which emitted a `<link rel="shortcut icon">`
+Replaced the hugo-bearcub partial of the same name, which emitted a `<link rel="shortcut icon">`
 only when `Site.Params.favicon` was set — a parameter this site never defined, so the built
 `<head>` carried no icon at all. Takes no context; called once from `baseof.html`.
 
@@ -276,7 +276,7 @@ four dates now go through `i18n "date-format"`; the attribute keeps the machine 
 [`<time>` carries two dates](#time-carries-two-dates-not-one).
 
 The empty message is `i18n "no-entries"`, neutral between articles and links. `no-posts`
-stays for the taxonomy list and the bear-cub theme, reworded to "Aucun contenu à afficher
+stays for the taxonomy list, reworded to "Aucun contenu à afficher
 pour l'instant" because the taxonomy page lists tags, not articles (#93); `no-links` is
 gone.
 

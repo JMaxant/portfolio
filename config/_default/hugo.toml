@@ -7,7 +7,7 @@ defaultContentLanguageInSubdir = false
 removePathAccents = true
 
 [params]
-madeWith = 'Made with Hugo & based on bear-cub theme'
+madeWith = 'Made with Hugo'
 baseline = 'Développement web'
 
 [params.author]
@@ -21,10 +21,6 @@ tag = 'tags'
 # Emit class names instead of inline styles, so the palette lives in
 # 11-code.css and follows the theme. See docs/css-tokens.md.
 noClasses = false
-
-[module]
-[[module.imports]]
-path = 'github.com/clente/hugo-bearcub'
 
 [params.meta]
 favicon = false

@@ -5,7 +5,7 @@ Statut : brouillon de travail — sert de fil rouge pendant le développement, �
 ## 1. Contexte
 
 - Site : `https://www.julien-maxant.com/`
-- Stack imposée : Hugo, thème [bear-cub](https://github.com/clente/hugo-bearcub), gestion de tâches via `Taskfile.yml`.
+- Stack imposée : Hugo (thème bear-cub au départ, abandonné — voir #56, tout est désormais local), gestion de tâches via `Taskfile.yml`.
 - Le site est actuellement un squelette (thème installé, contenu en Lorem Ipsum, une seule page `content/_index.md`).
 - Volonté explicite : coder le site soi-même pour monter en compétence sur la stack (Hugo, templating Go, CSS, CI/CD). Ce document cadre le *besoin*, pas l'implémentation.
 
@@ -126,7 +126,7 @@ Le champ `tags` de l'archetype veille est donc désormais exploité nativement. 
 ## 6. Identité visuelle
 
 - Choix affirmé : pas de branding fort (pas de logo prévu), focus sur le contenu — mais **personnalisation prévue**, notamment un switch clair/sombre (light/dark mode).
-- Contrainte du thème bear-cub : `assets/styles/01-base.css` existe déjà et laisse penser qu'une architecture de surcharge CSS est en cours de mise en place. Le thème fournit plusieurs feuilles de style alternatives (`original.css`, `herman.css` — cette dernière étant une variante sombre fixe), mais **pas de bascule clair/sombre au runtime** : c'est un choix de style statique à la compilation, pas un toggle utilisateur. Le switch light/dark devra donc être développé (détection `prefers-color-scheme` + bascule manuelle mémorisée, typiquement via `localStorage`), pas récupéré tel quel du thème.
+- Contrainte du thème bear-cub (historique, thème abandonné en #56) : `assets/styles/01-base.css` existe déjà et laisse penser qu'une architecture de surcharge CSS est en cours de mise en place. Le thème fournit plusieurs feuilles de style alternatives (`original.css`, `herman.css` — cette dernière étant une variante sombre fixe), mais **pas de bascule clair/sombre au runtime** : c'est un choix de style statique à la compilation, pas un toggle utilisateur. Le switch light/dark devra donc être développé (détection `prefers-color-scheme` + bascule manuelle mémorisée, typiquement via `localStorage`), pas récupéré tel quel du thème.
 
 ## 7. Internationalisation
 
@@ -139,7 +139,7 @@ Le champ `tags` de l'archetype veille est donc désormais exploité nativement. 
   - `defaultContentLanguage = "fr"` et `defaultContentLanguageInSubdir = false` dans `hugo.toml` — le français reste à la racine (`/blog/...`), l'anglais arrivera plus tard sous `/en/...` sans rien déplacer.
   - Organiser le contenu en *page bundles* avec `translationKey` dès maintenant (même mono-langue) pour que l'ajout de l'anglais soit additif, pas une réorganisation.
 
-Note technique annexe : le thème bear-cub embarque déjà des traductions d'interface (en/de/ko/pt/tr) mais pas de `fr` — et le dossier `i18n/` du site est actuellement vide. Les libellés d'interface (boutons, labels) du thème pourraient donc s'afficher dans une langue par défaut du thème plutôt qu'en français tant qu'un `i18n/fr.toml` ne surcharge pas ces clés. Détail d'implémentation à traiter en développant, sans impact sur le cadrage.
+Note technique annexe (historique, thème abandonné en #56 ; `i18n/fr.toml` existe désormais) : le thème bear-cub embarquait déjà des traductions d'interface (en/de/ko/pt/tr) mais pas de `fr` — et le dossier `i18n/` du site est actuellement vide. Les libellés d'interface (boutons, labels) du thème pourraient donc s'afficher dans une langue par défaut du thème plutôt qu'en français tant qu'un `i18n/fr.toml` ne surcharge pas ces clés. Détail d'implémentation à traiter en développant, sans impact sur le cadrage.
 
 ## 8. SEO & structure de données
 
