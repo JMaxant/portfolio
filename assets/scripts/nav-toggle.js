@@ -1,3 +1,5 @@
+import { createDisclosure } from './disclosure.js';
+
 (() => {
   const toggle = document.querySelector('.menu-toggle');
   const nav = document.getElementById('primary-nav');
@@ -28,7 +30,7 @@
     });
   };
 
-  const { isOpen, setOpen } = window.createDisclosure({
+  const { isOpen, setOpen } = createDisclosure({
     toggle,
     panel: nav,
     onChange: setInert,

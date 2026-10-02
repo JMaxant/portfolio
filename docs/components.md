@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.26.0
+version: 1.27.0
 date_published: 2026-08-08
 date_modified: 2026-10-02
 ---
@@ -477,11 +477,10 @@ Crossing the breakpoint upwards with the panel open closes it, the same reset
 closing pass is what releases `inert`.
 
 The `aria-expanded` toggling, the `.is-open` mirroring and the `Escape` handler are not
-written here: they come from `assets/scripts/00-disclosure.js`, shared with the theme
-switcher, which is the other disclosure in the header. The `00-` prefix is load-bearing —
-`baseof.html` bundles `resources.Match "scripts/*.js"`, which sorts by path, so the helper
-has to concatenate before its two consumers. It publishes on `window` because after
-concatenation each script is still its own IIFE.
+written here: they come from `assets/scripts/disclosure.js`, shared with the theme
+switcher, which is the other disclosure in the header. The helper is exported and imported by
+both consumers; `baseof.html` bundles `assets/scripts/main.js` with `js.Build`, so the import
+graph, not a filename, orders the files.
 
 The helper's `onChange` callback fires on every transition, opening and closing alike, and
 is what both consumers hook into — `nav-toggle.js` for `inert`, `theme-switcher.html` for

@@ -1,3 +1,5 @@
+import { createDisclosure, dismissOnOutside } from './disclosure.js';
+
 (() => {
   const toggle = document.querySelector('.theme-switcher__toggle');
   const panel = document.getElementById('theme-switcher-panel');
@@ -15,7 +17,7 @@
 
   /* Opening moves focus straight onto the current choice rather than onto the group, so the
      radios are operable without an intermediate Tab (DSFR/RGAA select pattern). */
-  const { isOpen, setOpen } = window.createDisclosure({
+  const { isOpen, setOpen } = createDisclosure({
     toggle,
     panel,
     onChange: (open) => {
@@ -28,7 +30,7 @@
     },
   });
 
-  window.dismissOnOutside({ toggle, panel, isOpen, setOpen });
+  dismissOnOutside({ toggle, panel, isOpen, setOpen });
 
   /* Below the breakpoint the panel is permanently visible and the trigger is hidden, so a
      leftover aria-expanded="true" would describe a control the user can no longer reach. */
