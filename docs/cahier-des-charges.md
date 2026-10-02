@@ -267,8 +267,8 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [ ] Meta description + OpenGraph par page.
 - [X] JSON-LD: `Person` (home, about), `BlogPosting` (articles), `Article` (projects), `BreadcrumbList` (issue #15, see `docs/seo.md#structured-data`).
 - [X] Sitemap and RSS feeds checked and fixed: the main feed lists the blog and the projects, veille items link to their source (issues #16 and #74, see `docs/seo.md#feeds`).
-- [ ] `robots.txt` autorisant explicitement les crawlers IA connus (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...).
-- [ ] `llms.txt` — à écrire en dernier dans cette phase, une fois le contenu réel stabilisé (il le résume).
+- [X] `robots.txt` explicitly allowing the known AI crawlers (issue #17, see `docs/seo.md#robotstxt`).
+- [X] `llms.txt` (issue #18): generated from the content rather than written once it stabilises, so it never goes stale. See `docs/seo.md#llmstxt`.
 - ~~CV machine-readable (`/cv.json`) — à générer après la page Parcours définitive, pour rester synchronisé.~~ Dropped, see section 8bis.
 
 ### Phase 5 — Déploiement

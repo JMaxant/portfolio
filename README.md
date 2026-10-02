@@ -43,7 +43,8 @@ project are documented in [Components](docs/components.md).
 ## SEO
 
 Every page needs a `description` in its front matter; the fallback chain, social preview
-images and what the tests check are in [SEO guidelines](docs/seo.md).
+images, structured data, feeds, `robots.txt`, `llms.txt` and what the tests check are in
+[SEO guidelines](docs/seo.md).
 
 ## Setup
 
