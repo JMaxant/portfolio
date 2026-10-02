@@ -111,7 +111,7 @@ Les trois valeurs de `render` ne se valent pas, et la nuance décide de tout ici
 - `never` exclut la page de **toutes** les collections. Vérifié empiriquement : elle n'engendre alors jamais de page de taxonomie, même avec `list = 'always'`.
 - `link` supprime la sortie HTML mais **conserve l'entrée dans les collections** et lui assigne un `Permalink`.
 
-**Décidé** : `render = 'link'`, et donc oui, les entrées veille alimentent les pages `/tags/*`. Le `list.html` de bear-cub gère déjà le pattern lien externe (`.Params.link` + `↪`) : une page de terme lie l'entrée vers sa source, pas vers une URL du site. On obtient le niveau 1 ci-dessus sur la veille aussi — zéro JS, vraies URLs partageables, indexables, cohérent avec les objectifs SEO/GEO de la section 8bis.
+**Decided**: `render = 'link'`, so veille entries do feed the `/tags/*` pages. The `entry-link.html` partial handles the external link: when `.Params.source_link` is set, a term page links the entry to its source rather than to a URL on the site. Level 1 above therefore holds for the veille too — no JS, real shareable and indexable URLs, consistent with the SEO/GEO goals of section 8bis.
 
 Garanties vérifiées après `hugo --gc --minify --cleanDestinationDir` :
 
@@ -146,7 +146,7 @@ Note technique annexe (historique) : le thème bear-cub, abandonné en #56, n'em
 Non demandé explicitement mais cohérent avec l'objectif "vitrine pro" — à considérer comme périmètre standard d'un portfolio sérieux :
 - Meta description par page, OpenGraph pour le partage (LinkedIn notamment, vu la cible pro).
 - JSON-LD `Person` a minima sur la page d'accueil/à propos (nom, métier, compétences) — cohérent avec un site personnel de marque.
-- Sitemap et flux RSS pour le blog (souvent natifs à un thème Hugo comme bear-cub — à vérifier plutôt qu'à recréer).
+- Sitemap and RSS feed for the blog. The sitemap is Hugo's built-in one; the feed uses a local template, `layouts/_default/rss.xml`.
 
 ## 8bis. GEO & accessibilité aux agents IA
 
