@@ -29,6 +29,11 @@ export default defineConfig([
     },
   },
   {
+    files: ["assets/scripts/**/*.js"],
+    ignores: ["assets/scripts/inline/**"],
+    languageOptions: {sourceType: "module"},
+  },
+  {
     files: ["tests/**/*.js"],
     languageOptions: {
       sourceType: "module",

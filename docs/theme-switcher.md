@@ -1,8 +1,8 @@
 ---
 title: Light / dark switch
-version: 2.3.0
+version: 2.4.0
 date_published: 2026-08-03
-date_modified: 2026-08-19
+date_modified: 2026-10-02
 ---
 
 # Light / dark switch
@@ -35,7 +35,7 @@ the system.
 |------|------|
 | `layouts/partials/theme-switcher.html` | Icon trigger + a group of 3 radios (light/dark/system), each labelled by an `icon.html` icon and its text, included from `nav.html` |
 | `assets/scripts/inline/theme-init.js` | Anti-flash: sets `data-theme` before the first paint, and marks `<html class="js">` |
-| `assets/scripts/00-disclosure.js` | Disclosure behaviour shared with the burger menu |
+| `assets/scripts/disclosure.js` | Disclosure behaviour shared with the burger menu |
 | `assets/scripts/theme-toggle.js` | Opens and closes the panel (desktop only, refs #72) |
 | `assets/scripts/theme.js` | Applies the choice, keeps the radios and the trigger's label in sync |
 | `assets/styles/base/tokens.css` | Primitives (`--light-*`, `--dark-*`), semantic tokens (`--color-*`) and the switching rules (`@media`, `[data-theme]`) |
@@ -50,7 +50,7 @@ the system.
    hide controls that only JavaScript can operate — see [Without JavaScript](#without-javascript).
 2. **Rendering the `<fieldset>`** — the "System" radio is `checked` in the HTML, so the
    markup already shows the default state before any script runs. `theme.js`, deferred
-   through the `resources.Match "scripts/*.js"` bundle, then checks the radio matching the
+   through the `js.Build` bundle, then checks the radio matching the
    stored choice if there is one. That static default is what the *scripted* page starts
    from; it is not a no-JS fallback, see [Without JavaScript](#without-javascript).
 3. **Changing the choice** — on a radio's `change`, `theme.js` updates `localStorage` and
