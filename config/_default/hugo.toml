@@ -11,6 +11,8 @@ madeWith = 'Made with Hugo'
 baseline = 'Développement web'
 # Last fallback of the meta description, for a page with neither a description nor content.
 description = 'Julien Maxant, développeur web depuis 2017 : PHP, Drupal, Symfony, JS, Vue, Go, Python.'
+# The sections that count as publications: the home page's latest activity and the main RSS feed.
+mainSections = ['blog', 'projets']
 
 [params.author]
 name = 'Julien Maxant'
@@ -34,6 +36,10 @@ url = 'https://github.com/JMaxant'
 [[params.social]]
 name = 'LinkedIn'
 url = 'https://www.linkedin.com/in/julien-maxant/'
+
+# The tag index lists terms, not content: a feed of it has nothing to follow.
+[outputs]
+taxonomy = ['html']
 
 [taxonomies]
 tag = 'tags'

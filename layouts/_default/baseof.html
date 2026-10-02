@@ -15,9 +15,15 @@
 
   {{- partial "css.html" . -}}
 
-  {{ with .OutputFormats.Get "rss" -}}
-   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
-  {{ end -}}
+  {{- /* The main feed on every page, then the page's own feed (section, tag) when it has one. */}}
+  {{- with site.Home.OutputFormats.Get "rss" }}
+  <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}" />
+  {{- end }}
+  {{- if not .IsHome }}
+    {{- with .OutputFormats.Get "rss" }}
+  <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Title }} | {{ site.Title }}" />
+    {{- end }}
+  {{- end }}
 
 </head>
 

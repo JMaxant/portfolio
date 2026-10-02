@@ -4,6 +4,8 @@ description = """
 Lead tech, dans le domaine du web depuis 2017. PHP, JS, Go, du cadrage au déploiement. Je centre mon travail sur la compréhension du besoin, la prise de décision et des architectures stables sur le long terme.
 """
 translationKey = 'a-propos'
+# No feed: the section holds the resume only, which is not a publication.
+outputs = ['html']
 +++
 
 Après une carrière dans l'hôtellerie, j'ai décidé de suivre le sujet qui ne m'a jamais vraiment lâché et de me reconvertir dans le développement web.
