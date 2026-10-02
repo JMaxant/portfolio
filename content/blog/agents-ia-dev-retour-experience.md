@@ -5,7 +5,7 @@ title = 'Coder avec un agent IA : ce qui marche, ce qui ne marche pas'
 description = "Retour d'expérience sur l'usage d'agents type Claude en dev : conception, spécification, découpage des tâches — et où l'exercice montre ses limites."
 tags = ['ia', 'workflow']
 translationKey = 'agents-ia-dev-retour-experience'
-cover = ''
+images = []
 +++
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Un an à utiliser des agents

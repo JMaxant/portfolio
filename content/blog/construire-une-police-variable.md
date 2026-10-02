@@ -5,7 +5,7 @@ title = 'Compiler sa propre police variable : le cas Spectral'
 description = "Pas de version variable officielle pour la police serif de ce site : reconstruire un font variable à partir des sources, quatre fois plus léger que les fichiers statiques."
 tags = ['css', 'performance']
 translationKey = 'construire-une-police-variable'
-cover = ''
+images = []
 +++
 
 Ce site sert la police serif Spectral en 2 fichiers `.woff2` de ~64 Ko chacun. Avant,

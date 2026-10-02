@@ -1,15 +1,18 @@
-{{- /* Ported from hugo-bearcub (seo_tags.html), social-card branch dropped. Reworked in #14. */ -}}
-<!-- Primary Meta Tags -->
-<meta name="title" content="{{ with .Title }}{{ . }}{{ else }}{{ .Site.Title }}{{ end }}" />
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
-<meta name="author" content="{{ with .Params.author }}{{ . }}{{ end }}" />
-<meta name="keywords" content="{{ if .IsPage}}{{ range $index, $tag := .Params.tags }}{{ $tag }},{{ end }}{{ else }}{{ range $plural, $terms := .Site.Taxonomies }}{{ range $term, $val := $terms }}{{ printf "%s," $term }}{{ end }}{{ end }}{{ end }}" />
+{{- /* Head-only partial: takes the page context, called once from baseof.html.
+       The description chain mirrors Hugo's embedded opengraph.html, so the meta description
+       and og:description agree. See docs/components.md#seo_tagshtml. */ -}}
+{{- $description := or .Description .Summary site.Params.description | plainify | htmlUnescape -}}
+{{- $description = replaceRE `\s+` " " $description | strings.TrimSpace -}}
+<link rel="canonical" href="{{ .Permalink }}" />
+{{- with $description }}
+<meta name="description" content="{{ . }}" />
+{{- end }}
+{{- with site.Params.author.name }}
+<meta name="author" content="{{ . }}" />
+{{- end }}
 
-<!-- Open Graph / Facebook -->
 {{ template "_internal/opengraph.html" . }}
-
-<!-- Twitter -->
 {{ template "_internal/twitter_cards.html" . }}
 
-<!-- Microdata -->
+{{- /* Microdata, kept until the JSON-LD of #15 replaces it. */}}
 {{ template "_internal/schema.html" . }}

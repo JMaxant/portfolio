@@ -2,6 +2,7 @@
 date = '2026-07-26'
 draft = false
 title = 'Julien Maxant'
+description = 'De la réception du besoin au déploiement, je crée, conçois et conseille sur des projets de sites ou applications (PHP, Drupal, Symfony, JS, Vue, Go, Python) depuis 2017.'
 +++
 
 <!-- The only h1 of the page: the hero partial no longer emits one. -->

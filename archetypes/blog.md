@@ -5,5 +5,5 @@ title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 description = ""
 tags = []
 translationKey = '{{ .File.ContentBaseName }}'
-cover = ""
+images = []
 +++

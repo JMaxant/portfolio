@@ -83,7 +83,7 @@ Deux idées évoquées : "Récemment publiés" (nouveau contenu) et "Dernières 
 
 Utile uniquement pour les types de contenu créés de façon répétée — pas pour les pages singulières.
 
-- **`blog`** — archetype dédié : `title`, `date`, `draft`, `tags`, `description`, éventuellement `cover`.
+- **`blog`** — archetype dédié : `title`, `date`, `draft`, `tags`, `description`, éventuellement `images`.
 - **`projets`** — archetype dédié : `title`, `date`, `tags` (liste), `role`, `repo`/`demo` (liens), `status` (en cours / terminé), `description`.
 - **`veille`** — archetype dédié : `title`, `date`, `link` (URL de l'article partagé), `description` (commentaire), `tags`, `source_lang` (langue de la source, pour l'attribut `lang` et un futur filtrage).
 - **Accueil, Parcours, À propos** — pas d'archetype nécessaire : pages uniques, créées une fois, éditées directement.
@@ -130,7 +130,7 @@ Le champ `tags` de l'archetype veille est donc désormais exploité nativement. 
 
 ## 7. Internationalisation
 
-- **Phase 1 : FR uniquement.** Contenu, URLs et méta en français (`locale = fr-fr` déjà en place).
+- **Phase 1 : FR uniquement.** Contenu, URLs et méta en français (`locale = fr-FR` déjà en place).
 - **Phase 2 (plus tard) : ajout de l'anglais.** Ne pas fermer la porte techniquement :
   - Éviter de coder en dur des liens ou labels qui supposeraient une seule langue.
   - Garder à l'esprit que chaque contenu (page, article) devra un jour exister en FR *et* EN de façon complète (pas de traduction partielle) — c'est une contrainte à anticiper dans la structure de contenu (ex. `translationKey` par article), pas à implémenter maintenant.
