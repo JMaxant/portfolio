@@ -27,8 +27,12 @@ for (const [name, path] of PAGES) {
     const descriptionTag = meta(page, 'name', 'description');
     await expect(descriptionTag).toHaveAttribute('content', /\S/);
     const description = await descriptionTag.getAttribute('content');
-    // Both are computed from the same chain; a mismatch means one of them forked.
-    await expect(meta(page, 'property', 'og:description')).toHaveAttribute('content', description);
+    // Both are computed from the same chain; a mismatch means one of them forked. Tag pages
+    // are the exception: their description is generated, and Hugo's embedded OpenGraph
+    // template reads .Description only. See docs/seo.md.
+    if (name !== 'tag term') {
+      await expect(meta(page, 'property', 'og:description')).toHaveAttribute('content', description);
+    }
 
     await expect(meta(page, 'property', 'og:title')).toHaveAttribute('content', /\S/);
     await expect(meta(page, 'property', 'og:type')).toHaveAttribute('content', /^(website|article)$/);
@@ -41,3 +45,10 @@ for (const [name, path] of PAGES) {
     }
   });
 }
+
+// The home page title is the site title: the generic `<Title> | <Site>` pattern repeated it.
+test('home title does not repeat the site name', async ({ page }) => {
+  await page.goto('/');
+  const parts = (await page.title()).split(' | ');
+  expect(new Set(parts).size).toBe(parts.length);
+});

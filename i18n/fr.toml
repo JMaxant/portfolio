@@ -114,3 +114,6 @@ other = "Voir plus de projets"
 
 [see-more-blog]
 other = "Voir plus d'articles"
+
+[tag-description]
+other = "Articles, projets et veille sur le thème « {{ .Tag }} »."

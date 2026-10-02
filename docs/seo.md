@@ -1,6 +1,6 @@
 ---
 title: SEO — contributor guidelines
-version: 1.0.0
+version: 1.1.0
 date_published: 2026-10-02
 date_modified: 2026-10-02
 ---
@@ -31,11 +31,16 @@ a standard tag, search engines ignore the second. Do not add them back.
 The description is resolved from the first non-empty value of:
 
 1. `description` in the front matter. `description = ''` counts as empty.
-2. `.Summary`, which Hugo computes from the body: the first 70 words, or the text above a
+2. On a tag page only, the `tag-description` string of `i18n/fr.toml`, filled with the tag
+   name.
+3. `.Summary`, which Hugo computes from the body: the first 70 words, or the text above a
    `<!--more-->` marker.
-3. `params.description` in `config/_default/hugo.toml`.
+4. `params.description` in `config/_default/hugo.toml`.
 
-`og:description` and `twitter:description` use the same chain, so one field feeds all three.
+`og:description` and `twitter:description` use the same chain, except step 2: Hugo's embedded
+OpenGraph template reads `.Description` only, so a tag page shares the site description in
+its social preview. Tag pages are rarely shared; overriding the embedded template to close the
+gap would mean maintaining a copy of it.
 
 Rules:
 
@@ -47,17 +52,19 @@ Rules:
   excerpt of its own choosing.
 - **Plain text.** Markup is stripped, so Markdown or HTML in the field only adds noise.
 
-### Pages that fall back to the site description
+### Section and tag pages
 
-A page with neither a description nor a body ends up at step 3 and shares the site-wide
-text. Today that is:
+A section list takes its description from its `_index.md`: give one to every new section.
+`params.description` is a safety net, not a target — no page reaches it today.
 
-- the section lists `/blog/`, `/projets/` and `/veille/`, whose `_index.md` has
-  `description = ''` and no body;
-- every tag page `/tags/<term>/`, which Hugo generates from the taxonomy with no content file.
+A tag page has no content file, so it gets the generated `tag-description`. To write a
+specific one for a tag, create `content/tags/<term>/_index.md` with a `description`: step 1
+wins over step 2, and the social preview follows.
 
-`params.description` is a safety net, not a target: when adding a section, give its
-`_index.md` a description.
+## Page title
+
+`baseof.html` builds `<title>` as `<page title> | <site title>`. The home page is the
+exception, since its title is the site title: it reads `<site title> | <baseline>` instead.
 
 ## Social preview image
 
@@ -82,9 +89,10 @@ in upper case: `fr-FR` yields `fr_FR`, `fr-fr` yields `fr_fr`, which scrapers do
 `tests/seo.spec.js` loads one page per template and asserts that:
 
 - the canonical URL and `og:url` match the page URL;
-- the meta description is not empty and equals `og:description`;
+- the meta description is not empty and equals `og:description`, tag pages excepted;
 - `og:title`, `og:type`, `og:locale` and `author` are present;
-- `og:image`, when present, is an absolute URL.
+- `og:image`, when present, is an absolute URL;
+- the home page title does not repeat the site name.
 
 A new list template (see the `_default/list.html` gotcha in `CLAUDE.md`) gets a line in the
 spec's `PAGES` table.

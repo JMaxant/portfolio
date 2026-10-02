@@ -1,7 +1,10 @@
 {{- /* Head-only partial: takes the page context, called once from baseof.html.
        The description chain mirrors Hugo's embedded opengraph.html, so the meta description
        and og:description agree. See docs/components.md#seo_tagshtml. */ -}}
-{{- $description := or .Description .Summary site.Params.description | plainify | htmlUnescape -}}
+{{- /* A tag page has no content file, hence no .Description: generate one. og:description
+       cannot follow, the embedded template reads .Description only. */ -}}
+{{- $termDescription := cond (eq .Kind "term") (T "tag-description" (dict "Tag" .Title)) "" -}}
+{{- $description := or .Description $termDescription .Summary site.Params.description | plainify | htmlUnescape -}}
 {{- $description = replaceRE `\s+` " " $description | strings.TrimSpace -}}
 <link rel="canonical" href="{{ .Permalink }}" />
 {{- with $description }}
