@@ -30,7 +30,7 @@
   {{ end }}
 
   {{/* Latest activity */}}
-  {{ $activites := where site.RegularPages "Section" "in" (slice "blog" "projets") }}
+  {{ $activites := where site.RegularPages "Section" "in" site.Params.mainSections }}
 
   {{ with first 3 $activites.ByLastmod.Reverse }}
     <section class="home home--latest">

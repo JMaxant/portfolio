@@ -1,6 +1,6 @@
 ---
 title: Archetypes Hugo
-version: 1.4.0
+version: 1.5.0
 date_published: 2026-08-01
 date_modified: 2026-10-02
 ---
@@ -46,7 +46,7 @@ Pièges :
 - **`tags`** : taxonomie unique du site — inclut la stack technique (décision section 5quinquies, pas de taxonomie `stack` séparée). Nuance veille : le champ alimente bien les pages `/tags/*` depuis le passage à `build.render = 'link'` (vérifié empiriquement ; `render = 'never'` les en excluait, quel que soit `list`).
 - **`status`** (projets) : `en cours` ou `terminé`.
 - **`images`** (blog): list of image paths for the social preview, read by Hugo's embedded OpenGraph template as `og:image` (absolute URL). Optional: without it, the preview has no image. Replaces the `cover` front matter field, which no template read (#14). See [seo.md](seo.md).
-- **`link`** (veille) : URL de l'article partagé. Les entrées de veille sont *teaser-only* (issue #40) : un cascade dans `content/veille/_index.md` leur applique `build.render = 'link'` et `build.list = 'local'` — aucune page individuelle n'est générée. Un layout de liste doit donc lier `link`, jamais `.RelPermalink` : `render = 'link'` l'assigne bel et bien, mais l'URL correspondante n'a pas de rendu et renvoie un 404. Le piège s'applique aussi aux flux, cf. issue #74.
+- **`source_link`** (veille): URL of the shared article. Veille entries are *teaser-only* (issue #40): a cascade in `content/veille/_index.md` gives them `build.render = 'link'` and `build.list = 'local'`, so no page of their own is generated. Anything that links an entry — a list layout, a feed — must use `source_link`, never `.Permalink`: `render = 'link'` does assign one, but it has no rendering and returns a 404. `entry-link.html` and `layouts/_default/rss.xml` both handle it (#74).
 - **`source_lang`** (veille) : langue de la source, code BCP 47 (`fr`, `en`…). Prévu pour l'attribut `lang` (a11y) et un futur filtrage.
 
 ## Quotes TOML vs template Go

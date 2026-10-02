@@ -119,7 +119,7 @@ Garanties vérifiées après `hugo --gc --minify --cleanDestinationDir` :
 - `sitemap.xml` ne référence que `/veille/`, pas les entrées ;
 - le RSS global reste exempt de veille, `list = 'local'` limitant la visibilité à la section (avec `list = 'always'` les entrées y apparaîtraient).
 
-**Réserve connue** : le `Permalink` assigné par `link` pointe vers une URL sans rendu, et `layouts/_default/rss.xml` l'émet tel quel dans `/veille/index.xml` et `/tags/<terme>/index.xml` — liens morts dans les flux (mais pas dans le HTML ni le sitemap). Traité par l'issue #74.
+**Réserve connue** : le `Permalink` assigné par `link` pointe vers une URL sans rendu, et `layouts/_default/rss.xml` l'émet tel quel dans `/veille/index.xml` et `/tags/<terme>/index.xml` — liens morts dans les flux (mais pas dans le HTML ni le sitemap). Fixed in #74: a feed item links to `source_link` when it is set.
 
 Le champ `tags` de l'archetype veille est donc désormais exploité nativement. Reste non couvert : affiner la liste **dans** `/veille/`, une page de terme mélangeant blog, projets et veille (issue #42, V1).
 
@@ -266,7 +266,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 
 - [ ] Meta description + OpenGraph par page.
 - [X] JSON-LD: `Person` (home, about), `BlogPosting` (articles), `Article` (projects), `BreadcrumbList` (issue #15, see `docs/seo.md#structured-data`).
-- [ ] Vérifier sitemap + RSS natifs du thème plutôt que les recréer.
+- [X] Sitemap and RSS feeds checked and fixed: the main feed lists the blog and the projects, veille items link to their source (issues #16 and #74, see `docs/seo.md#feeds`).
 - [ ] `robots.txt` autorisant explicitement les crawlers IA connus (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...).
 - [ ] `llms.txt` — à écrire en dernier dans cette phase, une fois le contenu réel stabilisé (il le résume).
 - ~~CV machine-readable (`/cv.json`) — à générer après la page Parcours définitive, pour rester synchronisé.~~ Dropped, see section 8bis.

@@ -1,13 +1,13 @@
 ---
 title: SEO — contributor guidelines
-version: 1.2.0
+version: 1.3.0
 date_published: 2026-10-02
 date_modified: 2026-10-02
 ---
 
 # SEO — contributor guidelines
 
-Ref: issues #14 and #15. What a content author or template author must do so that every page carries
+Ref: issues #14, #15 and #16. What a content author or template author must do so that every page carries
 a usable description and social preview. The partial contract itself is documented in
 [components.md](components.md#seo_tagshtml).
 
@@ -116,6 +116,38 @@ without a name.
 Check a new template or content type with [validator.schema.org](https://validator.schema.org/)
 and Google's [Rich Results Test](https://search.google.com/test/rich-results).
 
+## Feeds
+
+`layouts/_default/rss.xml` renders every feed. Which pages get one:
+
+| Feed | Items |
+|------|-------|
+| `/index.xml` | Regular pages of `params.mainSections`: the blog and the projects |
+| `/<section>/index.xml` | The section's regular pages |
+| `/tags/<term>/index.xml` | Every page carrying the tag, veille entries included |
+
+`params.mainSections` also feeds the latest activity of the home page, so a section added to
+it appears in both. `/a-propos/` and the tag index have no feed: the first holds the resume,
+which is not a publication, the second lists terms rather than content. A new section that
+should not have one sets `outputs = ['html']` in its `_index.md`.
+
+Each feed keeps its 20 most recent items (`services.rss.limit`). Items carry the full content,
+not an excerpt: a subscriber reads in their reader, and the item's link leads to the page.
+
+A feed's title and description follow the page's: `<title> | <site title>`, then the
+description chain above. An item's description is its `description`, else its summary.
+
+A veille entry links to its `source_link`, since it has no page of its own. Its `guid` stays the
+site's Permalink, marked `isPermaLink="false"`: a stable identifier rather than a link.
+
+Every page's `<head>` advertises the main feed, and the page's own feed when it has one.
+
+## Sitemap
+
+`sitemap.xml` is Hugo's built-in one, unmodified. It lists every rendered page, so drafts and
+veille entries are left out, and takes `lastmod` from `date` until #70 gives `.Lastmod` a
+source. Search engines learn its address from the `Sitemap:` line of `robots.txt` (#17).
+
 ## What the tests check
 
 `tests/seo.spec.js` loads one page per template and asserts that:
@@ -129,6 +161,10 @@ and Google's [Rich Results Test](https://search.google.com/test/rich-results).
 `tests/json-ld.spec.js` checks the node types of each template, that every `@id` reference
 points to the `Person` of the same page, that a project has an `about` only with a `repo`, and
 that the `BreadcrumbList` matches the visible trail.
+
+`tests/feeds.spec.js` checks what the main feed lists, that the `/a-propos/` and tag index
+feeds are not generated, that a veille entry links to its source, and that every page
+advertises the main feed.
 
 A new list template (see the `_default/list.html` gotcha in `CLAUDE.md`) gets a line in the
 spec's `PAGES` table.
