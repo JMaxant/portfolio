@@ -40,6 +40,11 @@ Reusable partials take an explicit dict rather than the current context. Their t
 contracts, the CSS classes they expose, and the Go templating pitfalls specific to this
 project are documented in [Components](docs/components.md).
 
+## SEO
+
+Every page needs a `description` in its front matter; the fallback chain, social preview
+images and what the tests check are in [SEO guidelines](docs/seo.md).
+
 ## Setup
 
 ```sh

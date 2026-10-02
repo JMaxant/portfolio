@@ -1,6 +1,6 @@
 +++
 title = 'Veille'
-description = ''
+description = "Sélection commentée d'articles et de ressources sur le développement web."
 translationKey = 'veille'
 [[cascade]]
 [cascade.build]

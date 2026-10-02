@@ -5,7 +5,7 @@ title = 'Taskfile plutôt que Makefile ou npm scripts : ce que ça change au quo
 description = "Un seul runner pour npm, Hugo et les scripts qualité — retour sur task après quelques mois d'usage sur ce site."
 tags = ['taskfile', 'outillage']
 translationKey = 'taskfile-plutot-que-makefile'
-cover = ''
+images = []
 +++
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. `task` remplace ici aussi

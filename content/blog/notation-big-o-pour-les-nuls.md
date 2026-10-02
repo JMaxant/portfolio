@@ -5,7 +5,7 @@ title = 'La notation Big O pour les nuls'
 description = "Comment lire O(n), O(log n) ou O(n²) sans y voir des maths — et pourquoi ça compte avant même d'avoir un problème de performance."
 tags = ['algorithmique', 'go']
 translationKey = 'notation-big-o-pour-les-nuls'
-cover = ''
+images = []
 +++
 
 La notation Big O répond à une seule question : **si je donne deux fois plus de

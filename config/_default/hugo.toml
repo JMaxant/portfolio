@@ -1,5 +1,5 @@
 baseURL = 'https://www.julien-maxant.com/'
-locale = 'fr-fr'
+locale = 'fr-FR'
 title = 'Julien Maxant'
 copyright = '2026 - Julien Maxant'
 defaultContentLanguage = 'fr'
@@ -9,6 +9,8 @@ removePathAccents = true
 [params]
 madeWith = 'Made with Hugo'
 baseline = 'Développement web'
+# Last fallback of the meta description, for a page with neither a description nor content.
+description = 'Julien Maxant, développeur web depuis 2017 : PHP, Drupal, Symfony, JS, Vue, Go, Python.'
 
 [params.author]
 name = 'Julien Maxant'

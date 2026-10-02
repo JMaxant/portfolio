@@ -1,13 +1,13 @@
 ---
 title: Components — partials and integration
-version: 1.24.0
+version: 1.25.0
 date_published: 2026-08-08
-date_modified: 2026-10-01
+date_modified: 2026-10-02
 ---
 
 # Components — partials and integration
 
-Ref: issues #45, #47, #48, #66, #77, #114. Describes the reusable components from both sides: the **template
+Ref: issues #14, #45, #47, #48, #66, #77, #114. Describes the reusable components from both sides: the **template
 contract** (how you call them) and the **CSS contract** (what they expose to integration).
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
@@ -151,6 +151,17 @@ property. It is a deliberate duplicate of `base/tokens.css`, outside what
 `check-tokens.mjs` can see: change the brand colour there and this line has to follow.
 `#2042c2` carries 8.02:1 against white, so the label the browser paints over it stays
 readable.
+
+### `seo_tags.html`
+
+Head metadata: canonical, description, author, then Hugo's embedded OpenGraph, Twitter card
+and schema.org microdata templates. Takes the page context, not a dict — it is head-only and
+called once from `baseof.html`.
+
+The description is resolved once, through the same chain as Hugo's embedded
+`opengraph.html`. Keep the two aligned: `tests/seo.spec.js` fails when the meta description
+and `og:description` differ. Fallback chain, image sources and authoring rules are in
+[seo.md](seo.md).
 
 ### `hero.html`
 
