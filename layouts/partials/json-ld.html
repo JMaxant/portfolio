@@ -1,0 +1,107 @@
+{{- /*
+  Expected context (dict):
+    page (required)        — the page being rendered
+    description (required) — its resolved meta description, so both never disagree
+
+  Emits one schema.org @graph per page. Built as dicts and serialised by jsonify, never
+  written as JSON text: jsonify escapes quotes and `<`, which a hand-written template would
+  not. See docs/seo.md#structured-data.
+*/ -}}
+{{- if not .page -}}
+  {{- errorf "partial json-ld.html: missing required \"page\" parameter" -}}
+{{- end -}}
+{{- $page := .page -}}
+{{- $description := .description -}}
+
+{{- /* @ids are resolved within one document only: a node referenced by @id is always
+       emitted in full on the same page. */ -}}
+{{- $personId := printf "%s#person" site.Home.Permalink -}}
+{{- $person := dict
+  "@type" "Person"
+  "@id" $personId
+  "name" site.Params.author.name
+  "url" site.Home.Permalink
+-}}
+{{- with site.Params.author.jobTitle }}{{ $person = merge $person (dict "jobTitle" .) }}{{ end -}}
+{{- with site.Params.author.knowsAbout }}{{ $person = merge $person (dict "knowsAbout" .) }}{{ end -}}
+{{- $sameAs := slice -}}
+{{- range site.Params.social }}{{ $sameAs = $sameAs | append .url }}{{ end -}}
+{{- with $sameAs }}{{ $person = merge $person (dict "sameAs" .) }}{{ end -}}
+
+{{- $graph := slice -}}
+{{- $isProfile := and $page.IsSection (eq $page.Section "a-propos") -}}
+{{- $articleTypes := dict "blog" "BlogPosting" "projets" "Article" -}}
+{{- $articleType := cond $page.IsPage (index $articleTypes $page.Section | default "") "" -}}
+
+{{- if $page.IsHome -}}
+  {{- $graph = $graph | append (dict
+    "@type" "WebSite"
+    "@id" (printf "%s#website" site.Home.Permalink)
+    "url" site.Home.Permalink
+    "name" site.Title
+    "description" $description
+    "inLanguage" site.Language.Locale
+    "publisher" (dict "@id" $personId)
+  ) $person -}}
+
+{{- else if $isProfile -}}
+  {{- $graph = $graph | append (dict
+    "@type" "ProfilePage"
+    "url" $page.Permalink
+    "name" $page.Title
+    "description" $description
+    "inLanguage" site.Language.Locale
+    "mainEntity" (dict "@id" $personId)
+  ) $person -}}
+
+{{- else if $articleType -}}
+  {{- $article := dict
+    "@type" $articleType
+    "headline" $page.Title
+    "description" $description
+    "url" $page.Permalink
+    "mainEntityOfPage" $page.Permalink
+    "datePublished" ($page.Date.Format "2006-01-02T15:04:05Z07:00")
+    "inLanguage" site.Language.Locale
+    "author" (dict "@id" $personId)
+  -}}
+  {{- /* No dateModified: .Lastmod has no reliable source yet (#70). */ -}}
+  {{- with $page.Params.tags }}{{ $article = merge $article (dict "keywords" .) }}{{ end -}}
+  {{- /* Same image lookup as Hugo's embedded opengraph.html, so og:image agrees. */ -}}
+  {{- with partial "_funcs/get-page-images" $page -}}
+    {{- $article = merge $article (dict "image" (index . 0).Permalink) -}}
+  {{- end -}}
+  {{- /* A project is described as code only when it has a repository. */ -}}
+  {{- with $page.Params.repo -}}
+    {{- $article = merge $article (dict "about" (dict
+      "@type" "SoftwareSourceCode"
+      "name" $page.Title
+      "codeRepository" .
+    )) -}}
+  {{- end -}}
+  {{- $graph = $graph | append $article $person -}}
+{{- end -}}
+
+{{- /* Mirrors breadcrumb.html: same Ancestors walk, same home label. */ -}}
+{{- if and (not $page.IsHome) (ne $page.Kind "404") -}}
+  {{- $items := slice -}}
+  {{- range $page.Ancestors.Reverse -}}
+    {{- $items = $items | append (dict
+      "@type" "ListItem"
+      "position" (add (len $items) 1)
+      "name" (cond .IsHome (i18n "home") .Title)
+      "item" .Permalink
+    ) -}}
+  {{- end -}}
+  {{- $items = $items | append (dict
+    "@type" "ListItem"
+    "position" (add (len $items) 1)
+    "name" $page.Title
+    "item" $page.Permalink
+  ) -}}
+  {{- $graph = $graph | append (dict "@type" "BreadcrumbList" "itemListElement" $items) -}}
+{{- end -}}
+
+{{- with $graph }}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" . | jsonify | safeJS }}</script>
+{{- end }}

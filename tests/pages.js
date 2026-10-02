@@ -5,6 +5,7 @@ export const FIXTURES = {
   // Long title and an intro, for the breadcrumb truncation and the italic intro.
   article: { url: '/blog/fixture-article/', title: 'Fixture article with a title long enough to overflow the breadcrumb at 320px wide' },
   project: { url: '/projets/fixture-project/', title: 'Fixture project' },
+  projectWithRepo: { url: '/projets/fixture-project-repo/', repo: 'https://example.com/fixture/repo' },
   table: { url: '/fixture-table/' },
   parcours: { url: '/a-propos/fixture-parcours/', title: 'Fixture parcours' },
   tag: { url: '/tags/fixture-tag/', title: 'Fixture-Tag' },
