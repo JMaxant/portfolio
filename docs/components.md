@@ -159,20 +159,9 @@ and schema.org microdata templates. Takes the page context, not a dict — it is
 called once from `baseof.html`.
 
 The description is resolved once, through the same chain as Hugo's embedded
-`opengraph.html`: `description` front matter, then `.Summary`, then `site.Params.description`.
-Keep the two aligned: `tests/seo.spec.js` fails when the meta description and
-`og:description` differ. An empty `description = ''` counts as absent and falls through.
-
-`og:image` is optional. The embedded template emits it only when it finds a source —
-`images` in front matter, a bundle resource named `*feature*`, `*cover*` or `*thumbnail*`,
-then `site.Params.images` — and falls back to a `summary` Twitter card without one.
-
-`og:locale` is derived from the site `locale`, which must be written `fr-FR`: `fr-fr` yields
-`fr_fr`, which scrapers do not recognise.
-
-`<meta name="title">` and `<meta name="keywords">`, inherited from hugo-bearcub, were dropped:
-the first is not a standard tag, the second is ignored by search engines. The microdata stays
-until the JSON-LD of #15 replaces it.
+`opengraph.html`. Keep the two aligned: `tests/seo.spec.js` fails when the meta description
+and `og:description` differ. Fallback chain, image sources and authoring rules are in
+[seo.md](seo.md).
 
 ### `hero.html`
 
