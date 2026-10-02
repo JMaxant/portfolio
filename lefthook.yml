@@ -6,7 +6,7 @@ pre-commit:
       run: npx editorconfig-checker {staged_files}
 
     conflict-markers:
-      run: "! git grep -nE '^(<{7}|={7}|>{7})( |$)'"
+      run: "! git --no-pager grep -nE '^(<{7}|={7}|>{7})( |$)'"
 
     taplo-fmt:
       glob: "*.toml"

@@ -139,7 +139,7 @@ Le champ `tags` de l'archetype veille est donc désormais exploité nativement. 
   - `defaultContentLanguage = "fr"` et `defaultContentLanguageInSubdir = false` dans `hugo.toml` — le français reste à la racine (`/blog/...`), l'anglais arrivera plus tard sous `/en/...` sans rien déplacer.
   - Organiser le contenu en *page bundles* avec `translationKey` dès maintenant (même mono-langue) pour que l'ajout de l'anglais soit additif, pas une réorganisation.
 
-Note technique annexe (historique, thème abandonné en #56 ; `i18n/fr.toml` existe désormais) : le thème bear-cub embarquait déjà des traductions d'interface (en/de/ko/pt/tr) mais pas de `fr` — et le dossier `i18n/` du site est actuellement vide. Les libellés d'interface (boutons, labels) du thème pourraient donc s'afficher dans une langue par défaut du thème plutôt qu'en français tant qu'un `i18n/fr.toml` ne surcharge pas ces clés. Détail d'implémentation à traiter en développant, sans impact sur le cadrage.
+Note technique annexe (historique) : le thème bear-cub, abandonné en #56, n'embarquait pas de traductions `fr`. Les libellés d'interface vivent désormais dans `i18n/fr.toml`.
 
 ## 8. SEO & structure de données
 

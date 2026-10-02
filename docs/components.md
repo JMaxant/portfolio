@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.23.0
+version: 1.24.0
 date_published: 2026-08-08
 date_modified: 2026-10-01
 ---
@@ -12,8 +12,8 @@ contract** (how you call them) and the **CSS contract** (what they expose to int
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
 
-For tokens and breakpoints, see [css-tokens.md](css-tokens.md). Partials inherited from the
-a theme are gone since #56: the site has none.
+For tokens and breakpoints, see [css-tokens.md](css-tokens.md). Every partial is local: the
+site has had no theme since #56.
 
 ## Conventions
 
@@ -807,6 +807,16 @@ of the markup — `base/elements.css` holds the three rules.
 `tests/table.spec.js` asserts the wrapping, the keyboard reachability, and that the page does
 not overflow at 320px **with an artificially widened font** — testing with the shipped font
 only would reproduce exactly the blind spot that let this reach CI.
+
+## Code blocks
+
+Fenced code blocks go through `layouts/_default/_markup/render-codeblock.html`, ported from
+hugo-bearcub, which passes the block to `transform.HighlightCodeBlock` and emits `.Wrapped`.
+The context is the render hook's own, not a dict.
+
+Its only effect over Hugo's default rendering is that the block's trailing newline is
+dropped: without the hook, every `<pre>` ends with an empty highlighted line. Colours come
+from tokens, see [css-tokens.md](css-tokens.md#syntax-highlighting).
 
 ## Templating pitfalls
 

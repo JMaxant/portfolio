@@ -1,2 +1,5 @@
-{{- /* Ported from hugo-bearcub. */ -}}
+{{- /* Code block render hook, ported from hugo-bearcub. Unlike Hugo's default rendering,
+       it drops the block's trailing newline. See docs/components.md#code-blocks.
+
+       Expected context: the render hook's own, not a dict. */ -}}
 {{- (transform.HighlightCodeBlock .).Wrapped -}}

@@ -16,9 +16,9 @@ featured = true
 Accessibilité, cohérence visuelle et qualité du build sont vérifiées automatiquement à
 chaque modification, plutôt que relues à la main.
 
-Techniquement : Hugo, thème [bear-cub](https://github.com/clente/hugo-bearcub)
-personnalisé, CSS sur mesure sans framework, pipeline qualité (lint, tokens, contraste,
-build) qui tourne à l'identique en local et en CI.
+Techniquement : Hugo sans thème (layouts et partials écrits à la main), CSS sur mesure
+sans framework, pipeline qualité (lint, tokens, contraste, build) qui tourne
+à l'identique en local et en CI.
 
 ## Pourquoi Hugo
 
