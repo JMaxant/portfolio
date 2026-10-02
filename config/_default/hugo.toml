@@ -12,14 +12,14 @@ enableRobotsTXT = true
 madeWith = 'Made with Hugo'
 baseline = 'Développement web'
 # Last fallback of the meta description, for a page with neither a description nor content.
-description = 'Julien Maxant, développeur web depuis 2017 : PHP, Drupal, Symfony, JS, Vue, Go, Python.'
+description = 'Julien Maxant, lead tech et développeur web depuis 2017 : PHP, Drupal, Symfony, JS, Vue, Go, Python.'
 # The sections that count as publications: the home page's latest activity and the main RSS feed.
 mainSections = ['projets', 'blog']
 
 [params.author]
 name = 'Julien Maxant'
 # Read by the JSON-LD Person node only. See docs/seo.md#structured-data.
-jobTitle = 'Développeur web'
+jobTitle = 'Lead tech'
 knowsAbout = [
   'PHP',
   'Drupal',
