@@ -1,6 +1,5 @@
 public/
 .hugo_build.lock
-_vendor/
 .idea/
 .claude
 node_modules/

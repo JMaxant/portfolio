@@ -1,5 +1,5 @@
 name: Setup Hugo toolchain
-description: Go (for Hugo Modules resolution) + pinned Hugo extended.
+description: Pinned Hugo extended.
 
 inputs:
   hugo-version:
@@ -9,10 +9,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-go@v7
-      with:
-        go-version-file: go.mod
-
     - uses: peaceiris/actions-hugo@v3
       with:
         hugo-version: ${{ inputs.hugo-version }}

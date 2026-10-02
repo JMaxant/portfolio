@@ -1,8 +1,8 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.10.0
+version: 1.11.0
 date_published: 2026-08-01
-date_modified: 2026-09-25
+date_modified: 2026-10-01
 ---
 
 # Quality gates — pre-commit & CI
@@ -63,7 +63,7 @@ Build Hugo → lychee **en ligne** (liens externes inclus). En cas de liens mort
 |---|---|
 | `lefthook.yml` | Définition des checks (source de vérité) |
 | `lychee.toml` | Config lychee partagée interne/externe (ancres, retries, timeouts) |
-| `.github/actions/setup-hugo/action.yml` | Composite action Go + Hugo extended — **la version de Hugo CI s'épingle ici** (input `hugo-version`) |
+| `.github/actions/setup-hugo/action.yml` | Composite action Hugo extended — **la version de Hugo CI s'épingle ici** (input `hugo-version`) |
 | `.markdownlint.yaml`, `.stylelintrc.json` | Configs linters |
 | `.editorconfig` | Règles whitespace/newline/encodage — aussi appliquées à l'édition par les IDE qui le lisent nativement (PhpStorm, VS Code…) |
 | `package.json` | devDependencies (ranges `^`, versions exactes figées par `package-lock.json`, installées via `npm ci` en CI) ; champ `engines` (Node minimal) ; `allowScripts` autorise le `postinstall` de lefthook, qui installe le hook git |

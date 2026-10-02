@@ -1,5 +1,4 @@
-{{/* bear-cub's own syntax.css is deliberately not loaded: it hardcodes a theme-blind
-     Dracula palette that outranks ours. See docs/css-tokens.md#syntax-highlighting. */}}
+{{/* Syntax colours come from our own tokens. See docs/css-tokens.md#syntax-highlighting. */}}
 
 {{ with .Params.style }}
   {{ $extra := resources.Get . | minify }}

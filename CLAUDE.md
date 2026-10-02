@@ -1,7 +1,8 @@
 # CLAUDE.md
 
-Personal portfolio site. Hugo static site, `hugo-bearcub` theme consumed as a Hugo Module
-and vendored in `_vendor/`. Plain CSS, no framework, no JS framework.
+Personal portfolio site. Hugo static site, no theme: every layout, partial and stylesheet
+lives in this repo (the hugo-bearcub theme was dropped, #56). Plain CSS, no framework, no JS
+framework.
 
 Work is tracked as GitHub issues grouped into phase milestones. `docs/cahier-des-charges.md`
 is the running spec — check it before proposing scope.
@@ -108,7 +109,6 @@ majority of comparable files actually do before claiming to follow the local sty
 
 ## Do not touch
 
-- `_vendor/` — vendored Hugo module, regenerated, never hand-edited.
 - `CODE_REVIEW.md` — gitignored local review artifact.
 - Do not extend the `ignore` list in `.stylelintrc.json` without proving the case per the
   rules in `docs/css-compat.md`. Entries justified against an older browser baseline go
@@ -120,7 +120,6 @@ majority of comparable files actually do before claiming to follow the local sty
   anything ordered by it reorders on a fresh clone. Tracked by #70.
 - Do not wrap a URL in angle brackets in Markdown (`url="<mailto:…>"`): they are treated as
   an autolink and end up percent-encoded in the `href`, breaking the link.
-- The bear-cub `_default/list.html` emits no `h1`, so every list template overrides it and
-  emits its own: `blog`, `veille`, `projets`, `tags/taxonomy.html`, `tags/term.html`. No page
-  falls back to the theme's template — check with `hugo --templateMetrics` before assuming
-  one does.
+- There is no `_default/list.html`: every section has its own list template (`blog`, `veille`,
+  `projets`, `a-propos`, `tags/taxonomy.html`, `tags/term.html`), each emitting its own `h1`.
+  A new section without one gets Hugo's bare fallback — check with `hugo --templateMetrics`.

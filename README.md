@@ -2,12 +2,11 @@
 
 [![CI](https://github.com/JMaxant/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/JMaxant/portfolio/actions/workflows/ci.yml)
 
-Personal site built with [Hugo](https://gohugo.io), using the [hugo-bearcub](https://github.com/clente/hugo-bearcub) theme.
+Personal site built with [Hugo](https://gohugo.io), with its own layouts and stylesheets (no theme).
 
 ## Requirements
 
 - **Hugo extended** v0.164.0+ (custom `layouts/` overrides use `.Site.Language.Locale` and `hugo.Sites`, unavailable before Hugo v0.158.0 — see `layouts/_default/baseof.html`, `layouts/_default/rss.xml`, `layouts/partials/nav.html`)
-- **Go** 1.26.5+ (Hugo Modules resolution — see `go.mod`)
 - **Node** 24+ (for `stylelint` and `lefthook` — see Setup below; version declared in `.nvmrc` and enforced by the `engines` field of `package.json`)
 
 ## CSS stack

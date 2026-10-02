@@ -5,7 +5,7 @@ Statut : brouillon de travail — sert de fil rouge pendant le développement, �
 ## 1. Contexte
 
 - Site : `https://www.julien-maxant.com/`
-- Stack imposée : Hugo, thème [bear-cub](https://github.com/clente/hugo-bearcub), gestion de tâches via `Taskfile.yml`.
+- Stack imposée : Hugo (thème bear-cub au départ, abandonné — voir #56, tout est désormais local), gestion de tâches via `Taskfile.yml`.
 - Le site est actuellement un squelette (thème installé, contenu en Lorem Ipsum, une seule page `content/_index.md`).
 - Volonté explicite : coder le site soi-même pour monter en compétence sur la stack (Hugo, templating Go, CSS, CI/CD). Ce document cadre le *besoin*, pas l'implémentation.
 
@@ -111,7 +111,7 @@ Les trois valeurs de `render` ne se valent pas, et la nuance décide de tout ici
 - `never` exclut la page de **toutes** les collections. Vérifié empiriquement : elle n'engendre alors jamais de page de taxonomie, même avec `list = 'always'`.
 - `link` supprime la sortie HTML mais **conserve l'entrée dans les collections** et lui assigne un `Permalink`.
 
-**Décidé** : `render = 'link'`, et donc oui, les entrées veille alimentent les pages `/tags/*`. Le `list.html` de bear-cub gère déjà le pattern lien externe (`.Params.link` + `↪`) : une page de terme lie l'entrée vers sa source, pas vers une URL du site. On obtient le niveau 1 ci-dessus sur la veille aussi — zéro JS, vraies URLs partageables, indexables, cohérent avec les objectifs SEO/GEO de la section 8bis.
+**Decided**: `render = 'link'`, so veille entries do feed the `/tags/*` pages. The `entry-link.html` partial handles the external link: when `.Params.source_link` is set, a term page links the entry to its source rather than to a URL on the site. Level 1 above therefore holds for the veille too — no JS, real shareable and indexable URLs, consistent with the SEO/GEO goals of section 8bis.
 
 Garanties vérifiées après `hugo --gc --minify --cleanDestinationDir` :
 
@@ -126,7 +126,7 @@ Le champ `tags` de l'archetype veille est donc désormais exploité nativement. 
 ## 6. Identité visuelle
 
 - Choix affirmé : pas de branding fort (pas de logo prévu), focus sur le contenu — mais **personnalisation prévue**, notamment un switch clair/sombre (light/dark mode).
-- Contrainte du thème bear-cub : `assets/styles/01-base.css` existe déjà et laisse penser qu'une architecture de surcharge CSS est en cours de mise en place. Le thème fournit plusieurs feuilles de style alternatives (`original.css`, `herman.css` — cette dernière étant une variante sombre fixe), mais **pas de bascule clair/sombre au runtime** : c'est un choix de style statique à la compilation, pas un toggle utilisateur. Le switch light/dark devra donc être développé (détection `prefers-color-scheme` + bascule manuelle mémorisée, typiquement via `localStorage`), pas récupéré tel quel du thème.
+- Contrainte du thème bear-cub (historique, thème abandonné en #56) : `assets/styles/01-base.css` existe déjà et laisse penser qu'une architecture de surcharge CSS est en cours de mise en place. Le thème fournit plusieurs feuilles de style alternatives (`original.css`, `herman.css` — cette dernière étant une variante sombre fixe), mais **pas de bascule clair/sombre au runtime** : c'est un choix de style statique à la compilation, pas un toggle utilisateur. Le switch light/dark devra donc être développé (détection `prefers-color-scheme` + bascule manuelle mémorisée, typiquement via `localStorage`), pas récupéré tel quel du thème.
 
 ## 7. Internationalisation
 
@@ -139,14 +139,14 @@ Le champ `tags` de l'archetype veille est donc désormais exploité nativement. 
   - `defaultContentLanguage = "fr"` et `defaultContentLanguageInSubdir = false` dans `hugo.toml` — le français reste à la racine (`/blog/...`), l'anglais arrivera plus tard sous `/en/...` sans rien déplacer.
   - Organiser le contenu en *page bundles* avec `translationKey` dès maintenant (même mono-langue) pour que l'ajout de l'anglais soit additif, pas une réorganisation.
 
-Note technique annexe : le thème bear-cub embarque déjà des traductions d'interface (en/de/ko/pt/tr) mais pas de `fr` — et le dossier `i18n/` du site est actuellement vide. Les libellés d'interface (boutons, labels) du thème pourraient donc s'afficher dans une langue par défaut du thème plutôt qu'en français tant qu'un `i18n/fr.toml` ne surcharge pas ces clés. Détail d'implémentation à traiter en développant, sans impact sur le cadrage.
+Note technique annexe (historique) : le thème bear-cub, abandonné en #56, n'embarquait pas de traductions `fr`. Les libellés d'interface vivent désormais dans `i18n/fr.toml`.
 
 ## 8. SEO & structure de données
 
 Non demandé explicitement mais cohérent avec l'objectif "vitrine pro" — à considérer comme périmètre standard d'un portfolio sérieux :
 - Meta description par page, OpenGraph pour le partage (LinkedIn notamment, vu la cible pro).
 - JSON-LD `Person` a minima sur la page d'accueil/à propos (nom, métier, compétences) — cohérent avec un site personnel de marque.
-- Sitemap et flux RSS pour le blog (souvent natifs à un thème Hugo comme bear-cub — à vérifier plutôt qu'à recréer).
+- Sitemap and RSS feed for the blog. The sitemap is Hugo's built-in one; the feed uses a local template, `layouts/_default/rss.xml`.
 
 ## 8bis. GEO & accessibilité aux agents IA
 
