@@ -41,6 +41,11 @@ url = 'https://www.linkedin.com/in/julien-maxant/'
 [outputs]
 taxonomy = ['html']
 
+# Most recent items per feed. Items carry their full content, so an unbounded feed grows with
+# every post. See docs/seo.md#feeds.
+[services.rss]
+limit = 20
+
 [taxonomies]
 tag = 'tags'
 

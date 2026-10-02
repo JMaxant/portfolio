@@ -131,6 +131,9 @@ it appears in both. `/a-propos/` and the tag index have no feed: the first holds
 which is not a publication, the second lists terms rather than content. A new section that
 should not have one sets `outputs = ['html']` in its `_index.md`.
 
+Each feed keeps its 20 most recent items (`services.rss.limit`). Items carry the full content,
+not an excerpt: a subscriber reads in their reader, and the item's link leads to the page.
+
 A feed's title and description follow the page's: `<title> | <site title>`, then the
 description chain above. An item's description is its `description`, else its summary.
 
