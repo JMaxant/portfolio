@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.25.0
+version: 1.26.0
 date_published: 2026-08-08
 date_modified: 2026-10-02
 ---
@@ -154,14 +154,39 @@ readable.
 
 ### `seo_tags.html`
 
-Head metadata: canonical, description, author, then Hugo's embedded OpenGraph, Twitter card
-and schema.org microdata templates. Takes the page context, not a dict — it is head-only and
+Head metadata: canonical, description, author, Hugo's embedded OpenGraph and Twitter card
+templates, then `json-ld.html`. Takes the page context, not a dict — it is head-only and
 called once from `baseof.html`.
 
 The description is resolved once, through the same chain as Hugo's embedded
 `opengraph.html`. Keep the two aligned: `tests/seo.spec.js` fails when the meta description
 and `og:description` differ. Fallback chain, image sources and authoring rules are in
 [seo.md](seo.md).
+
+### `json-ld.html`
+
+The page's schema.org `@graph`, in one `<script type="application/ld+json">`. Called from
+`seo_tags.html` only. Which nodes each page gets, and where their values come from, is in
+[seo.md](seo.md#structured-data).
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `page` | yes | — | The page being rendered |
+| `description` | yes | — | Its resolved meta description |
+
+```gotemplate
+{{ partial "json-ld.html" (dict "page" . "description" $description) }}
+```
+
+**The description is passed in, not recomputed.** `seo_tags.html` owns the fallback chain; a
+second copy here would drift from the meta tag.
+
+**The graph is built as dicts and serialised with `jsonify | safeJS`.** `jsonify` escapes
+quotes and `<`, so a title or description cannot break out of the script. Without `safeJS`,
+`html/template` treats the `ld+json` script as JavaScript and wraps the JSON in a string literal.
+
+**The `BreadcrumbList` repeats the `Ancestors` walk of `breadcrumb.html`**, home label included.
+Change one, change the other: `tests/json-ld.spec.js` compares them.
 
 ### `hero.html`
 
@@ -629,6 +654,8 @@ partial therefore binds `$page := .page` and reads everything from it. The missi
 
 **The home crumb is not `.Title`.** The home page title is the site title, which reads wrong
 in a trail, so `IsHome` swaps it for `i18n "home"`.
+
+**`json-ld.html` walks the same trail** to emit the `BreadcrumbList`. Keep the two in step.
 
 **Callers** — every template that renders a page below the root: `_default/single.html`,
 `blog/list.html`, `veille/list.html`, `projets/list.html`, `projets/single.html`,

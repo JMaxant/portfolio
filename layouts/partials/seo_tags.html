@@ -17,5 +17,4 @@
 {{ template "_internal/opengraph.html" . }}
 {{ template "_internal/twitter_cards.html" . }}
 
-{{- /* Microdata, kept until the JSON-LD of #15 replaces it. */}}
-{{ template "_internal/schema.html" . }}
+{{ partial "json-ld.html" (dict "page" . "description" $description) }}

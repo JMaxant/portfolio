@@ -14,6 +14,26 @@ description = 'Julien Maxant, développeur web depuis 2017 : PHP, Drupal, Symfon
 
 [params.author]
 name = 'Julien Maxant'
+# Read by the JSON-LD Person node only. See docs/seo.md#structured-data.
+jobTitle = 'Développeur web'
+knowsAbout = [
+  'PHP',
+  'Drupal',
+  'Symfony',
+  'JavaScript',
+  'Vue.js',
+  'Go',
+  'Python',
+]
+
+# Profiles on other sites, in display order. The JSON-LD Person lists them as sameAs.
+[[params.social]]
+name = 'GitHub'
+url = 'https://github.com/JMaxant'
+
+[[params.social]]
+name = 'LinkedIn'
+url = 'https://www.linkedin.com/in/julien-maxant/'
 
 [taxonomies]
 tag = 'tags'
