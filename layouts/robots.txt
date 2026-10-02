@@ -1,0 +1,24 @@
+{{- /* See docs/seo.md#robotstxt. Outside production (previews, `hugo server`), nothing is
+       crawled: a preview indexed under its own URL would duplicate the real site. */ -}}
+{{- if hugo.IsProduction -}}
+User-agent: *
+Allow: /
+
+# AI crawlers, allowed on purpose: the site aims at visibility, not protection.
+# A crawler named in a group ignores the `*` group: a Disallow added above must be
+# repeated here.
+{{- range slice
+  "GPTBot" "OAI-SearchBot" "ChatGPT-User"
+  "ClaudeBot" "Claude-SearchBot" "Claude-User"
+  "PerplexityBot" "Perplexity-User"
+  "Google-Extended" "Applebot-Extended"
+}}
+User-agent: {{ . }}
+{{- end }}
+Allow: /
+
+Sitemap: {{ "sitemap.xml" | absURL }}
+{{- else -}}
+User-agent: *
+Disallow: /
+{{- end }}

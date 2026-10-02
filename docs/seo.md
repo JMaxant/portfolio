@@ -1,13 +1,13 @@
 ---
 title: SEO — contributor guidelines
-version: 1.3.0
+version: 1.4.0
 date_published: 2026-10-02
 date_modified: 2026-10-02
 ---
 
 # SEO — contributor guidelines
 
-Ref: issues #14, #15 and #16. What a content author or template author must do so that every page carries
+Ref: issues #14 to #18. What a content author or template author must do so that every page carries
 a usable description and social preview. The partial contract itself is documented in
 [components.md](components.md#seo_tagshtml).
 
@@ -126,8 +126,8 @@ and Google's [Rich Results Test](https://search.google.com/test/rich-results).
 | `/<section>/index.xml` | The section's regular pages |
 | `/tags/<term>/index.xml` | Every page carrying the tag, veille entries included |
 
-`params.mainSections` also feeds the latest activity of the home page, so a section added to
-it appears in both. `/a-propos/` and the tag index have no feed: the first holds the resume,
+`params.mainSections` also feeds the latest activity of the home page and the sections of
+`llms.txt`, so a section added to it appears in all three. Its order is the order of `llms.txt`. `/a-propos/` and the tag index have no feed: the first holds the resume,
 which is not a publication, the second lists terms rather than content. A new section that
 should not have one sets `outputs = ['html']` in its `_index.md`.
 
@@ -148,6 +148,37 @@ Every page's `<head>` advertises the main feed, and the page's own feed when it 
 veille entries are left out, and takes `lastmod` from `date` until #70 gives `.Lastmod` a
 source. Search engines learn its address from the `Sitemap:` line of `robots.txt` (#17).
 
+## robots.txt
+
+Rendered from `layouts/robots.txt` (`enableRobotsTXT`), not copied from `static/`, so the
+`Sitemap:` line follows `baseURL`.
+
+In production, every crawler is allowed, and the known AI crawlers are named in a group of
+their own. That group changes nothing today — `*` already allows everything — and states the
+intent: the site aims at visibility. The catch is that a crawler named in a group ignores the
+`*` group, so a `Disallow` added to `*` must be repeated in the AI group.
+
+Outside production — `hugo server`, or a preview built with another `--environment` — the file
+disallows everything, so a preview is never indexed in place of the real site.
+
+## llms.txt
+
+`/llms.txt` follows the [llmstxt.org](https://llmstxt.org/) proposal: a summary of the site,
+written for a language model, with links to the pages worth reading. It is an output format of
+the home page (`llms` in `config/_default/hugo.toml`), rendered from `layouts/index.llms.txt`,
+so it follows the content without being rewritten.
+
+| Part | Source |
+|------|--------|
+| `# title` | `title` in the site configuration |
+| `> summary` | `params.description` |
+| Introduction | `llms_intro` in `content/_index.md` |
+| One `##` per section | The regular pages of each `params.mainSections` entry, then `/a-propos/` and its pages |
+| `## Optional` | `/veille/`, as one link: its entries point to other sites |
+
+Each link reads `[title](url): description`, the description falling back to the summary, as
+in the feeds. Keep `llms_intro` factual and in the third person: an agent quotes it as is.
+
 ## What the tests check
 
 `tests/seo.spec.js` loads one page per template and asserts that:
@@ -165,6 +196,10 @@ that the `BreadcrumbList` matches the visible trail.
 `tests/feeds.spec.js` checks what the main feed lists, that the `/a-propos/` and tag index
 feeds are not generated, that a veille entry links to its source, and that every page
 advertises the main feed.
+
+`tests/robots-llms.spec.js` checks that `robots.txt` names the AI crawlers, disallows nothing in
+production and points to a sitemap that resolves, and that `llms.txt` is plain text with the
+expected headings, lists the publications but not the veille entries, and has no broken link.
 
 A new list template (see the `_default/list.html` gotcha in `CLAUDE.md`) gets a line in the
 spec's `PAGES` table.

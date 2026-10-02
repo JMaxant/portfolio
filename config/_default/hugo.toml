@@ -5,6 +5,8 @@ copyright = '2026 - Julien Maxant'
 defaultContentLanguage = 'fr'
 defaultContentLanguageInSubdir = false
 removePathAccents = true
+# Rendered from layouts/robots.txt. See docs/seo.md#robotstxt.
+enableRobotsTXT = true
 
 [params]
 madeWith = 'Made with Hugo'
@@ -12,7 +14,7 @@ baseline = 'Développement web'
 # Last fallback of the meta description, for a page with neither a description nor content.
 description = 'Julien Maxant, développeur web depuis 2017 : PHP, Drupal, Symfony, JS, Vue, Go, Python.'
 # The sections that count as publications: the home page's latest activity and the main RSS feed.
-mainSections = ['blog', 'projets']
+mainSections = ['projets', 'blog']
 
 [params.author]
 name = 'Julien Maxant'
@@ -39,7 +41,15 @@ url = 'https://www.linkedin.com/in/julien-maxant/'
 
 # The tag index lists terms, not content: a feed of it has nothing to follow.
 [outputs]
+home = ['html', 'rss', 'llms']
 taxonomy = ['html']
+
+# /llms.txt, rendered from layouts/index.llms.txt. See docs/seo.md#llmstxt.
+[outputFormats.llms]
+baseName = 'llms'
+mediaType = 'text/plain'
+isPlainText = true
+notAlternative = true
 
 # Most recent items per feed. Items carry their full content, so an unbounded feed grows with
 # every post. See docs/seo.md#feeds.
