@@ -10,6 +10,10 @@
 {{- if not .page -}}
   {{- errorf "partial json-ld.html: missing required \"page\" parameter" -}}
 {{- end -}}
+{{- /* isset, not `not`: an empty description is legitimate, a forgotten key is not. */ -}}
+{{- if not (isset . "description") -}}
+  {{- errorf "partial json-ld.html: missing required \"description\" parameter" -}}
+{{- end -}}
 {{- $page := .page -}}
 {{- $description := .description -}}
 

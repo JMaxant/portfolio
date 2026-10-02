@@ -101,9 +101,9 @@ The `Person` is built from the site configuration: `params.author` gives `name`,
 `knowsAbout`, and every `url` of `params.social` becomes a `sameAs`. Those profile links are
 what lets a search engine tie the site to the same person elsewhere, so keep them current.
 
-An article takes `description`, `tags` (as `keywords`), `date` and `images` from its front
-matter, through the same lookups as the meta tags. `dateModified` is left out until `.Lastmod`
-has a reliable source (#70).
+An article's `description` and `image` resolve as the meta tags do: the description chain
+above, and the `og:image` lookup. `keywords` lists its `tags`, `datePublished` is its `date`.
+`dateModified` is left out until `.Lastmod` has a reliable source (#70).
 
 A project is always an `Article`, since a case study need not be about code. Its `about` holds
 a `SoftwareSourceCode` only when `repo` is filled: leave `repo` empty for a project with no

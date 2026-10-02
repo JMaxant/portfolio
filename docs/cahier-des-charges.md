@@ -154,6 +154,7 @@ Pertinent vu la cible (recruteurs/devs) et le positionnement "vitrine technique"
 
 À prévoir :
 - **Structured data étendu** : au-delà du `Person` déjà prévu (section 8), ajouter `BlogPosting`/`Article` sur les billets de blog et `CreativeWork` (ou équivalent) sur les fiches projets — aide autant le SEO classique que les moteurs génératifs à identifier et citer correctement le contenu.
+  Implemented in #15 with `Article` rather than `CreativeWork` for projects: a case study is an article, and it describes its code as a `SoftwareSourceCode` only when it has a repository.
 - **`robots.txt` permissif envers les crawlers IA connus** (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...) — à l'inverse de beaucoup de sites corporate qui les bloquent, ici l'objectif est la visibilité, pas la protection.
 - **`llms.txt`** — convention émergente et non standardisée (un résumé texte du site + liens clés, sur le modèle de `robots.txt`), adoption non garantie par les outils IA, mais coût d'ajout quasi nul. À considérer comme un plus, pas un prérequis.
 - **Prose factuelle et bien structurée** (titres, listes, affirmations claires du type "j'ai construit X pour résoudre Y avec Z") — sert autant un recruteur qui scanne rapidement qu'un LLM qui résume/extrait le contenu. Cohérent avec le ton déjà décidé en section 3.
@@ -264,7 +265,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 ### Phase 4 — SEO & GEO (une fois qu'il y a du contenu réel à décrire)
 
 - [ ] Meta description + OpenGraph par page.
-- [ ] JSON-LD : `Person` (accueil/à propos), `BlogPosting`/`Article` (articles), `CreativeWork` (projets).
+- [X] JSON-LD: `Person` (home, about), `BlogPosting` (articles), `Article` (projects), `BreadcrumbList` (issue #15, see `docs/seo.md#structured-data`).
 - [ ] Vérifier sitemap + RSS natifs du thème plutôt que les recréer.
 - [ ] `robots.txt` autorisant explicitement les crawlers IA connus (GPTBot, ClaudeBot, PerplexityBot, Google-Extended...).
 - [ ] `llms.txt` — à écrire en dernier dans cette phase, une fois le contenu réel stabilisé (il le résume).
