@@ -1,8 +1,8 @@
 ---
 title: Playwright test suite
-version: 1.2.0
+version: 1.3.0
 date_published: 2026-08-29
-date_modified: 2026-09-30
+date_modified: 2026-10-03
 ---
 
 # Playwright test suite
@@ -17,10 +17,11 @@ it now runs the whole suite:
 
 | File | Covers |
 |------|--------|
-| `a11y.spec.js` | Automated accessibility checks (`@axe-core/playwright`) across `tests/pages.js`'s page list |
+| `a11y.spec.js` | axe-core (`@axe-core/playwright`) on one page per template (`A11Y_PAGES` in `tests/pages.js`), in light, dark and system colour schemes. Rule sets: WCAG 2.0 to 2.2 A/AA, `best-practice` (landmark-unique, heading-order), plus `color-contrast-enhanced` (AAA) |
 | `breadcrumb.spec.js` | Breadcrumb rendering |
 | `breakpoints.spec.js` | Behavior at the `--bp-*` breakpoints (`docs/css-tokens.md`) |
 | `fonts.spec.js` | Body/headings resolve to Spectral (not a silent fallback), italic intro text |
+| `keyboard.spec.js` | What axe cannot judge: skip-link, landmark names, keyboard-scrollable code blocks, theme switcher by keyboard, focus indicators, `prefers-reduced-motion` |
 | `nav.spec.js` | Header/nav menu, including the mobile burger panel and the active trail |
 | `overflow.spec.js` | No horizontal overflow across pages, at default size and (WCAG 1.4.4) at 200% text |
 | `sticky-footer.spec.js` | Footer stays pinned on short pages |

@@ -67,6 +67,16 @@ other = "Aucun projet pour l'instant"
 [reading-time]
 other = "{{ .Count }} min de lecture"
 
+# Landmark names: the role is announced after the name, so no "navigation" in the label.
+[nav-main]
+other = "Principale"
+
+[nav-error]
+other = "Pages utiles"
+
+[nav-footer]
+other = "Pied de page"
+
 [post-nav]
 other = "Articles"
 

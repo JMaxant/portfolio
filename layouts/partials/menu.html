@@ -3,7 +3,8 @@
     menuName (required) — "main" or "error"
     page     (required) — the page being rendered, for the active trail
 
-  Thin wrapper: resolves the top-level menu by name and renders the <nav><ul> shell. All <li>
+  Thin wrapper: resolves the top-level menu by name and renders the <nav><ul> shell, named
+  by the i18n key "nav-<menuName>" (a page carries several navs, each needs a unique name). All <li>
   rendering is delegated to menu-items.html, which is not meant to be called except from
   here.
 
@@ -18,7 +19,7 @@
   {{- errorf "partial menu.html: missing required \"page\" parameter" -}}
 {{- end -}}
 
-<nav>
+<nav aria-label="{{ i18n (printf "nav-%s" .menuName) }}">
   <ul class="menu menu--{{ .menuName }}" role="list">
     {{ partial "menu-items.html" (dict
       "entries" (index site.Menus .menuName).ByWeight
