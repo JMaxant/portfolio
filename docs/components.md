@@ -278,6 +278,19 @@ don't overlap enough to share one partial.
 blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
 `.byline`. No class of its own: a project meta line *is* a byline, only richer.
 
+### `markdown-link.html`
+
+Visible link to the Markdown twin of a page, called at the end of the article in the blog and
+project templates. See [seo.md](seo.md#markdown-versions).
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| `page` | yes | The page to link from |
+
+Emits `p.single__alt.meta` only when the page has a `markdown` output format, so a call from a
+template whose pages have none is harmless. A missing `page` fails the build through `errorf`.
+The label is the `markdown-version` string of `i18n/fr.toml`.
+
 ### `entry-list.html`
 
 The `<ul>` of a section or taxonomy listing: one entry per page — date, title link,
@@ -477,11 +490,10 @@ Crossing the breakpoint upwards with the panel open closes it, the same reset
 closing pass is what releases `inert`.
 
 The `aria-expanded` toggling, the `.is-open` mirroring and the `Escape` handler are not
-written here: they come from `assets/scripts/00-disclosure.js`, shared with the theme
-switcher, which is the other disclosure in the header. The `00-` prefix is load-bearing —
-`baseof.html` bundles `resources.Match "scripts/*.js"`, which sorts by path, so the helper
-has to concatenate before its two consumers. It publishes on `window` because after
-concatenation each script is still its own IIFE.
+written here: they come from `assets/scripts/disclosure.js`, shared with the theme
+switcher, which is the other disclosure in the header. The helper is exported and imported by
+both consumers; `baseof.html` bundles `assets/scripts/main.js` with `js.Build`, so the import
+graph, not a filename, orders the files.
 
 The helper's `onChange` callback fires on every transition, opening and closing alike, and
 is what both consumers hook into — `nav-toggle.js` for `inert`, `theme-switcher.html` for

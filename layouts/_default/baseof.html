@@ -24,6 +24,10 @@
   <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Title }} | {{ site.Title }}" />
     {{- end }}
   {{- end }}
+  {{- /* Only the blog and project pages have a Markdown twin. See docs/seo.md#markdown-versions. */}}
+  {{- with .OutputFormats.Get "markdown" }}
+  <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" />
+  {{- end }}
 
 </head>
 
@@ -43,15 +47,16 @@
     {{- partial "footer.html" . -}}
   </footer>
 
-  {{ $files := resources.Match "scripts/*.js" }}
-  {{ if hugo.IsDevelopment }}
-    {{ range $files }}
-      <script src="{{ .RelPermalink }}" defer></script>
-    {{ end }}
-  {{ else }}
-   {{ $minified := $files | resources.Concat "scripts.min.js" | minify | fingerprint }}
-   <script src="{{ $minified.RelPermalink }}" defer></script>
+  {{ $opts := dict
+    "target" "es2020"
+    "minify" (not hugo.IsDevelopment)
+    "sourceMap" (cond hugo.IsDevelopment "linked" "none")
+  }}
+  {{ $js := resources.Get "scripts/main.js" | js.Build $opts }}
+  {{ if not hugo.IsDevelopment }}
+    {{ $js = $js | fingerprint }}
   {{ end }}
+  <script type="module" src="{{ $js.RelPermalink }}"></script>
 </body>
 
 </html>

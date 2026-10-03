@@ -1,13 +1,13 @@
 ---
 title: SEO — contributor guidelines
-version: 1.5.0
+version: 1.6.0
 date_published: 2026-10-02
-date_modified: 2026-10-02
+date_modified: 2026-10-03
 ---
 
 # SEO — contributor guidelines
 
-Ref: issues #14 to #18. What a content author or template author must do so that every page carries
+Ref: issues #14 to #18, #153. What a content author or template author must do so that every page carries
 a usable description and social preview. The partial contract itself is documented in
 [components.md](components.md#seo_tagshtml).
 
@@ -181,6 +181,45 @@ file, build with `hugo` and open `public/robots.txt`. Through `task run`, open
 and leaves `public/` as the last build wrote it. A browser may also serve a cached copy after a
 change; reload without the cache.
 
+## Markdown versions
+
+Each blog article and project is also published as `index.md` next to its HTML page
+(`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds the
+title, the description as a quote and the body, with no front matter.
+
+- **Output format**: `markdown` in `config/_default/hugo.toml` (`text/markdown`, base name
+  `index`), rendered from `layouts/_default/single.md`.
+- **Scope**: enabled by `cascade.outputs` in `content/blog/_index.md` and
+  `content/projets/_index.md`, for the `page` kind only. Listings, tag pages, `/a-propos/` and
+  the home page get none. A new publication section copies that cascade.
+- **Shortcodes** are stripped from the raw body: they render HTML for the page and have no
+  Markdown equivalent. Keep the text a reader needs outside a shortcode.
+- **Links**: `](/path)`, `](#id)` and `](path)` are made absolute against the site and the page.
+  Only the Markdown syntax is rewritten: a raw `<a href>` or `<img src>` in the body is kept as
+  written.
+- **Advertised** by `<link rel="alternate" type="text/markdown">` in the head, and by a visible
+  link (`markdown-link.html`) at the end of the article.
+- **`llms.txt` links to the Markdown version instead of the HTML page**: it is the cleaner
+  target, and the HTML page stays one link away through the canonical URL.
+
+**Known gap — duplicate content.** A `.md` file cannot carry a `<link rel="canonical">`, and
+nothing stops a search engine from indexing it next to the HTML page. It is not in
+`sitemap.xml`, but the `rel="alternate"` link and `llms.txt` expose it. The fix is an HTTP header,
+`Link: <html-url>; rel="canonical"`, which depends on the host (#20): GitHub Pages cannot set
+it, Cloudflare Pages and Netlify need a generated `_headers` file. Do not use
+`X-Robots-Tag: noindex`: some AI crawlers read it as "do not use".
+
+**Known gap — duplicate content.** A `.md` file cannot carry a `<link rel="canonical">`, and
+nothing stops a search engine from indexing it next to the HTML page. It is not in
+`sitemap.xml`, but the `rel="alternate"` link and `llms.txt` expose it. The fix is an HTTP header,
+`Link: <html-url>; rel="canonical"`, which depends on the host (#20): GitHub Pages cannot set
+it, Cloudflare Pages and Netlify need a generated `_headers` file. Do not use
+`X-Robots-Tag: noindex`: some AI crawlers read it as "do not use".
+
+Content negotiation on `Accept: text/markdown` is out of scope: no candidate host supports it
+(#20). So is a directive hidden in the HTML, which would be cloaking (see
+[ADR 0004](adr/0004-no-afdocs.md)).
+
 ## llms.txt
 
 `/llms.txt` follows the [llmstxt.org](https://llmstxt.org/) proposal: a summary of the site,
@@ -196,7 +235,8 @@ so it follows the content without being rewritten.
 | One `##` per section | The regular pages of each `params.mainSections` entry, then `/a-propos/` and its pages |
 | `## Optional` | `/veille/`, as one link: its entries point to other sites |
 
-Each link reads `[title](url): description`, the description falling back to the summary, as
+Each link reads `[title](url): description`, the url being the [Markdown version](#markdown-versions)
+of the page when it has one, the HTML page otherwise, the description falling back to the summary, as
 in the feeds. A page's `description` is therefore what an agent reads about it: the rules of
 [Writing a description](#writing-a-description) apply here too.
 
@@ -245,6 +285,11 @@ advertises the main feed.
 `tests/robots-llms.spec.js` checks that `robots.txt` names the AI crawlers, disallows nothing in
 production and points to a sitemap that resolves, and that `llms.txt` is plain text with the
 expected headings, lists the publications but not the veille entries, and has no broken link.
+
+`tests/markdown.spec.js` checks that an article and a project have an `index.md` with title,
+description and body but no front matter, that shortcodes are gone and links absolute, that the
+HTML page advertises and links to it, that the excluded page kinds have none, and that
+`llms.txt` points to it.
 
 A new list template (see the `_default/list.html` gotcha in `CLAUDE.md`) gets a line in the
 spec's `PAGES` table.
