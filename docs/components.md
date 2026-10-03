@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.28.0
+version: 1.27.0
 date_published: 2026-08-08
 date_modified: 2026-10-03
 ---
