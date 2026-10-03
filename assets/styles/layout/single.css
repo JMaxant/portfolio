@@ -28,6 +28,11 @@
   }
 }
 
+.single__alt {
+  margin-block-end: var(--spacing-xs);
+  font-style: italic;
+}
+
 /* Sits outside the article and resolves the same min() as the grid's content column, so it
    repeats the --gutter that layout/content-grid.css declares. Change one, change the other.
    (--breakout is not repeated: only the grid tracks use it.) */

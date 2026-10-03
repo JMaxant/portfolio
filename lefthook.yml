@@ -20,6 +20,8 @@ pre-commit:
       glob: "*.md"
       exclude:
         - "docs/**"
+        # A Go template that happens to end in .md, not Markdown.
+        - "layouts/**"
       run: npx --yes markdownlint-cli2@0.23.2 {staged_files}
 
     stylelint:

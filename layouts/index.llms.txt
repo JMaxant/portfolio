@@ -1,7 +1,10 @@
 {{- /* /llms.txt, per https://llmstxt.org: title, summary, then one list of links per section.
        Generated from the content, so it never needs rewriting. See docs/seo.md#llmstxt. */ -}}
 {{- define "partials/llms-link.txt" -}}
-- [{{ .Title }}]({{ .Permalink }}){{ with or .Description .Summary }}: {{ . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace }}{{ end }}
+{{- /* The Markdown twin when the page has one: a cleaner target than the HTML. */ -}}
+{{- $url := .Permalink -}}
+{{- with .OutputFormats.Get "markdown" }}{{ $url = .Permalink }}{{ end -}}
+- [{{ .Title }}]({{ $url }}){{ with or .Description .Summary }}: {{ . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace }}{{ end }}
 {{- end -}}
 
 {{- $sections := slice -}}

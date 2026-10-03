@@ -44,6 +44,13 @@ url = 'https://www.linkedin.com/in/julien-maxant/'
 home = ['html', 'rss', 'llms']
 taxonomy = ['html']
 
+# index.md next to the HTML of a blog article or project, rendered from layouts/_default/single.md.
+# Enabled by the cascade of content/blog and content/projets. See docs/seo.md#markdown-versions.
+[outputFormats.markdown]
+baseName = 'index'
+mediaType = 'text/markdown'
+isPlainText = true
+
 # /llms.txt, rendered from layouts/index.llms.txt. See docs/seo.md#llmstxt.
 [outputFormats.llms]
 baseName = 'llms'

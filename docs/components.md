@@ -1,8 +1,8 @@
 ---
 title: Components — partials and integration
-version: 1.27.0
+version: 1.28.0
 date_published: 2026-08-08
-date_modified: 2026-10-02
+date_modified: 2026-10-03
 ---
 
 # Components — partials and integration
@@ -277,6 +277,19 @@ don't overlap enough to share one partial.
 **Integration** — the partial emits `ul.byline.meta`, the same block as the byline of a
 blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
 `.byline`. No class of its own: a project meta line *is* a byline, only richer.
+
+### `markdown-link.html`
+
+Visible link to the Markdown twin of a page, called at the end of the article in the blog and
+project templates. See [seo.md](seo.md#markdown-versions).
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| `page` | yes | The page to link from |
+
+Emits `p.single__alt.meta` only when the page has a `markdown` output format, so a call from a
+template whose pages have none is harmless. A missing `page` fails the build through `errorf`.
+The label is the `markdown-version` string of `i18n/fr.toml`.
 
 ### `entry-list.html`
 

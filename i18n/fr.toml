@@ -117,3 +117,6 @@ other = "Voir plus d'articles"
 
 [tag-description]
 other = "Articles, projets et veille sur le thème « {{ .Tag }} »."
+
+[markdown-version]
+other = "Consulter la version Markdown"
