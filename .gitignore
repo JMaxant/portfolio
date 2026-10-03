@@ -12,3 +12,5 @@ scripts/fonts/.venv/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+/assets/jsconfig.json

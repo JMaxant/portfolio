@@ -1,0 +1,16 @@
+{{- /*
+  markdown-link.html — visible link to the Markdown twin of a page.
+
+  Contract:
+    page (required) — the page to link from.
+
+  Emits nothing when the page has no Markdown output. See docs/seo.md#markdown-versions.
+*/ -}}
+{{- $page := .page -}}
+{{- if not $page -}}
+  {{- errorf "partial markdown-link.html: missing required key %q" "page" -}}
+{{- end -}}
+
+{{- with $page.OutputFormats.Get "markdown" -}}
+  <p class="single__alt meta"><a href="{{ .RelPermalink }}" type="{{ .MediaType.Type }}">{{ i18n "markdown-version" }}</a></p>
+{{- end -}}

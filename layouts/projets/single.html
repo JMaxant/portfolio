@@ -15,5 +15,6 @@
     </header>
 
     {{ .Content }}
+    {{ partial "markdown-link.html" (dict "page" .) }}
   </article>
 {{ end }}
