@@ -1,8 +1,8 @@
 ---
 title: Quality gates — pre-commit & CI
-version: 1.11.0
+version: 1.12.0
 date_published: 2026-08-01
-date_modified: 2026-10-01
+date_modified: 2026-10-03
 ---
 
 # Quality gates — pre-commit & CI
@@ -67,6 +67,7 @@ Build Hugo → lychee **en ligne** (liens externes inclus). En cas de liens mort
 | `.markdownlint.yaml`, `.stylelintrc.json` | Configs linters |
 | `.editorconfig` | Règles whitespace/newline/encodage — aussi appliquées à l'édition par les IDE qui le lisent nativement (PhpStorm, VS Code…) |
 | `package.json` | devDependencies (ranges `^`, versions exactes figées par `package-lock.json`, installées via `npm ci` en CI) ; champ `engines` (Node minimal) ; `allowScripts` autorise le `postinstall` de lefthook, qui installe le hook git |
+| `.npmrc` | `engine-strict=true` — `npm ci` refuses a Node outside `engines` |
 | `.nvmrc` | Version Node du projet — lue par nvm/fnm/mise en local et par `actions/setup-node` en CI (`node-version-file`) ; cohérente avec `engines` |
 
 ## Usage local
@@ -75,6 +76,18 @@ Build Hugo → lychee **en ligne** (liens externes inclus). En cas de liens mort
 task setup   # npm ci — le hook git lefthook est installé par son postinstall (autorisé via allowScripts)
 task qa      # tous les checks sur tous les fichiers = job CI `quality`
 ```
+
+### Node version
+
+Node 24+ is required (`.nvmrc`, `engines.node`). Two guards enforce it locally:
+
+- `engine-strict=true` in `.npmrc` makes `npm ci` fail on an unsupported Node. It only acts at install time.
+- The `node:check` Taskfile precondition, a dependency of `task setup` and `task qa`, fails when the major
+  version of `node --version` is below the one in `.nvmrc`. It covers a `node_modules` installed under
+  Node 24 then run under an older one, where `editorconfig-checker` crashes yet exits 0 and lefthook
+  reports it as passed.
+
+CI is unaffected: both workflows read `node-version-file: .nvmrc`.
 
 ## Maintenance
 

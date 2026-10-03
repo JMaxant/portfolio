@@ -11,8 +11,20 @@ tasks:
     cmds:
       - task --list
 
+  node:check:
+    internal: true
+    vars:
+      NODE_REQUIRED:
+        sh: cut -d. -f1 .nvmrc
+      NODE_FOUND:
+        sh: node --version
+    preconditions:
+      - sh: test "$(node -p 'process.versions.node.split(".")[0]')" -ge "{{.NODE_REQUIRED}}"
+        msg: "Node {{.NODE_REQUIRED}}+ required (.nvmrc), found {{.NODE_FOUND}}. Switch with nvm/fnm/mise."
+
   setup:
     desc: Set up the local dev environment (installs npm deps and the lefthook git hook).
+    deps: [node:check]
     cmds:
       - npm ci
       - npx lefthook install
@@ -25,6 +37,7 @@ tasks:
 
   qa:
     desc: Run every quality check on all files (exactly what CI's quality job runs).
+    deps: [node:check]
     cmd: npx lefthook run pre-commit --all-files
 
   qa:fix:
