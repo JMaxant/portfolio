@@ -285,6 +285,8 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 
 Différent de la Phase 6 : la Phase 6 vérifie qu'on a bien fait ce qui était prévu (DoD), la recette vérifie que ça marche réellement une fois tout en ligne ensemble — c'est là que les bugs et oublis se révèlent. Volontairement gardée légère au départ ; les bugs trouvés donneront lieu à des issues créées au fil de l'eau, pas anticipées ici.
 
+Les cinq recettes sont regroupées dans une seule checklist post-déploiement, `docs/post-deploy-checklist.md` : une suite Playwright de smoke tests rejouée sur l'URL en ligne (`task test:live -- <url>`), puis quelques vérifications manuelles que rien d'automatique ne remplace.
+
 - [ ] Recette fonctionnelle bout-en-bout en prod (accueil → projet → blog → contact).
 - [ ] Recette responsive / cross-navigateur (mobile + desktop, au moins 2 navigateurs).
 - [ ] Recette du switch light/dark en conditions réelles (bascule + persistance après rechargement).

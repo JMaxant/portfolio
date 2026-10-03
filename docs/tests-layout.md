@@ -1,6 +1,6 @@
 ---
 title: Playwright test suite
-version: 1.3.0
+version: 1.4.0
 date_published: 2026-08-29
 date_modified: 2026-10-03
 ---
@@ -28,6 +28,7 @@ it now runs the whole suite:
 | `table.spec.js` | Table rendering (`render-table.html`) |
 | `theme-switcher.spec.js` | Light/dark toggle |
 | `time.spec.js` | Date/time formatting |
+| `live/smoke.spec.js` | Post-deploy smoke tests against a deployed site, never run locally; see [post-deploy-checklist.md](post-deploy-checklist.md) |
 
 ## Fixtures
 
@@ -66,3 +67,13 @@ Chromium only, for a fast local loop (`playwright.config.ts` also defines `firef
 
 CI (`.github/workflows/playwright.yml`) runs the full suite across all three browsers on
 every push/PR to `main`, independently of `ci.yml`'s `quality`/`links-internal` jobs.
+
+## Against a deployed site
+
+```sh
+task test:live -- https://www.example.com
+```
+
+`BASE_URL` swaps the local server for that URL and restricts the run to `tests/live/`, which
+use real content. The other specs depend on fixtures and stay local. See
+[post-deploy-checklist.md](post-deploy-checklist.md).
