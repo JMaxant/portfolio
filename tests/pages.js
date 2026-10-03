@@ -9,6 +9,8 @@ export const FIXTURES = {
   project: { url: '/projets/fixture-project/', title: 'Fixture project' },
   projectWithRepo: { url: '/projets/fixture-project-repo/', repo: 'https://example.com/fixture/repo' },
   table: { url: '/fixture-table/' },
+  // A highlighted block wider than any viewport the suite uses.
+  code: { url: '/fixture-code/' },
   parcours: { url: '/a-propos/fixture-parcours/', title: 'Fixture parcours' },
   tag: { url: '/tags/fixture-tag/', title: 'Fixture-Tag' },
 };
@@ -19,4 +21,19 @@ export const PAGES = [
   ['blog list', '/blog/'],
   ['table', FIXTURES.table.url],
   ['parcours', FIXTURES.parcours.url],
+];
+
+// One page per template, for the a11y suite: landmark, heading and h1 rules only mean
+// something once every layout has been scanned. The 404 is served at /404.html.
+export const A11Y_PAGES = [
+  ['home', '/'],
+  ...PAGES,
+  ['article', FIXTURES.article.url],
+  ['code block', FIXTURES.code.url],
+  ['projects list', '/projets/'],
+  ['project', FIXTURES.project.url],
+  ['watch list', '/veille/'],
+  ['tag index', '/tags/'],
+  ['tag term', FIXTURES.tag.url],
+  ['404', '/404.html'],
 ];

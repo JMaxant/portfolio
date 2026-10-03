@@ -58,6 +58,15 @@ tasks:
     desc: Download the Chromium build Playwright drives.
     cmd: npx playwright install chromium
 
+  test:live:
+    desc: "Run the post-deploy smoke suite against a deployed site: task test:live -- https://example.com (see docs/post-deploy-checklist.md)."
+    vars:
+      URL: '{{.CLI_ARGS | default "https://www.julien-maxant.com"}}'
+    env:
+      BASE_URL: '{{.URL}}'
+    cmds:
+      - npx playwright install chromium firefox webkit
+      - npx playwright test
 
   hugo:serve:
     aliases: [serve, dev, run]

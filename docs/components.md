@@ -1,6 +1,6 @@
 ---
 title: Components — partials and integration
-version: 1.28.0
+version: 1.27.0
 date_published: 2026-08-08
 date_modified: 2026-10-03
 ---
@@ -556,6 +556,11 @@ to [`menu-items.html`](#menu-itemshtml).
 |-----|----------|---------|-------------|
 | `menuName` | yes | — | Menu identifier: `main` or `error` |
 | `page` | yes | — | The page being rendered, against which the trail is resolved |
+
+The `<nav>` is named by the i18n key `nav-<menuName>` (`nav-main`, `nav-error`): a page
+carries several navigation landmarks, and each must have a unique accessible name. Adding a
+menu means adding its key to `i18n/fr.toml`. Keep the role out of the label, it is announced
+after the name.
 
 `menuName` is checked against a whitelist with `errorf` before any output, since Go
 templates cannot do dynamic field access (`.Site.Menus.$menuName`) — the menu is fetched
