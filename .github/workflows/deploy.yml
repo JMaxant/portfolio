@@ -40,4 +40,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # The action defaults to Wrangler 3, which needs a `main` entry point: an assets-only
+          # config such as ours requires Wrangler 4.
+          wranglerVersion: '4'
           command: deploy
