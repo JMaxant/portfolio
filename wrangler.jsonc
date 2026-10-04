@@ -1,0 +1,8 @@
+{
+  // Static site served by Workers Static Assets. See docs/post-deploy-checklist.md
+  "name": "portfolio",
+  "compatibility_date": "2026-10-04",
+  "assets": {
+    "directory": "./public"
+  }
+}

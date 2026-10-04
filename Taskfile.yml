@@ -71,3 +71,7 @@ tasks:
   hugo:serve:
     aliases: [serve, dev, run]
     cmd: "{{.HUGO}} serve -D --cleanDestinationDir --disableFastRender"
+
+  hugo:build:
+    aliases: [build]
+    cmd: "{{.HUGO}} --cleanDestinationDir --gc --minify"
