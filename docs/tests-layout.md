@@ -22,6 +22,7 @@ it now runs the whole suite:
 | `breadcrumb.spec.js` | Breadcrumb rendering |
 | `breakpoints.spec.js` | Behavior at the `--bp-*` breakpoints (`docs/css-tokens.md`) |
 | `fonts.spec.js` | Body/headings resolve to Spectral (not a silent fallback), italic intro text |
+| `headers.spec.js` | The generated `/_headers`: a canonical `Link` rule per Markdown version, none for other pages |
 | `keyboard.spec.js` | What axe cannot judge: skip-link, landmark names, keyboard-scrollable code blocks, theme switcher by keyboard, focus indicators, `prefers-reduced-motion` |
 | `nav.spec.js` | Header/nav menu, including the mobile burger panel and the active trail |
 | `overflow.spec.js` | No horizontal overflow across pages, at default size and (WCAG 1.4.4) at 200% text |

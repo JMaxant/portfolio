@@ -46,6 +46,17 @@ test('the crawler files are served and point to this very site', async ({ reques
   }
 });
 
+test('a Markdown version carries a canonical Link header to its HTML page', async ({ page, request }) => {
+  await page.goto('/blog/');
+  const article = await page.locator('main a[href^="/blog/"]').first().getAttribute('href');
+  const response = await request.get(`${article}index.md`);
+
+  expect(response.status()).toBe(200);
+  // Only the path is compared: the header names the production host, whatever host is tested.
+  const canonical = response.headers().link?.match(/^<([^>]+)>; rel="canonical"$/)?.[1];
+  expect(new URL(canonical).pathname).toBe(article);
+});
+
 test('the outgoing links are not dead', async ({ page, request }) => {
   await page.goto('/');
   const mailto = await page.locator('a.cta[href^="mailto:"]').first().getAttribute('href');

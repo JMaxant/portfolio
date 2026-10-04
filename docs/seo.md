@@ -202,19 +202,22 @@ title, the description as a quote and the body, with no front matter.
 - **`llms.txt` links to the Markdown version instead of the HTML page**: it is the cleaner
   target, and the HTML page stays one link away through the canonical URL.
 
-**Known gap — duplicate content.** A `.md` file cannot carry a `<link rel="canonical">`, and
-nothing stops a search engine from indexing it next to the HTML page. It is not in
-`sitemap.xml`, but the `rel="alternate"` link and `llms.txt` expose it. The fix is an HTTP header,
-`Link: <html-url>; rel="canonical"`, which depends on the host (#20): GitHub Pages cannot set
-it, Cloudflare Pages and Netlify need a generated `_headers` file. Do not use
-`X-Robots-Tag: noindex`: some AI crawlers read it as "do not use".
+**Canonical header.** A `.md` file cannot carry a `<link rel="canonical">`, and nothing stops a
+search engine from indexing it next to the HTML page: it is not in `sitemap.xml`, but the
+`rel="alternate"` link and `llms.txt` expose it. Each one is therefore served with an HTTP
+header, `Link: <html-url>; rel="canonical"`.
 
-**Known gap — duplicate content.** A `.md` file cannot carry a `<link rel="canonical">`, and
-nothing stops a search engine from indexing it next to the HTML page. It is not in
-`sitemap.xml`, but the `rel="alternate"` link and `llms.txt` expose it. The fix is an HTTP header,
-`Link: <html-url>; rel="canonical"`, which depends on the host (#20): GitHub Pages cannot set
-it, Cloudflare Pages and Netlify need a generated `_headers` file. Do not use
-`X-Robots-Tag: noindex`: some AI crawlers read it as "do not use".
+- **Generated**: the `headers` output format of the home page (`config/_default/hugo.toml`)
+  renders `/_headers` from `layouts/index.headers`, the file Cloudflare reads. One rule per
+  Markdown version, because a rule takes a path pattern, not a per-page value. It follows the
+  content and is never edited by hand.
+- **Not served**: Cloudflare consumes `_headers` and does not publish it.
+- **Limits**: 100 rules on the free plan. Each publication costs one, so a new section is
+  counted before it is added.
+- **Tested**: `tests/headers.spec.js` checks the generated file, and
+  `tests/live/smoke.spec.js` checks the header on a deployed article.
+- Do not use `X-Robots-Tag: noindex` instead: some AI crawlers read it as "do not use", which
+  defeats the point of publishing Markdown.
 
 Content negotiation on `Accept: text/markdown` is out of scope: no candidate host supports it
 (#20). So is a directive hidden in the HTML, which would be cloaking (see

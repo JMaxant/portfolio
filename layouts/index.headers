@@ -1,0 +1,10 @@
+{{- /* /_headers for Cloudflare: a canonical Link header on every Markdown version, which
+       cannot carry a <link rel="canonical"> itself. One rule per file, as a rule takes a path,
+       not a per-page value. A path starts at column 0 and its headers are indented.
+       See docs/seo.md#markdown-versions. */ -}}
+{{- range site.RegularPages -}}
+  {{- $canonical := .Permalink -}}
+  {{- with .OutputFormats.Get "markdown" -}}
+    {{- printf "%s\n  Link: <%s>; rel=\"canonical\"\n\n" .RelPermalink $canonical -}}
+  {{- end -}}
+{{- end -}}
