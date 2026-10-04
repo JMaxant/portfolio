@@ -1,8 +1,7 @@
 ---
 title: ADR 0003 — Self-build a Spectral variable font from upstream UFO sources
-version: 1.1.0
 date_published: 2026-08-29
-date_modified: 2026-08-29
+date_modified: 2026-10-04
 ---
 
 # Self-build a Spectral variable font from upstream UFO sources
@@ -13,6 +12,10 @@ Refs #120. The site self-hosted Spectral (see the commit adopting it as `--font-
 6 static `.woff2` files: 3 roman weights (Light 300, Regular 400, SemiBold 600) and their
 italics. This ADR replaces those 6 files with 2 variable fonts — one roman, one italic —
 each covering the whole 300–600 `wght` range in a single file.
+
+Spectral replaced Alexandria (the sans-serif of [ADR 0002](0002-alexandria-font-family.md),
+now superseded) as the site's text font, and is self-hosted rather than imported from
+Bunny Fonts.
 
 ## No official variable release
 

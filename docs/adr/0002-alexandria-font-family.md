@@ -1,13 +1,17 @@
 ---
 title: ADR 0002 — Adopt Alexandria as the sans-serif font family
-version: 1.0.0
 date_published: 2026-08-16
-date_modified: 2026-08-16
+date_modified: 2026-10-04
 ---
 
 # Adopt Alexandria as the sans-serif font family
 
-Status: accepted
+Status: superseded by [ADR 0003](0003-spectral-variable-font.md)
+
+Alexandria was dropped for Spectral, a self-hosted serif (#120), so the Bunny Fonts import and
+the four-weight set below no longer exist in the codebase. Kept as the record of why the
+hosted-import route was taken, and of the "nothing beyond what's used" weight rule that
+ADR 0003 reuses.
 
 Issue #86 asked for a distinct sans-serif typeface instead of the `system-ui` stack that
 `--font-sans` fell back to. We chose Alexandria from Bunny Fonts.
