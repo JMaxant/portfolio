@@ -31,6 +31,7 @@ the full suite cannot simply be pointed at production.
 | Responsive / cross-browser (#25) | the same tests on 3 desktop and 2 mobile projects; the layout itself is covered locally by `breakpoints`, `overflow`, `nav`, `sticky-footer` and `table` specs |
 | Light / dark switch and persistence (#26) | `tests/live/smoke.spec.js`; the full behaviour is in `theme-switcher.spec.js` |
 | `robots.txt`, `llms.txt`, `sitemap.xml` reachable | `tests/live/smoke.spec.js`, which also checks the sitemap points to the tested host (a wrong `baseURL` at build time ships a sitemap for another site) |
+| Canonical `Link` header and UTF-8 charset on the Markdown versions and text files (#20, #168) | `tests/live/smoke.spec.js`; the canonical check compares the path only, as the header always names the production host |
 | Outgoing links (#28) | `tests/live/smoke.spec.js` (mailto shape, GitHub and LinkedIn profiles from `params.social`); the weekly `links-external.yml` covers every other link |
 
 LinkedIn answers `999` to anything that is not a logged-in browser, so that status counts as

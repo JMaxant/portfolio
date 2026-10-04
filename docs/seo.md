@@ -201,19 +201,26 @@ title, the description as a quote and the body, with no front matter.
 - **`llms.txt` links to the Markdown version instead of the HTML page**: it is the cleaner
   target, and the HTML page stays one link away through the canonical URL.
 
-**Known gap — duplicate content.** A `.md` file cannot carry a `<link rel="canonical">`, and
-nothing stops a search engine from indexing it next to the HTML page. It is not in
-`sitemap.xml`, but the `rel="alternate"` link and `llms.txt` expose it. The fix is an HTTP header,
-`Link: <html-url>; rel="canonical"`, which depends on the host (#20): GitHub Pages cannot set
-it, Cloudflare Pages and Netlify need a generated `_headers` file. Do not use
-`X-Robots-Tag: noindex`: some AI crawlers read it as "do not use".
+**HTTP headers.** A `.md` file cannot carry a `<link rel="canonical">`, and nothing stops a
+search engine from indexing it next to the HTML page: it is not in `sitemap.xml`, but the
+`rel="alternate"` link and `llms.txt` expose it. Each one is therefore served with an HTTP
+header, `Link: <html-url>; rel="canonical"`. The host also leaves the charset out of
+`text/markdown` and `text/plain`, so a browser guesses one and shows `Ã©` for `é` (#168): the
+same rules set `Content-Type` with `charset=utf-8`.
 
-**Known gap — duplicate content.** A `.md` file cannot carry a `<link rel="canonical">`, and
-nothing stops a search engine from indexing it next to the HTML page. It is not in
-`sitemap.xml`, but the `rel="alternate"` link and `llms.txt` expose it. The fix is an HTTP header,
-`Link: <html-url>; rel="canonical"`, which depends on the host (#20): GitHub Pages cannot set
-it, Cloudflare Pages and Netlify need a generated `_headers` file. Do not use
-`X-Robots-Tag: noindex`: some AI crawlers read it as "do not use".
+- **Generated**: the `headers` output format of the home page (`config/_default/hugo.toml`)
+  renders `/_headers` from `layouts/index.headers`, the file Cloudflare parses and does not
+  serve. It is never edited by hand.
+- **One rule per section, not per page**: the `:slug` placeholder of the path is reused in the
+  value (`Link: <https://…/blog/:slug/>`). A section is listed once it has a page with a
+  Markdown version, so a new section copying the cascade needs no change here.
+- **Limits**: 100 rules and 2,000 characters per line. The file holds a handful of rules, and
+  its size does not grow with the content.
+- **Tested**: `tests/headers.spec.js` checks the generated file, and
+  `tests/live/smoke.spec.js` checks the headers a deployed article and the text files really
+  carry. The live test is the only one that proves the host applies them.
+- Do not use `X-Robots-Tag: noindex` instead: some AI crawlers read it as "do not use", which
+  defeats the point of publishing Markdown.
 
 Content negotiation on `Accept: text/markdown` is out of scope: no candidate host supports it
 (#20). So is a directive hidden in the HTML, which would be cloaking (see

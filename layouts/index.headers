@@ -1,0 +1,16 @@
+{{- /* /_headers for Cloudflare, parsed by the host and never served. See docs/seo.md#markdown-versions.
+       A rule takes a path pattern whose `:slug` placeholder is reused in the value, so one rule
+       per section covers every page. A Markdown version cannot carry a <link rel="canonical">
+       and gets it as a header; text files declare their charset, which the host leaves out.
+       A path starts at column 0 and its headers are indented. */ -}}
+{{- $base := strings.TrimSuffix "/" site.BaseURL -}}
+{{- $sections := slice -}}
+{{- range site.RegularPages -}}
+  {{- if .OutputFormats.Get "markdown" -}}{{- $sections = $sections | append .Section -}}{{- end -}}
+{{- end -}}
+{{- range $sections | uniq -}}
+  {{- printf "/%s/:slug/index.md\n  Link: <%s/%s/:slug/>; rel=\"canonical\"\n  Content-Type: text/markdown; charset=utf-8\n\n" . $base . -}}
+{{- end -}}
+{{- range slice "llms.txt" "robots.txt" -}}
+  {{- printf "/%s\n  Content-Type: text/plain; charset=utf-8\n\n" . -}}
+{{- end -}}

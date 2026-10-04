@@ -41,7 +41,7 @@ url = 'https://www.linkedin.com/in/julien-maxant/'
 
 # The tag index lists terms, not content: a feed of it has nothing to follow.
 [outputs]
-home = ['html', 'rss', 'llms']
+home = ['html', 'rss', 'llms', 'headers']
 taxonomy = ['html']
 
 # index.md next to the HTML of a blog article or project, rendered from layouts/_default/single.md.
@@ -55,6 +55,18 @@ isPlainText = true
 [outputFormats.llms]
 baseName = 'llms'
 mediaType = 'text/plain'
+isPlainText = true
+notAlternative = true
+
+# /_headers, rendered from layouts/index.headers: the canonical Link header of each Markdown
+# version, read by Cloudflare. See docs/seo.md#markdown-versions.
+[mediaTypes.'text/x-cloudflare-headers']
+delimiter = ''
+suffixes = ['']
+
+[outputFormats.headers]
+baseName = '_headers'
+mediaType = 'text/x-cloudflare-headers'
 isPlainText = true
 notAlternative = true
 
