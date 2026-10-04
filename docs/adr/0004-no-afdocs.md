@@ -1,6 +1,5 @@
 ---
 title: ADR 0004 — Do not adopt afdocs
-version: 1.0.0
 date_published: 2026-10-02
 date_modified: 2026-10-02
 ---

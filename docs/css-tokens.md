@@ -1,6 +1,5 @@
 ---
 title: CSS tokens and breakpoints
-version: 1.17.2
 date_published: 2026-08-08
 date_modified: 2026-09-28
 ---

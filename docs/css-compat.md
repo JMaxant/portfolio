@@ -1,6 +1,5 @@
 ---
 title: CSS browser compatibility
-version: 1.2.2
 date_published: 2026-08-04
 date_modified: 2026-08-17
 ---

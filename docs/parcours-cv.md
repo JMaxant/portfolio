@@ -1,6 +1,5 @@
 ---
 title: Contributing to the Parcours page
-version: 3.1.0
 date_published: 2026-08-14
 date_modified: 2026-09-28
 ---
