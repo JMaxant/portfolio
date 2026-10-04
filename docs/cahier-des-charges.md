@@ -1,3 +1,9 @@
+---
+title: Cahier des charges — Portfolio Julien Maxant
+date_published: 2026-07-26
+date_modified: 2026-10-04
+---
+
 # Cahier des charges — Portfolio Julien Maxant
 
 Statut : brouillon de travail — sert de fil rouge pendant le développement, à amender au fur et à mesure.
@@ -245,26 +251,26 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [X] Mise en forme des listes et articles de blog, blocs de code inclus (issue #44).
 - [X] Mise en forme des fiches et de la liste projets (issue #45) : liste en cards via `card.html`, fiche au gabarit lecture de l'article, ligne de méta enrichie (`projets-meta.html`).
 - [X] Mise en forme de la liste de veille (issue #46).
-- [ ] Mise en forme de la page Parcours / CV (issue #47).
+- [X] Mise en forme de la page Parcours / CV (issue #47).
 - [X] Mise en forme de la page d'accueil (issue #48).
 - [X] Mise en forme navigation/header et footer (issue #49).
-- [ ] Page 404 personnalisée (issue #50).
-- [ ] Mise en forme des pages de taxonomie `/tags/` (issue #51).
-- [ ] Favicon et icônes meta — traités avec l'iconographie d'interface (issue #80, qui absorbe #52).
-- [ ] Pagination des listes : vérifier et trancher (issue #53).
+- [X] Page 404 personnalisée (issue #50).
+- [X] Mise en forme des pages de taxonomie `/tags/` (issue #51).
+- [X] Favicon et icônes meta — traités avec l'iconographie d'interface (issue #80, qui absorbe #52).
+- [X] Pagination des listes : vérifier et trancher (issue #53).
 
 ### Phase 3 — Contenu réel (remplace le Lorem Ipsum)
 
 À ce stade la structure et le style existent déjà — on peut se concentrer sur le fond.
 
-- [ ] Page Parcours : chapeau, "Maintenant", "Avant", compétences (stack quotidienne vs direction) — section 5bis.
-- [ ] 1 à 2 études de cas projets, taguées avec la taxonomie stack.
-- [ ] Premier article de blog — candidat naturel : documenter un apprentissage Go/Python/K8s, ce qui matérialise tout de suite le lien "preuve" de la section 5bis.
-- [ ] Page d'accueil finale : accroche, projets phares, section "Dernières activités" (fusionnée, section 5ter), CTA contact.
+- [X] Page Parcours : chapeau, "Maintenant", "Avant", compétences (stack quotidienne vs direction) — section 5bis.
+- [X] 1 à 2 études de cas projets, taguées avec la taxonomie stack.
+- [X] Premier article de blog — candidat naturel : documenter un apprentissage Go/Python/K8s, ce qui matérialise tout de suite le lien "preuve" de la section 5bis.
+- [X] Page d'accueil finale : accroche, projets phares, section "Dernières activités" (fusionnée, section 5ter), CTA contact.
 
 ### Phase 4 — SEO & GEO (une fois qu'il y a du contenu réel à décrire)
 
-- [ ] Meta description + OpenGraph par page.
+- [X] Meta description + OpenGraph par page.
 - [X] JSON-LD: `Person` (home, about), `BlogPosting` (articles), `Article` (projects), `BreadcrumbList` (issue #15, see `docs/seo.md#structured-data`).
 - [X] Sitemap and RSS feeds checked and fixed: the main feed lists the blog and the projects, veille items link to their source (issues #16 and #74, see `docs/seo.md#feeds`).
 - [X] `robots.txt` explicitly allowing the known AI crawlers (issue #17, see `docs/seo.md#robotstxt`).
@@ -288,10 +294,10 @@ Différent de la Phase 6 : la Phase 6 vérifie qu'on a bien fait ce qui était p
 Les cinq recettes sont regroupées dans une seule checklist post-déploiement, `docs/post-deploy-checklist.md` : une suite Playwright de smoke tests rejouée sur l'URL en ligne (`task test:live -- <url>`), puis quelques vérifications manuelles que rien d'automatique ne remplace.
 
 - [ ] Recette fonctionnelle bout-en-bout en prod (accueil → projet → blog → contact).
-- [ ] Recette responsive / cross-navigateur (mobile + desktop, au moins 2 navigateurs).
-- [ ] Recette du switch light/dark en conditions réelles (bascule + persistance après rechargement).
+- [X] Recette responsive / cross-navigateur (mobile + desktop, au moins 2 navigateurs).
+- [X] Recette du switch light/dark en conditions réelles (bascule + persistance après rechargement).
 - [ ] Recette SEO/GEO en prod (`sitemap.xml`, `robots.txt`, `llms.txt` accessibles ; JSON-LD validé via un outil externe).
-- [ ] Recette des liens sortants (mailto, LinkedIn, GitHub) — pas de lien mort.
+- [X] Recette des liens sortants (mailto, LinkedIn, GitHub) — pas de lien mort.
 
 ### Hors séquence / non bloquant
 

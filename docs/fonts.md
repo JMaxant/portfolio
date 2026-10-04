@@ -1,6 +1,5 @@
 ---
 title: Font tooling — fontmake & fonttools
-version: 1.0.0
 date_published: 2026-08-29
 date_modified: 2026-08-29
 ---

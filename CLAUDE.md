@@ -96,16 +96,17 @@ Validate parameters with `errorf` against a whitelist, before emitting any outpu
 
 ### Documentation
 
-Lives in `docs/` only. Frontmatter: `title`, `version`, `date_published`, `date_modified`.
+Lives in `docs/` only. Frontmatter: `title`, `date_published`, `date_modified`. No `version`
+field: git history is the changelog.
 
 **Write documentation in English** — that includes new files, edits to existing ones, and
 the README. Code comments and commit messages are English too, `tests/*.spec.js` included,
 and so is anything published to GitHub: **issue bodies, pull request titles and
 descriptions**. French is for conversation in the chat, nothing else.
 
-Some older files are still in French and are being migrated (#73). Do not read them as the
-convention, and do not justify a new French file by the ones next to it — check what the
-majority of comparable files actually do before claiming to follow the local style.
+The one exception is `docs/cahier-des-charges.md`, a French scoping document excluded from the
+rule on purpose (#73). Do not justify a new French file by it — check what the majority of
+comparable files actually do before claiming to follow the local style.
 
 ## Do not touch
 

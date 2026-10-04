@@ -1,6 +1,5 @@
 ---
 title: ADR 0001 — Exclude Markdown task lists from cas-max
-version: 1.0.0
 date_published: 2026-08-16
 date_modified: 2026-08-16
 ---

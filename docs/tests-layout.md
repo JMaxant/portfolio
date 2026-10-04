@@ -1,6 +1,5 @@
 ---
 title: Playwright test suite
-version: 1.4.0
 date_published: 2026-08-29
 date_modified: 2026-10-03
 ---

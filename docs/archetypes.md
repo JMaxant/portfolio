@@ -1,60 +1,59 @@
 ---
-title: Archetypes Hugo
-version: 1.5.0
+title: Hugo archetypes
 date_published: 2026-08-01
-date_modified: 2026-10-02
+date_modified: 2026-10-04
 ---
 
-# Archetypes Hugo
+# Hugo archetypes
 
-Réf : issue #4, Phase 0 du [cahier des charges](cahier-des-charges.md) (section 5quater).
+Ref: issue #4, phase 0 of the [cahier des charges](cahier-des-charges.md) (section 5quater).
 
-## Principe
+## Principle
 
-Un archetype est un template de front matter appliqué par `hugo new <chemin>`. Hugo choisit l'archetype d'après le **premier segment du chemin** (`hugo new blog/...` → `archetypes/blog.md`) et retombe sur `archetypes/default.md` sinon.
+An archetype is a front matter template applied by `hugo new <path>`. Hugo picks the archetype from the **first segment of the path** (`hugo new blog/...` → `archetypes/blog.md`) and falls back to `archetypes/default.md` otherwise.
 
-## Archetypes du site
+## Site archetypes
 
-| Archetype    | Usage            | Champs spécifiques                                      |
-|--------------|------------------|---------------------------------------------------------|
-| `default.md` | Pages génériques | —                                                       |
-| `blog.md`    | Articles de blog | `tags`, `description`, `images`                         |
-| `projets.md` | Fiches projets   | `tags`, `description`, `status`, `repo`, `demo`, `role` |
-| `veille.md`  | Entrées de veille | `tags`, `description`, `link`, `source_lang`           |
+| Archetype    | Use             | Specific fields                                         |
+|--------------|-----------------|---------------------------------------------------------|
+| `default.md` | Generic pages   | —                                                       |
+| `blog.md`    | Blog posts      | `tags`, `description`, `images`                         |
+| `projets.md` | Project pages   | `tags`, `description`, `status`, `repo`, `demo`, `role` |
+| `veille.md`  | Veille entries  | `tags`, `description`, `link`, `source_lang`            |
 
-Champs communs : `title` (dérivé du nom de fichier), `date`, `draft = true`, `translationKey`.
+Common fields: `title` (derived from the file name), `date`, `draft = true`, `translationKey`.
 
-## Créer un contenu
+## Creating content
 
 ```sh
-hugo new blog/mon-article/index.md      # article (page bundle)
-hugo new projets/mon-projet/index.md    # fiche projet (page bundle)
-hugo new veille/mon-lien.md             # entrée de veille (fichier simple)
+hugo new blog/my-post/index.md      # post (page bundle)
+hugo new projets/my-project/index.md    # project page (page bundle)
+hugo new veille/my-link.md             # veille entry (single file)
 ```
 
-La forme *page bundle* (`<slug>/index.md`) est la convention du site : un dossier par contenu, qui accueillera ses images. `title` et `translationKey` sont alors dérivés du nom du dossier. Exception : les entrées de veille, teaser-only et sans ressources, restent des fichiers simples.
+The *page bundle* form (`<slug>/index.md`) is the site convention: one folder per piece of content, which will hold its images. `title` and `translationKey` are then derived from the folder name. Exception: veille entries, which are teaser-only and have no resources, stay single files.
 
-Pièges :
+Traps:
 
-- `hugo new blog` échoue (« failed to resolve ») : la commande attend le chemin d'un fichier de contenu, pas un nom de section.
-- Les stubs de section (`_index.md`) se créent à la main, pas via `hugo new` : l'archetype y appliquerait `draft = true` et une date inutiles.
+- `hugo new blog` fails ("failed to resolve"): the command expects the path of a content file, not a section name.
+- Section stubs (`_index.md`) are created by hand, not through `hugo new`: the archetype would apply a useless `draft = true` and date.
 
-## Conventions de champs
+## Field conventions
 
 - **`description`** rather than `summary`: `layouts/partials/seo_tags.html` reads `.Description` for the meta description and OpenGraph, falling back to `.Summary`, then `site.Params.description`; `summary` is already a field Hugo computes from the content.
-- **`translationKey`** : apparie les futures traductions (Phase 2, section 7 du cahier des charges) indépendamment des slugs. Dérivé du nom du contenu, ignoré tant que le site est monolingue.
-- **`tags`** : taxonomie unique du site — inclut la stack technique (décision section 5quinquies, pas de taxonomie `stack` séparée). Nuance veille : le champ alimente bien les pages `/tags/*` depuis le passage à `build.render = 'link'` (vérifié empiriquement ; `render = 'never'` les en excluait, quel que soit `list`).
-- **`status`** (projets) : `en cours` ou `terminé`.
+- **`translationKey`**: pairs future translations (phase 2, section 7 of the cahier des charges) regardless of slugs. Derived from the content name, ignored while the site is monolingual.
+- **`tags`**: the site's single taxonomy, which includes the tech stack (decision in section 5quinquies, no separate `stack` taxonomy). Veille nuance: the field does feed the `/tags/*` pages since the switch to `build.render = 'link'` (verified empirically; `render = 'never'` excluded them whatever `list` was).
+- **`status`** (projets): `en cours` or `terminé` (values are French, as rendered).
 - **`images`** (blog): list of image paths for the social preview, read by Hugo's embedded OpenGraph template as `og:image` (absolute URL). Optional: without it, the preview has no image. Replaces the `cover` front matter field, which no template read (#14). See [seo.md](seo.md).
 - **`source_link`** (veille): URL of the shared article. Veille entries are *teaser-only* (issue #40): a cascade in `content/veille/_index.md` gives them `build.render = 'link'` and `build.list = 'local'`, so no page of their own is generated. Anything that links an entry — a list layout, a feed — must use `source_link`, never `.Permalink`: `render = 'link'` does assign one, but it has no rendering and returns a 404. `entry-link.html` and `layouts/_default/rss.xml` both handle it (#74).
-- **`source_lang`** (veille) : langue de la source, code BCP 47 (`fr`, `en`…). Prévu pour l'attribut `lang` (a11y) et un futur filtrage.
+- **`source_lang`** (veille): language of the source, BCP 47 code (`fr`, `en`…). Intended for the `lang` attribute (a11y) and future filtering.
 
-## Quotes TOML vs template Go
+## TOML quotes vs Go template
 
-Deux langages imbriqués, deux règles :
+Two nested languages, two rules:
 
 ```toml
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 ```
 
-Extérieur (TOML) : quotes simples. Intérieur (template Go, évalué par `hugo new`) : quotes doubles obligatoires — `'-'` y serait un littéral de caractère, pas une chaîne.
+Outer (TOML): single quotes. Inner (Go template, evaluated by `hugo new`): double quotes are mandatory — `'-'` there would be a character literal, not a string.

@@ -1,6 +1,5 @@
 ---
 title: Accessibility acceptance checklist
-version: 1.0.0
 date_published: 2026-10-03
 date_modified: 2026-10-03
 ---
