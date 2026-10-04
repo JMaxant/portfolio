@@ -83,6 +83,29 @@ task test:layout
 Real-browser tests (accessibility, nav, breakpoints, overflow, theme switcher, and more)
 under `tests/`, too slow for a pre-commit hook. See [Playwright test suite](docs/tests-layout.md).
 
+## Documentation
+
+Everything lives in `docs/`, in English except the scoping document.
+
+- [Cahier des charges](docs/cahier-des-charges.md) — running spec and roadmap (French on purpose)
+- [Hugo archetypes](docs/archetypes.md) — content templates and front matter fields
+- [Components](docs/components.md) — partials, contracts and templating traps
+- [CSS tokens and breakpoints](docs/css-tokens.md) — design tokens and breakpoint values
+- [Browser compatibility](docs/css-compat.md) — how `css.Build` and Stylelint divide the work
+- [Light / dark switch](docs/theme-switcher.md) — theme switcher behaviour
+- [SEO guidelines](docs/seo.md) — meta tags, structured data, feeds, crawlers
+- [Contributing to the Parcours page](docs/parcours-cv.md) — editing the CV page
+- [Quality gates](docs/qa-ci.md) — pre-commit and CI
+- [Playwright test suite](docs/tests-layout.md) — layout and functional tests
+- [Font tooling](docs/fonts.md) — building the Spectral variable font
+- [Accessibility acceptance checklist](docs/a11y-recette.md) and
+  [post-deploy checklist](docs/post-deploy-checklist.md) — manual recette
+- Architecture decision records:
+  [0001](docs/adr/0001-no-tasklist-in-cas-max.md) task lists in cas-max,
+  [0002](docs/adr/0002-alexandria-font-family.md) Alexandria (superseded),
+  [0003](docs/adr/0003-spectral-variable-font.md) Spectral variable font,
+  [0004](docs/adr/0004-no-afdocs.md) no afdocs
+
 ## CI
 
 Three GitHub Actions workflows, independent of deployment:
