@@ -181,7 +181,9 @@ Pas de lien de prise de RDV (Cal.com/Calendly) à ce stade.
 
 ## 11. Hébergement / déploiement
 
-**Non tranché.** Options à évaluer avant de coder la CI/CD :
+**Tranché (#20) : Cloudflare Pages**, déployé depuis GitHub Actions. Seule option qui permet de poser
+l'en-tête `Link: rel="canonical"` par chemin sur les versions Markdown (#153), avec des previews de PR
+et un CDN gratuit. Options évaluées :
 
 | Option           | Avantage principal                                              | Point d'attention                                              |
 |------------------|-----------------------------------------------------------------|----------------------------------------------------------------|

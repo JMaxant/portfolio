@@ -1,0 +1,43 @@
+name: Deploy
+
+# Manual only: Actions tab > Deploy > Run workflow, on main.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never cancel a deploy halfway: queue the next one instead.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-hugo
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Same gate as ci.yml: nothing ships if a quality check fails.
+      - name: Run all pre-commit checks
+        run: npx lefthook run pre-commit --all-files
+
+      - run: hugo --cleanDestinationDir --gc --minify
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
