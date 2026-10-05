@@ -4,5 +4,8 @@
   "compatibility_date": "2026-10-04",
   "assets": {
     "directory": "./public"
-  }
+  },
+  // The site has one public address, the custom domain. See docs/post-deploy-checklist.md#public-addresses
+  "workers_dev": false,
+  "preview_urls": false
 }

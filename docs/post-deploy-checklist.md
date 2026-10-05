@@ -1,7 +1,7 @@
 ---
 title: Post-deploy checklist
 date_published: 2026-10-03
-date_modified: 2026-10-03
+date_modified: 2026-10-05
 ---
 
 # Post-deploy checklist
@@ -51,6 +51,18 @@ About ten minutes, on the deployed URL.
   validator (Google Rich Results Test, validator.schema.org): no errors.
 - [ ] Share one URL in a chat or social preview tool: title, description and image look right.
 - [ ] Screen reader pass: follow [a11y-recette.md](a11y-recette.md).
+
+## Public addresses
+
+The site answers on `https://www.julien-maxant.com` only. `workers_dev` and `preview_urls` are
+off in `wrangler.jsonc`, so the Worker has no `workers.dev` address and no per-version preview
+URL: a second public copy would be one more address to keep consistent with the canonical one.
+
+- **Apex**: `julien-maxant.com` is a proxied DNS record with a redirect rule to `www` (301,
+  path and query string kept). "Always Use HTTPS" is on, so `http://` reaches the same rule.
+- **PR previews** are not set up. Adding them means `preview_urls = true` and a job running
+  `wrangler versions upload`, and the preview URL is public: nothing there is private.
+- **To test a build before it ships**, serve `public/` locally (`task serve`).
 
 ## 3. Record the run
 
