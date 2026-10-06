@@ -1,7 +1,7 @@
 ---
 title: Playwright test suite
 date_published: 2026-08-29
-date_modified: 2026-10-03
+date_modified: 2026-10-06
 ---
 
 # Playwright test suite
@@ -20,6 +20,7 @@ it now runs the whole suite:
 | `breadcrumb.spec.js` | Breadcrumb rendering |
 | `breakpoints.spec.js` | Behavior at the `--bp-*` breakpoints (`docs/css-tokens.md`) |
 | `fonts.spec.js` | Body/headings resolve to Spectral (not a silent fallback), italic intro text |
+| `footer.spec.js` | The `params.social` profiles are visible footer links with a text, on every template, and the footer navigation has a name |
 | `headers.spec.js` | The generated `/_headers`: one canonical `Link` rule per publication section, the charset of the text files, no other rule |
 | `keyboard.spec.js` | What axe cannot judge: skip-link, landmark names, keyboard-scrollable code blocks, theme switcher by keyboard, focus indicators, `prefers-reduced-motion` |
 | `nav.spec.js` | Header/nav menu, including the mobile burger panel and the active trail |

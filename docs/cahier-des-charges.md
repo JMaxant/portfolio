@@ -1,7 +1,7 @@
 ---
 title: Cahier des charges — Portfolio Julien Maxant
 date_published: 2026-07-26
-date_modified: 2026-10-04
+date_modified: 2026-10-05
 ---
 
 # Cahier des charges — Portfolio Julien Maxant
@@ -205,16 +205,16 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 
 ## 13. Definition of Done — V1
 
-- [ ] Page d'accueil avec accroche, présentation, 2-3 projets phares, CTA contact.
-- [ ] Section/page Projets avec au moins 1-2 études de cas complètes (pas de Lorem Ipsum).
+- [x] Page d'accueil avec accroche, présentation, 2-3 projets phares, CTA contact.
+- [x] Section/page Projets avec au moins 1-2 études de cas complètes (pas de Lorem Ipsum).
 - [ ] Page Parcours/CV à jour.
-- [ ] Section Blog fonctionnelle (même avec 1 seul article de lancement).
-- [ ] Liens email + LinkedIn + GitHub visibles et fonctionnels.
-- [ ] Build Hugo sans warning, déployé en HTTPS sur `julien-maxant.com`.
-- [ ] Aucun contenu Lorem Ipsum ou placeholder restant.
-- [ ] Switch light/dark mode fonctionnel (préférence système détectée + bascule manuelle mémorisée).
-- [ ] Taxonomie tag en place sur au moins les articles/projets publiés au lancement.
-- [ ] `llms.txt` présent à la racine.
+- [x] Section Blog fonctionnelle (même avec 1 seul article de lancement).
+- [ ] Liens email + LinkedIn + GitHub visibles et fonctionnels. Reste LinkedIn et GitHub : #173.
+- [x] Build Hugo sans warning, déployé en HTTPS sur `www.julien-maxant.com` (le domaine nu y redirige).
+- [ ] Aucun contenu Lorem Ipsum ou placeholder restant. Le site publié n'en a pas ; restent des brouillons non publiés à finir ou supprimer.
+- [x] Switch light/dark mode fonctionnel (préférence système détectée + bascule manuelle mémorisée).
+- [x] Taxonomie tag en place sur au moins les articles/projets publiés au lancement.
+- [x] `llms.txt` présent à la racine.
 - ~~CV machine-readable (`/cv.json` ou équivalent JSON Resume) présent et à jour avec la page Parcours.~~ Dropped, see section 8bis.
 
 ## 14. Points ouverts à trancher pendant le développement
