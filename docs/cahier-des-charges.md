@@ -207,11 +207,11 @@ Ces points sont volontairement repoussés pour livrer une V1 sobre et rapide à 
 
 - [x] Page d'accueil avec accroche, présentation, 2-3 projets phares, CTA contact.
 - [x] Section/page Projets avec au moins 1-2 études de cas complètes (pas de Lorem Ipsum).
-- [ ] Page Parcours/CV à jour.
+- [x] Page Parcours/CV à jour.
 - [x] Section Blog fonctionnelle (même avec 1 seul article de lancement).
-- [ ] Liens email + LinkedIn + GitHub visibles et fonctionnels. Reste LinkedIn et GitHub : #173.
+- [x] Liens email + LinkedIn + GitHub visibles et fonctionnels.
 - [x] Build Hugo sans warning, déployé en HTTPS sur `www.julien-maxant.com` (le domaine nu y redirige).
-- [ ] Aucun contenu Lorem Ipsum ou placeholder restant. Le site publié n'en a pas ; restent des brouillons non publiés à finir ou supprimer.
+- [x] Aucun contenu Lorem Ipsum ou placeholder restant. Le site publié n'en a pas ; les brouillons non publiés (`draft: true`) sont du contenu en cours, pas des placeholders.
 - [x] Switch light/dark mode fonctionnel (préférence système détectée + bascule manuelle mémorisée).
 - [x] Taxonomie tag en place sur au moins les articles/projets publiés au lancement.
 - [x] `llms.txt` présent à la racine.
