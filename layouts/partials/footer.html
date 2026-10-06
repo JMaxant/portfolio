@@ -1,6 +1,15 @@
 <div class="container--wide">
-  <nav aria-label="{{ i18n "nav-footer" }}">
+  <nav aria-label='{{ i18n "nav-footer" }}'>
     <ul class="menu menu--footer" role="list">
+      {{ range site.Params.social }}
+        <li>
+          <a href="{{ .url  }}" target="_blank" rel="noopener">
+            {{ .name }}
+            {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
+
+          </a>
+        </li>
+      {{ end }}
       <li>
         <a href='{{ absURL "index.xml" }}'>RSS</a>
       </li>

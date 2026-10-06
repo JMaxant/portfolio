@@ -1,12 +1,12 @@
 ---
 title: Components — partials and integration
 date_published: 2026-08-08
-date_modified: 2026-10-03
+date_modified: 2026-10-06
 ---
 
 # Components — partials and integration
 
-Ref: issues #14, #45, #47, #48, #66, #77, #114. Describes the reusable components from both sides: the **template
+Ref: issues #14, #45, #47, #48, #66, #77, #114, #173. Describes the reusable components from both sides: the **template
 contract** (how you call them) and the **CSS contract** (what they expose to integration).
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
@@ -647,6 +647,42 @@ does not recurse into children. A menu entry with children used to render as a
 `submenu-toggle` disclosure (`submenu-toggle.js`, `.submenu`/`.submenu-toggle` in
 `menu.css`), removed once the only entry using it ("A propos") became a plain link — check
 git history if a nested menu is needed again.
+
+### `footer.html`
+
+Site footer: the social profiles, the RSS link and the copyright. `baseof.html` calls it once
+with the page context (`partial "footer.html" .`), not with a dictionary. It is the exception
+to [Dictionary-based calls](#dictionary-based-calls), because it takes no parameter and reads
+site-level data only: there is nothing to pass.
+
+| Source | Used for |
+|--------|----------|
+| `[[params.social]]` in `config/_default/hugo.toml` | One `<li>` per entry, in the config order: `name` is the link text, `url` the `href` |
+| `i18n "nav-footer"` | Accessible name of the `<nav>` landmark |
+| `absURL "index.xml"` | The RSS link, always last |
+| `.Site.Copyright`, `.Site.Params.madeWith` | The line under the list |
+
+`params.social` is also read by `json-ld.html` for the `sameAs` of the Person node, so a profile
+added to the config appears in the structured data and in the footer at once. That is what
+`tests/footer.spec.js` relies on: it compares the two.
+
+**Markup** — `<nav aria-label><ul class="menu menu--footer" role="list">`, then a `<p>`. A profile
+leaves the site, so its link carries the marker of [`entry-link.html`](#entry-linkhtml):
+`target="_blank" rel="noopener"` and the `external-link` icon, whose `visually-hidden` text
+completes the accessible name (the profile name, then `i18n "external-link"`). The RSS link
+stays on the site and has none.
+
+**Integration** — `.site-footer` is in `layout/footer.css`, the list reuses the `.menu` block of
+`components/menu.css` with the `menu--footer` variant.
+
+**Known interaction** — below 768px, the `.menu` and `.menu a` rules of `menu.css` that lay out
+the burger panel (a column, block links, `--text-sm`) are not scoped to `.site-nav`, so they
+apply to the footer list and to the 404 menu too. Only `.menu--main` keeps the border under
+each item. Scope the rules to the panel if the footer should keep its own layout.
+
+**Tests** — `tests/footer.spec.js` checks that every profile is a visible footer link with a text
+on each template and that the navigation has a name. `tests/live/smoke.spec.js` repeats the
+profile check on the deployed site, next to the check that the profiles answer.
 
 ### `breadcrumb.html`
 

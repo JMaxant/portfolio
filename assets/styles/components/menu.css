@@ -132,14 +132,19 @@
     gap: 0;
   }
 
-  .menu a {
+  .menu a,
+  .menu span[aria-current] {
     display: block;
     padding-block: var(--spacing-sm);
-    font-size: var(--text-md);
+    font-size: var(--text-sm);
+  }
+
+  .menu--main a,
+  .menu--main span[aria-current] {
     border-block-end: var(--border-thin);
   }
 
-  .menu li:last-child a {
+  .menu li:last-child :is(a, span[aria-current]) {
     border-block-end: none;
   }
 

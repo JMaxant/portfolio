@@ -74,6 +74,12 @@ test('the outgoing links are not dead', async ({ page, request }) => {
   const profiles = graph.find((node) => node['@type'] === 'Person').sameAs;
   expect(profiles.length).toBeGreaterThan(0);
 
+  // The profiles must be on the page, not only in the structured data: #173.
+  const footerLinks = await page.locator('.site-footer a').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+  for (const url of profiles) {
+    expect(footerLinks, `${url} is missing from the footer`).toContain(url);
+  }
+
   for (const url of profiles) {
     // Retried: the big platforms answer 5xx now and then to a client that is not a browser.
     await expect.poll(async () => {
