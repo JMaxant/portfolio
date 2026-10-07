@@ -250,16 +250,16 @@ correct with a single partial.
 
 ### `projets-meta.html`
 
-Meta line of a project page, under the title: date, role, status, links to the repository
-and to the demo, then taxonomy terms.
+Meta block of a project page, under the title: date, role, status, links to the repository
+and to the demo, in a `dl.byline`, then the taxonomy terms in their own `ul.tags`.
 
 | Key | Required | Description |
 |-----|----------|-------------|
 | `page` | yes | The project page to describe |
 
 Only the date is unconditional; every other entry appears only if the front matter carries
-the field (`role`, `status`, `repo`, `demo`, `tags`). A missing `page` fails the build
-through `errorf`.
+the field (`role`, `status`, `repo`, `demo`, `tags`). `repo` and `demo` share one `Liens`
+entry, since neither is a label of its own. A missing `page` fails the build through `errorf`.
 
 **External links** — `repo` and `demo` leave the site, so they get the same marker as
 [`entry-link.html`](#entry-linkhtml) below: `target="_blank" rel="noopener"`, and
@@ -273,9 +273,9 @@ same marker independently: `entry-link.html` owns the internal/external title li
 `.entry-list__item`, `projets-meta.html` owns a project's byline, and the two contracts
 don't overlap enough to share one partial.
 
-**Integration** — the partial emits `ul.byline.meta`, the same block as the byline of a
-blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
-`.byline`. No class of its own: a project meta line *is* a byline, only richer.
+**Integration** — the partial emits the same `dl.byline` as a blog article, see
+[Dates](#dates) for its classes. A project meta line *is* a byline, only richer: no class of
+its own.
 
 ### `markdown-link.html`
 
@@ -1052,20 +1052,22 @@ on a page that carries an explicit `lastmod`. Two dates side by side with only o
 named is what forces a reader to stop, so the publication date is labelled too even though
 it is the only one on most pages.
 
-The byline is a wrapping flex row with nothing but a gap between items, which read as one
-sentence once an item became a two-part phrase. The textual items therefore carry
-`byline__meta` and take a `·` separator between them:
+**Byline** — `layouts/_default/single.html` and `projets-meta.html` render it as a `dl`,
+because every entry is a label and a value. It is a wrapping flex row of pairs, so there is
+no separator to keep off a wrapped line, and the tags sit in their own list below.
 
-```css
-.byline__meta + .byline__meta::before {
-  padding-inline-end: var(--spacing-xs);
-  content: '·' / '';
-}
-```
+| Class | Element | Role |
+|-------|---------|------|
+| `byline` | `dl` | Block, a wrapping flex row; overrides the grid of `dl` in `base/elements.css` |
+| `byline__item` | `div` | One pair, a column |
+| `byline__label` | `dt` | `--text-xs`, uppercase, `--color-text-soft` |
+| `byline__value` | `dd` | `--text-sm`, `--color-text`, tabular figures |
+| `byline__value--links` | `dd` | Modifier of the value, on the same element: several links, wrapping |
+| `single__tags` | `ul.tags` | The tags, under the byline |
 
-The empty alt text keeps the separator out of the accessibility tree, the same idiom as
-`components/breadcrumb.css`. The tags are deliberately excluded: they are already set apart
-by their border, and a separator between bordered pills is noise.
+All of it is scoped under `.single__heading` in `layout/single.css`. The reading time label
+and its value are separate i18n keys (`reading-label`, `reading-time`), so the value is the
+bare `9 min`.
 
 The home page's "Dernières activités" block sorts on `.ByLastmod` and shows the bare date
 with no label at all: its compact grid gives the date a fixed `--size-col-date-compact`

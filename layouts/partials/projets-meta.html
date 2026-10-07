@@ -1,5 +1,5 @@
 {{- /*
-  projets-meta.html — meta line of a project page: date, role, status, links to the
+  projets-meta.html — meta block of a project page: date, role, status, links to the
   repository and to the demo, then taxonomy terms.
 
   Contract:
@@ -8,44 +8,61 @@
   Every field but the date is optional: an entry is emitted only for what the front
   matter actually carries. Repository and demo point outside the site, so they get
   the external-link treatment (visible marker plus a text equivalent), which is what
-  tells them apart from the internal links of the page.
+  tells them apart from the internal links of the page. Same dl.byline as a blog
+  article; the tags follow in their own list.
 */ -}}
 {{- $page := .page -}}
 {{- if not $page -}}
   {{- errorf "partial projets-meta.html: missing required key %q" "page" -}}
 {{- end -}}
 
-<ul class="byline meta" role="list">
-  <li>
-    <time pubdate="pubdate" datetime='{{ $page.Date.Format "2006-01-02" }}'>
-      {{ $page.Date.Format (default "2006-01-02" $page.Site.Params.dateFormat) }}
-    </time>
-  </li>
+<dl class="byline">
+  <div class="byline__item">
+    <dt class="byline__label">{{ i18n "published-on" }}</dt>
+    <dd class="byline__value">
+      <time datetime='{{ $page.Date.Format "2006-01-02" }}'>
+        {{ time.Format (i18n "date-format") $page.Date }}
+      </time>
+    </dd>
+  </div>
   {{- with $page.Params.role }}
-    <li>{{ i18n "project-role" }}&#160;: {{ . }}</li>
+  <div class="byline__item">
+    <dt class="byline__label">{{ i18n "project-role" }}</dt>
+    <dd class="byline__value">{{ . }}</dd>
+  </div>
   {{- end }}
   {{- with $page.Params.status }}
-    <li>{{ i18n "project-status" }}&#160;: {{ . }}</li>
+  <div class="byline__item">
+    <dt class="byline__label">{{ i18n "project-status" }}</dt>
+    <dd class="byline__value">{{ . }}</dd>
+  </div>
   {{- end }}
-  {{- with $page.Params.repo }}
-    <li>
+  {{- if or $page.Params.repo $page.Params.demo }}
+  <div class="byline__item">
+    <dt class="byline__label">{{ i18n "project-links" }}</dt>
+    <dd class="byline__value byline__value--links">
+      {{- with $page.Params.repo }}
       <a href="{{ . }}" target="_blank" rel="noopener">
         {{ i18n "project-repo" }}
         {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
       </a>
-    </li>
-  {{- end }}
-  {{- with $page.Params.demo }}
-    <li>
+      {{- end }}
+      {{- with $page.Params.demo }}
       <a href="{{ . }}" target="_blank" rel="noopener">
         {{ i18n "project-demo" }}
         {{ partial "icon.html" (dict "name" "external-link" "label" (i18n "external-link")) }}
       </a>
-    </li>
+      {{- end }}
+    </dd>
+  </div>
   {{- end }}
-  {{- range $page.GetTerms "tags" }}
-    <li>
-      <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
-    </li>
+</dl>
+{{- with $page.GetTerms "tags" }}
+<ul class="tags single__tags" role="list">
+  {{- range . }}
+  <li>
+    <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+  </li>
   {{- end }}
 </ul>
+{{- end }}
