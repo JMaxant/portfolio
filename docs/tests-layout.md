@@ -19,6 +19,8 @@ it now runs the whole suite:
 | `a11y.spec.js` | axe-core (`@axe-core/playwright`) on one page per template (`A11Y_PAGES` in `tests/pages.js`), in light, dark and system colour schemes. Rule sets: WCAG 2.0 to 2.2 A/AA, `best-practice` (landmark-unique, heading-order), plus `color-contrast-enhanced` (AAA) |
 | `breadcrumb.spec.js` | Breadcrumb rendering |
 | `breakpoints.spec.js` | Behavior at the `--bp-*` breakpoints (`docs/css-tokens.md`) |
+| `byline.spec.js` | The `dl.byline` of an article and of a project: labelled entries, conditional update date and links, tags beside it |
+| `details.spec.js` | The AI disclaimer: shown only when `aiDisclaimer` is set, closed by default, opened by the keyboard |
 | `fonts.spec.js` | Body/headings resolve to Spectral (not a silent fallback), italic intro text |
 | `footer.spec.js` | The `params.social` profiles are visible footer links with a text, on every template, and the footer navigation has a name |
 | `headers.spec.js` | The generated `/_headers`: one canonical `Link` rule per publication section, the charset of the text files, no other rule |

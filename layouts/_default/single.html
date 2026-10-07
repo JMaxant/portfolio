@@ -39,7 +39,7 @@
           {{ end }}
         </dl>
         {{ with .GetTerms "tags" }}
-        <ul class="tags single__tags" role="list">
+        <ul class="tags" role="list">
           {{ range . }}
           <li>
             <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>

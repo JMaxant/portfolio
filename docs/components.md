@@ -1052,22 +1052,28 @@ on a page that carries an explicit `lastmod`. Two dates side by side with only o
 named is what forces a reader to stop, so the publication date is labelled too even though
 it is the only one on most pages.
 
-**Byline** — `layouts/_default/single.html` and `projets-meta.html` render it as a `dl`,
+**Byline** — `layouts/_default/single.html` and `projets/single.html` render it as a `dl`,
 because every entry is a label and a value. It is a wrapping flex row of pairs, so there is
-no separator to keep off a wrapped line, and the tags sit in their own list below.
+no separator to keep off a wrapped line. The pairs and the tags share one row,
+`.single__meta`: pairs at the start, tags at the end, and the tags drop under the pairs when
+the row is too narrow.
 
 | Class | Element | Role |
 |-------|---------|------|
+| `single__meta` | `div` | The row: byline and tags, `space-between`, wrapping. Sits under `.single__intro`, in the template, not in the partial |
 | `byline` | `dl` | Block, a wrapping flex row; overrides the grid of `dl` in `base/elements.css` |
 | `byline__item` | `div` | One pair, a column |
-| `byline__label` | `dt` | `--text-xs`, uppercase, `--color-text-soft` |
-| `byline__value` | `dd` | `--text-sm`, `--color-text`, tabular figures |
+| `byline__label` | `dt` | `--text-xs`, bold, `--color-text-soft` |
+| `byline__value` | `dd` | `--text-sm`, tabular figures |
 | `byline__value--links` | `dd` | Modifier of the value, on the same element: several links, wrapping |
-| `single__tags` | `ul.tags` | The tags, under the byline |
 
-All of it is scoped under `.single__heading` in `layout/single.css`. The reading time label
-and its value are separate i18n keys (`reading-label`, `reading-time`), so the value is the
-bare `9 min`.
+The tags are a plain `ul.tags`: they need no class of the byline. All of it is scoped under
+`.single__heading` in `layout/single.css`. The reading time label and its value are separate
+i18n keys (`reading-label`, `reading-time`), so the value is the bare `9 min`.
+
+`tests/byline.spec.js` covers the entries, the conditional update date, the tags sharing the
+row and the project links; `tests/details.spec.js` covers the AI disclaimer. Both read
+`FIXTURES.disclaimer`, an article carrying every optional field.
 
 The home page's "Dernières activités" block sorts on `.ByLastmod` and shows the bare date
 with no label at all: its compact grid gives the date a fixed `--size-col-date-compact`
