@@ -1,116 +1,125 @@
 +++
-date = '2026-07-12'
+date = '2026-10-06'
+lastmod = '2026-10-07'
 draft = false
 title = 'Portfolio Hugo'
-description = "Étude de cas : le site que vous consultez — pipeline CSS et qualité outillés pour tenir une baseline navigateurs et un contraste AAA sans y repasser à l'œil à chaque changement."
+description = "Ce site : créé avec Hugo ; pipeline CSS et qualité orientée accessibilité, maintenance et évolutivité ."
 tags = ['hugo', 'css']
 translationKey = 'portfolio-hugo'
-status = 'terminé'
+status = 'Terminé'
 repo = 'https://github.com/JMaxant/portfolio'
 demo = ''
-role = 'Lead developer'
+role = 'Juge et partie'
 featured = true
+aiDisclaimer = "Partiel (plan et relecture)."
 +++
 
-**En bref :** un site que je peux faire évoluer sans craindre de casser l'existant.
-Accessibilité, cohérence visuelle et qualité du build sont vérifiées automatiquement à
-chaque modification, plutôt que relues à la main.
+**En bref :** un site que je voulais faire depuis longtemps, sans avoir sauté le pas.
 
-Techniquement : Hugo sans thème (layouts et partials écrits à la main), CSS sur mesure
-sans framework, pipeline qualité (lint, tokens, contraste, build) qui tourne
-à l'identique en local et en CI.
+D'un point de vue technique, je me suis imposé les contraintes suivantes :
 
-## Pourquoi Hugo
+* Performance et simplicité
+* Robustesse
+* Accessibilité (sans prétendre être un expert)
+* Pas de framework (ni back, ni front)
+* CI/CD et tests Playwright pour m'assurer que rien (ou presque) ne casse
 
-Projet perso avec un double objectif : une vitrine professionnelle pour recruteurs et
-clients freelance, et un terrain d'entraînement pour monter en compétence sur du
-templating Go, du CSS sans dépendance, et une chaîne CI/CD tenue de bout en bout — sans
-sacrifier la lisibilité du contenu à la démonstration technique.
-
-Un générateur de site statique répond aux deux à la fois. Côté vitrine, la cible
-(recruteurs, agents de recherche) n'a pas de rendu JS à franchir pour indexer le
-contenu, contrairement à une SPA. Côté apprentissage, le HTML/CSS produit reste la
-sortie principale — pas de couche framework JS entre l'auteur et le résultat, donc
-chaque décision (tokens, contraste, breakpoints) reste visible et vérifiable dans la
-feuille de style elle-même plutôt que dissoute dans un système de composants.
+Et ç'a été l'occasion d'approfondir l'utilisation d'agent IA dans le développement et le suivi de projet.
 
 ## Contexte
 
-* Site personnel, parti d'un squelette : thème installé, contenu en Lorem Ipsum, une
-  seule page `content/_index.md`
-* Aucune contrainte de delivery externe — le calendrier est le seul arbitre du scope
-* Exigence posée dès la Phase 0 (avant tout contenu) : les quality gates et la CI
-  existent avant que le contenu s'accumule, pas après
-* Cible recruteurs/clients : le site doit rester une vitrine lisible, pas seulement un
-  prétexte à empiler des scripts de vérification
+L'objectif de ce site est multiple : une vitrine professionnelle, un espace d'expérimentation.
+La réalisation de ce site devrait donc me permettre de me ré-approprier le CSS, approfondir ma compréhension du templating Go ainsi que de mettre en place une CI GitHub.
 
-## Les contraintes
+Sur un projet personnel de ce genre, mon premier obstacle a toujours été le cadrage et la perte de motivation qui en découle, et c'est ici que l'usage d'agents IA (Claude) a été trés efficace : utilisée dés le départ pour le cadrage et le suivi du projet, l'IA a permis de mener le projet à bien, sans (trop) dériver sur des besoins secondaires.
 
-* Pas de framework CSS, pas de PostCSS, pas d'autoprefixer — seul `css.Build` (esbuild,
-  natif Hugo) prend en charge la transpilation et les préfixes vendeur
-* Une baseline navigateurs explicite (Chrome 105+, Firefox 121+, Safari 16+, Edge 105+)
-  à tenir, alors que deux mécanismes différents la couvrent : transpilation de syntaxe
-  d'un côté, blocage de features runtime non transpilables de l'autre
-* Contraste ciblé à AAA (7:1) plutôt que le AA/RGAA (4.5:1), sans dérive silencieuse
-  tolérée à mesure que la palette ou les composants évoluent
-* Aucune valeur de couleur, d'espacement ou de breakpoint écrite en dur dans un
-  composant — tout doit venir d'un token déclaré une seule fois
+## Pourquoi Hugo
+
+Mon cœur d'expertise full-stack se trouve plutôt sur des technos plus lourdes (Drupal, Symfony, Vue JS) : dés le départ, ces choix étaient hors concours.
+
+Si une stack PHP ou JS complète peut présenter un intérêt pour la gestion de contenu, le besoin étant un site purement édito, se voulant léger et épuré, elles se sont retrouvées éliminées d'office.
+
+D'autres solutions (CMS Flat file type Grav) ont été envisagées, mais quitte à partir dans la simplicité, autant, aussi, faire sans la stack Apache/Nging + PHP, pour encore alléger l'hébergement.
+
+Étant trés amateur de Go, j'ai donc décidé d'utiliser Hugo et son tooling natif : `partials`, `css.Build`, `js.Build` etc.
+
+## Choix techniques
+
+* **YAGNI** (You Ain't Gonna Need It): pas de code "au cas où", c'est le plus souvent du bruit et du code mort
+
+### Front
+
+* CSS natif uniquement
+* Baseline navigateurs explicite (Chrome 105+, Firefox 121+, Safari 16+, Edge 105+)
+* Utilisation de tokens CSS pour définir une organisation stricte du front
+* Règle "Zéro valeur en dur": tokens complets et restrictifs à deux niveaux d'abstraction :
+  * Tokens bruts (`--light-bg`, `--dark-bg`)
+  * Tokens sémantiques (`--color-bg` récupérant la valeur light ou dark selon le thème sélectionné
 * Le hook pre-commit local et la CI doivent exécuter la même définition, pour qu'aucun
   contrôle qualité ne puisse diverger entre les deux
+* `css.Build` transpile selon la syntaxe selon la baseline navigateurs
+* Stylelint bloque les features non-transpilabes (container queries, subgrid)
 
-## Les choix écartés
+### Accessibilité
 
-* Une revue manuelle du contraste à chaque changement de palette : tolérable une fois,
-  pas répétable sans dérive — d'autant que la palette est passée de AA à AAA en cours
-  de route, avec des marges initiales aussi fines qu'entre 7,00 et 7,06
-* Une exemption CSS ajoutée « au cas où » dans la config Stylelint plutôt que prouvée :
-  une feature ignorée sans vérification empirique dans `public/` reste ignorée même
-  quand la baseline évolue et que le support natif la couvre déjà
-* Dupliquer la logique de vérification entre pre-commit et CI (deux configs qui
-  divergent tôt ou tard) plutôt qu'une définition unique appelée par les deux
+* Les contrastes ciblés à AAA (7:1) plutôt que le AA/RGAA (4.5:1)
+  * Script de vérification (`check-contrast.mjs`) exécuté en précommit, dans la CI ou sur demande (`task qa`)
+* Peu de javascript, templates basés sur les éléments html natifs autant que possible, respect de l'html sémantique
+* Utilisation là où indispensable d'aria-* pour compenser ou compléter
 
-## Décisions techniques
+### CI/CD, hébergement
 
-* **Tokens CSS à deux niveaux d'indirection** : palettes brutes (`--light-*`,
-  `--dark-*`) jamais consommées directement par un composant, tokens sémantiques
-  (`--color-surface`, `--color-text-soft`…) seuls exposés. Le dark mode change en
-  réassignant les tokens sémantiques dans un seul fichier, sans toucher aux
-  composants.
-* **Règle « zéro valeur en dur » appliquée par script**, pas seulement documentée :
-  `check-tokens.mjs` échoue sur toute couleur, taille ou durée littérale hors
-  `base/tokens.css` ; l'échappatoire est un commentaire `token-exception` justifié
-  inline, jamais un ajout silencieux à une liste d'ignore.
-* **Contraste vérifié automatiquement** : `check-contrast.mjs` lit les valeurs hex
-  directement dans `tokens.css` (aucune valeur dupliquée dans le script) et calcule
-  chaque paire de couleurs, texte à 7:1, composants à 3:1. Un token de couleur non
-  couvert par une paire est aussi un échec — sinon un token ajouté plus tard n'est
-  simplement jamais mesuré.
-* **Breakpoints déclaratifs mais vérifiés à l'exécution** : les media queries ne
-  peuvent pas lire une custom property, donc les valeurs (`768px`, `576px`) restent en
-  dur — mais `check-breakpoints.mjs` échoue sur une largeur qui ne correspond à aucun
-  token `--bp-*`, et sur un token que plus aucune query n'utilise.
-* **Deux rôles distincts pour tenir la baseline navigateurs** : `css.Build` transpile
-  la syntaxe (nesting, media query range syntax) à la compilation ; Stylelint
-  (`stylelint-no-unsupported-browser-features`) bloque au lint les features runtime
-  qu'aucun transpileur ne peut simuler (container queries, `subgrid`). Chaque entrée de
-  la liste d'ignore Stylelint est justifiée par une vérification dans `public/` après
-  build, pas supposée — deux entrées obsolètes (`:has()`, `scroll-behavior`) ont été
-  retirées une fois la baseline remontée et le support natif confirmé.
-* **`lefthook.yml` comme unique source de vérité qualité** : le hook pre-commit local
-  tourne sur les fichiers stagés, la CI appelle la même commande sur l'ensemble des
-  fichiers trackés — aucune règle qualité ne peut exister dans l'un sans exister dans
-  l'autre.
-* **Contenu piloté par cascade Hugo plutôt que par template dédié** : la section
-  `/veille/` (teaser-only) utilise `build.render = 'link'` en cascade pour rester dans
-  les collections (donc alimenter les pages `/tags/*`) sans générer de page de détail —
-  contre `render = 'never'`, qui exclurait l'entrée de toute collection. Comportement
-  vérifié après build (`--cleanDestinationDir`) plutôt que supposé : aucune page
-  `public/veille/<entrée>/` générée, sitemap propre, RSS global exempt.
+* `lefthook` comme outil de qualité : exécution des tâches precommit mais aussi exécuté sur demande et dans la CI
+* tests Playwright de non-régression
+* Utilisation de `dependabot` pour les packages JS (pour les tests et le tooling local)
+* Déploiement avec wrangler sur demande via workflow dédié dans github actions (déploiement depuis la branche main,
+conditionné à une pipeline qualité valide)
+* Hébergement via les Workers/Pages Cloudflare (gratuit sans limitation de bande passante tant que les assets déployés sont statiques)
+
+### Back
+
+S'il n'y a pas vraiment de back-end comme on l'entend traditionnellement, j'ai tiré parti des fonctionnalités d'Hugo
+notamment pour le SEO/GEO :
+
+* partial `json-ld.html` pour les données structurées schema.org (Website, ProfilePage, Article, BreadcrumbList)
+* partial `seo-tags.html` pour les balises meta (description, author, og, canonical)
+* fichier `llms.txt` généré à partir de `index.llms.txt` qui liste dynamiquementles pages
+* version markdown des contenus rendu depuis `single.md`
+
+Tout les partials déclarent un contrat, c'est-à-dire que les propriétés qui leur sont passées sont validées et
+provoquent une erreur au build du site.
+
+## Utilisation de l'IA dans le projet
+
+L'IA a été capitale pour accélérer le cadrage et le suivi du projet.
+Utilisé en assistant, Claude a permis dés le départ de définir un cahier des charges et de réaliser un découpage des
+tâches macro qui a résolu le plus gros écueil : le cadrage, c'est-à-dire savoir où l'on va.
+
+Il a s'agit d'utiliser l'agent pour exposer mon besoin (prompt type `Je souhaite réaliser un portfolio avec telles
+contraintes et tels buts`), puis d'itérer jusqu'à arriver à la rédaction du cahier des charges initial.
+
+De ce cahier des charges, en ont été déduites les tâches initiales, puis, avec un token PAT GitHub, transformer ces tâches
+en issue, réparties par milestones (Fondation/Scaffolding, Squelette de contenu, identité visuelle, SEO/GEO etc jusqu'à
+Recette & Post MEP).
+
+En utilisant la version de base de Github Projects et couplé à une contrainte temps arbitraire, cela m'a permis de
+visualiser l'étendue réelle du chantier et de prioriser ou dé-prioriser en fonction du temps que j'avais à y consacrer.
+
+Pour la partie développement agentique, j'ai utilisé l'IA pour débloquer des situations avec lesquelles l'expertise me
+manquait sur des sujets spécifiques à Hugo, ou de faciliter ma prise en main et compréhension des pratiques css modernes
+(nesting, grid-template-columns, gestion des tokens/custom properties).
+
+Pour finir, l'IA a été particulièrement efficace dans la création et maintenance de documentation.
 
 ## Résultat
 
-Pas de métrique de production comparable au cas Drupal — c'est un site personnel, pas
-un site à trafic. L'angle est différent : une CI qui tolère zéro `WARN` Hugo, un
-contraste et des tokens vérifiés par script plutôt que revus à l'œil, et un pre-commit
-qui ne peut pas diverger de la CI par construction. Le pipeline qualité tient à jour
-avec le contenu, pas après coup.
+Le portfolio a été déployé début octobre, pour une date initiale prévue à mi-septembre.
+Des métriques de traffic ne sont ni disponibles (pas d'analytics par choix) ni pertinentes, en revanche les objectifs
+initiaux sont atteint : le site est simple, performant, facile d'utilisation et documenté.
+
+Les choix techniques (Hugo, CSS natif, hébergement) se sont révélés être les bons pour ce projet, même si Hugo souffre
+d'une prise en main parfois complexe, a minima obtuse.
+
+L'utilisation de l'IA a été un vrai atout en termes de gain de temps et d'efficacité, avec un bémol concernant la
+documentation. Par défaut, un agent écrit pour un autre agent ; la vraie difficulté est de réussir à la contenir pour ne
+pas perdre la maîtrise technique du projet.
