@@ -250,7 +250,7 @@ correct with a single partial.
 
 ### `projets-meta.html`
 
-Meta block of a project page, under the title: date, role, status, links to the repository
+Meta block of a project page, under the title: date, update date, role, status, links to the repository
 and to the demo, in a `dl.byline`, then the taxonomy terms in their own `ul.tags`.
 
 | Key | Required | Description |
@@ -259,7 +259,9 @@ and to the demo, in a `dl.byline`, then the taxonomy terms in their own `ul.tags
 
 Only the date is unconditional; every other entry appears only if the front matter carries
 the field (`role`, `status`, `repo`, `demo`, `tags`). `repo` and `demo` share one `Liens`
-entry, since neither is a label of its own. A missing `page` fails the build through `errorf`.
+entry, since neither is a label of its own. The update date follows the blog rule: shown only
+when `.Lastmod` is after `.Date`, i.e. when the front matter carries an explicit `lastmod`.
+A missing `page` fails the build through `errorf`.
 
 **External links** — `repo` and `demo` leave the site, so they get the same marker as
 [`entry-link.html`](#entry-linkhtml) below: `target="_blank" rel="noopener"`, and
@@ -1061,7 +1063,7 @@ the row is too narrow.
 | Class | Element | Role |
 |-------|---------|------|
 | `single__meta` | `div` | The row: byline and tags, `space-between`, wrapping. Sits under `.single__intro`, in the template, not in the partial |
-| `byline` | `dl` | Block, a wrapping flex row; overrides the grid of `dl` in `base/elements.css` |
+| `byline` | `dl` | Block, a wrapping flex row; a column grid (`--byline-column`) at 768px and below, so wrapped rows share their columns. Overrides the grid of `dl` in `base/elements.css` |
 | `byline__item` | `div` | One pair, a column |
 | `byline__label` | `dt` | `--text-xs`, bold, `--color-text-soft` |
 | `byline__value` | `dd` | `--text-sm`, tabular figures |

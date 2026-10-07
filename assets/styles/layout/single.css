@@ -85,6 +85,17 @@
   text-align: end;
 }
 
+/* Below this width the byline wraps, and flex rows would each size their own columns. */
+@media screen and (width <= 768px) {
+  .single__heading .byline {
+    --byline-column: 10rem; /* token-exception: column geometry, local to the byline */
+
+    display: grid;
+    flex-basis: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(var(--byline-column), 1fr));
+  }
+}
+
 @media screen and (width <= 576px) {
   .post-nav__list {
     flex-direction: column;

@@ -1,6 +1,6 @@
 {{- /*
-  projets-meta.html — meta block of a project page: date, role, status, links to the
-  repository and to the demo, then taxonomy terms.
+  projets-meta.html — meta block of a project page: date, update date, role, status,
+  links to the repository and to the demo, then taxonomy terms.
 
   Contract:
     page (required) — the project page to describe.
@@ -25,6 +25,16 @@
       </time>
     </dd>
   </div>
+  {{- if $page.Lastmod.After $page.Date }}
+  <div class="byline__item">
+    <dt class="byline__label">{{ i18n "updated-on" }}</dt>
+    <dd class="byline__value">
+      <time datetime='{{ $page.Lastmod.Format "2006-01-02" }}'>
+        {{ time.Format (i18n "date-format") $page.Lastmod }}
+      </time>
+    </dd>
+  </div>
+  {{- end }}
   {{- with $page.Params.role }}
   <div class="byline__item">
     <dt class="byline__label">{{ i18n "project-role" }}</dt>

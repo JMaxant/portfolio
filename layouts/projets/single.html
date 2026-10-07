@@ -16,6 +16,13 @@
       </div>
     </header>
 
+    {{ with .Params.aiDisclaimer }}
+      {{ partial "details.html" (dict
+      "summary" (i18n "ai-disclaimer")
+      "body" .
+      "variant" "ai-disclaimer") }}
+    {{ end }}
+
     {{ .Content }}
     {{ partial "markdown-link.html" (dict "page" .) }}
   </article>
