@@ -1,0 +1,47 @@
+.details {
+  --details-chevron: 0.6em; /* token-exception: chevron geometry, local to this component */
+  --details-chevron-stroke: 2px; /* token-exception: chevron geometry, local to this component */
+
+  background: var(--color-surface-alt);
+  border: var(--border-thin);
+}
+
+.details__summary {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  min-block-size: var(--size-touch-target);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-soft);
+  cursor: pointer;
+  list-style: none;
+
+  &::before {
+    flex: none;
+    width: var(--details-chevron);
+    height: var(--details-chevron);
+    content: '';
+    border-block-end: var(--details-chevron-stroke) solid currentcolor;
+    border-inline-end: var(--details-chevron-stroke) solid currentcolor;
+    transform: rotate(-45deg);
+    transition: var(--transition);
+  }
+}
+
+.details__body {
+  padding: var(--spacing-2xs) var(--spacing-md) var(--spacing-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-soft);
+}
+
+.details[open] {
+  .details__summary {
+    color: var(--color-text);
+
+    &::before {
+      transform: rotate(45deg);
+    }
+  }
+}

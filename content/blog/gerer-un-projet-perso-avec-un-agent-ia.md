@@ -6,6 +6,7 @@ description = "Cadrer, découper et livrer un projet personnel avec un agent IA 
 tags = ['ia', 'workflow']
 translationKey = 'gerer-un-projet-perso-avec-un-agent-ia'
 images = []
+aiDisclaimer = 'Partiel (plan et relecture)'
 +++
 
 Introduction : le point de départ. Un projet perso, seul, avec un agent IA comme

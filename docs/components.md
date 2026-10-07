@@ -1,12 +1,12 @@
 ---
 title: Components — partials and integration
 date_published: 2026-08-08
-date_modified: 2026-10-06
+date_modified: 2026-10-07
 ---
 
 # Components — partials and integration
 
-Ref: issues #14, #45, #47, #48, #66, #77, #114, #173. Describes the reusable components from both sides: the **template
+Ref: issues #14, #45, #47, #48, #66, #77, #114, #170, #173. Describes the reusable components from both sides: the **template
 contract** (how you call them) and the **CSS contract** (what they expose to integration).
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
@@ -250,16 +250,16 @@ correct with a single partial.
 
 ### `projets-meta.html`
 
-Meta line of a project page, under the title: date, role, status, links to the repository
-and to the demo, then taxonomy terms.
+Meta block of a project page, under the title: date, role, status, links to the repository
+and to the demo, in a `dl.byline`, then the taxonomy terms in their own `ul.tags`.
 
 | Key | Required | Description |
 |-----|----------|-------------|
 | `page` | yes | The project page to describe |
 
 Only the date is unconditional; every other entry appears only if the front matter carries
-the field (`role`, `status`, `repo`, `demo`, `tags`). A missing `page` fails the build
-through `errorf`.
+the field (`role`, `status`, `repo`, `demo`, `tags`). `repo` and `demo` share one `Liens`
+entry, since neither is a label of its own. A missing `page` fails the build through `errorf`.
 
 **External links** — `repo` and `demo` leave the site, so they get the same marker as
 [`entry-link.html`](#entry-linkhtml) below: `target="_blank" rel="noopener"`, and
@@ -273,9 +273,9 @@ same marker independently: `entry-link.html` owns the internal/external title li
 `.entry-list__item`, `projets-meta.html` owns a project's byline, and the two contracts
 don't overlap enough to share one partial.
 
-**Integration** — the partial emits `ul.byline.meta`, the same block as the byline of a
-blog article (`layout/single.css`). It holds more entries there, hence the `flex-wrap` on
-`.byline`. No class of its own: a project meta line *is* a byline, only richer.
+**Integration** — the partial emits the same `dl.byline` as a blog article, see
+[Dates](#dates) for its classes. A project meta line *is* a byline, only richer: no class of
+its own.
 
 ### `markdown-link.html`
 
@@ -289,6 +289,68 @@ project templates. See [seo.md](seo.md#markdown-versions).
 Emits `p.single__alt.meta` only when the page has a `markdown` output format, so a call from a
 template whose pages have none is harmless. A missing `page` fails the build through `errorf`.
 The label is the `markdown-version` string of `i18n/fr.toml`.
+
+### `details.html`
+
+A collapsible block on the native `<details>` element: no JavaScript, the toggle and the
+keyboard (`Enter`, `Space`) come from the browser. Its one caller so far is the AI disclaimer
+of an article (#170).
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `summary` | yes | — | Visible label of the `<summary>`, already resolved by the caller (`i18n`) |
+| `body` | yes | — | Content of the panel. A plain string is escaped; a `template.HTML` is not |
+| `variant` | no | none | Class suffix: `details--<variant>` |
+
+```gotemplate
+{{ with .Params.aiDisclaimer }}
+  {{ partial "details.html" (dict "summary" (i18n "ai-disclaimer") "body" . "variant" "ai-disclaimer") }}
+{{ end }}
+```
+
+Both required keys are checked with `errorf` before any output. Inside the `with`, `.` is the
+tested value, hence `"body" .`: reach the page through `$`.
+
+**The AI disclaimer** — `layouts/_default/single.html` renders it between the header and
+`.Content` when the front matter carries `aiDisclaimer`, a short string describing how the AI
+took part (`aiDisclaimer = 'Partiel (plan et relecture)'`). Absent, nothing is emitted. The
+summary is the `ai-disclaimer` i18n string, the front matter value is the body.
+
+**Integration** (`components/details.css`):
+
+| Class | Role |
+|-------|------|
+| `details` | Block: `--color-surface-alt` background, `--border-thin`, `--border-radius` |
+| `details__summary` | The control. Flex row, chevron drawn by `::before`, at least `--size-touch-target` high |
+| `details__body` | The panel, in `--color-text-soft` |
+| `details--ai-disclaimer` | Variant hook, unstyled so far |
+
+The block is a direct child of `.container-content-grid`, so it sits in the `content` column
+and takes its bottom margin from the article rhythm. It carries no margin of its own.
+
+The chevron is two borders in `currentcolor`, rotated: right when closed, down when
+`[open]`. Being `currentcolor` it follows both themes and `forced-colors`, and it never
+carries the information alone, the label does. Its size and stroke are custom properties on
+`.details` (`--details-chevron`, `--details-chevron-stroke`) with a `token-exception`, the
+`--burger-*` pattern of `components/menu.css`.
+
+**Contrast** — measured with the formula of `scripts/quality/check-contrast.mjs`, on
+`--color-surface-alt`, the worst background of each theme:
+
+| Element | Token | Light | Dark |
+|---------|-------|-------|------|
+| Summary, closed; body | `--color-text-soft` | 7.04:1 | 7.15:1 |
+| Summary, open | `--color-text` | 12.09:1 | 11.92:1 |
+| Chevron | `currentcolor`, same as the summary | 7.04:1 | 7.15:1 |
+
+All are AAA (7:1), and all are pairs the script already enforces, so the component adds no
+token to measure. The box edge is `--border-thin`, decorative like the one of a tag or a card
+(1.21:1 light, 1.25:1 dark): the component is identified by its label and chevron, not by its
+outline (WCAG 1.4.11). The focus ring is the global one of `base/elements.css`.
+
+**Known limit** — the body is an unstyled `div`. A caller passing rendered HTML gets the
+article's `p` margins only through the content grid, which does not reach inside the block.
+Add a rule when a second caller needs rich content.
 
 ### `entry-list.html`
 
@@ -990,20 +1052,28 @@ on a page that carries an explicit `lastmod`. Two dates side by side with only o
 named is what forces a reader to stop, so the publication date is labelled too even though
 it is the only one on most pages.
 
-The byline is a wrapping flex row with nothing but a gap between items, which read as one
-sentence once an item became a two-part phrase. The textual items therefore carry
-`byline__meta` and take a `·` separator between them:
+**Byline** — `layouts/_default/single.html` and `projets/single.html` render it as a `dl`,
+because every entry is a label and a value. It is a wrapping flex row of pairs, so there is
+no separator to keep off a wrapped line. The pairs and the tags share one row,
+`.single__meta`: pairs at the start, tags at the end, and the tags drop under the pairs when
+the row is too narrow.
 
-```css
-.byline__meta + .byline__meta::before {
-  padding-inline-end: var(--spacing-xs);
-  content: '·' / '';
-}
-```
+| Class | Element | Role |
+|-------|---------|------|
+| `single__meta` | `div` | The row: byline and tags, `space-between`, wrapping. Sits under `.single__intro`, in the template, not in the partial |
+| `byline` | `dl` | Block, a wrapping flex row; overrides the grid of `dl` in `base/elements.css` |
+| `byline__item` | `div` | One pair, a column |
+| `byline__label` | `dt` | `--text-xs`, bold, `--color-text-soft` |
+| `byline__value` | `dd` | `--text-sm`, tabular figures |
+| `byline__value--links` | `dd` | Modifier of the value, on the same element: several links, wrapping |
 
-The empty alt text keeps the separator out of the accessibility tree, the same idiom as
-`components/breadcrumb.css`. The tags are deliberately excluded: they are already set apart
-by their border, and a separator between bordered pills is noise.
+The tags are a plain `ul.tags`: they need no class of the byline. All of it is scoped under
+`.single__heading` in `layout/single.css`. The reading time label and its value are separate
+i18n keys (`reading-label`, `reading-time`), so the value is the bare `9 min`.
+
+`tests/byline.spec.js` covers the entries, the conditional update date, the tags sharing the
+row and the project links; `tests/details.spec.js` covers the AI disclaimer. Both read
+`FIXTURES.disclaimer`, an article carrying every optional field.
 
 The home page's "Dernières activités" block sorts on `.ByLastmod` and shows the bare date
 with no label at all: its compact grid gives the date a fixed `--size-col-date-compact`

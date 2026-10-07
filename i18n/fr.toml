@@ -28,6 +28,9 @@ other = "Dépôt"
 [project-demo]
 other = "Démo"
 
+[project-links]
+other = "Liens"
+
 [theme]
 other = "Thème"
 
@@ -65,7 +68,10 @@ other = "Rien à afficher pour l'instant"
 other = "Aucun projet pour l'instant"
 
 [reading-time]
-other = "{{ .Count }} min de lecture"
+other = "{{ .Count }} min"
+
+[reading-label]
+other = "Lecture"
 
 # Landmark names: the role is announced after the name, so no "navigation" in the label.
 [nav-main]
@@ -130,3 +136,6 @@ other = "Articles, projets et veille sur le thème « {{ .Tag }} »."
 
 [markdown-version]
 other = "Consulter la version Markdown"
+
+[ai-disclaimer]
+other = "Usage de l'IA dans la rédaction de ce contenu"

@@ -17,6 +17,8 @@ const PAGES = [
   ['tags list', '/tags/'],
   ['tag term', FIXTURES.tag.url],
   ['blog single', FIXTURES.article.url],
+  ['blog single, updated', FIXTURES.disclaimer.url],
+  ['project single', FIXTURES.project.url],
   ['parcours', FIXTURES.parcours.url],
 ];
 
