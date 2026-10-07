@@ -28,7 +28,7 @@
           </li>
           {{ end }}
           {{ if $isPost }}
-          <li class="byline__meta">{{ i18n "reading-time" .ReadingTime }}</li>
+            <li class="byline__meta">{{ i18n "reading-time" .ReadingTime }}</li>
           {{ end }}
           {{ range (.GetTerms "tags") }}
           <li>
@@ -38,6 +38,13 @@
         </ul>
       </div>
     </header>
+
+    {{ with .Params.aiDisclaimer }}
+      {{ partial "details.html" (dict
+        "summary" (i18n "ai-disclaimer")
+        "body" .
+        "variant" "ai-disclaimer") }}
+    {{ end }}
 
     {{ .Content }}
     {{ partial "markdown-link.html" (dict "page" .) }}

@@ -1,12 +1,12 @@
 ---
 title: Components — partials and integration
 date_published: 2026-08-08
-date_modified: 2026-10-06
+date_modified: 2026-10-07
 ---
 
 # Components — partials and integration
 
-Ref: issues #14, #45, #47, #48, #66, #77, #114, #173. Describes the reusable components from both sides: the **template
+Ref: issues #14, #45, #47, #48, #66, #77, #114, #170, #173. Describes the reusable components from both sides: the **template
 contract** (how you call them) and the **CSS contract** (what they expose to integration).
 Both live in the same document on purpose — two files indexed on the same components would
 drift apart.
@@ -289,6 +289,68 @@ project templates. See [seo.md](seo.md#markdown-versions).
 Emits `p.single__alt.meta` only when the page has a `markdown` output format, so a call from a
 template whose pages have none is harmless. A missing `page` fails the build through `errorf`.
 The label is the `markdown-version` string of `i18n/fr.toml`.
+
+### `details.html`
+
+A collapsible block on the native `<details>` element: no JavaScript, the toggle and the
+keyboard (`Enter`, `Space`) come from the browser. Its one caller so far is the AI disclaimer
+of an article (#170).
+
+| Key | Required | Default | Description |
+|-----|----------|---------|-------------|
+| `summary` | yes | — | Visible label of the `<summary>`, already resolved by the caller (`i18n`) |
+| `body` | yes | — | Content of the panel. A plain string is escaped; a `template.HTML` is not |
+| `variant` | no | none | Class suffix: `details--<variant>` |
+
+```gotemplate
+{{ with .Params.aiDisclaimer }}
+  {{ partial "details.html" (dict "summary" (i18n "ai-disclaimer") "body" . "variant" "ai-disclaimer") }}
+{{ end }}
+```
+
+Both required keys are checked with `errorf` before any output. Inside the `with`, `.` is the
+tested value, hence `"body" .`: reach the page through `$`.
+
+**The AI disclaimer** — `layouts/_default/single.html` renders it between the header and
+`.Content` when the front matter carries `aiDisclaimer`, a short string describing how the AI
+took part (`aiDisclaimer = 'Partiel (plan et relecture)'`). Absent, nothing is emitted. The
+summary is the `ai-disclaimer` i18n string, the front matter value is the body.
+
+**Integration** (`components/details.css`):
+
+| Class | Role |
+|-------|------|
+| `details` | Block: `--color-surface-alt` background, `--border-thin`, `--border-radius` |
+| `details__summary` | The control. Flex row, chevron drawn by `::before`, at least `--size-touch-target` high |
+| `details__body` | The panel, in `--color-text-soft` |
+| `details--ai-disclaimer` | Variant hook, unstyled so far |
+
+The block is a direct child of `.container-content-grid`, so it sits in the `content` column
+and takes its bottom margin from the article rhythm. It carries no margin of its own.
+
+The chevron is two borders in `currentcolor`, rotated: right when closed, down when
+`[open]`. Being `currentcolor` it follows both themes and `forced-colors`, and it never
+carries the information alone, the label does. Its size and stroke are custom properties on
+`.details` (`--details-chevron`, `--details-chevron-stroke`) with a `token-exception`, the
+`--burger-*` pattern of `components/menu.css`.
+
+**Contrast** — measured with the formula of `scripts/quality/check-contrast.mjs`, on
+`--color-surface-alt`, the worst background of each theme:
+
+| Element | Token | Light | Dark |
+|---------|-------|-------|------|
+| Summary, closed; body | `--color-text-soft` | 7.04:1 | 7.15:1 |
+| Summary, open | `--color-text` | 12.09:1 | 11.92:1 |
+| Chevron | `currentcolor`, same as the summary | 7.04:1 | 7.15:1 |
+
+All are AAA (7:1), and all are pairs the script already enforces, so the component adds no
+token to measure. The box edge is `--border-thin`, decorative like the one of a tag or a card
+(1.21:1 light, 1.25:1 dark): the component is identified by its label and chevron, not by its
+outline (WCAG 1.4.11). The focus ring is the global one of `base/elements.css`.
+
+**Known limit** — the body is an unstyled `div`. A caller passing rendered HTML gets the
+article's `p` margins only through the content grid, which does not reach inside the block.
+Add a rule when a second caller needs rich content.
 
 ### `entry-list.html`
 

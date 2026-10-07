@@ -1,0 +1,20 @@
+{{- /*
+  details.html — collapsible disclosure, on the native <details> element.
+
+  Contract:
+    summary (required) — visible label of the <summary>.
+    body    (required) — panel content. A plain string is escaped.
+    variant (optional) — class suffix: details--<variant>.
+
+  See docs/components.md#detailshtml.
+*/ -}}
+{{- range $key := slice "summary" "body" -}}
+  {{- if not (index $ $key) -}}
+    {{- errorf "partial details.html: missing required key %q" $key -}}
+  {{- end -}}
+{{- end -}}
+
+<details class="details{{ with .variant }} details--{{ . }}{{ end }}">
+  <summary class="details__summary">{{ .summary }}</summary>
+  <div class="details__body">{{ .body }}</div>
+</details>

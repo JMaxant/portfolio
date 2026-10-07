@@ -1,5 +1,5 @@
 .single__heading {
-  margin-block-end: var(--spacing-xl);
+  margin-block-end: var(--spacing-md);
   border-bottom: var(--border-thin);
 
   .single__intro {

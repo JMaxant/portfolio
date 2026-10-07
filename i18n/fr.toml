@@ -130,3 +130,6 @@ other = "Articles, projets et veille sur le thème « {{ .Tag }} »."
 
 [markdown-version]
 other = "Consulter la version Markdown"
+
+[ai-disclaimer]
+other = "Usage de l'IA dans la rédaction de ce contenu"
