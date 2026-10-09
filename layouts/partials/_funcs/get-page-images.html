@@ -1,0 +1,56 @@
+{{- /* Overrides Hugo's embedded partial of the same name, read by the embedded opengraph.html
+       and twitter_cards.html and by json-ld.html. The only difference with upstream: the
+       fallback is the generated card, not params.images. Re-diff on a Hugo upgrade.
+       See docs/seo.md#social-preview-image. */ -}}
+{{- $imgs := slice }}
+{{- $imgParams := .Params.images }}
+{{- $resources := .Resources.ByType "image" -}}
+{{- if not $imgParams }}
+	{{- $featured := $resources.GetMatch "*feature*" -}}
+	{{- if not $featured }}{{ $featured = $resources.GetMatch "{*cover*,*thumbnail*}" }}{{ end -}}
+	{{- with $featured }}
+		{{- $imgs = $imgs | append (dict
+			"Image" .
+			"RelPermalink" .RelPermalink
+			"Permalink" .Permalink
+			)
+		}}
+	{{- end }}
+{{- end }}
+{{- if and (not $imgParams) (not $imgs) }}
+	{{- with partial "og-card.html" (dict "page" .) }}
+		{{- $imgs = $imgs | append (dict
+			"Image" .
+			"RelPermalink" .RelPermalink
+			"Permalink" .Permalink
+			)
+		}}
+	{{- end }}
+{{- end }}
+{{- range $imgParams }}
+	{{- $img := . }}
+	{{- $url := urls.Parse $img }}
+	{{- if eq $url.Scheme "" }}
+		{{- with or ($resources.GetMatch $img) (resources.GetMatch $img) -}}
+			{{- $imgs = $imgs | append (dict
+				"Image" .
+				"RelPermalink" .RelPermalink
+				"Permalink" .Permalink
+				)
+			}}
+		{{- else }}
+			{{- $imgs = $imgs | append (dict
+				"RelPermalink" (relURL $img)
+				"Permalink" (absURL $img)
+				)
+			}}
+		{{- end }}
+	{{- else }}
+		{{- $imgs = $imgs | append (dict
+			"RelPermalink" $img
+			"Permalink" $img
+			)
+		}}
+	{{- end }}
+{{- end }}
+{{- return $imgs }}

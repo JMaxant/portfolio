@@ -6,6 +6,8 @@ export const FIXTURES = {
   article: { url: '/blog/fixture-article/', title: 'Fixture article with a title long enough to overflow the breadcrumb at 320px wide' },
   // `aiDisclaimer`, `lastmod` and three tags: every entry of the byline and the details block.
   disclaimer: { url: '/blog/fixture-disclaimer/' },
+  // `images` in the front matter: the generated social card must step aside.
+  cardOverride: { url: '/blog/fixture-card-override/' },
   // Shortcode and relative links in the body, for the Markdown twin.
   markdownArticle: { url: '/blog/fixture-markdown/' },
   project: { url: '/projets/fixture-project/', title: 'Fixture project' },

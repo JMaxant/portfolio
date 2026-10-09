@@ -1,7 +1,7 @@
 ---
 title: Components — partials and integration
 date_published: 2026-08-08
-date_modified: 2026-10-07
+date_modified: 2026-10-09
 ---
 
 # Components — partials and integration
@@ -161,6 +161,38 @@ The description is resolved once, through the same chain as Hugo's embedded
 `opengraph.html`. Keep the two aligned: `tests/seo.spec.js` fails when the meta description
 and `og:description` differ. Fallback chain, image sources and authoring rules are in
 [seo.md](seo.md).
+
+### `og-card.html`
+
+Returns the 1200×630 social card of a page, as an image resource. Called from the
+`_funcs/get-page-images` override only.
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| `page` | yes | The page the card stands for: its title, or the tagline on the home page |
+
+The assets it needs, `background.png` and the two Spectral TTFs, sit in `assets/og/`; a
+missing one **fails the build** through `errorf`. How the card is composed and how to change
+it is in [seo.md](seo.md#generated-card).
+
+**Return pitfall:** `{{ return $bg | images.Filter $filters }}` fails with "must provide an
+image". Assign the result to a variable, then return the variable.
+
+**The title is drawn on a narrower layer.** `images.Text` wraps at the image width, not at a
+symmetric margin, so a title drawn on the full card ends 35 px from the right edge against an
+80 px left margin. The partial crops the background to 1075 px, draws on it, and composites
+the layer with `images.Overlay`.
+
+**`strings.Truncate` returns HTML-escaped text:** the partial unescapes after it, or an
+apostrophe reaches the card as `&#39;`.
+
+### `_funcs/get-page-images.html`
+
+Overrides Hugo's embedded partial of the same name, which the embedded `opengraph.html` and
+`twitter_cards.html` and `json-ld.html` all call. The only change from upstream: when a page
+has neither `images` nor a feature/cover/thumbnail resource, it returns the card from
+`og-card.html` instead of reading `params.images`. **Diff it against the upstream file when
+bumping Hugo.**
 
 ### `json-ld.html`
 
