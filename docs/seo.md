@@ -1,7 +1,7 @@
 ---
 title: SEO — contributor guidelines
 date_published: 2026-10-02
-date_modified: 2026-10-03
+date_modified: 2026-10-09
 ---
 
 # SEO — contributor guidelines
@@ -225,6 +225,26 @@ same rules set `Content-Type` with `charset=utf-8`.
 Content negotiation on `Accept: text/markdown` is out of scope: no candidate host supports it
 (#20). So is a directive hidden in the HTML, which would be cloaking (see
 [ADR 0004](adr/0004-no-afdocs.md)).
+
+## Security headers
+
+The `/*` rule of `layouts/index.headers` (see [HTTP headers](#markdown-versions)) sets three
+headers on every response. HSTS and `X-Content-Type-Options: nosniff` are not here: they are
+set in the Cloudflare dashboard (see [post-deploy-checklist.md](post-deploy-checklist.md)).
+
+| Header | Value | Why |
+|--------|-------|-----|
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Explicit rather than the browser default: no path leaves the site. |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | The site uses none of them, so a future dependency cannot ask. |
+| `Content-Security-Policy` | `frame-ancestors 'none'` | The site cannot be framed (clickjacking). It is the modern form of `X-Frame-Options`. |
+
+There is deliberately no full Content-Security-Policy (#174): the site has no form, no
+third-party script and no cookie, and the inline theme script would need a hash recomputed on
+every edit, failing silently (the theme stops working) when it is forgotten. Add one with the
+first script, form or embed that makes it worth the upkeep.
+
+Tested by `tests/headers.spec.js` (the generated rule) and `tests/live/smoke.spec.js` (the
+headers a deployed page really carries).
 
 ## llms.txt
 

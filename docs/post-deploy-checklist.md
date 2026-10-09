@@ -1,7 +1,7 @@
 ---
 title: Post-deploy checklist
 date_published: 2026-10-03
-date_modified: 2026-10-05
+date_modified: 2026-10-09
 ---
 
 # Post-deploy checklist
@@ -32,6 +32,7 @@ the full suite cannot simply be pointed at production.
 | Light / dark switch and persistence (#26) | `tests/live/smoke.spec.js`; the full behaviour is in `theme-switcher.spec.js` |
 | `robots.txt`, `llms.txt`, `sitemap.xml` reachable | `tests/live/smoke.spec.js`, which also checks the sitemap points to the tested host (a wrong `baseURL` at build time ships a sitemap for another site) |
 | Canonical `Link` header and UTF-8 charset on the Markdown versions and text files (#20, #168) | `tests/live/smoke.spec.js`; the canonical check compares the path only, as the header always names the production host |
+| `Referrer-Policy`, `Permissions-Policy` and `frame-ancestors` on the HTML pages (#174) | `tests/live/smoke.spec.js`; set in `layouts/index.headers`, see [seo.md](seo.md#security-headers) |
 | Outgoing links (#28) | `tests/live/smoke.spec.js` (mailto shape, GitHub and LinkedIn profiles from `params.social`); the weekly `links-external.yml` covers every other link |
 
 LinkedIn answers `999` to anything that is not a logged-in browser, so that status counts as
@@ -92,6 +93,8 @@ zone means redoing all of them. This is the state they were set to at launch.
 | Minimum TLS version | 1.2 |
 | HSTS | On, `max-age` 6 months, **no** `includeSubDomains`, **no** preload: it is hard to undo, so it starts modest |
 | No-Sniff header | On (`X-Content-Type-Options: nosniff`) |
+
+The other security headers are not set here but in `layouts/index.headers`: see [seo.md](seo.md#security-headers).
 
 **Left off on purpose**
 
