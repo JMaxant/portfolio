@@ -65,6 +65,15 @@ test('the text files are served as UTF-8', async ({ request }) => {
   }
 });
 
+test('the HTML pages carry the security headers', async ({ request }) => {
+  // Set in layouts/index.headers: only a deployed site proves the host applies them. #174.
+  const headers = (await request.get('/')).headers();
+
+  expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin');
+  expect(headers['permissions-policy']).toBe('camera=(), microphone=(), geolocation=()');
+  expect(headers['content-security-policy']).toBe("frame-ancestors 'none'");
+});
+
 test('the outgoing links are not dead', async ({ page, request }) => {
   await page.goto('/');
   const mailto = await page.locator('a.cta[href^="mailto:"]').first().getAttribute('href');

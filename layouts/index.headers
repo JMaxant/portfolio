@@ -2,7 +2,10 @@
        A rule takes a path pattern whose `:slug` placeholder is reused in the value, so one rule
        per section covers every page. A Markdown version cannot carry a <link rel="canonical">
        and gets it as a header; text files declare their charset, which the host leaves out.
+       The `/*` rule carries the security headers of every response, merged by the host with
+       the rules below. See docs/seo.md#security-headers.
        A path starts at column 0 and its headers are indented. */ -}}
+{{- print "/*\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  Content-Security-Policy: frame-ancestors 'none'\n\n" -}}
 {{- $base := strings.TrimSuffix "/" site.BaseURL -}}
 {{- $sections := slice -}}
 {{- range site.RegularPages -}}

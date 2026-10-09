@@ -31,10 +31,20 @@ test('the text files declare their charset', async ({ request }) => {
   }
 });
 
+test('every response carries the security headers', async ({ request }) => {
+  const rules = await fetchRules(request);
+
+  expect(rules.get('/*')).toEqual([
+    '  Referrer-Policy: strict-origin-when-cross-origin',
+    '  Permissions-Policy: camera=(), microphone=(), geolocation=()',
+    "  Content-Security-Policy: frame-ancestors 'none'",
+  ]);
+});
+
 test('no rule targets a page without a Markdown version', async ({ request }) => {
   const paths = [...(await fetchRules(request)).keys()];
 
   for (const path of paths) {
-    expect(path, path).toMatch(/^\/((blog|projets)\/:slug\/index\.md|llms\.txt|robots\.txt)$/);
+    expect(path, path).toMatch(/^\/(\*|(blog|projets)\/:slug\/index\.md|llms\.txt|robots\.txt)$/);
   }
 });
