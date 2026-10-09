@@ -5,6 +5,8 @@ copyright = '2026 - Julien Maxant'
 defaultContentLanguage = 'fr'
 defaultContentLanguageInSubdir = false
 removePathAccents = true
+# A term page title keeps the tag as authored (`PHP`), instead of title-casing `css` into `Css`.
+capitalizeListTitles = false
 # Rendered from layouts/robots.txt. See docs/seo.md#robotstxt.
 enableRobotsTXT = true
 

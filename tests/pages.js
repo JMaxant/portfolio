@@ -14,7 +14,7 @@ export const FIXTURES = {
   // A highlighted block wider than any viewport the suite uses.
   code: { url: '/fixture-code/' },
   parcours: { url: '/a-propos/fixture-parcours/', title: 'Fixture parcours' },
-  tag: { url: '/tags/fixture-tag/', title: 'Fixture-Tag' },
+  tag: { url: '/tags/fixture-tag/', title: 'fixture-tag' },
 };
 
 // Pages probed by the cross-cutting test suites (overflow, a11y). Paths are relative to

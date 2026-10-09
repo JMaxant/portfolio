@@ -71,7 +71,7 @@
 <ul class="tags" role="list">
   {{- range . }}
   <li>
-    <a class="tag" href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+    <a class="tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
   </li>
   {{- end }}
 </ul>

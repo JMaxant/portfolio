@@ -1,7 +1,7 @@
 ---
 title: Contributing to the Parcours page
 date_published: 2026-08-14
-date_modified: 2026-09-28
+date_modified: 2026-10-09
 ---
 
 # Contributing to the Parcours page
@@ -40,7 +40,9 @@ most recent first, and nothing sorts them for you.
   position.
 - Dates follow ISO 8601: `YYYY`, `YYYY-MM` or `YYYY-MM-DD`. Only the year is displayed; the
   full value stays in the `<time datetime>` attribute.
-- `tags` are lowercase slugs, comma-separated. A tag links to its term page only when some
+- `tags` are comma-separated and displayed as written (`PHP`, not `php`); spell a tag the
+  same way as in the content front matter, `scripts/quality/check-tags-case.mjs` enforces it.
+  A tag links to its term page only when some
   content carries that term; otherwise it renders as plain text.
 
 ## Adding a skill
@@ -55,7 +57,7 @@ For a skill nothing published backs yet, add it to `extra`:
 {{</* skills title="Compétences" extra="Python, Kubernetes" */>}}
 ```
 
-`extra` renders as plain, unlinked tags. The build fails if an `extra` entry, lowercased,
+`extra` renders as plain, unlinked tags, in the case written. The build fails if an `extra` entry, lowercased,
 already matches a tag used in content — that skill has a term page and belongs there
 instead, not in `extra`.
 
