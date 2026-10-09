@@ -26,11 +26,11 @@
   <div class="skills">
     <ul class="tags" role="list">
       {{ range $tags.Alphabetical }}
-      <li><a class="tag tag--accented" href="{{ .Page.RelPermalink }}">{{ lower .Page.LinkTitle }}</a></li>
+      <li><a class="tag tag--accented" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>
       {{ end }}
       {{ with $extra }}
         {{ range . }}
-          <li class="tag">{{ lower . }}</li>
+          <li class="tag">{{ . }}</li>
         {{ end }}
       {{ end }}
     </ul>

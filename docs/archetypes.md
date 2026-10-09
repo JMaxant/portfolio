@@ -1,7 +1,7 @@
 ---
 title: Hugo archetypes
 date_published: 2026-08-01
-date_modified: 2026-10-04
+date_modified: 2026-10-09
 ---
 
 # Hugo archetypes
@@ -42,7 +42,7 @@ Traps:
 
 - **`description`** rather than `summary`: `layouts/partials/seo_tags.html` reads `.Description` for the meta description and OpenGraph, falling back to `.Summary`, then `site.Params.description`; `summary` is already a field Hugo computes from the content.
 - **`translationKey`**: pairs future translations (phase 2, section 7 of the cahier des charges) regardless of slugs. Derived from the content name, ignored while the site is monolingual.
-- **`tags`**: the site's single taxonomy, which includes the tech stack (decision in section 5quinquies, no separate `stack` taxonomy). Veille nuance: the field does feed the `/tags/*` pages since the switch to `build.render = 'link'` (verified empirically; `render = 'never'` excluded them whatever `list` was).
+- **`tags`**: the site's single taxonomy, which includes the tech stack (decision in section 5quinquies, no separate `stack` taxonomy). Veille nuance: the field does feed the `/tags/*` pages since the switch to `build.render = 'link'` (verified empirically; `render = 'never'` excluded them whatever `list` was). A tag is displayed exactly as written (`PHP`, `Outillage`) in badges, tag page titles and descriptions; only its URL is a lowercase slug (`/tags/php/`). Write each tag with one spelling across content: `scripts/quality/check-tags-case.mjs` fails on `PHP` next to `php`, since the term title would otherwise depend on which page Hugo reads first.
 - **`status`** (projets): `en cours` or `terminé` (values are French, as rendered).
 - **`images`** (blog): list of image paths for the social preview, read by Hugo's embedded OpenGraph template as `og:image` (absolute URL). Optional: without it, the preview has no image. Replaces the `cover` front matter field, which no template read (#14). See [seo.md](seo.md).
 - **`source_link`** (veille): URL of the shared article. Veille entries are *teaser-only* (issue #40): a cascade in `content/veille/_index.md` gives them `build.render = 'link'` and `build.list = 'local'`, so no page of their own is generated. Anything that links an entry — a list layout, a feed — must use `source_link`, never `.Permalink`: `render = 'link'` does assign one, but it has no rendering and returns a 404. `entry-link.html` and `layouts/_default/rss.xml` both handle it (#74).

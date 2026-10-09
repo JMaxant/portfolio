@@ -34,7 +34,7 @@
           <ul role="list" class="tags">
             {{ range . }}
               <li class="tag tag--accented">
-                <a href="{{ .RelPermalink }}">{{ lower .LinkTitle }}</a>
+                <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
               </li>
             {{ end }}
           </ul>

@@ -3,7 +3,7 @@ date = '2026-09-23'
 draft = true
 title = 'La notation Big O pour les nuls'
 description = "Comment lire O(n), O(log n) ou O(n²) sans y voir des maths — et pourquoi ça compte avant même d'avoir un problème de performance."
-tags = ['algorithmique', 'go']
+tags = ['Algorithmique', 'Go']
 translationKey = 'notation-big-o-pour-les-nuls'
 images = []
 +++

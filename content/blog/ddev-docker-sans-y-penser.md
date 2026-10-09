@@ -3,7 +3,7 @@ date = '2026-09-23'
 draft = true
 title = 'DDEV : Docker sans avoir à écrire un docker-compose.yml'
 description = "Ce que DDEV automatise par-dessus Docker pour un projet Drupal — et ce qui reste à comprendre en dessous."
-tags = ['docker', 'drupal']
+tags = ['Docker', 'Drupal']
 translationKey = 'ddev-docker-sans-y-penser'
 images = []
 +++

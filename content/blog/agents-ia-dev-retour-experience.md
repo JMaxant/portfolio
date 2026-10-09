@@ -3,7 +3,7 @@ date = '2026-09-23'
 draft = true
 title = 'Coder avec un agent IA : ce qui marche, ce qui ne marche pas'
 description = "Retour d'expérience sur l'usage d'agents type Claude en dev : conception, spécification, découpage des tâches — et où l'exercice montre ses limites."
-tags = ['ia', 'workflow']
+tags = ['IA', 'Workflow']
 translationKey = 'agents-ia-dev-retour-experience'
 images = []
 +++

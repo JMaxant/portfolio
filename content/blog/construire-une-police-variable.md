@@ -3,7 +3,7 @@ date = '2026-09-23'
 draft = false
 title = 'Compiler sa propre police variable : le cas Spectral'
 description = "Pas de version variable officielle pour la police serif de ce site : reconstruire un font variable à partir des sources, quatre fois plus léger que les fichiers statiques."
-tags = ['css', 'performance']
+tags = ['CSS', 'Performance']
 translationKey = 'construire-une-police-variable'
 images = []
 +++

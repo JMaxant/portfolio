@@ -3,7 +3,7 @@ date = '2026-09-23'
 draft = true
 title = 'Taskfile plutôt que Makefile ou npm scripts : ce que ça change au quotidien'
 description = "Un seul runner pour npm, Hugo et les scripts qualité — retour sur task après quelques mois d'usage sur ce site."
-tags = ['taskfile', 'outillage']
+tags = ['Taskfile', 'Outillage']
 translationKey = 'taskfile-plutot-que-makefile'
 images = []
 +++

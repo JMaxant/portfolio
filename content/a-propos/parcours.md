@@ -11,21 +11,21 @@ type = 'parcours'
     titre="Lead developer/Lead tech"
     organisation="Axess"
     resume="Projets Drupal et Symfony build & TMA (sites institutionnels, e-commerce, énergie), Dataviz (VueJS), participation à la R&D, mise en place d'environnements dockerisés (docker-compose, DDEV) et de tooling (Makefile, Taskfile), accompagnement, consolidation de process (onboarding, documentation, réversibilité et utilisation de l'IA)."
-    tags="php, symfony, drupal, vue, tooling, DDEV, IA" >}}
+    tags="PHP, Symfony, Drupal, Vue, Tooling, DDEV, IA" >}}
   {{< timeline-item
     debut="2021"
     fin="2024"
     titre="Développeur expert"
     organisation="Ecedi"
     resume="Projets Drupal (build & TMA de sites institutionnels), animation de la R&D, mentorat et accompagnement, tooling (Makefile, DDEV)"
-    tags="drupal, php, DDEV" >}}
+    tags="Drupal, PHP, DDEV" >}}
   {{< timeline-item
     debut="2018"
     fin="2021"
     titre="Ingénieur d'études"
     organisation="Niji"
     resume="Pôle Run : TMA préventive, évolutive et corrective (full-stack Drupal 7/8), refontes partielles, tooling interne (dashboard de suivi Symfony 4)."
-    tags="php, js, css, drupal, docker" >}}
+    tags="PHP, JS, CSS, Drupal, Docker" >}}
 {{< /timeline >}}
 
 {{< timeline title="Précédemment" period="Jusqu'à 2017" >}}
