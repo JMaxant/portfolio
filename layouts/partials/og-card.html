@@ -1,0 +1,61 @@
+{{- /* Returns the 1200×630 social card of a page, as an image resource.
+       Contract and traps: docs/components.md#og-cardhtml. Colours are copied from
+       base/tokens.css (--light-text), out of reach of check-tokens.mjs.
+
+       Key   Required  Description
+       page  yes       The page the card stands for: its title, or the tagline on
+                       the home page. */ -}}
+{{- $page := .page -}}
+{{- if not $page -}}
+  {{- errorf "partial og-card.html: missing required key page" -}}
+{{- end -}}
+{{- $bg := resources.Get "og/background.png" -}}
+{{- $light := resources.Get "og/Spectral-Light.ttf" -}}
+{{- $semiBold := resources.Get "og/Spectral-SemiBold.ttf" -}}
+{{- if not (and $bg $light $semiBold) -}}
+  {{- errorf "partial og-card.html: assets/og/ must hold background.png, Spectral-Light.ttf and Spectral-SemiBold.ttf" -}}
+{{- end -}}
+{{- $color := "#2a2d34" -}}
+
+{{- /* The home title is the site name, already in the header: it gets the tagline. */ -}}
+{{- $title := or $page.Params.card_title $page.Title -}}
+{{- if $page.IsHome -}}
+  {{- $title = T "og-card-tagline" -}}
+{{- end -}}
+{{- /* strings.Truncate returns HTML-escaped text, hence the unescape after it. */ -}}
+{{- $title = strings.Truncate 110 ($title | plainify | htmlUnescape) | htmlUnescape -}}
+{{- /* French typography: no line may start with a colon or a question mark. */ -}}
+{{- $title = replaceRE ` ([:;!?»])` "\u00a0$1" $title -}}
+
+{{- /* Stepped by length, so that a long title fits the area under the rule. */ -}}
+{{- $size := 44 -}}
+{{- if le (len $title) 36 -}}
+  {{- $size = 80 -}}
+{{- else if le (len $title) 64 -}}
+  {{- $size = 64 -}}
+{{- else if le (len $title) 90 -}}
+  {{- $size = 52 -}}
+{{- end -}}
+
+{{- /* images.Text wraps at the image width, not at a symmetric margin: the title is drawn
+       on a narrower layer, then composited. The layer is a crop of the background. */ -}}
+{{- $layer := $bg.Crop "1075x300 bottomleft" -}}
+{{- $layer = $layer.Filter (images.Text $title (dict "font" $semiBold "size" $size "color" $color "x" 0 "y" 0 "linespacing" 8)) -}}
+
+{{- $header := printf "%s  ·  %s" site.Title site.Params.baseline -}}
+{{- $muted := "#46525a" -}}
+{{- $footerSize := 28 -}}
+{{- $footerY := 530 -}}
+{{- $filters := slice
+  (images.Text $header (dict "font" $light "size" 34 "color" $color "x" 80 "y" 56))
+  (images.Overlay $layer 80 200)
+  (images.Text (urls.Parse site.BaseURL).Host (dict "font" $light "size" $footerSize "color" $muted "x" 80 "y" $footerY))
+-}}
+{{- /* Right-aligned by arithmetic, images.Text cannot measure: Spectral's digits are tabular
+       (0.5 em) and "/" is 0.242 em, so DD/MM/YYYY is 4.484 em wide whatever the date. */ -}}
+{{- if and $page.IsPage (not $page.Date.IsZero) -}}
+  {{- $x := sub 1120 (math.Round (mul 4.484 $footerSize)) -}}
+  {{- $filters = $filters | append (images.Text ($page.Date.Format "02/01/2006") (dict "font" $light "size" $footerSize "color" $muted "x" $x "y" $footerY)) -}}
+{{- end -}}
+{{- $card := $bg.Filter $filters -}}
+{{- return $card -}}

@@ -14,3 +14,4 @@ scripts/fonts/.venv/
 /playwright/.auth/
 
 /assets/jsconfig.json
+resources/_gen/
