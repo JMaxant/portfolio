@@ -1,12 +1,12 @@
 +++
 date = '2026-09-23'
 draft = true
-title = 'La notation Big O pour les nuls'
-description = "Comment lire O(n), O(log n) ou O(n²) sans y voir des maths — et pourquoi ça compte avant même d'avoir un problème de performance."
-tags = ['Algorithmique', 'Go']
-translationKey = 'notation-big-o-pour-les-nuls'
+title = 'Briller en société grâce à Big O()'
+description = 'Pour celles et ceux qui (comme moi) sont perplexes quand ils ou elles lisent "this is O(n²), use a hashmap" sur Stack Overflow.'
+tags = ['Algorithmie']
+translationKey = 'briller-en-societe-grace-a-big-o'
 images = []
-aiDisclaimer = 'Partiel (relecture et corrections)'
+aiDisclaimer = 'Partiel (relecture et corrections typographiques)'
 +++
 
 La notation Big O, pour un profil comme le mien (j'entends par là, un profil reconverti ou dont la formation initiale
@@ -16,7 +16,8 @@ compris, mais préfère éviter que ce soit vu. _A posteriori_, je pense que ça
 comprennent pas forcément beaucoup plus ce dont il s'agit (un peu comme les regex).
 
 Je me suis donc lancé (à corps perdu, rien de moins) dans le sujet pour pouvoir moi aussi briller en société et laisser
-des commentaires de revue de code abscons.
+des commentaires de revue de code abscons (disclaimer : j'ai passé un bac Littéraire, donc ne prenez pas ce que je dis
+pour parole d'évangile hein).
 
 ## Que sont les "O(...)"
 
