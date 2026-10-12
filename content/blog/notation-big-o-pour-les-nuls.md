@@ -6,97 +6,162 @@ description = "Comment lire O(n), O(log n) ou O(n²) sans y voir des maths — e
 tags = ['Algorithmique', 'Go']
 translationKey = 'notation-big-o-pour-les-nuls'
 images = []
+aiDisclaimer = 'Partiel (relecture et corrections)'
 +++
 
-La notation Big O répond à une seule question : **si je donne deux fois plus de
-données à ce code, il met combien de fois plus de temps ?** Pas "combien de
-millisecondes" — ça dépend de la machine, du langage, du cache. Big O ignore tout ça
-pour ne garder que la tendance : est-ce que le temps double, est-ce qu'il est
-multiplié par quatre, ou est-ce qu'il ne bouge presque pas ?
+La notation Big O, pour un profil comme le mien (j'entends par là, un profil reconverti ou dont la formation initiale
+n'était pas orientée maths/informatique), c'est un sujet un peu mystérieux qu'on aperçoit sur des réponses Stack Overflow
+ou des threads Reddit et face auquel on lève un sourcil et on prend l'air inspiré de la personne qui n'a pas vraiment
+compris, mais préfère éviter que ce soit vu. _A posteriori_, je pense que ça se voit et que la plupart d'entre nous ne
+comprennent pas forcément beaucoup plus ce dont il s'agit (un peu comme les regex).
 
-## Ce que "O(...)" veut dire
+Je me suis donc lancé (à corps perdu, rien de moins) dans le sujet pour pouvoir moi aussi briller en société et laisser
+des commentaires de revue de code abscons.
 
-`O(f(n))` se lit "l'ordre de grandeur du temps suit `f(n)`", où `n` est la taille de
-l'entrée (le nombre d'éléments d'une liste, de lignes d'une table...). Ce qui compte
-n'est jamais la constante devant, ni les termes qui deviennent négligeables quand `n`
-grossit — seul le terme qui domine survit :
+## Que sont les "O(...)"
 
-* `3n + 100` devient `O(n)` — le `+100` ne pèse plus rien dès que `n` est grand, et le
-  `3` ne change pas la *forme* de la courbe, seulement sa pente.
-* `n² + n` devient `O(n²)` — le `n²` écrase le `n` dès que `n` dépasse quelques
-  unités.
+Pour résumer rapidement, cette notation décrit comment le temps d'exécution évolue lorsque la quantité de données (`n`)
+évolue.
 
-C'est une notation de *comportement à grande échelle*, pas une mesure de vitesse
-réelle.
+| Notation   | Nom            | Exemples (Go, PHP)                      | Si n double…        |
+|------------|----------------|-----------------------------------------|---------------------|
+| O(1)       | Constant       | `nombres[0]`, `$tableau[0]`             | Temps identique     |
+| O(log n)   | Logarithmique  | `slices.BinarySearch()`                 | +1 étape            |
+| O(n)       | Linéaire       | `for range`, `foreach`, `in_array()`    | Temps × 2           |
+| O(n log n) | Quasi-linéaire | `slices.Sort()`, `sort()`, `usort()`    | Un peu plus que × 2 |
+| O(n²)      | Quadratique    | Deux `for range` ou `foreach` imbriqués | Temps × 4           |
+| O(n³)      | Cubique        | Trois `for` ou `foreach` imbriqués      | Temps × 8           |
+| O(2ⁿ)      | Exponentiel    | Fibonacci récursif naïf                 | Temps au carré      |
 
-## Les complexités qu'on croise tout le temps
+Si ça vous éclaire : bravo ! Vous êtes bien plus intelligent.e.s que moi, sinon, pas de panique, des explications
+arrivent.
 
-| Notation     | Nom            | Exemple concret                                                                                        |
-|--------------|----------------|--------------------------------------------------------------------------------------------------------|
-| `O(1)`       | Constant       | Lire `slice[3]` — un accès par index, quelle que soit la taille du slice                               |
-| `O(log n)`   | Logarithmique  | Chercher un mot dans un dictionnaire papier : à chaque étape, on élimine la moitié des pages restantes |
-| `O(n)`       | Linéaire       | Parcourir une liste une fois pour trouver un élément                                                   |
-| `O(n log n)` | Quasi-linéaire | Trier une liste avec un bon algorithme de tri (tri fusion, tri rapide en moyenne)                      |
-| `O(n²)`      | Quadratique    | Comparer chaque élément d'une liste à tous les autres (deux boucles imbriquées)                        |
-| `O(2^n)`     | Exponentiel    | Essayer toutes les combinaisons possibles d'un ensemble de `n` éléments                                |
+## Approfondissons (avec des exemples !)
 
-Le classement va du meilleur au pire dans cet ordre. Un algorithme `O(log n)` sur un
-million d'éléments fait environ 20 comparaisons. Un algorithme `O(n²)` sur le même
-volume en fait mille milliards.
+Ce que cette notation (et ce tableau) permet, c'est d'anticiper comment se comportera un algorithme selon la quantité
+de données (`n`).
 
-## Un exemple qui se voit dans le code
+Les exemples qui suivent prendront des valeurs arbitraires pour la facilité de lecture : on partira du principe que
+l'opération coûtera 1ms (quelle qu'elle soit).
 
-Chercher une valeur dans une liste triée, la manière naïve (parcourir un par un) :
+### `O(1)`
 
 ```go
-func rechercheLineaire(valeurs []int, cible int) bool {
-    for _, v := range valeurs {
-        if v == cible {
-            return true
-        }
-    }
-    return false
-}
+// nombres contient un élément
+nombres[0] // 1ms
+
+// nombres contient 1 000 éléments
+nombres[0] // 1ms
 ```
 
-C'est `O(n)` : dans le pire cas (la valeur n'existe pas, ou elle est en dernière
-position), on parcourt toute la liste.
+Le temps d'exécution est **constant** : on récupère un élément dans le tableau, et c'est tout.
 
-Comme la liste est triée, on peut faire mieux — éliminer la moitié des candidats à
-chaque comparaison plutôt que d'avancer un par un :
+### `O(log n)`
 
 ```go
-func rechercheDichotomique(valeurs []int, cible int) bool {
-    debut, fin := 0, len(valeurs)-1
-    for debut <= fin {
-        milieu := (debut + fin) / 2
-        switch {
-        case valeurs[milieu] == cible:
-            return true
-        case valeurs[milieu] < cible:
-            debut = milieu + 1
-        default:
-            fin = milieu - 1
-        }
-    }
-    return false
-}
+// nombres contient 1 000 éléments triés
+slices.BinarySearch(nombres, 42) // ~10ms
+
+// nombres contient 1 000 000 éléments triés
+slices.BinarySearch(nombres, 42) // ~20ms
 ```
 
-C'est `O(log n)`. Sur une liste de 1 000 éléments, la première version fait jusqu'à
-1 000 comparaisons ; la seconde, 10 au maximum. L'écart ne vient d'aucune astuce
-d'implémentation — juste du fait qu'on jette la moitié des données restantes à chaque
-tour, au lieu d'une seule.
+Bien que la quantité de données soit 1000 fois plus importante dans le second cas, le temps d'exécution est seulement
+multiplié par 2 : c'est le principe de la recherche binaire.
 
-## Ce que ça n'est pas
+Prenez `git bisect` (commande git qui mérite éloges et offrandes quotidiennes) : on lui donne un point de départ (`git bisect good`, traduisible par "à ce moment, la prod marchait encore"), un point d'arrivée (`git bisect bad`, ou "c'est là que la prod a pris feu"), et à partir de là, il va se mettre au milieu de l'intervalle (`n`). À chaque itération, on teste, on définit si c'est bon ou non, ce qui permet de déduire "la bonne" moitié, et il recommence à partir de la bonne moitié pour éliminer par dichotomie jusqu'à arriver au point de bascule (le commit en cause).
 
-* **Une mesure de temps réel.** Un `O(n²)` peut battre un `O(n log n)` si `n` reste
-  petit — la notation ne dit rien sur les constantes, seulement sur ce qui se passe
-  quand `n` devient grand.
-* **Une excuse pour optimiser prématurément.** Un algorithme `O(n²)` sur une liste de
-  20 éléments qui ne grossira jamais n'a aucun problème à résoudre. Le sujet devient
-  réel quand `n` peut croître sans qu'on contrôle sa limite (les lignes d'une table,
-  les utilisateurs d'un service).
-* **Réservé aux entretiens techniques.** Ça sert surtout à répondre à une question
-  très concrète en amont : cette fonction va-t-elle tenir quand le volume de données
-  sera multiplié par dix ?
+Concrètement, ça veut dire qu'au lieu de tester _chacun_ des commits (soit `n`), on aura dans le pire des cas 10 ou 20 opérations (au lieu de 1 000 ou 1 000 000).
+
+### `O(n)`
+
+```go
+// nombres contient 1 000 éléments
+for _, v := range nombres {
+ total += v
+} // 1 000ms
+
+// nombres contient 1 000 000 éléments
+for _, v := range nombres {
+ total += v
+} // 1 000 000ms
+```
+
+Ici, c'est explicite, le coût croît **linéairement** : le coût d'exécution sera de `n` ms.
+
+### `O(n log n)`
+
+```go
+// nombres contient 1 000 éléments
+slices.Sort(nombres) // ~10 000ms, soit 10s
+
+// nombres contient 1 000 000 éléments
+slices.Sort(nombres) // ~20 000 000ms, soit ~5h30
+```
+
+Celui-ci est un peu abstrait, car, que ce soit en PHP ou en Go, les algorithmes de tri (`sort` en php) fonctionnent sous le capot en `O(n log n)`, c'est la complexité des bons algorithmes de tri (comme le tri fusion). Dans notre cas, ce qu'il faut garder en tête, c'est que le `log` grandit lentement : la différence entre un tri `O(n log n)` et un tri `O(n²)` sur 1 000 000 d'éléments, c'est la différence entre 5h30 et 32 ans.
+
+### `O(n²)`
+
+```go
+// nombres contient 1 000 éléments
+for i := range nombres {
+ for j := range nombres {
+  // comparer nombres[i] et nombres[j]
+ }
+} // 1 000 000ms, soit ~17min
+
+// nombres contient 1 000 000 éléments
+// 1 000 000 000 000ms, soit ~32 ans
+```
+
+L'exemple ci-dessus est naïf (et encore une fois il s'agit de donner un ordre d'idée), mais c'est le cas typique qui fonctionne _jusqu'à un certain point_ : une tâche de fond qui compare des contenus ou des entités et qui tourne sans problème, mais où l'opération appliquée voit son coût augmenté de `2n` pour chaque nouvelle entité. Si on double le nombre d'entités, le temps d'exécution quadruple.
+
+### `O(n³)`
+
+```go
+// nombres contient 100 éléments
+for i := range nombres {
+ for j := range nombres {
+  for k := range nombres {
+   // ...
+  }
+ }
+} // 1 000 000ms, soit ~17min
+
+// nombres contient 1 000 éléments
+// 1 000 000 000ms, soit ~11 jours et demi
+```
+
+Dans ce cas, si on double le nombre d'entités, le temps d'exécution est multiplié par huit.
+
+### `O(2ⁿ)`
+
+```go
+func fib(n int) int {
+ if n < 2 {
+  return n
+ }
+ return fib(n-1) + fib(n-2)
+}
+
+fib(1) // 1ms
+fib(10) // ~1 000ms, soit ~1s
+fib(11) // ~2 000ms, soit ~2s
+fib(12) // ~4 000ms, soit ~4s
+fib(30) // ~1 000 000 000ms, soit ~12 jours
+```
+
+Dans cet exemple, `n` n'est plus un tableau, mais un entier arbitraire. Le principe s'applique quand même : chaque incrémentation **double le temps d'exécution** (d'où `2ⁿ` soit `2 ^ 10`, puis `2 ^ 11` etc).
+
+## Et ça sert à quoi ?
+
+Déjà, ça ne sert pas _au quotidien_.
+
+Quitte à évaluer les complexités rencontrées, au quotidien, on sera plus souvent confrontés à des complexités de tout autre ordre (NPath, cyclomatique par exemple) et qui seront bien plus contraignantes ou dangereuses sur le long terme ou dans la vie du projet car elles sous-entendent des problèmes de compréhension et de maintenance du code.
+
+Il y a aussi le non-dit, qui est que dans bien des cas cette grille d'analyse sera peu pertinente : comme pour nos amis les IA, le contexte est tout. Sur une volumétrie limitée par exemple, c'est une analyse qui n'apportera rien.
+
+En revanche, c'est un outil d'anticipation et d'architecture de son code : avoir tout ça en tête, c'est pouvoir se poser la question "Comment mon code se comportera quand il sera alimenté par `n` fois plus de données ?". Et c'est aussi un raccourci et un vocabulaire commun plus précis, à défaut d'être plus intelligible, pour mieux répondre ou mieux review le code.
+
+Et pour ce qui est de briller en société : honnêtement, bof. Mais ça m'aura au moins permis d'écrire cet article, donc c'est toujours ça de pris (je garde les regex sous le coude).
