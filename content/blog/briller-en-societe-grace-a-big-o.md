@@ -22,7 +22,7 @@ pour parole d'évangile hein).
 ## Que sont les "O(...)"
 
 Pour résumer rapidement, cette notation décrit comment le temps d'exécution évolue lorsque la quantité de données (`n`)
-évolue.
+augmente.
 
 | Notation   | Nom            | Exemples (Go, PHP)                      | Si n double…        |
 |------------|----------------|-----------------------------------------|---------------------|
