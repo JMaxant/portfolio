@@ -79,6 +79,8 @@ Point clé : ne pas laisser la section 4 comme une simple déclaration d'intenti
 
 **Décidé** (#10) : abandon de la distinction explicite "stack quotidienne" / "direction", et de la preuve par carte (un `proof` par compétence en cours pointant vers une page). La section Compétences liste désormais automatiquement tous les tags réellement utilisés sur le site (liés à leur page de taxonomie), plus une liste optionnelle de compétences pas encore rattachées à un contenu publié (`extra`, rendu sans lien). Le build échoue si une entrée de `extra` fait doublon avec un tag déjà utilisé, pour éviter la dérive entre les deux listes. La frontière quotidien/trajectoire reste visible (bordure en pointillés + tags non accentués pour `extra`), mais sans label ni carte dédiée par compétence.
 
+**Amendé** (#196) : la section Compétences ne liste plus les tags du site, qui mélangeaient compétences et thèmes d'articles. Elle lit `params.author.knowsAbout`, la même liste que le JSON-LD ; `extra` et le build en échec sur doublon disparaissent.
+
 ## 5ter. Page d'accueil : sections dynamiques
 
 Deux idées évoquées : "Récemment publiés" (nouveau contenu) et "Dernières mises à jour" (contenu existant retouché) — ce sont deux signaux réellement différents, mais avec le faible volume de contenu au lancement, les séparer en deux sections risque de laisser l'une des deux vide ou anecdotique.

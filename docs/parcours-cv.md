@@ -66,4 +66,10 @@ when an entry is added or its dates move.
 ## Validating a change
 
 `task qa` builds the site with any Hugo `WARN` treated as a failure. A missing required
-parameter or an `extra` entry that duplicates a tag fails the build through `errorf`.
+parameter fails the build through `errorf`.
+
+## Markdown version
+
+`/a-propos/parcours/index.md` is built from the same shortcodes, each with a Markdown template
+next to its HTML one (`layouts/shortcodes/<name>.md`). A new Parcours shortcode needs one too,
+or its HTML leaks into the twin. See [seo.md](seo.md#markdown-versions).

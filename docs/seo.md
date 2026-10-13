@@ -244,6 +244,8 @@ front matter block, the title, the description as a quote and the body.
   written.
 - **Advertised** by `<link rel="alternate" type="text/markdown">` in the head, and by a visible
   link (`markdown-link.html`) at the end of the article.
+- **`llms.txt` itself** is linked from the footer of every page, the one signal a reader of the
+  extracted text always sees.
 - **`llms.txt` links to the Markdown version instead of the HTML page**: it is the cleaner
   target, and the HTML page stays one link away through the canonical URL.
 

@@ -324,6 +324,22 @@ Emits `p.single__alt.meta` only when the page has a `markdown` output format, so
 template whose pages have none is harmless. A missing `page` fails the build through `errorf`.
 The label is the `markdown-version` string of `i18n/fr.toml`.
 
+### `markdown-twin.md`
+
+The Markdown twin of a page, published as `index.md`: front matter, title, description as a
+quote, body. Called by `layouts/_default/single.md`, `layouts/a-propos/list.md` and
+`layouts/parcours/single.md`, which are one-line wrappers. See
+[seo.md](seo.md#markdown-versions).
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| `page` | yes | The page to render |
+| `body` | no | The Markdown body. Defaults to the raw content with its shortcodes dropped |
+
+Any other key, or a missing `page`, fails the build through `errorf`. The Parcours passes its
+rendered `.Content` as `body`, since its body is only shortcodes with a Markdown template of
+their own. `date` is omitted for a page without one.
+
 ### `details.html`
 
 A collapsible block on the native `<details>` element: no JavaScript, the toggle and the
@@ -746,7 +762,7 @@ git history if a nested menu is needed again.
 
 ### `footer.html`
 
-Site footer: the social profiles, the RSS link and the copyright. `baseof.html` calls it once
+Site footer: the social profiles, the RSS and `llms.txt` links and the copyright. `baseof.html` calls it once
 with the page context (`partial "footer.html" .`), not with a dictionary. It is the exception
 to [Dictionary-based calls](#dictionary-based-calls), because it takes no parameter and reads
 site-level data only: there is nothing to pass.
@@ -755,7 +771,7 @@ site-level data only: there is nothing to pass.
 |--------|----------|
 | `[[params.social]]` in `config/_default/hugo.toml` | One `<li>` per entry, in the config order: `name` is the link text, `url` the `href` |
 | `i18n "nav-footer"` | Accessible name of the `<nav>` landmark |
-| `absURL "index.xml"` | The RSS link, always last |
+| `absURL "index.xml"`, `absURL "llms.txt"` | The RSS link, then the `llms.txt` link, always last |
 | `.Site.Copyright`, `.Site.Params.madeWith` | The line under the list |
 
 `params.social` is also read by `json-ld.html` for the `sameAs` of the Person node, so a profile
@@ -765,8 +781,8 @@ added to the config appears in the structured data and in the footer at once. Th
 **Markup** — `<nav aria-label><ul class="menu menu--footer" role="list">`, then a `<p>`. A profile
 leaves the site, so its link carries the marker of [`entry-link.html`](#entry-linkhtml):
 `target="_blank" rel="noopener"` and the `external-link` icon, whose `visually-hidden` text
-completes the accessible name (the profile name, then `i18n "external-link"`). The RSS link
-stays on the site and has none.
+completes the accessible name (the profile name, then `i18n "external-link"`). The RSS and
+`llms.txt` links stay on the site and have none.
 
 **Integration** — `.site-footer` is in `layout/footer.css`, the list reuses the `.menu` block of
 `components/menu.css` with the `menu--footer` variant.
