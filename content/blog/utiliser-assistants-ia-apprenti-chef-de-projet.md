@@ -1,7 +1,7 @@
 +++
 date = '2026-10-04T12:41:59+02:00'
 draft = true
-title = 'Gérer un projet perso avec un agent IA'
+title = 'Utiliser les assistants IA : un apprenti chef de projet'
 description = "Cadrer, découper et livrer un projet personnel avec un agent IA : ce que la spécification, les tickets et les garde-fous changent quand on travaille seul."
 tags = ['IA', 'Workflow']
 translationKey = 'gerer-un-projet-perso-avec-un-agent-ia'
