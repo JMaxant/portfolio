@@ -6,6 +6,7 @@ description = "Pas de version variable officielle pour la police serif de ce sit
 tags = ['CSS', 'Performance']
 translationKey = 'construire-une-police-variable'
 images = []
+iaDisclaimer = "Important (plan, relecture, correction)"
 +++
 
 Ce site sert la police serif Spectral en 2 fichiers `.woff2` de ~64 Ko chacun. Avant,
