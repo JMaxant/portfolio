@@ -1,5 +1,5 @@
-{{- /*Markdown twin of a blog article or project, published as index.md. Title, description
-       and body only: shortcodes are dropped and relative links made absolute.
+{{- /*Markdown twin of a blog article or project, published as index.md. Front matter, title,
+       description and body: shortcodes are dropped and relative links made absolute.
        See docs/seo.md#markdown-versions. */ -}}
 {{- $base := strings.TrimSuffix "/" site.BaseURL -}}
 {{- $body := .RawContent -}}
@@ -10,6 +10,9 @@
 {{- $body = replaceRE `\]\(/([^/])` (printf "](%s/$1" $base) $body -}}
 {{- $body = replaceRE `\]\(#` (printf "](%s#" .Permalink) $body -}}
 {{- $body = replaceRE `\]\((?:\./)?([^/#:)\s][^:)\s]*)\)` (printf "](%s$1)" .Permalink) $body -}}
+---
+{{ printf "title: %s\nauthor: %s\ndate: %s\ncanonical: %s" (jsonify .Title) (jsonify site.Params.author.name) (.Date.Format "2006-01-02") .Permalink }}
+---
 
 # {{ .Title }}
 

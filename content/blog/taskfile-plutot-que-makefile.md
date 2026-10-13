@@ -22,7 +22,7 @@ en mode auto-fix), `test:layout` (suite Playwright), et `hugo:serve` avec trois 
 
 Le point notable : `task qa` n'est pas une commande à part qui *ressemble* à la CI,
 c'est littéralement la même invocation de `lefthook` que le job `quality` de la CI
-appelle — documenté dans `docs/qa-ci.md`. Aucune des deux définitions ne peut dériver
+appelle — documenté dans [`docs/qa-ci.md`](https://github.com/JMaxant/portfolio/blob/main/docs/qa-ci.md). Aucune des deux définitions ne peut dériver
 de l'autre puisqu'il n'y en a qu'une.
 
 ## Pourquoi pas un Makefile ou des scripts npm

@@ -5,16 +5,17 @@ import { FIXTURES } from './pages.js';
 
 const twin = (url) => `${url}index.md`;
 
-test('an article and a project have a Markdown twin with title, description and body', async ({ request }) => {
+test('an article and a project have a Markdown twin with front matter, title, description and body', async ({ request }) => {
   for (const page of [FIXTURES.article, FIXTURES.project]) {
     const response = await request.get(twin(page.url));
     expect(response.status(), page.url).toBe(200);
     expect(response.headers()['content-type']).toMatch(/^text\/markdown/);
     const text = await response.text();
-    expect(text).toMatch(/^# \S/);
+    expect(text).toMatch(/^---\ntitle: ".+"\nauthor: ".+"\ndate: \d{4}-\d{2}-\d{2}\ncanonical: https?:\/\/\S+\n---\n/);
+    expect(text).toMatch(/^# \S/m);
     expect(text).toMatch(/^> \S/m);
     expect(text).toContain('Body.');
-    expect(text).not.toMatch(/^(\+\+\+|---)$/m);
+    expect(text).not.toMatch(/^\+\+\+$/m);
   }
 });
 

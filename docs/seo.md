@@ -212,8 +212,12 @@ change; reload without the cache.
 ## Markdown versions
 
 Each blog article and project is also published as `index.md` next to its HTML page
-(`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds the
-title, the description as a quote and the body, with no front matter.
+(`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds a
+front matter block, the title, the description as a quote and the body.
+
+- **Front matter**: `title`, `author` (`params.author.name`), `date` (publication date) and
+  `canonical` (the HTML page). A file read on its own can then be dated and attributed. The
+  title and author are written as JSON strings, which are valid quoted YAML.
 
 - **Output format**: `markdown` in `config/_default/hugo.toml` (`text/markdown`, base name
   `index`), rendered from `layouts/_default/single.md`.
