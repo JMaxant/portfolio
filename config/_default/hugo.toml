@@ -20,16 +20,25 @@ mainSections = ['projets', 'blog']
 
 [params.author]
 name = 'Julien Maxant'
-# Read by the JSON-LD Person node only. See docs/seo.md#structured-data.
+# Read by the JSON-LD Person node. See docs/seo.md#structured-data.
 jobTitle = 'Lead tech'
+# The skills: listed by the Parcours `skills` shortcode and by the JSON-LD `knowsAbout`, so the two
+# cannot drift. Not the blog tags. See docs/parcours-cv.md#adding-a-skill.
 knowsAbout = [
   'PHP',
   'Drupal',
   'Symfony',
   'JavaScript',
   'Vue.js',
+  'CSS',
   'Go',
   'Python',
+  'Docker',
+  'DDEV',
+  'Kubernetes',
+  'Git',
+  'GitLab',
+  'GitHub',
 ]
 
 # Profiles on other sites, in display order. The JSON-LD Person lists them as sameAs.

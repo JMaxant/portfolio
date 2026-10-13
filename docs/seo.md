@@ -126,7 +126,7 @@ breadcrumb is described in the same graph rather than with `itemprop` attributes
 | Any other page | `BreadcrumbList` |
 
 The `Person` is built from the site configuration: `params.author` gives `name`, `jobTitle` and
-`knowsAbout`, and every `url` of `params.social` becomes a `sameAs`. Those profile links are
+`knowsAbout` (the list the Parcours `skills` shortcode displays), and every `url` of `params.social` becomes a `sameAs`. Those profile links are
 what lets a search engine tie the site to the same person elsewhere, so keep them current.
 
 An article's `description` and `image` resolve as the meta tags do: the description chain

@@ -905,7 +905,7 @@ validates its required parameters with `errorf`, reporting the position in the s
 | `timeline` (paired) | `title`, `period` (optional) | `section.resume__section--now` with its `h2` and the `ol.timeline` |
 | `timeline-item` | same keys as the partial, `tags` comma-separated | `timeline-item.html` |
 | `resume-text` (paired) | `title`, `period` (optional) | `section.resume__section--before`, body rendered as Markdown |
-| `skills` | `title`, `extra` comma-separated (optional) | `section.resume__section--skills` with its `h2` and one `ul.tags`: every tag the site actually uses, linked, followed by `extra` as plain, unlinked tags |
+| `skills` | `title` | `section.resume__section--skills` with its `h2` and one `ul.tags`: the skills of `params.author.knowsAbout`, each linked to its tag page when some content carries that tag, plain text otherwise |
 
 **Why one shortcode per section type, not a generic section wrapper.** A paired shortcode
 that renders its `.Inner` with `RenderString` drops the HTML of nested shortcodes (`Raw HTML
@@ -913,8 +913,9 @@ omitted`, a `WARN`, so a failed build), because `markup.goldmark.renderer.unsafe
 So `resume-text` is the only one rendering Markdown, and it must not contain shortcodes;
 `timeline` outputs its `.Inner` (`timeline-item` calls) as is instead.
 
-`skills` fails the build when an `extra` entry, lowercased, matches an existing tag: that
-skill already has a term page and belongs in content (a `tags` list), not in `extra`.
+`skills` reads `params.author.knowsAbout`, not the taxonomy: a blog tag that is not a skill
+("Performance", "Workflow") must not show up in the CV. The JSON-LD `Person` reads the same
+list, so the page and the structured data cannot disagree.
 
 ## Article layout (`.container-content-grid`)
 

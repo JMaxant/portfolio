@@ -47,19 +47,12 @@ most recent first, and nothing sorts them for you.
 
 ## Adding a skill
 
-The `skills` shortcode lists every tag actually used on the site — nothing to edit there,
-it follows content automatically. Tag a project, a blog post or a veille entry, and the
-skill appears, linked to its term page.
+The `skills` shortcode lists `params.author.knowsAbout` in `config/_default/hugo.toml`, and
+the JSON-LD `Person` reads the same list. Blog tags are not skills and never appear there.
 
-For a skill nothing published backs yet, add it to `extra`:
-
-```markdown
-{{</* skills title="Compétences" extra="Python, Kubernetes" */>}}
-```
-
-`extra` renders as plain, unlinked tags, in the case written. The build fails if an `extra` entry, lowercased,
-already matches a tag used in content — that skill has a term page and belongs there
-instead, not in `extra`.
+To add a skill, add it to that list, written as it should be displayed. It links to its tag
+page when some content carries a tag with the same slug (`Go` and `go`), and is plain text
+otherwise.
 
 ## The pivot year
 

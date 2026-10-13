@@ -70,4 +70,4 @@ type = 'parcours'
     resume="Histoire, théorie et pratique musicale, recherche (esthétique et sémiotique) et philologie de la musique" >}}
 {{< /timeline >}}
 
-{{< skills title="Compétences" extra="Python, Kubernetes, Vue, JS, git, gitlab, github" >}}
+{{< skills title="Compétences" >}}
