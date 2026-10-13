@@ -28,7 +28,7 @@ type = 'parcours'
     tags="PHP, JS, CSS, Drupal, Docker" >}}
 {{< /timeline >}}
 
-{{< timeline title="Précédemment" period="Jusqu'à 2017" >}}
+{{< timeline title="Précédemment" period="De 2011 à 2018" >}}
   {{< timeline-item
     debut="2014"
     fin="2018"

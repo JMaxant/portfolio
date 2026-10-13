@@ -872,7 +872,8 @@ contract. Entries are written by hand in the content, most recent first.
 
 The three required keys are checked with `errorf` before any output. Only the year is
 displayed, through `substr`, which is what makes all three date precisions acceptable; the
-full value stays in the `datetime` attribute.
+full value stays in the `datetime` attribute. When `fin` falls in the same year as `debut`,
+the year is shown once (`2025`, not `2025 → 2025`).
 
 `tags` are plain strings, not taxonomy terms, so each one is looked up with
 `site.GetPage`: a tag that some content carries becomes a link, one that nothing carries is

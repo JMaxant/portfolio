@@ -355,10 +355,10 @@ advertises the main feed.
 production and points to a sitemap that resolves, and that `llms.txt` is plain text with the
 expected headings, lists the publications but not the veille entries, and has no broken link.
 
-`tests/markdown.spec.js` checks that an article and a project have an `index.md` with title,
-description and body but no front matter, that shortcodes are gone and links absolute, that the
-HTML page advertises and links to it, that the excluded page kinds have none, and that
-`llms.txt` points to it.
+`tests/markdown.spec.js` checks that an article and a project have an `index.md` with front
+matter, title, description and body, that shortcodes are gone and links absolute, that the
+resume pages have a twin without HTML, that the HTML page advertises and links to it, that the
+excluded page kinds have none, and that `llms.txt` points to it.
 
 A new list template (see the `_default/list.html` gotcha in `CLAUDE.md`) gets a line in the
 spec's `PAGES` table.

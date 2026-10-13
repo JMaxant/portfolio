@@ -27,6 +27,7 @@ it now runs the whole suite:
 | `keyboard.spec.js` | What axe cannot judge: skip-link, landmark names, keyboard-scrollable code blocks, theme switcher by keyboard, focus indicators, `prefers-reduced-motion` |
 | `nav.spec.js` | Header/nav menu, including the mobile burger panel and the active trail |
 | `overflow.spec.js` | No horizontal overflow across pages, at default size and (WCAG 1.4.4) at 200% text |
+| `parcours.spec.js` | Parcours text as an extractor reads it: heading separator, one-year periods |
 | `sticky-footer.spec.js` | Footer stays pinned on short pages |
 | `table.spec.js` | Table rendering (`render-table.html`) |
 | `theme-switcher.spec.js` | Light/dark toggle |

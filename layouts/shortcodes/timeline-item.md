@@ -1,6 +1,10 @@
 {{- /* Markdown form of layouts/shortcodes/timeline-item.html. */ -}}
-{{- $end := .Get "fin" | default (i18n "parcours-ongoing") -}}
-{{ printf "\n### %s, %s (%s → %s)" (.Get "titre") (.Get "organisation") (.Get "debut") $end }}
+{{- $period := .Get "debut" -}}
+{{- /* A period inside one year reads "2025", not "2025 → 2025". */ -}}
+{{- if ne (substr (.Get "fin" | default "") 0 4) (substr $period 0 4) -}}
+  {{- $period = printf "%s → %s" $period (.Get "fin" | default (i18n "parcours-ongoing")) -}}
+{{- end -}}
+{{ printf "\n### %s, %s (%s)" (.Get "titre") (.Get "organisation") $period }}
 {{ with .Get "resume" }}
 {{ . }}
 {{ end }}

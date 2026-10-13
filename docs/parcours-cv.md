@@ -59,6 +59,10 @@ otherwise.
 The year separating "Maintenant" from "Avant" (2017) is written by hand in the
 `description` and in the `period` of `timeline` and `resume-text`. Change all three together.
 
+The `period` of "Précédemment" is the span of its entries (2011 to 2018), not the pivot: the
+last hotel job ends in 2018, after the training that started the web career in 2017. Update it
+when an entry is added or its dates move.
+
 ## Validating a change
 
 `task qa` builds the site with any Hugo `WARN` treated as a failure. A missing required
