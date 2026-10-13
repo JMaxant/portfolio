@@ -26,7 +26,7 @@
   "name" site.Params.author.name
   "url" site.Home.Permalink
 -}}
-{{- with site.Params.baseline }}{{ $person = merge $person (dict "jobTitle" .) }}{{ end -}}
+{{- with site.Params.author.jobTitle }}{{ $person = merge $person (dict "jobTitle" .) }}{{ end -}}
 {{- with site.Params.author.knowsAbout }}{{ $person = merge $person (dict "knowsAbout" .) }}{{ end -}}
 {{- $sameAs := slice -}}
 {{- range site.Params.social }}{{ $sameAs = $sameAs | append .url }}{{ end -}}
