@@ -1,5 +1,5 @@
 +++
-date = '2026-09-23'
+date = '2026-10-13'
 draft = false
 title = 'Briller en société grâce à Big O()'
 description = 'Pour celles et ceux qui (comme moi) sont perplexes quand ils ou elles lisent "this is O(n²), use a hashmap" sur Stack Overflow.'
