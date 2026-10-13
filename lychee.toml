@@ -6,4 +6,6 @@ max_retries = 2
 timeout = 20
 cache = false
 accept = ["200..=204", "429"]
-exclude = ["^mailto:"]
+# LinkedIn answers 999 to any non-browser client. The profile is checked in a real browser by
+# tests/live/smoke.spec.js instead.
+exclude = ["^mailto:", "^https://(www\\.)?linkedin\\.com/"]
