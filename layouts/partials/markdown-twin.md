@@ -31,8 +31,9 @@
   {{- $body = replaceRE `\]\((?:\./)?([^/#:)\s][^:)\s]*)\)` (printf "](%s$1)" $page.Permalink) $body -}}
 {{- end -}}
 ---
-title: {{ jsonify $page.Title }}
-author: {{ jsonify site.Params.author.name }}
+{{- /* JSON strings are valid quoted YAML; noHTMLEscape keeps "&" from becoming \u0026. */}}
+title: {{ jsonify (dict "noHTMLEscape" true) $page.Title }}
+author: {{ jsonify (dict "noHTMLEscape" true) site.Params.author.name }}
 {{ with $page.Date }}{{ if not .IsZero }}date: {{ .Format "2006-01-02" }}
 {{ end }}{{ end -}}
 canonical: {{ $page.Permalink }}

@@ -222,9 +222,10 @@ Each blog article, project, the resume section index and the Parcours are also p
 (`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds a
 front matter block, the title, the description as a quote and the body.
 
-- **Front matter**: `title`, `author` (`params.author.name`), `date` (publication date) and
-  `canonical` (the HTML page). A file read on its own can then be dated and attributed. The
-  title and author are written as JSON strings, which are valid quoted YAML.
+- **Front matter**: `title`, `author` (`params.author.name`), `date` (publication date, left out
+  of a page that has none, such as the resume) and `canonical` (the HTML page). A file read on
+  its own can then be dated and attributed. The title and author are written as JSON strings
+  without HTML escaping, which are valid quoted YAML.
 
 - **Output format**: `markdown` in `config/_default/hugo.toml` (`text/markdown`, base name
   `index`), rendered by the `markdown-twin.md` partial. `layouts/_default/single.md`,
