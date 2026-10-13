@@ -23,6 +23,10 @@
     color: var(--color-text);
     text-decoration: underline;
   }
+
+  &.menu--footer {
+    font-size: var(--text-sm);
+  }
 }
 
 .menu-toggle {
