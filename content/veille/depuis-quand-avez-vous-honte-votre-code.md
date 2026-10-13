@@ -1,6 +1,6 @@
 +++
 date = '2026-03-31'
-draft = false
+draft = true
 title = 'Depuis quand avez vous honte de votre code ? - Frédéric Bouchery (f2r.github.io)'
 description = "Article de Frédéric Bouchery, particulièrement intéressant sur une approche pragmatique de l'utilisation de l'IA."
 tags = ['Tendance', 'IA']

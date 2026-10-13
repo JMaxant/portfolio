@@ -5,7 +5,7 @@ translationKey = 'parcours'
 type = 'parcours'
 +++
 
-{{< timeline title="Actuellement" period="Depuis 2017" >}}
+{{< timeline title="Actuellement" period="Depuis 2018" >}}
   {{< timeline-item
     debut="2024-05"
     titre="Lead developer/Lead tech"
