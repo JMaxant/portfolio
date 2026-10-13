@@ -63,7 +63,9 @@ wins over step 2, and the social preview follows.
 ## Page title
 
 `baseof.html` builds `<title>` as `<page title> | <site title>`. The home page is the
-exception, since its title is the site title: it reads `<site title> | <baseline>` instead.
+exception, since its title is the site title: it reads `<site title> | <baseline>` instead. The
+baseline (`params.baseline`) is a tagline naming a field ("Lead tech et développement web"),
+shared with the header and the social cards. It is not the job title.
 
 ## Social preview image
 
@@ -126,8 +128,13 @@ breadcrumb is described in the same graph rather than with `itemprop` attributes
 | Any other page | `BreadcrumbList` |
 
 The `Person` is built from the site configuration: `params.author` gives `name`, `jobTitle` and
-`knowsAbout`, and every `url` of `params.social` becomes a `sameAs`. Those profile links are
-what lets a search engine tie the site to the same person elsewhere, so keep them current.
+`knowsAbout` (the list the Parcours `skills` shortcode displays), and every `url` of `params.social` becomes a `sameAs`. Those profile links are what lets a search
+engine tie the site to the same person elsewhere, so keep them current.
+
+`params.author.jobTitle` is the one wording of the job title ("Lead tech et développeur web"). The
+hand-written texts that say it (`llms_intro`, the `description` of the home, A propos and Parcours
+pages, `params.description`, the anchor sentence of the home) must follow when it changes. The
+baseline is a separate tagline, see [Page title](#page-title).
 
 An article's `description` and `image` resolve as the meta tags do: the description chain
 above, and the `og:image` lookup. `keywords` lists its `tags`, `datePublished` is its `date`.
@@ -211,22 +218,35 @@ change; reload without the cache.
 
 ## Markdown versions
 
-Each blog article and project is also published as `index.md` next to its HTML page
-(`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds the
-title, the description as a quote and the body, with no front matter.
+Each blog article, project, the resume section index and the Parcours are also published as `index.md` next to its HTML page
+(`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds a
+front matter block, the title, the description as a quote and the body.
+
+- **Front matter**: `title`, `author` (`params.author.name`), `date` (publication date, left out
+  of a page that has none, such as the resume) and `canonical` (the HTML page). A file read on
+  its own can then be dated and attributed. The title and author are written as JSON strings
+  without HTML escaping, which are valid quoted YAML.
 
 - **Output format**: `markdown` in `config/_default/hugo.toml` (`text/markdown`, base name
-  `index`), rendered from `layouts/_default/single.md`.
-- **Scope**: enabled by `cascade.outputs` in `content/blog/_index.md` and
-  `content/projets/_index.md`, for the `page` kind only. Listings, tag pages, `/a-propos/` and
-  the home page get none. A new publication section copies that cascade.
+  `index`), rendered by the `markdown-twin.md` partial. `layouts/_default/single.md`,
+  `layouts/a-propos/list.md` and `layouts/parcours/single.md` are one-line wrappers around it.
+- **Scope**: enabled by `cascade.outputs` in `content/blog/_index.md`,
+  `content/projets/_index.md` and `content/a-propos/_index.md`, for the `page` kind only, plus
+  `outputs` on the `/a-propos/` section index itself. Listings, tag pages and the home page get
+  none. A new publication section copies that cascade.
 - **Shortcodes** are stripped from the raw body: they render HTML for the page and have no
   Markdown equivalent. Keep the text a reader needs outside a shortcode.
+- **The Parcours** is the exception: its body is only shortcodes, so it renders `.Content`, and
+  `timeline`, `timeline-item`, `skills` and `resume-text` each have a Markdown template
+  (`layouts/shortcodes/*.md`) that Hugo picks for this output format. A new Parcours shortcode
+  needs one too, or the HTML leaks into the twin.
 - **Links**: `](/path)`, `](#id)` and `](path)` are made absolute against the site and the page.
   Only the Markdown syntax is rewritten: a raw `<a href>` or `<img src>` in the body is kept as
   written.
 - **Advertised** by `<link rel="alternate" type="text/markdown">` in the head, and by a visible
   link (`markdown-link.html`) at the end of the article.
+- **`llms.txt` itself** is linked from the footer of every page, the one signal a reader of the
+  extracted text always sees.
 - **`llms.txt` links to the Markdown version instead of the HTML page**: it is the cleaner
   target, and the HTML page stays one link away through the canonical URL.
 
@@ -242,7 +262,9 @@ same rules set `Content-Type` with `charset=utf-8`.
   serve. It is never edited by hand.
 - **One rule per section, not per page**: the `:slug` placeholder of the path is reused in the
   value (`Link: <https://…/blog/:slug/>`). A section is listed once it has a page with a
-  Markdown version, so a new section copying the cascade needs no change here.
+  Markdown version, so a new section copying the cascade needs no change here. A section index
+  with its own twin (`/a-propos/index.md`) gets a rule of its own, since `:slug` does not match
+  an empty segment.
 - **Limits**: 100 rules and 2,000 characters per line. The file holds a handful of rules, and
   its size does not grow with the content.
 - **Tested**: `tests/headers.spec.js` checks the generated file, and
@@ -343,10 +365,10 @@ advertises the main feed.
 production and points to a sitemap that resolves, and that `llms.txt` is plain text with the
 expected headings, lists the publications but not the veille entries, and has no broken link.
 
-`tests/markdown.spec.js` checks that an article and a project have an `index.md` with title,
-description and body but no front matter, that shortcodes are gone and links absolute, that the
-HTML page advertises and links to it, that the excluded page kinds have none, and that
-`llms.txt` points to it.
+`tests/markdown.spec.js` checks that an article and a project have an `index.md` with front
+matter, title, description and body, that shortcodes are gone and links absolute, that the
+resume pages have a twin without HTML, that the HTML page advertises and links to it, that the
+excluded page kinds have none, and that `llms.txt` points to it.
 
 A new list template (see the `_default/list.html` gotcha in `CLAUDE.md`) gets a line in the
 spec's `PAGES` table.

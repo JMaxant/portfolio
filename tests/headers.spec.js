@@ -14,13 +14,21 @@ const fetchRules = async (request) => rulesOf(await (await request.get('/_header
 test('each publication section has one rule giving its Markdown versions a canonical Link', async ({ request }) => {
   const rules = await fetchRules(request);
 
-  for (const section of ['blog', 'projets']) {
+  for (const section of ['blog', 'projets', 'a-propos']) {
     const headers = rules.get(`/${section}/:slug/index.md`);
     expect(headers, section).toBeDefined();
     // The :slug placeholder is reused in the value: one rule covers every page of the section.
     expect(headers.some((line) => new RegExp(`^  Link: <https?://[^/>]+/${section}/:slug/>; rel="canonical"$`).test(line)), section).toBe(true);
     expect(headers, section).toContain('  Content-Type: text/markdown; charset=utf-8');
   }
+});
+
+test('the resume section index has its own rule, which the :slug rule does not match', async ({ request }) => {
+  const headers = (await fetchRules(request)).get('/a-propos/index.md');
+
+  expect(headers).toBeDefined();
+  expect(headers.some((line) => /^ {2}Link: <https?:\/\/[^/>]+\/a-propos\/>; rel="canonical"$/.test(line))).toBe(true);
+  expect(headers).toContain('  Content-Type: text/markdown; charset=utf-8');
 });
 
 test('the text files declare their charset', async ({ request }) => {
@@ -45,6 +53,6 @@ test('no rule targets a page without a Markdown version', async ({ request }) =>
   const paths = [...(await fetchRules(request)).keys()];
 
   for (const path of paths) {
-    expect(path, path).toMatch(/^\/(\*|(blog|projets)\/:slug\/index\.md|llms\.txt|robots\.txt)$/);
+    expect(path, path).toMatch(/^\/(\*|(blog|projets|a-propos)\/:slug\/index\.md|a-propos\/index\.md|llms\.txt|robots\.txt)$/);
   }
 });

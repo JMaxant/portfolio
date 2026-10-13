@@ -17,6 +17,8 @@ la transmission au sein des équipes.\
 <!-- markdownlint-disable-next-line MD025 MD026 -->
 # Hello ! 👋
 
+Je suis Julien Maxant, lead tech et développeur web.
+
 De la réception du besoin au déploiement, je crée, conçois et conseille sur des projets de sites ou applications (PHP, Drupal, Symfony, JS, Vue, Go, Python) depuis 2017.
 
 <!-- Shortcode attribute, not prose: angle brackets around the address would be

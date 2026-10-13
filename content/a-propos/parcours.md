@@ -1,11 +1,11 @@
 +++
 title = 'Parcours'
-description = "Développeur web depuis 2017 : développement back, full-stack, mentorat, devops et facilitation."
+description = "Lead tech et développeur web depuis 2017 : développement back, full-stack, mentorat, devops et facilitation."
 translationKey = 'parcours'
 type = 'parcours'
 +++
 
-{{< timeline title="Actuellement" period="Depuis 2017" >}}
+{{< timeline title="Actuellement" period="Depuis 2018" >}}
   {{< timeline-item
     debut="2024-05"
     titre="Lead developer/Lead tech"
@@ -28,7 +28,7 @@ type = 'parcours'
     tags="PHP, JS, CSS, Drupal, Docker" >}}
 {{< /timeline >}}
 
-{{< timeline title="Précédemment" period="Jusqu'à 2017" >}}
+{{< timeline title="Précédemment" period="De 2011 à 2018" >}}
   {{< timeline-item
     debut="2014"
     fin="2018"
@@ -70,4 +70,4 @@ type = 'parcours'
     resume="Histoire, théorie et pratique musicale, recherche (esthétique et sémiotique) et philologie de la musique" >}}
 {{< /timeline >}}
 
-{{< skills title="Compétences" extra="Python, Kubernetes, Vue, JS, git, gitlab, github" >}}
+{{< skills title="Compétences" >}}

@@ -47,26 +47,29 @@ most recent first, and nothing sorts them for you.
 
 ## Adding a skill
 
-The `skills` shortcode lists every tag actually used on the site — nothing to edit there,
-it follows content automatically. Tag a project, a blog post or a veille entry, and the
-skill appears, linked to its term page.
+The `skills` shortcode lists `params.author.knowsAbout` in `config/_default/hugo.toml`, and
+the JSON-LD `Person` reads the same list. Blog tags are not skills and never appear there.
 
-For a skill nothing published backs yet, add it to `extra`:
-
-```markdown
-{{</* skills title="Compétences" extra="Python, Kubernetes" */>}}
-```
-
-`extra` renders as plain, unlinked tags, in the case written. The build fails if an `extra` entry, lowercased,
-already matches a tag used in content — that skill has a term page and belongs there
-instead, not in `extra`.
+To add a skill, add it to that list, written as it should be displayed. It links to its tag
+page when some content carries a tag with the same slug (`Go` and `go`), and is plain text
+otherwise.
 
 ## The pivot year
 
 The year separating "Maintenant" from "Avant" (2017) is written by hand in the
 `description` and in the `period` of `timeline` and `resume-text`. Change all three together.
 
+The `period` of "Précédemment" is the span of its entries (2011 to 2018), not the pivot: the
+last hotel job ends in 2018, after the training that started the web career in 2017. Update it
+when an entry is added or its dates move.
+
 ## Validating a change
 
 `task qa` builds the site with any Hugo `WARN` treated as a failure. A missing required
-parameter or an `extra` entry that duplicates a tag fails the build through `errorf`.
+parameter fails the build through `errorf`.
+
+## Markdown version
+
+`/a-propos/parcours/index.md` is built from the same shortcodes, each with a Markdown template
+next to its HTML one (`layouts/shortcodes/<name>.md`). A new Parcours shortcode needs one too,
+or its HTML leaks into the twin. See [seo.md](seo.md#markdown-versions).

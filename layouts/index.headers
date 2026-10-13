@@ -14,6 +14,12 @@
 {{- range $sections | uniq -}}
   {{- printf "/%s/:slug/index.md\n  Link: <%s/%s/:slug/>; rel=\"canonical\"\n  Content-Type: text/markdown; charset=utf-8\n\n" . $base . -}}
 {{- end -}}
+{{- /* A section index has its own twin (/a-propos/index.md), which the :slug rule does not match. */ -}}
+{{- range site.Sections -}}
+  {{- if .OutputFormats.Get "markdown" -}}
+    {{- printf "/%s/index.md\n  Link: <%s/%s/>; rel=\"canonical\"\n  Content-Type: text/markdown; charset=utf-8\n\n" .Section $base .Section -}}
+  {{- end -}}
+{{- end -}}
 {{- range slice "llms.txt" "robots.txt" -}}
   {{- printf "/%s\n  Content-Type: text/plain; charset=utf-8\n\n" . -}}
 {{- end -}}

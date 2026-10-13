@@ -24,8 +24,15 @@ jobs:
         id: lychee
         uses: lycheeverse/lychee-action@v2
         with:
-          args: '"public/**/*.html"'
+          # Same root and remap as the per-PR job in ci.yml: without them every root-relative
+          # link of the built files is reported as an error.
+          args: >-
+            --root-dir "${{ github.workspace }}/public"
+            --remap 'https://www.julien-maxant.com(.*) file://${{ github.workspace }}/public$1'
+            "public/**/*.html"
           output: ./lychee-report.md
+          # The issue below is the signal, so dead links do not fail the job. A crash of lychee
+          # itself does: see the last step.
           fail: false
 
       - name: Find existing link-rot issue
@@ -46,3 +53,20 @@ jobs:
           content-filepath: ./lychee-report.md
           labels: link-rot
           issue-number: ${{ steps.issue.outputs.number }}
+
+      - name: Close the link-rot issue once the report is clean
+        if: steps.lychee.outputs.exit_code == 0
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for number in $(gh issue list --label link-rot --state open --json number --jq '.[].number'); do
+            gh issue close "$number" --comment "The weekly check found no dead link."
+          done
+
+      # lychee exits 1 when it could not run at all, 2 when it found dead links.
+      - name: Fail when lychee itself crashed
+        if: steps.lychee.outputs.exit_code == 1
+        run: |
+          echo "::error::lychee failed to run, see the Check all links online step"
+          exit 1

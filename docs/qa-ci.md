@@ -54,7 +54,7 @@ Concurrency: superseded PR runs are cancelled; `main` runs are not.
 
 ### `links-external.yml` — weekly (Monday 06:00 UTC) + manual
 
-Hugo build → lychee **online** (external links included). On dead links: opens — or updates, if already open — an issue labelled `link-rot` with the report. Never blocks a PR. Can be triggered manually: `gh workflow run links-external.yml`.
+Hugo build → lychee **online** (external links included), with the same `--root-dir` and `--remap` as `links-internal` so the site's own links resolve against `public/`. On dead links: opens — or updates, if already open — an issue labelled `link-rot` with the report. On a clean run: closes the open `link-rot` issue. A crash of lychee itself (exit code 1) fails the job; dead links (exit code 2) do not. LinkedIn is excluded in `lychee.toml`, since it answers `999` to bots. Never blocks a PR. Can be triggered manually: `gh workflow run links-external.yml`.
 
 ## Configuration files
 

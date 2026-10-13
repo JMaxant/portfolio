@@ -80,3 +80,11 @@ test('microdata is gone', async ({ page }) => {
   await page.goto(FIXTURES.article.url);
   await expect(page.locator('[itemprop]')).toHaveCount(0);
 });
+
+// #195: one wording of the job title, and the owner's name in the home content.
+test('home names its owner with the job title of the Person', async ({ page }) => {
+  await page.goto('/');
+  const person = byType(await graph(page), 'Person');
+
+  await expect(page.locator('main')).toContainText(`${person.name}, ${person.jobTitle.toLowerCase()}`);
+});

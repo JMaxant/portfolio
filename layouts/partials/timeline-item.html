@@ -19,11 +19,14 @@
 <li class="timeline__item">
   <p class="timeline__period">
     <time datetime="{{ .debut }}">{{ substr .debut 0 4 }}</time>
-    &rarr;
-    {{ with .fin }}
-      <time datetime="{{ . }}">{{ substr . 0 4 }}</time>
-    {{ else }}
-      {{ i18n "parcours-ongoing" }}
+    {{- /* A period inside one year reads "2025", not "2025 → 2025". */ -}}
+    {{ if ne (substr (.fin | default "") 0 4) (substr .debut 0 4) }}
+      &rarr;
+      {{ with .fin }}
+        <time datetime="{{ . }}">{{ substr . 0 4 }}</time>
+      {{ else }}
+        {{ i18n "parcours-ongoing" }}
+      {{ end }}
     {{ end }}
   </p>
   <h3 class="timeline__title">{{ .titre }} &mdash; {{ .organisation }}</h3>

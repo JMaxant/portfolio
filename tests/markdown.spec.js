@@ -1,20 +1,21 @@
 import { test, expect } from '@playwright/test';
 import { FIXTURES } from './pages.js';
 
-// #153: a Markdown twin of each article and project. See docs/seo.md#markdown-versions.
+// #153, #194: a Markdown twin of each article, project and resume page. See docs/seo.md#markdown-versions.
 
 const twin = (url) => `${url}index.md`;
 
-test('an article and a project have a Markdown twin with title, description and body', async ({ request }) => {
+test('an article and a project have a Markdown twin with front matter, title, description and body', async ({ request }) => {
   for (const page of [FIXTURES.article, FIXTURES.project]) {
     const response = await request.get(twin(page.url));
     expect(response.status(), page.url).toBe(200);
     expect(response.headers()['content-type']).toMatch(/^text\/markdown/);
     const text = await response.text();
-    expect(text).toMatch(/^# \S/);
+    expect(text).toMatch(/^---\ntitle: ".+"\nauthor: ".+"\ndate: \d{4}-\d{2}-\d{2}\ncanonical: https?:\/\/\S+\n---\n/);
+    expect(text).toMatch(/^# \S/m);
     expect(text).toMatch(/^> \S/m);
     expect(text).toContain('Body.');
-    expect(text).not.toMatch(/^(\+\+\+|---)$/m);
+    expect(text).not.toMatch(/^\+\+\+$/m);
   }
 });
 
@@ -38,8 +39,27 @@ test('the HTML page advertises its Markdown twin and links to it', async ({ page
   }
 });
 
-test('listings, tags, resume and home have no Markdown twin', async ({ page, request }) => {
-  for (const url of ['/', '/blog/', '/projets/', '/tags/', FIXTURES.tag.url, '/a-propos/', FIXTURES.parcours.url]) {
+test('the resume section index and the Parcours have a Markdown twin', async ({ request }) => {
+  for (const url of ['/a-propos/', FIXTURES.parcours.url]) {
+    const response = await request.get(twin(url));
+    expect(response.status(), url).toBe(200);
+    expect(response.headers()['content-type']).toMatch(/^text\/markdown/);
+    const text = await response.text();
+    expect(text, url).toMatch(/^---\ntitle: ".+"\nauthor: ".+"\ncanonical: https?:\/\/\S+\n---\n/);
+    expect(text, url).not.toMatch(/<[a-z]/);
+  }
+});
+
+test('the Parcours twin renders its shortcodes as headings, not as HTML', async ({ request }) => {
+  const text = await (await request.get(twin(FIXTURES.parcours.url))).text();
+
+  expect(text).toMatch(/^## Actuellement \(Depuis 2017\)$/m);
+  expect(text).toMatch(/^### Fixture role, Fixture Inc \(2024-05 → .+\)$/m);
+  expect(text).toContain('A timeline entry.');
+});
+
+test('listings, tags and home have no Markdown twin', async ({ page, request }) => {
+  for (const url of ['/', '/blog/', '/projets/', '/tags/', FIXTURES.tag.url]) {
     expect((await request.get(twin(url))).status(), url).toBe(404);
     await page.goto(url);
     await expect(page.locator('link[type="text/markdown"]'), url).toHaveCount(0);

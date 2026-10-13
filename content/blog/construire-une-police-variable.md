@@ -1,12 +1,12 @@
 +++
-date = '2026-09-23'
+date = '2026-10-13'
 draft = false
 title = 'Compiler sa propre police variable : le cas Spectral'
 description = "Pas de version variable officielle pour la police serif de ce site : reconstruire un font variable à partir des sources, quatre fois plus léger que les fichiers statiques."
 tags = ['CSS', 'Performance']
 translationKey = 'construire-une-police-variable'
 images = []
-iaDisclaimer = "Important (plan, relecture, correction)"
+aiDisclaimer = "Important (plan, relecture, correction)"
 +++
 
 Ce site sert la police serif Spectral en 2 fichiers `.woff2` de ~64 Ko chacun. Avant,
@@ -34,12 +34,12 @@ qui décrivent comment interpoler entre les masters de graisse. Le pipeline de b
 officiel du dépôt ne produit que la release statique et dépend d'une demi-douzaine
 d'outils externes (`afdko`, `ttfautohint`...). Recompiler la même source avec
 `fontmake -o variable` produit une police variable, avec seulement `fontmake` et
-`fonttools` — les deux seuls outils dont ce projet a besoin (`docs/fonts.md`).
+`fonttools` — les deux seuls outils dont ce projet a besoin ([`docs/fonts.md`](https://github.com/JMaxant/portfolio/blob/main/docs/fonts.md)).
 
 Comme Debian empêche un `pip install` au niveau système et que le module `venv` n'est
 pas toujours présent sans `sudo`, la toolchain Python vit dans un venv local créé par
 [`uv`](https://docs.astral.sh/uv/) (`task setup:fonts`), avec les versions figées dans
-`scripts/fonts/requirements.txt` — le même principe que `package.json` pour les
+[`scripts/fonts/requirements.txt`](https://github.com/JMaxant/portfolio/blob/main/scripts/fonts/requirements.txt) — le même principe que `package.json` pour les
 dépendances JS.
 
 ## Ne garder que ce qui sert
@@ -103,7 +103,7 @@ avant.
 
 Le nom d'une police modifiée ne doit être changé, sous OFL, que si la licence
 originale déclare un *Reserved Font Name* — pas systématiquement à chaque
-modification. `assets/styles/fonts/OFL.txt` n'en déclare aucun : rien ne suit la
+modification. [`assets/styles/fonts/OFL.txt`](https://github.com/JMaxant/portfolio/blob/main/assets/styles/fonts/OFL.txt) n'en déclare aucun : rien ne suit la
 ligne de copyright, et "Spectral" n'apparaît nulle part ailleurs dans le texte de
 licence. Cette compilation reste une "Modified Version" au sens de l'OFL (reconstruite
 depuis les sources, axe remappé, glyphes normalisés et sous-ensemble), mais conserve

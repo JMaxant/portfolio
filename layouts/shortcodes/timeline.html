@@ -17,7 +17,10 @@
 <section class="resume__section resume__section--now">
   <h2>
     {{ $title }}
-    {{ with .Get "period" }}<span class="resume__period">{{ . }}</span>{{ end }}
+    {{- /* A real separator: text extractors drop the whitespace between a heading and its
+           inline span, giving "ActuellementDepuis 2017". Hidden, so the layout is unchanged. */ -}}
+    {{ with .Get "period" }}<span class="visually-hidden">,</span>
+    <span class="resume__period">{{ . }}</span>{{ end }}
   </h2>
   <ol class="timeline" role="list">
     {{ .Inner }}

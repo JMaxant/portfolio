@@ -1,37 +1,26 @@
 {{- /*
-  Compétences: every tag actually used on the site, linked to its term page, plus optional
-  skills not yet backed by any content (comma-separated `extra`). See
-  docs/components.md#parcours-shortcodes.
+  Compétences: the skills of `params.author.knowsAbout`, the list the JSON-LD Person also reads.
+  A skill links to its tag page when some content carries that tag, and renders as plain text
+  otherwise. Blog tags that are not skills never appear here. See docs/components.md#parcours-shortcodes.
 
-{{< skills title="Compétences" extra="Python, Kubernetes" >}}
+{{< skills title="Compétences" >}}
 */ -}}
 {{- $title := .Get "title" -}}
 {{- if not $title -}}
   {{- errorf "shortcode skills: 'title' parameter is required - %s" .Position -}}
 {{- end -}}
 
-{{- $tags := .Site.Taxonomies.tags -}}
-{{- $extra := slice -}}
-{{- range split (.Get "extra" | default "") "," -}}
-  {{- with strings.TrimSpace . -}}
-    {{- if isset $tags (lower .) -}}
-      {{- errorf "shortcode skills: %q in 'extra' already has a tag page, drop it from 'extra' - %s" . $.Position -}}
-    {{- end -}}
-    {{- $extra = $extra | append . -}}
-  {{- end -}}
-{{- end -}}
-
 <section class="resume__section resume__section--skills">
   <h2>{{ $title }}</h2>
   <div class="skills">
     <ul class="tags" role="list">
-      {{ range $tags.Alphabetical }}
-      <li><a class="tag tag--accented" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>
-      {{ end }}
-      {{ with $extra }}
-        {{ range . }}
-          <li class="tag">{{ . }}</li>
-        {{ end }}
+      {{ range site.Params.author.knowsAbout }}
+        {{- $skill := . -}}
+        {{- with site.GetPage (printf "/tags/%s" (urlize $skill)) -}}
+          <li><a class="tag tag--accented" href="{{ .RelPermalink }}">{{ $skill }}</a></li>
+        {{- else -}}
+          <li class="tag">{{ $skill }}</li>
+        {{- end }}
       {{ end }}
     </ul>
   </div>
