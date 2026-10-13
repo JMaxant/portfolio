@@ -211,7 +211,7 @@ change; reload without the cache.
 
 ## Markdown versions
 
-Each blog article and project is also published as `index.md` next to its HTML page
+Each blog article, project, the resume section index and the Parcours are also published as `index.md` next to its HTML page
 (`/blog/<slug>/index.md`), for agents that would otherwise read mostly boilerplate. It holds a
 front matter block, the title, the description as a quote and the body.
 
@@ -220,12 +220,18 @@ front matter block, the title, the description as a quote and the body.
   title and author are written as JSON strings, which are valid quoted YAML.
 
 - **Output format**: `markdown` in `config/_default/hugo.toml` (`text/markdown`, base name
-  `index`), rendered from `layouts/_default/single.md`.
-- **Scope**: enabled by `cascade.outputs` in `content/blog/_index.md` and
-  `content/projets/_index.md`, for the `page` kind only. Listings, tag pages, `/a-propos/` and
-  the home page get none. A new publication section copies that cascade.
+  `index`), rendered by the `markdown-twin.md` partial. `layouts/_default/single.md`,
+  `layouts/a-propos/list.md` and `layouts/parcours/single.md` are one-line wrappers around it.
+- **Scope**: enabled by `cascade.outputs` in `content/blog/_index.md`,
+  `content/projets/_index.md` and `content/a-propos/_index.md`, for the `page` kind only, plus
+  `outputs` on the `/a-propos/` section index itself. Listings, tag pages and the home page get
+  none. A new publication section copies that cascade.
 - **Shortcodes** are stripped from the raw body: they render HTML for the page and have no
   Markdown equivalent. Keep the text a reader needs outside a shortcode.
+- **The Parcours** is the exception: its body is only shortcodes, so it renders `.Content`, and
+  `timeline`, `timeline-item`, `skills` and `resume-text` each have a Markdown template
+  (`layouts/shortcodes/*.md`) that Hugo picks for this output format. A new Parcours shortcode
+  needs one too, or the HTML leaks into the twin.
 - **Links**: `](/path)`, `](#id)` and `](path)` are made absolute against the site and the page.
   Only the Markdown syntax is rewritten: a raw `<a href>` or `<img src>` in the body is kept as
   written.
@@ -246,7 +252,9 @@ same rules set `Content-Type` with `charset=utf-8`.
   serve. It is never edited by hand.
 - **One rule per section, not per page**: the `:slug` placeholder of the path is reused in the
   value (`Link: <https://…/blog/:slug/>`). A section is listed once it has a page with a
-  Markdown version, so a new section copying the cascade needs no change here.
+  Markdown version, so a new section copying the cascade needs no change here. A section index
+  with its own twin (`/a-propos/index.md`) gets a rule of its own, since `:slug` does not match
+  an empty segment.
 - **Limits**: 100 rules and 2,000 characters per line. The file holds a handful of rules, and
   its size does not grow with the content.
 - **Tested**: `tests/headers.spec.js` checks the generated file, and

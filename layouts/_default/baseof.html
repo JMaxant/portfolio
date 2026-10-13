@@ -24,7 +24,7 @@
   <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Title }} | {{ site.Title }}" />
     {{- end }}
   {{- end }}
-  {{- /* Only the blog and project pages have a Markdown twin. See docs/seo.md#markdown-versions. */}}
+  {{- /* Only the blog, project and resume pages have a Markdown twin. See docs/seo.md#markdown-versions. */}}
   {{- with .OutputFormats.Get "markdown" }}
   <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" />
   {{- end }}
