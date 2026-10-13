@@ -1,6 +1,6 @@
 +++
 title = 'Parcours'
-description = "Développeur web depuis 2017 : développement back, full-stack, mentorat, devops et facilitation."
+description = "Lead tech et développeur web depuis 2017 : développement back, full-stack, mentorat, devops et facilitation."
 translationKey = 'parcours'
 type = 'parcours'
 +++

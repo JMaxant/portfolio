@@ -1,7 +1,7 @@
 +++
 title = 'À propos'
 description = """
-Lead tech, dans le domaine du web depuis 2017. PHP, JS, Go, du cadrage au déploiement. Je centre mon travail sur la compréhension du besoin, la prise de décision et des architectures stables sur le long terme.
+Lead tech et développeur web depuis 2017. PHP, JS, Go, du cadrage au déploiement. Je centre mon travail sur la compréhension du besoin, la prise de décision et des architectures stables sur le long terme.
 """
 translationKey = 'a-propos'
 # No feed: the section holds the resume only, which is not a publication. The Markdown twin

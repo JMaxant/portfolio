@@ -12,7 +12,9 @@ enableRobotsTXT = true
 
 [params]
 madeWith = 'Made with Hugo'
-baseline = 'Développement web'
+# The job title, written once: the header, the home <title>, the social cards and the JSON-LD Person's
+# jobTitle all read it. See docs/seo.md#structured-data.
+baseline = 'Lead tech et développeur web'
 # Last fallback of the meta description, for a page with neither a description nor content.
 description = 'Julien Maxant, lead tech et développeur web depuis 2017 : PHP, Drupal, Symfony, JS, Vue, Go, Python.'
 # The sections that count as publications: the home page's latest activity and the main RSS feed.
@@ -20,8 +22,8 @@ mainSections = ['projets', 'blog']
 
 [params.author]
 name = 'Julien Maxant'
-# Read by the JSON-LD Person node. See docs/seo.md#structured-data.
-jobTitle = 'Lead tech'
+# Read by the JSON-LD Person node, with `params.baseline` as its jobTitle.
+# See docs/seo.md#structured-data.
 # The skills: listed by the Parcours `skills` shortcode and by the JSON-LD `knowsAbout`, so the two
 # cannot drift. Not the blog tags. See docs/parcours-cv.md#adding-a-skill.
 knowsAbout = [
