@@ -29,13 +29,13 @@ Et ça a été l'occasion d'approfondir l'utilisation d'agents IA dans le dével
 ## Contexte
 
 L'objectif de ce site est multiple : une vitrine professionnelle, un espace d'expérimentation.
-La réalisation de ce site devrait donc me permettre de me réapproprier le CSS, approfondir ma compréhension du templating Go ainsi que de mettre en place une CI GitHub.
+La réalisation de ce site devait donc me permettre de me réapproprier le CSS, approfondir ma compréhension du templating Go ainsi que de mettre en place une CI GitHub.
 
 Sur un projet personnel de ce genre, mon premier obstacle a toujours été le cadrage et la perte de motivation qui en découle, et c'est ici que l'usage d'agents IA (Claude) a été très efficace : utilisée dès le départ pour le cadrage et le suivi du projet, l'IA a permis de mener le projet à bien, sans (trop) dériver sur des besoins secondaires.
 
 ## Pourquoi Hugo
 
-Mon cœur d'expertise full-stack se trouve plutôt sur des technos plus lourdes (Drupal, Symfony, Vue.js) : dès le départ, ces choix étaient hors concours.
+Mon cœur d'expertise full-stack se trouve plutôt sur des technos plus lourdes (Drupal, Symfony, Vue.js) : dès le départ, ces choix étaient exclues.
 
 Si une stack PHP ou JS complète présente un intérêt pour la gestion de contenu, le besoin étant un site purement édito, léger et épuré, elles sont éliminées d'office.
 
@@ -117,7 +117,7 @@ Le portfolio a été déployé début octobre, pour une date initiale à mi-sept
 Des métriques de trafic ne sont ni disponibles (pas d'analytics par choix) ni pertinentes, en revanche les objectifs
 initiaux sont atteints : le site est simple, performant, facile d'utilisation et documenté.
 
-Les choix techniques (Hugo, CSS natif, hébergement) se sont révélés révélés pertinents, même si Hugo souffre
+Les choix techniques (Hugo, CSS natif, hébergement) se sont révélés pertinents, même si Hugo souffre
 d'une prise en main parfois complexe, a minima obscure.
 
 L'utilisation de l'IA a été un vrai atout en termes de gain de temps et d'efficacité, avec un bémol concernant la
