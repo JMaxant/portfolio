@@ -37,7 +37,6 @@ knowsAbout = [
   'Python',
   'Docker',
   'DDEV',
-  'Kubernetes',
   'Git',
   'GitLab',
   'GitHub',
