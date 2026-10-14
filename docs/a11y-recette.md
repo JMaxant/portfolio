@@ -1,7 +1,7 @@
 ---
 title: Accessibility acceptance checklist
 date_published: 2026-10-03
-date_modified: 2026-10-03
+date_modified: 2026-10-14
 ---
 
 # Accessibility acceptance checklist
@@ -63,6 +63,8 @@ On each template, open the elements list (`Insert+F7`).
 - [ ] Landmarks read as `Principale`, `Fil d'Ariane`, `Pied de page` (and `Articles` on an
       article), each followed by the role, without "navigation" spoken twice
 - [ ] No two landmarks of the same role share a name
+- [ ] The `Plan du site` link is in the footer on every template, in the same place, and the page
+      lists every section (RGAA 12.1 to 12.4)
 - [ ] Headings form an outline with no skipped level, and there is exactly one `h1`
 - [ ] The page title read on load is distinct and descriptive
 - [ ] The page is announced in French (correct pronunciation, not an English voice)

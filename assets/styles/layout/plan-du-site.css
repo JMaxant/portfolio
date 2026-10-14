@@ -1,0 +1,30 @@
+/* Scoped under .site-map: the reset's `ul[role="list"] { padding: 0 }` outranks a bare
+   .site-map__list, and would flatten the levels. */
+.site-map,
+.site-map .site-map__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.site-map {
+  font-size: var(--text-md);
+}
+
+/* One guide line per level, so the nesting reads at a glance. */
+.site-map .site-map__list {
+  padding-inline-start: var(--spacing-md);
+  margin-block-start: var(--spacing-xs);
+  margin-inline-start: var(--spacing-2xs);
+  font-size: var(--text-base);
+  border-inline-start: var(--border-thin);
+
+  a {
+    font-weight: var(--font-weight-normal);
+  }
+}
+
+.site-map .site-map__list--inline {
+  flex-flow: row wrap;
+  gap: var(--spacing-xs) var(--spacing-md);
+}

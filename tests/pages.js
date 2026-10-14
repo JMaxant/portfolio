@@ -28,6 +28,7 @@ export const PAGES = [
   // The widest byline: three entries and three tags in one flex row.
   ['article with disclaimer', FIXTURES.disclaimer.url],
   ['project with repository', FIXTURES.projectWithRepo.url],
+  ['site map', '/plan-du-site/'],
 ];
 
 // One page per template, for the a11y suite: landmark, heading and h1 rules only mean
