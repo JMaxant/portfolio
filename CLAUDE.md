@@ -56,6 +56,11 @@ so `/* */` there is unavoidable.
 `type: short description - refs #N`, types `feat` / `fix` / `docs` / `chore` /
 `enhancement`. Always reference the issue.
 
+### Branches
+
+`fix|feature|chore/name_{id}`: the type, a short `snake_case` name, then the issue number,
+e.g. `feature/sitemap_html_204`. Note `feature`, not `feat`, unlike the commit type.
+
 ### Templates
 
 Reusable partials take an **explicit dict**, never the current context — so inside them,

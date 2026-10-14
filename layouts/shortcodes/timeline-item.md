@@ -1,4 +1,4 @@
-{{- /* Markdown form of layouts/shortcodes/timeline-item.html. */ -}}
+{{- /*Markdown form of layouts/shortcodes/timeline-item.html.*/ -}}
 {{- $period := .Get "debut" -}}
 {{- /* A period inside one year reads "2025", not "2025 → 2025". */ -}}
 {{- if ne (substr (.Get "fin" | default "") 0 4) (substr $period 0 4) -}}

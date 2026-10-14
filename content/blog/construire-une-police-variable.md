@@ -1,65 +1,81 @@
 +++
 date = '2026-09-23'
+lastmod = '2026-10-14'
 draft = false
 title = 'Compiler sa propre police variable : le cas Spectral'
 description = "Pas de version variable officielle pour la police serif de ce site : reconstruire un font variable à partir des sources, quatre fois plus léger que les fichiers statiques."
 tags = ['CSS', 'Performance']
 translationKey = 'construire-une-police-variable'
 images = []
-aiDisclaimer = "Important (plan, relecture, correction)"
+aiDisclaimer = "Partiel (corrections, ajouts des trois paragraphes finaux)"
 +++
 
-Ce site sert la police serif Spectral en 2 fichiers `.woff2` de ~64 Ko chacun. Avant,
-c'était 6 fichiers statiques pour ~532 Ko au total — un par graisse (light, regular,
-semibold) et par style (romain, italique). Le problème : Spectral n'a **aucune version
-variable officielle**. Google Fonts ne la sert qu'en statique. Il a donc fallu la
-compiler soi-même à partir des sources.
+Ce site utilise [la police serif Spectral](https://www.1001fonts.com/spectral-font.html).
+Cette police, c'est 1 fichier par style (romain et italique) **et** par graisse (light, regular et semibold), donc 3
+graisses x 2 styles : 6 fichiers.
 
-## Statique vs variable, en une phrase
+Au total, ça représente environ 532 Ko : autant dire que non seulement les outils type Lighthouse n'apprécient que peu
+(et le font savoir), mais aussi que c'est _un peu dommage_ d'embarquer 532 Ko de fonts quand on essaie de garder un site
+léger.
 
-Une police "statique" est un fichier par graisse : un pour le 300, un pour le 400, un
-pour le 600. Une police "variable" encode un axe continu (`wght`) dans un seul
-fichier — le navigateur interpole entre les graisses définies plutôt que de charger
-un fichier différent pour chacune. Sur ce site, `--font-weight-light` (300),
-`--font-weight-normal` (400) et `--font-weight-bold` (600) tiennent donc dans un seul
-fichier par style, romain et italique.
+Mais alors que je hurlais mon désespoir face à cette injustice flagrante (j'avais du mal à me résoudre à choisir entre
+"moche et rapide" et "un peu plus esthétique mais lourd") que je découvris les [polices variables](https://web.dev/articles/variable-fonts?hl=fr),
+ce qui, sur le papier du moins, m'emplit de joie (car j'ai des plaisirs simples).
 
-## Pas de release officielle, mais des sources buildables
+## Statique ou variable, c'est quoi ?
 
-Les sources UFO (le format d'échange des designers de fontes) de Spectral sont
-publiques, maintenues par Google, dans
-[`googlefonts/spectral`](https://github.com/googlefonts/spectral) (licence OFL-1.1).
-Elles incluent deux fichiers `.designspace` — un pour le romain, un pour l'italique —
-qui décrivent comment interpoler entre les masters de graisse. Le pipeline de build
-officiel du dépôt ne produit que la release statique et dépend d'une demi-douzaine
-d'outils externes (`afdko`, `ttfautohint`...). Recompiler la même source avec
-`fontmake -o variable` produit une police variable, avec seulement `fontmake` et
-`fonttools` — les deux seuls outils dont ce projet a besoin ([`docs/fonts.md`](https://github.com/JMaxant/portfolio/blob/main/docs/fonts.md)).
+Les polices dites statiques, ce sont les polices que l'on connaît le plus, à savoir un fichier par graisse et style :
+on aurait `mafont_light.woff2`, `mafont_light_italic.woff2`, `mafont_regular.woff2`, `mafont_regular_italic.woff2` etc.
+Pour reprendre l'exemple du paragraphe précédent, ça revient à avoir 6 fichiers pour plus de 500 Ko. Quitte à me répéter,
+c'est _un peu dommage_ d'avoir 6 requêtes pour un total approchant 5 fois le poids de la page, CSS et JS inclus.
 
-Comme Debian empêche un `pip install` au niveau système et que le module `venv` n'est
-pas toujours présent sans `sudo`, la toolchain Python vit dans un venv local créé par
-[`uv`](https://docs.astral.sh/uv/) (`task setup:fonts`), avec les versions figées dans
-[`scripts/fonts/requirements.txt`](https://github.com/JMaxant/portfolio/blob/main/scripts/fonts/requirements.txt) — le même principe que `package.json` pour les
-dépendances JS.
+À l'inverse, une police "variable", c'est une police qui encode un axe continu (`wght`) dans un seul fichier : le
+navigateur interpole entre les graisses définies plutôt que de charger un fichier différent pour chacune.
+Sur ce site, `--font-weight-light` (300), `--font-weight-normal` (400) et `--font-weight-bold` (600) tiennent dans un
+seul fichier par style, romain et italique.
 
-## Ne garder que ce qui sert
+## Build sa police variable à partir des sources
 
-Rien n'oblige à livrer la police telle que ses sources la définissent :
+Dans le cas de Spectral, la police variable n'existe pas (pas de release officielle). Heureusement, il est possible de
+build sa propre police variable à partir des sources UFO (le format d'échange des designers de polices), qui, dans ce
+cas, sont publiques et maintenues par Google, dans [`googlefonts/spectral`](https://github.com/googlefonts/spectral) sous
+(licence OFL-1.1).
 
-* **L'axe de graisse** couvre 200 à 800 en amont ; seuls 300/400/600 sont utilisés
-  dans ce projet. Après le premier build, `fonttools varLib.instancer` restreint
-  l'axe à 300–600 — la police reste variable, juste sur une plage plus étroite.
-* **Le jeu de glyphes** couvre en amont le cyrillique, le grec, l'arménien, le
-  géorgien — 1481 glyphes, aucun atteignable par du contenu français (ou anglais).
-  `fonttools subset` réduit à Latin + Latin-1 + Latin étendu A/B + ponctuation
-  générale + `€`, soit 810 glyphes — de quoi couvrir le français, l'anglais, et une
-  marge pour la plupart des langues latines (polonais, tchèque, turc...).
+Le détail du processus est lisible sur [le dépôt du portfolio](https://github.com/JMaxant/portfolio/blob/main/docs/fonts.md),
+mais dans les grandes lignes, il s'agit de :
 
-Combiné, l'axe restreint et le sous-ensemble de glyphes font passer romain + italique
-de ~532 Ko à ~128 Ko : environ 4 fois plus léger, pour un rendu strictement identique
-sur tout ce que le site affiche réellement.
+1. Récupérer les sources sur le dépôt Spectral (les masters UFO et le `.designspace`)
+2. Adapter les sources (notamment en ajoutant une table de correspondance pour les graisses)
+3. Utiliser python/`fontmake -o variable` et `fonttools` pour compiler une police variable par style
+4. Et voilà ! Une police variable
 
-## Trois bugs de compilation qui ne se voient qu'à l'usage
+## Faire du ménage
+
+À ce stade, la réduction de poids n'est pas très visible, mais c'est là que les choses deviennent intéressantes.
+
+Si on se penche sur le style du site, on se rend compte que :
+
+1. Seules les graisses 300/400/600 sont utilisées
+2. Seul le jeu de glyphes romain est pertinent (bien que j'aimerais, par exemple, parler grec, arménien ou ukrainien)
+
+En utilisant
+
+- `fonttools varLib.instancer`, on peut restreindre la graisse sur la plage qui nous intéresse (de 300 à 600)
+- `fonttools subset` permet de réduire aux glyphes utiles (Latin, Latin-1, Latin étendu A/B, ponctuation et `€`)
+
+Ces deux modifications appliquées, on passe de 6 fichiers (3 graisses x 2 styles, environ 532 Ko) à deux fichiers de 64
+Ko environ (un par style, soit 125 Ko). À peu près 4 fois plus légers.
+
+## T'as fait tout ça tout seul ?!?
+
+**Absolument pas**.
+
+L'essentiel de cette tâche a été réalisée avec Claude Code (probablement Sonnet ou Opus), et mon rôle a été celui de
+spécificateur/inspecteur des travaux finis.
+
+Claude a d'ailleurs son petit mot à dire sur quelques subtilités techniques :
+
+### Trois bugs de compilation qui ne se voient qu'à l'usage
 
 Les sources brutes ne compilent pas telles quelles :
 
@@ -89,9 +105,9 @@ a = f['fvar'].axes[0]
 print(a.axisTag, a.minValue, a.defaultValue, a.maxValue)
 ```
 
-## Deux fichiers, pas un
+### Deux fichiers, pas un
 
-Une police variable peut en théorie combiner plusieurs axes — graisse *et* italique
+Une police variable peut en théorie combiner plusieurs axes — graisse _et_ italique
 dans un seul fichier, avec un axe `ital`. Les sources de Spectral n'en ont pas :
 chaque `.designspace` ne porte qu'un axe `wght`. Fusionner romain et italique
 demanderait de retravailler les sources UFO elles-mêmes pour leur ajouter un axe —
@@ -99,13 +115,24 @@ un travail de conception de police, pas de compilation, et fragile à maintenir 
 aux mises à jour amont. Deux fichiers restent le plancher réaliste ici, contre six
 avant.
 
-## Licence : pas de renommage nécessaire
+### Licence : pas de renommage nécessaire
 
 Le nom d'une police modifiée ne doit être changé, sous OFL, que si la licence
-originale déclare un *Reserved Font Name* — pas systématiquement à chaque
+originale déclare un _Reserved Font Name_ — pas systématiquement à chaque
 modification. [`assets/styles/fonts/OFL.txt`](https://github.com/JMaxant/portfolio/blob/main/assets/styles/fonts/OFL.txt) n'en déclare aucun : rien ne suit la
 ligne de copyright, et "Spectral" n'apparaît nulle part ailleurs dans le texte de
 licence. Cette compilation reste une "Modified Version" au sens de l'OFL (reconstruite
 depuis les sources, axe remappé, glyphes normalisés et sous-ensemble), mais conserve
 légitimement le nom "Spectral" — dans les métadonnées internes de la police comme
 dans `--font-serif`.
+
+## Tout ça pour ça ?
+
+Hé bien oui, **tout ça pour ça**. C'était un sous-projet dans le projet qui s'est révélé être une très bonne surprise.
+L'utilisation de l'IA a été déterminante dans ce cas, car si j'aurais probablement fini par m'en sortir, ça m'aurait
+pris plusieurs jours, voire semaines, contre à peine une heure. La gratification immédiate, c'est de voir les voyants Lighthouse
+passer au vert, mais le vrai intérêt, surtout dès lors qu'on parle d'écoconception, c'est l'impact vertueux concret sur
+chacune des requêtes du site (qui a, bien entendu, des millions de visites uniques quotidiennes).
+Peut-être un jour tenterai-je d'industrialiser tout ceci, que ce soit autre chose qu'un processus décrit dans un dépôt
+de niche ? En attendant, je ne me lasse pas de voir les feux d'artifice dans Lighthouse (car, encore une fois, j'ai des
+plaisirs simples).
