@@ -83,6 +83,9 @@ other = "Pages utiles"
 [nav-footer]
 other = "Pied de page"
 
+[site-map]
+other = "Plan du site"
+
 [post-nav]
 other = "Articles"
 

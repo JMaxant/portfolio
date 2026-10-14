@@ -1,7 +1,7 @@
 ---
 title: SEO — contributor guidelines
 date_published: 2026-10-02
-date_modified: 2026-10-09
+date_modified: 2026-10-14
 ---
 
 # SEO — contributor guidelines
@@ -182,6 +182,29 @@ Every page's `<head>` advertises the main feed, and the page's own feed when it 
 `sitemap.xml` is Hugo's built-in one, unmodified. It lists every rendered page, so drafts and
 veille entries are left out, and takes `lastmod` from `date` until #70 gives `.Lastmod` a
 source. Search engines learn its address from the `Sitemap:` line of `robots.txt` (#17).
+
+The HTML site map is the one rendered page left out, with `sitemap = { disable = true }` in its
+front matter. See [Site map page](#site-map-page).
+
+## Site map page
+
+`/plan-du-site/` is the HTML site map (#204), the second navigation system RGAA 12.1 asks for.
+It is linked from the footer of every page. It repeats links that exist elsewhere and has no
+content of its own, so it is kept out of search results but its links stay crawlable.
+
+- **Meta robots, driven by front matter.** `noindex = true` in the page's front matter makes
+  `seo_tags.html` emit `<meta name="robots" content="noindex, follow">`. No other page carries
+  a robots meta. Reuse the param for any page that must stay out of results.
+- **Left out of `sitemap.xml`.** A page that asks not to be indexed should not be offered to
+  crawlers either: `sitemap = { disable = true }`.
+- **No `Disallow` in `robots.txt`.** A crawler that may not fetch the page never reads the
+  `noindex`, and the URL can still end up in results, without a description.
+- **No `X-Robots-Tag` header.** Same reason as for the Markdown twins below: some AI crawlers
+  read a `noindex` header as "do not use".
+
+The page is absent from `llms.txt` and from the feeds: both read `mainSections`, and it sits
+outside any section. `tests/plan-du-site.spec.js` checks the meta, the sitemap and the footer
+link.
 
 ## robots.txt
 

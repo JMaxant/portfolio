@@ -10,6 +10,11 @@
 {{- with $description }}
 <meta name="description" content="{{ . }}" />
 {{- end }}
+{{- /* noindex,follow: the links are still crawled. A meta tag rather than X-Robots-Tag, which
+       some AI crawlers read as "do not use". See docs/seo.md#site-map-page. */ -}}
+{{- if .Params.noindex }}
+<meta name="robots" content="noindex, follow" />
+{{- end }}
 {{- with site.Params.author.name }}
 <meta name="author" content="{{ . }}" />
 {{- end }}

@@ -1,7 +1,7 @@
 ---
 title: Cahier des charges — Portfolio Julien Maxant
 date_published: 2026-07-26
-date_modified: 2026-10-05
+date_modified: 2026-10-14
 ---
 
 # Cahier des charges — Portfolio Julien Maxant
@@ -245,6 +245,7 @@ Tout changer ici après coup implique de retoucher du contenu déjà écrit — 
 - [X] Créer `/parcours/`, `/blog/`, `/projets/` (pages/listes, contenu encore vide ou stub).
 - [X] Vérifier que les layouts bear-cub (`single.html`/`list.html`) couvrent le type "projet" ; sinon prévoir un layout minimal dédié. => Layouts dédiés ajoutés.
 - [X] Navigation : centraliser les menus dans `config/_default/menus.toml`, trancher le cas `/parcours/` (front matter vs config), déplacer le lien RSS de la nav vers le footer via surcharge des partials bear-cub (issue #36).
+- [X] Plan du site HTML (`/plan-du-site/`) : second système de navigation (RGAA 12.1 à 12.4), lien en pied de page, `noindex, follow` et absent de `sitemap.xml` (issue #204, voir `docs/seo.md#site-map-page`).
 - [X] Section `/veille/` teaser-only : cascade build options, archetype `veille.md`, layout `layouts/veille/list.html`, entrée de menu (issue #40).
 
 ### Phase 2 — Identité visuelle

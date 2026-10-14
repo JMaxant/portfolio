@@ -27,6 +27,7 @@
 @import url("layout/content-grid.css");
 @import url("layout/single.css");
 @import url("layout/parcours.css");
+@import url("layout/plan-du-site.css");
 @import url("layout/error.css");
 
 /* Utilities last, and the position is load-bearing. See docs/css-tokens.md#utilities. */

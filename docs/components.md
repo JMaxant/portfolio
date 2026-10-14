@@ -1,7 +1,7 @@
 ---
 title: Components — partials and integration
 date_published: 2026-08-08
-date_modified: 2026-10-09
+date_modified: 2026-10-14
 ---
 
 # Components — partials and integration
@@ -156,6 +156,9 @@ readable.
 Head metadata: canonical, description, author, Hugo's embedded OpenGraph and Twitter card
 templates, then `json-ld.html`. Takes the page context, not a dict — it is head-only and
 called once from `baseof.html`.
+
+It also emits `<meta name="robots" content="noindex, follow">` on a page whose front matter
+sets `noindex = true`, and on no other. See [seo.md](seo.md#site-map-page).
 
 The description is resolved once, through the same chain as Hugo's embedded
 `opengraph.html`. Keep the two aligned: `tests/seo.spec.js` fails when the meta description
@@ -762,7 +765,7 @@ git history if a nested menu is needed again.
 
 ### `footer.html`
 
-Site footer: the social profiles, the RSS and `llms.txt` links and the copyright. `baseof.html` calls it once
+Site footer: the social profiles, the RSS, site map and `llms.txt` links and the copyright. `baseof.html` calls it once
 with the page context (`partial "footer.html" .`), not with a dictionary. It is the exception
 to [Dictionary-based calls](#dictionary-based-calls), because it takes no parameter and reads
 site-level data only: there is nothing to pass.
@@ -771,7 +774,7 @@ site-level data only: there is nothing to pass.
 |--------|----------|
 | `[[params.social]]` in `config/_default/hugo.toml` | One `<li>` per entry, in the config order: `name` is the link text, `url` the `href` |
 | `i18n "nav-footer"` | Accessible name of the `<nav>` landmark |
-| `absURL "index.xml"`, `absURL "llms.txt"` | The RSS link, then the `llms.txt` link, always last |
+| `absURL "index.xml"`, `absURL "plan-du-site/"`, `absURL "llms.txt"` | The RSS link, the site map link (`i18n "site-map"`), then the `llms.txt` link, always last |
 | `.Site.Copyright`, `.Site.Params.madeWith` | The line under the list |
 
 `params.social` is also read by `json-ld.html` for the `sameAs` of the Person node, so a profile
@@ -782,7 +785,8 @@ added to the config appears in the structured data and in the footer at once. Th
 leaves the site, so its link carries the marker of [`entry-link.html`](#entry-linkhtml):
 `target="_blank" rel="noopener"` and the `external-link` icon, whose `visually-hidden` text
 completes the accessible name (the profile name, then `i18n "external-link"`). The RSS and
-`llms.txt` links stay on the site and have none.
+site map and `llms.txt` links stay on the site and have none. The site map link sits in the footer
+of every page, in the same place, as RGAA 12.4 requires.
 
 **Integration** — `.site-footer` is in `layout/footer.css`, the list reuses the `.menu` block of
 `components/menu.css` with the `menu--footer` variant.
@@ -795,6 +799,44 @@ each item. Scope the rules to the panel if the footer should keep its own layout
 **Tests** — `tests/footer.spec.js` checks that every profile is a visible footer link with a text
 on each template and that the navigation has a name. `tests/live/smoke.spec.js` repeats the
 profile check on the deployed site, next to the check that the profiles answer.
+
+### `plan-du-site/single.html`
+
+HTML site map, rendered for `content/plan-du-site.md` (`type = 'plan-du-site'`). A template, not
+a partial: it takes no parameter and reads site-level data only. Why the page is not indexed:
+[seo.md](seo.md#site-map-page).
+
+| Source | Listed as |
+|--------|-----------|
+| `site.Menus.main`, by weight | One top-level entry each: Accueil, Projets, Blog, Veille, A propos, Parcours |
+| `.Page.RegularPages` of an entry | A nested list under it, except on the home page |
+| `site.Taxonomies.tags.Alphabetical` | A last top-level entry, `/tags/`, with one inline link per tag |
+
+Three rules keep it from drifting or repeating itself:
+
+- **Generated, never written.** A new section with a menu entry, a new article or a new tag
+  shows up on the next build.
+- **A page is listed once.** Parcours is a child of A propos and has its own menu entry: it is
+  skipped under A propos, through the `$inMenu` dict of the entries' `RelPermalink`.
+- **Veille entries are skipped.** They link to their `source_link` and have no page of their
+  own (`build.render = 'link'`), so `where ... "Params.source_link" "eq" nil` leaves the
+  section as a plain link.
+
+**Markup** — `ul.site-map` of `li.site-map__item`, with `ul.site-map__list` for the nested
+level. Every list carries `role="list"` since `list-style: none` drops the role in Safari. No
+`<nav>`: the page is content, and a third landmark would only repeat the main menu and the
+footer to a screen reader.
+
+**Integration** — `layout/plan-du-site.css`, imported after `layout/parcours.css`. Each nested
+level is indented and carries a guide line (`border-inline-start`). The tag list uses the
+`--inline` modifier to wrap on one row instead of stacking.
+
+**Trap** — `reset.css` sets `padding: 0` on `ul[role="list"]`, which outranks a bare
+`.site-map__list`. The rules are scoped under `.site-map` for that reason: a single class
+silently drops the indentation.
+
+**Tests** — `tests/plan-du-site.spec.js`. The page is also in `PAGES` of `tests/pages.js`, so the
+overflow, breakpoint and axe suites scan it.
 
 ### `breadcrumb.html`
 

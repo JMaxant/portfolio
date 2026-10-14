@@ -1,7 +1,7 @@
 ---
 title: CSS tokens and breakpoints
 date_published: 2026-08-08
-date_modified: 2026-09-28
+date_modified: 2026-10-14
 ---
 
 # CSS tokens and breakpoints
@@ -24,7 +24,7 @@ assets/styles/
     tokens.css        raw palettes, semantic tokens, theme switching, scales
     elements.css      bare element styles (h1…h4, p, a, table, blockquote…)
   components/         theme-switcher, menu, card, entry-list, tag, cta, code
-  layout/             header, footer, page, home, content-grid, single, parcours, error
+  layout/             header, footer, page, home, content-grid, single, parcours, plan-du-site, error
   utils.css           .container, .visually-hidden, .meta
 ```
 

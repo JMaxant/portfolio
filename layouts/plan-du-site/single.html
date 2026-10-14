@@ -1,0 +1,58 @@
+{{ define "main" }}
+  {{- /* HTML site map (RGAA 12.1 to 12.4). Built from the main menu and the content, so it
+         cannot drift from either. A page that has its own menu entry is listed once, at the
+         top level. Veille entries link to their source and have no page of their own: only
+         the section is listed. See docs/components.md#plan-du-sitesinglehtml. */ -}}
+  {{- $inMenu := dict -}}
+  {{- range site.Menus.main -}}
+    {{- with .Page }}{{ $inMenu = merge $inMenu (dict .RelPermalink true) }}{{ end -}}
+  {{- end -}}
+
+  {{ partial "breadcrumb.html" (dict "page" .) }}
+
+  <article class="single container-content-grid">
+    <header class="single__heading">
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.description }}
+      <div class="single__intro">
+        <p class="single__intro-text">{{ . }}</p>
+      </div>
+      {{ end }}
+    </header>
+
+    <ul class="site-map" role="list">
+      {{ range site.Menus.main.ByWeight }}
+      <li class="site-map__item">
+        <a href="{{ .URL }}">{{ .Name }}</a>
+        {{- with .Page }}
+          {{- $children := where .RegularPages "Params.source_link" "eq" nil -}}
+          {{- $listed := slice -}}
+          {{- range $children -}}
+            {{- if not (index $inMenu .RelPermalink) }}{{ $listed = $listed | append . }}{{ end -}}
+          {{- end -}}
+          {{- if and (not .IsHome) $listed }}
+        <ul class="site-map__list" role="list">
+          {{- range $listed }}
+          <li class="site-map__item"><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+          {{- end }}
+        </ul>
+          {{- end }}
+        {{- end }}
+      </li>
+      {{ end }}
+
+      {{ with site.GetPage "/tags" }}
+      <li class="site-map__item">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{- with site.Taxonomies.tags.Alphabetical }}
+        <ul class="site-map__list site-map__list--inline" role="list">
+          {{- range . }}
+          <li class="site-map__item"><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></li>
+          {{- end }}
+        </ul>
+        {{- end }}
+      </li>
+      {{ end }}
+    </ul>
+  </article>
+{{ end }}
