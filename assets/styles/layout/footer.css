@@ -1,11 +1,15 @@
 .site-footer {
+  font-size: var(--text-sm);
   border-block-start: var(--border-thin);
 
   .container--wide {
     display: flex;
     justify-content: space-between;
     padding-block: var(--spacing-lg);
-    font-size: var(--text-sm);
+  }
+
+  .copyright {
+    text-align: center;
   }
 }
 
@@ -13,7 +17,6 @@
   .site-footer {
     .container--wide {
       flex-direction: column;
-      gap: var(--spacing-lg);
       align-items: center;
     }
   }

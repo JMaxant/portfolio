@@ -1,10 +1,10 @@
 +++
 date = '2026-09-23'
 draft = true
-title = 'Taskfile plutôt que Makefile ou npm scripts : ce que ça change au quotidien'
+title = 'Taskfile '
 description = "Un seul runner pour npm, Hugo et les scripts qualité — retour sur task après quelques mois d'usage sur ce site."
-tags = ['Taskfile', 'Outillage']
-translationKey = 'taskfile-plutot-que-makefile'
+tags = ['Outillage']
+translationKey = 'taskfile-mon-amour'
 images = []
 +++
 

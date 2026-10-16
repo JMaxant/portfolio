@@ -1,6 +1,6 @@
 <div class="container--wide">
   <nav aria-label='{{ i18n "nav-footer" }}'>
-    <ul class="menu menu--footer" role="list">
+    <ul class="menu menu--footer --socials" role="list">
       {{ range site.Params.social }}
         <li>
           <a href="{{ .url  }}" target="_blank" rel="noopener">
@@ -10,6 +10,11 @@
           </a>
         </li>
       {{ end }}
+    </ul>
+  </nav>
+
+  <nav aria-label='{{ i18n "nav-footer" }}'>
+    <ul class="menu menu--footer --secondary-nav" role="list">
       <li>
         <a href='{{ absURL "index.xml" }}'>RSS</a>
       </li>
@@ -21,7 +26,9 @@
       </li>
     </ul>
   </nav>
+</div>
 
+<div class="container copyright">
   <p>
     {{ .Site.Copyright }} | {{ markdownify .Site.Params.madeWith }}
   </p>

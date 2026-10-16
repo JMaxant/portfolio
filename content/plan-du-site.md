@@ -1,6 +1,6 @@
 +++
 title = 'Plan du site'
-description = "Liste de toutes les pages du site, par rubrique."
+description = ""
 translationKey = 'plan-du-site'
 type = 'plan-du-site'
 # Not a page to land on from a search engine: it repeats links found elsewhere. The robots
