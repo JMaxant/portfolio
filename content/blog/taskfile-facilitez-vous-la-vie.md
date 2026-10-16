@@ -1,6 +1,6 @@
 +++
 date = '2026-10-16'
-draft = true
+draft = false
 title = 'Facilitez-vous la vie avec Taskfile'
 description = "En termes de tooling ou de task runners, Makefile a longtemps été la référence. Et pour cause : standard historique, disponible nativement sur les environnements Linux. Et puis j'ai découvert Taskfile ..."
 tags = ['Tooling']
