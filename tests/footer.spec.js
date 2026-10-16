@@ -33,9 +33,13 @@ for (const [name, path] of PAGES) {
   });
 }
 
-test('the footer links sit in a named navigation landmark', async ({ page }) => {
+test('the footer links sit in distinctly named navigation landmarks', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.locator('.site-footer nav[aria-label]')).toHaveCount(1);
-  await expect(page.locator('.site-footer nav[aria-label]')).toHaveAttribute('aria-label', /\S/);
+  const navs = page.locator('.site-footer nav[aria-label]');
+  await expect(navs).toHaveCount(2);
+  const labels = await navs.evaluateAll((els) => els.map((el) => el.getAttribute('aria-label').trim()));
+  expect(labels.every(Boolean)).toBe(true);
+  // Two landmarks of the same role must differ by name, or a screen reader cannot tell them apart.
+  expect(new Set(labels).size).toBe(labels.length);
 });
