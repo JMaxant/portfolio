@@ -122,8 +122,9 @@ comparable files actually do before claiming to follow the local style.
 
 ## Gotchas
 
-- `.Lastmod` has no reliable source yet (no `enableGitInfo`, no `frontmatter.lastmod`), so
-  anything ordered by it reorders on a fresh clone. Tracked by #70.
+- `.Lastmod` is the hand-written `lastmod` front matter key, falling back to `date`: it is
+  never derived from git. Editing an existing content file requires bumping it, enforced by
+  `scripts/quality/check-lastmod.mjs`. See `docs/components.md#dates`.
 - Do not wrap a URL in angle brackets in Markdown (`url="<mailto:…>"`): they are treated as
   an autolink and end up percent-encoded in the `href`, breaking the link.
 - There is no `_default/list.html`: every section has its own list template (`blog`, `veille`,

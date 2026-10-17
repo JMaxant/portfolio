@@ -1,7 +1,7 @@
 ---
 title: SEO — contributor guidelines
 date_published: 2026-10-02
-date_modified: 2026-10-14
+date_modified: 2026-10-17
 ---
 
 # SEO — contributor guidelines
@@ -138,7 +138,8 @@ baseline is a separate tagline, see [Page title](#page-title).
 
 An article's `description` and `image` resolve as the meta tags do: the description chain
 above, and the `og:image` lookup. `keywords` lists its `tags`, `datePublished` is its `date`.
-`dateModified` is left out until `.Lastmod` has a reliable source (#70).
+`dateModified` is `lastmod` and is emitted only when it is after `date`, i.e. when the front
+matter carries an explicit `lastmod` (kept honest by `scripts/quality/check-lastmod.mjs`, #203).
 
 A project is always an `Article`, since a case study need not be about code. Its `about` holds
 a `SoftwareSourceCode` only when `repo` is filled: leave `repo` empty for a project with no
@@ -180,8 +181,8 @@ Every page's `<head>` advertises the main feed, and the page's own feed when it 
 ## Sitemap
 
 `sitemap.xml` is Hugo's built-in one, unmodified. It lists every rendered page, so drafts and
-veille entries are left out, and takes `lastmod` from `date` until #70 gives `.Lastmod` a
-source. Search engines learn its address from the `Sitemap:` line of `robots.txt` (#17).
+veille entries are left out, and takes `lastmod` from the front matter, falling back to `date`
+when the page carries none (see [Dates](components.md#dates)). Search engines learn its address from the `Sitemap:` line of `robots.txt` (#17).
 
 The HTML site map is the one rendered page left out, with `sitemap = { disable = true }` in its
 front matter. See [Site map page](#site-map-page).

@@ -1,7 +1,7 @@
 ---
 title: Components — partials and integration
 date_published: 2026-08-08
-date_modified: 2026-10-14
+date_modified: 2026-10-17
 ---
 
 # Components — partials and integration
@@ -1139,6 +1139,15 @@ which cannot tell a content edit from a mechanical one: renaming a front matter 
 repo-wide pass. `enableGitInfo` also demands `fetch-depth: 0` on every CI checkout, and
 would have constrained the still-open hosting decision — hosts that shallow-clone silently
 produce dates that differ from the local build.
+
+**Enforcement** — a hand-written date is only as good as the habit, so
+`scripts/quality/check-lastmod.mjs` (the `lastmod` command of `lefthook.yml`, #203) fails when
+a staged edit to an existing `content/**/*.md` leaves `lastmod` untouched. A new file is
+exempt. A page with no `lastmod` is asked for one on its first edit, so the backfill happens
+as pages change. A mechanical change opts out with `LEFTHOOK_EXCLUDE=lastmod git commit`.
+Two limits: it inspects the index only, so CI, which stages nothing, never trips it; and it
+checks that the line changed, not that the date is right. The value feeds the sitemap and the
+`dateModified` of the JSON-LD (see `docs/seo.md#structured-data`).
 
 **Display** — `layouts/_default/single.html` labels both dates, "Publié le …" and
 "Mis à jour le …", the second guarded by `{{ if .Lastmod.After .Date }}` so it appears only
