@@ -28,6 +28,10 @@ running the linter directly on the file is this, every time: compare with
 
 ## Build
 
+- **Node follows `.nvmrc`** (24.x). Run QA through `task qa`, whose `node:check` guard refuses
+  an older Node: calling `npx lefthook` directly skips it, and under Node 22
+  `editorconfig-checker` crashes with a `TypeError` yet exits 0, so the hook looks green
+  without checking anything. In the sandbox, `sudo /home/yolo/.npm-global/bin/n 24.16.0`.
 - **Hugo extended**, version pinned in `.github/actions/setup-hugo/action.yml`. Match that
   version rather than installing latest.
 - **A Hugo `WARN` is a failure.** `scripts/quality/check-hugo-build.sh` greps the build log
